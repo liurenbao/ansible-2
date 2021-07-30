@@ -1,0 +1,38 @@
+---
+# centos 源
+- name: close selinux
+  shell: /sbin/setenforce 0
+  ignore_errors: True
+
+- name: sed selinux
+  shell: sed -i '/^SELINUX=/s/enforcing/disabled/' /etc/selinux/config
+
+- name: close firewalld
+  shell: systemctl stop firewalld &&  systemctl disable firewalld
+#
+- name: rm -rf /tmp/keepalived
+  shell: rm -rf /tmp/keepalived 
+
+- name: mkdir /tmp/keepalived
+  shell: mkdir -p /tmp/keepalived 
+  
+- name: cp  keepalived
+  copy:
+    src: /etc/ansible/rpms/keepalived/
+    dest:  /tmp/keepalived/
+
+- name: install keepalived 
+  shell: yum localinstall -y /tmp/keepalived/*.rpm
+
+- name: replace keepalived.conf
+  template:
+    src: keepalived.conf.j2
+    dest:  /etc/keepalived/keepalived.conf
+
+- name: start Keepalived
+  shell: systemctl start keepalived && systemctl enable keepalived
+  when: MASTER_BACKUP=="MASTER"
+
+- name: start Keepalived
+  shell: systemctl start keepalived && systemctl enable keepalived
+  when: MASTER_BACKUP=="BACKUP"

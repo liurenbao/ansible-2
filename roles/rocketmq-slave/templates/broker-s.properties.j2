@@ -1,0 +1,26 @@
+brokerClusterName=CIMCluster
+brokerName={{ broker_name.split('-')[:-1]|join('-') }}
+brokerId=1
+deleteWhen=04
+fileReservedTime=168
+brokerRole=SLAVE
+flushDiskType=SYNC_FLUSH
+
+##namesrvAddr
+namesrvAddr={% for host in groups['rocketmq-namesrv'] %}{{ hostvars[host].ip }}:9876{% if not loop.last %};{% endif %}{% endfor %}
+
+##Broker
+listenPort=10911
+fetchNamesrvAddrByAddressServer = false
+autoCreateTopicEnable = false
+
+#default 4M
+maxMessageSize = 2097152
+defaultTopicQueueNums = 4
+
+#brokerIP1
+brokerIP1 = {{ ip }}
+brokerIP2 = {{ ip }}
+#storePathRootDir-storePathCommitLog
+storePathRootDir = {{ mq_datadir }}/store
+storePathCommitLog = {{ mq_datadir }}/store/commitlog

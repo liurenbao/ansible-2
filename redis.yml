@@ -1,0 +1,31 @@
+---
+- hosts: redis
+  gather_facts: false
+  vars:
+    - redis_image: '"192.168.160.47:8888/public/redis:6.2.4"'
+    # byte单位，推荐设置为系统的四分之三(需要给fork进程和系统留内存)
+    - maxmemory: 51539607552
+    - clearall: 'yes'
+  roles:
+    - redis
+
+- hosts: init_redis
+  gather_facts: false
+  tasks:
+  # 初始化redis集群
+  - name: init redis
+    shell: |
+      docker exec -i redis-node01 /bin/sh -c \
+      'redis-cli --cluster create \
+       192.168.160.101:6379 192.168.160.100:6379 192.168.160.99:6379 \
+       192.168.160.98:6379 192.168.160.64:6379 192.168.160.62:6379 \
+        --cluster-replicas 1'  << EOF
+      yes
+      EOF
+  - name: sleep 20s
+    shell: sleep 20
+    # 校验集群状态
+  - name: redis cluster info
+    shell: docker exec -it redis-node01 /bin/sh -c 'redis-cli cluster info' | grep cluster_state
+    register: result
+    failed_when: ' "cluster_state:ok" not in result.stdout'

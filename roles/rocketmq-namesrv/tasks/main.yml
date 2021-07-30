@@ -1,0 +1,59 @@
+---
+- name: modify sysctl
+  lineinfile:
+    dest: /etc/sysctl.conf
+    line: "{{ item }}"
+  with_items:
+    - "fs.file-max = 1048576"
+    - "net.ipv4.ip_local_port_range = 1024 65535"
+    - "net.ipv4.tcp_mem = 786432 2097152 3145728"
+    - "net.ipv4.tcp_rmem = 4096 4096 16777216"
+    - "net.ipv4.tcp_wmem = 4096 4096 16777216"
+    - "net.core.somaxconn = 65535"
+
+- name: sysctl enable
+  shell: sysctl -p /etc/sysctl.conf
+
+- name: unzip rocketmq
+  unarchive: 
+    src: "{{ item }}"
+    dest: "{{ work_dir }}"
+    creates: "{{ work_dir }}/{{ mq_unzip_name }}"
+  with_fileglob:
+    - "{{ tmp_dir }}/{{ mq_zip_name }}"
+
+- name: rename dir rocketmq
+  shell: |
+         rm -rf {{ work_dir }}/rocketmq
+         mv -u {{ work_dir }}/{{ mq_unzip_name }} {{ work_dir }}/rocketmq
+
+- name: rocketmq-directory-conf
+  shell: |
+         mkdir -p {{ work_dir }}/rocketmq/logs
+
+- name: replace rocketmq manager script
+  template:
+    src: rmq-tools.sh.j2
+    dest: "{{ work_dir }}/rocketmq/bin/rmq-tools.sh"
+    owner: "{{ mq_user }}"
+    mode: '0755'
+
+- name: mq-user permission
+  shell: |
+         chown -R {{ mq_user }} {{ work_dir }}/rocketmq
+         chmod -R 760 {{ work_dir }}/rocketmq
+
+- name: set mq env conf
+  lineinfile:
+    dest: /etc/profile
+    line: "{{ item }}"
+  with_items:
+    - "export RMQ_BIN={{ work_dir }}/rocketmq/bin"
+    - "export PATH=$RMQ_BIN:$PATH"
+    - "export ROCKETMQ_HOME={{ work_dir }}/rocketmq"
+
+- name: enable profile
+  raw: source /etc/profile
+
+- name: start mq
+  command: "su rocketmq -c '{{ work_dir }}/rocketmq/bin/rmq-tools.sh namesrv restart'"

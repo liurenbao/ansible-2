@@ -1,0 +1,11 @@
+{
+  "registry-mirrors": ["https://o7p6ymvq.mirror.aliyuncs.com"],
+  "insecure-registries":["10.250.2.67:18087"],
+  "exec-opts": ["native.cgroupdriver=systemd"],
+  "log-driver": "json-file",
+  "log-opts": {
+    "max-size": "200m"
+  },
+  "data-root": "/opt/data2/var/lib/docker",
+  "storage-driver": "overlay2"
+}

@@ -1,0 +1,25 @@
+---
+- name: modify sysctl
+  lineinfile:
+    dest: /etc/sysctl.conf
+    line: "{{ item }}"
+  with_items:
+    - "fs.file-max = 1048576"
+    - "net.ipv4.ip_local_port_range = 1024 65535"
+    - "net.ipv4.tcp_mem = 786432 2097152 3145728"
+    - "net.ipv4.tcp_rmem = 4096 4096 16777216"
+    - "net.ipv4.tcp_wmem = 4096 4096 16777216"
+    - "net.core.somaxconn = 65535"
+    - "vm.overcommit_memory = 1"
+    - "vm.min_free_kbytes = 5000000"
+    - "vm.drop_caches = 1"
+    - "vm.zone_reclaim_mode = 0"
+    - "vm.max_map_count = 655360"
+    - "vm.dirty_background_ratio = 50"
+    - "vm.dirty_ratio = 50"
+    - "vm.page-cluster = 3"
+    - "vm.dirty_writeback_centisecs = 360000"
+    - "vm.swappiness = 10"
+
+- name: sysctl enable
+  shell: sysctl -p /etc/sysctl.conf

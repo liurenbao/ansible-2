@@ -1,0 +1,19 @@
+version: '3'
+
+services:
+  zoo3:
+    image: zookeeper:3.4.11
+    restart: always
+    network_mode: "host"
+    hostname: zoo3
+    ports:
+      - 2181:2181
+      - 2888:2888
+      - 3888:3888
+    environment:
+      ZOO_MY_ID: 3
+      ZOO_SERVERS: server.1=10.28.114.39:2888:3888 server.2=7.185.18.132:2888:3888 server.3=7.185.18.25:2888:3888
+    volumes:
+       - /data01/zookeeper/data:/data
+       - /data01/zookeeper/datalog:/datalog
+       - /data01/zookeeper/conf:/conf

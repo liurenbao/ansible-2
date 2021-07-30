@@ -1,0 +1,26 @@
+
+work_dir: '/usr/local'
+tmp_dir: '/etc/ansible/rpms/rocketmq'
+
+java_zip_name: 'jdk-8u202-linux-x64.tar.gz'
+java_un_name: 'jdk1.8.0_202'
+
+http_proxy: 'http://10.243.42.70:3128'
+no_proxy: 'localhost, 127.0.0.0/24, 10.0.0.0/8, kweecr01.huawei.com, 10.116.0.0/16, 10.96.0.0/12, 192.168.0.0/16'
+
+# roketmq 
+mq_user: 'rocketmq'
+mq_user_pass: 'rocketmq123'
+mq_zip_name: 'rocketmq-all-4.7.1-bin-release.zip'
+mq_unzip_name: 'rocketmq-all-4.7.1-bin-release'
+#mq_un_name: 'rocketmq'
+mq_datadir: '/data01/cim'
+#broker_Xms: '1g'
+#broker_Xmn: '512m'
+#namesrv_Xms: '1g'
+#namesrv_Xmn: '512m'
+
+mq_console_name: 'rocketmq-console-ng-2.0.0.jar'
+image_name: 'rocketmq-console-ng:2.0'
+container_name: 'rocketmq-console'
+

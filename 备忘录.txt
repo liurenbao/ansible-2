@@ -1,0 +1,7 @@
+改机器名  ip用固定IP  .txt
+K8S证书刷新
+traefik externalpolicy用local
+traefik+request+readniess+setupprobe+liveness
+检查一下k8s的ipforwardfor是不是1 （/etc/sysctl.conf） 
+
+所有的依赖都放到harbor.tar.gz 不重新装

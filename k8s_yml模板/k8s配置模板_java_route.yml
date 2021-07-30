@@ -1,0 +1,19 @@
+#如果不需要让服务在K8S外通过域名可以访问到，则不用配置这个路由
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: <name>
+  namespace: <namespace>
+spec:
+  entryPoints:
+    - web
+  routes:
+    - kind: Rule
+    # 类似于nginx的path
+    # <域名>修改为自己的域名譬如：rnd-ipstore.huawe.com
+    # <url>修改为域名的后缀，譬如/ipstore/ 注，path前后都要带/，防止和其他服务冲突
+      match: PathPrefix(`/<url>/`) && Host('<域名>')
+      services:
+    #   deployment.yml里面配置的name和port
+        - name: <name>
+          port: 8080

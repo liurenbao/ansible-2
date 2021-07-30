@@ -1,0 +1,27 @@
+---
+- name: unzip java
+  unarchive: 
+    src: "{{ tmp_dir }}/{{ java_zip_name }}"
+    dest: "{{ work_dir }}"
+    creates: "{{ work_dir }}/{{ java_un_name }}"
+  
+- name: create java connet
+  ignore_errors: yes
+  file:
+    src: "{{ work_dir }}/{{ java_un_name }}"
+    dest: "{{ work_dir }}/java"
+    state: link
+
+- name: set java env conf
+  lineinfile:
+    dest: /etc/profile
+    state: present
+    line: "{{ item }}"
+  with_items:
+    - "export JAVA_HOME={{ work_dir }}/java"
+    - "export JRE_HOME=${JAVA_HOME}/jre"
+    - "export CLASSPATH=.:${JAVA_HOME}/lib:${JRE_HOME}/lib"
+    - "export PATH=${JAVA_HOME}/bin:$PATH"
+    
+- name: java profile enable
+  shell: source /etc/profile

@@ -1,0 +1,131 @@
+---
+# 需要对外暴露端口的服务需要配置Service，如果不需要对外暴露端口，删除Service配置
+apiVersion: v1
+kind: Service
+metadata:
+  # 服务暴露的service名字
+  name: <name>
+  # 命名空间根据实际情况修改
+  namespace: <namespace>
+spec:
+  ports:
+    #   提供http服务的这么配置
+    - name: http
+      # 服务端口号，spring boot的应用可以直接用默认的8080
+      port: 8080
+      targetPort: 8080
+  selector:
+    app: <name>
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: <name>
+  namespace: <namespace>
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: <name>
+  template:
+    metadata:
+      labels:
+        app: <name>
+    spec:
+      # 启动账户的id，默认可以删除
+      securityContext:
+        runAsUser: <userid>
+      # 私服secret名字，如果是public的镜像，则不需要这个
+      imagePullSecrets:
+        - name: <secret>
+      # 节点失活后，该节点的 pod 2s后进行迁移，
+      # k8s集群检测node down掉40s后，将node状态置为not-ready，
+      # 再过2s，该节点pod会重新迁移到其他节点
+      hostNetwork: false
+      tolerations:
+        - key: "node.kubernetes.io/unreachable"
+          operator: "Exists"
+          effect: "NoExecute"
+          tolerationSeconds: 2
+        - key: "node.kubernetes.io/not-ready"
+          operator: "Exists"
+          effect: "NoExecute"
+          tolerationSeconds: 2
+      # 增加反亲和性调度，pod不调度到<node-affinity-key>为true的节点
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: <node-affinity-key>
+                    operator: NotIn
+                    values:
+                      - 'true'
+      # 增加反亲和性调度，同一个名字的app不部署到同一个节点
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                topologyKey: "kubernetes.io/hostname"
+                labelSelector:
+                  matchExpressions:
+                    - key: app
+                      operator: In
+                      values:
+                        - <name>
+              weight: 100
+      containers:
+        - name: <name>
+          image: <container-url>
+          # 当前服务器已经存在相同版本的镜像则不会重复拉取
+          imagePullPolicy: IfNotPresent
+          # 系统环境变量，这个模板是针对spring boot的，这里设置的是spring boot服务的端口号和profile，不需要可以删除
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: test
+            - name: SERVER_PORT
+              value: "8080"
+          # 容器启动端口，没有可以删除
+          ports:
+            - containerPort: 8080
+          # 容器资源，request表示分配的最小资源，limit表示分配的资源上限
+          resources:
+            limits:
+              cpu: "2"
+              memory: 2048Mi
+            requests:
+              cpu: 50Mi
+              memory: 800Mi
+          # 启动探针 存活性探针 和 准备就绪探针，端口、时间等根据实际情况填写
+          startupProbe:
+            httpGet:
+              path: <health-path>
+              prot: 8080
+            failureThreshold: 10
+            initialDelay：10
+            periodSeconds: 10
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: <health-path>
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 300
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 20
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: <health-path>
+              port: 8080
+              scheme: HTTP
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 10    
+          # 优雅关机，需要确保基础镜像要有/bin/bash命令
+          lifecycle:
+            preStop:
+              exec:
+                command: [ "/bin/bash", "-c", "sleep 30" ]
+      # k8s给程序发kill -9的时间，这时间需要大于preStop的时间
+      terminationGracePeriodSeconds: 60

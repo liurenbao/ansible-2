@@ -1,0 +1,43 @@
+---
+- name: init-java
+  gather_facts: false
+  hosts: initsc
+  roles:
+    - init
+    - java
+  tags: java
+
+- name: install-rocketmq-namesrv
+  gather_facts: false
+  hosts: rocketmq-namesrv
+  roles:
+    - rocketmq-namesrv
+  tags: rocketmq-namesrv
+
+- name: install-rocketmq-master
+  gather_facts: false
+  hosts: rocketmq-master
+  roles:
+    - rocketmq-master
+  tags: rocketmq-master
+
+- name: install-rocketmq-slave
+  gather_facts: false
+  hosts: rocketmq-slave
+  roles:
+    - rocketmq-slave
+  tags: rocketmq-slave
+
+- name: install-docker
+  gather_facts: false
+  hosts: docker
+  roles:
+    - docker
+  tags: docker
+
+- name: start rocketmq-console
+  gather_facts: false
+  hosts: docker
+  roles:
+    - rocketmq-console
+  tags: rocketmq-console

@@ -1,0 +1,170 @@
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  labels:
+    app: filebeat
+  name: filebeat
+  namespace: elk
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  labels:
+    app: filebeat
+  name: filebeat-cluster-role
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - namespaces
+      - pods
+    verbs:
+      - get
+      - list
+      - watch
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  labels:
+    app: filebeat
+  name: filebeat-cluster-role-binding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: filebeat-cluster-role
+subjects:
+  - kind: ServiceAccount
+    name: filebeat
+    namespace: elk
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: filebeat-kafka-config
+  namespace: elk
+  labels:
+    app: filebeat-kafka-config
+data:
+  filebeat.yml: |
+    filebeat.inputs:
+    - type: container
+      multiline.pattern: '^\d{4}-\d{2}-\d{2}'
+      multiline.negate: true
+      multiline.match: after
+      processors:
+      - add_kubernetes_metadata:
+          in_cluster: true
+      - drop_event:
+          when:
+            not:
+              or:
+                - equals:
+                    kubernetes.namespace: default
+                - contains:
+                    kubernetes.namespace: cad
+      paths:
+        - /data01/var/lib/docker/containers/*/*.log
+    output.kafka:
+      hosts: ["10.28.114.39:9092","7.185.18.132:9092","7.185.18.25:9092"]
+      topic: k8s-log-test
+      required_acks: 0
+      worker: 8
+      keep_alive: 15
+    monitoring:
+      enabled: true
+      elasticsearch:
+        hosts: ["http://7.185.17.125:9200","http://7.185.17.147:9200","http://7.185.19.69:9200"]
+
+---
+kind: DaemonSet
+apiVersion: apps/v1
+metadata:
+  name: filebeat-kafka
+  namespace: elk
+  labels:
+    app: filebeat-kafka
+spec:
+  selector:
+    matchLabels:
+      app: filebeat-kafka
+  template:
+    metadata:
+      name: filebeat-kafka
+      labels:
+        app: filebeat-kafka
+    spec:
+      serviceAccountName: filebeat
+      securityContext:
+        runAsUser: 0
+      volumes:
+        - name: filebeat-kafka-config
+          configMap:
+            name: filebeat-kafka-config
+        - name: filebeat-data
+          hostPath:
+            path: /data01/var/lib/filebeat-kafka-data
+            type: DirectoryOrCreate
+        - name: varlibdockercontainers
+          hostPath:
+            path: /data01/var/lib/docker/containers
+            type: ''
+        - name: varrundockersock
+          hostPath:
+            path: /var/run/docker.sock
+            type: ''
+      containers:
+        - name: filebeat
+          image: 'docker.elastic.co/beats/filebeat:7.9.2'
+          args:
+            - '-e'
+            - '-E'
+            - http.enabled=true
+          env:
+            - name: key
+              value: product
+            - name: NODE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
+            - name: POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: metadata.namespace
+          resources:
+            limits:
+              memory: 500Mi
+            requests:
+              cpu: 100m
+              memory: 100Mi
+          volumeMounts:
+            - name: filebeat-kafka-config
+              readOnly: true
+              mountPath: /usr/share/filebeat/filebeat.yml
+              subPath: filebeat.yml
+            - name: filebeat-data
+              mountPath: /usr/share/filebeat/data
+            - name: varlibdockercontainers
+              readOnly: true
+              mountPath: /var/lib/docker/containers
+            - name: varrundockersock
+              readOnly: true
+              mountPath: /var/run/docker.sock
+            - name: varlibdockercontainers
+              mountPath: /data01/var/lib/docker/containers
+          livenessProbe:
+            exec:
+              command:
+                - sh
+                - '-c'
+                - curl --fail 127.0.0.1:5066
+          readinessProbe:
+            exec:
+              command:
+                - sh
+                - '-c'
+                - filebeat test output
+          imagePullPolicy: IfNotPresent
+      restartPolicy: Always

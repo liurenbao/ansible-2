@@ -1,0 +1,16 @@
+version: '3'
+services:
+  redis-cluster:
+    image: {{ redis_image }}
+    container_name: redis-node01
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - $PWD/redis.conf:/usr/local/etc/redis/redis.conf
+      - $PWD/data/:/data/
+    network_mode: "host"
+    restart: always
+    command: redis-server /usr/local/etc/redis/redis.conf
+
+# docker exec -it redis-node01 /bin/sh -c 'redis-cli --cluster create 192.168.160.62:6379 192.168.160.64:6379 192.168.160.98:6379 192.168.160.99:6379 192.168.160.100:6379 192.168.160.101:6379 --cluster-replicas 1' 
+
+# docker exec -it redis-node01 /bin/sh -c 'redis-cli cluster info'

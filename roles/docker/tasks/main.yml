@@ -1,0 +1,77 @@
+---
+
+- name: disable swap
+  lineinfile:
+    path: /etc/profile
+    state: present
+    regexp: '^swapoff'
+    line: swapoff -a
+
+- name: disable swap
+  shell: swapoff -a
+
+- name: disable swap
+  shell: sed -i '/ swap / s/^\(.*\)$/#\1/g' /etc/fstab
+
+- name: disable swap
+  shell: sed -i '/sysvg-swap/ s/^\(.*\)$/#\1/g' /etc/fstab
+
+- name: enable profile
+  shell: source /etc/profile
+
+- name: mkdir /local/docker
+  shell: mkdir -p /local/docker-repo
+
+- name: copy docker files
+  copy: src=/etc/ansible/rpms/docker/ dest=/local/docker-repo/
+
+# 安装和配置 docekr
+- name: install docker dep
+  shell: yum localinstall -y /local/docker-repo/*.rpm
+
+- name: create docker data-root
+  shell: mkdir -p /data01/var/lib/docker
+
+- name: config docker daemon
+  shell: mkdir -p /etc/docker/
+
+- name: config docker daemon
+  template:
+    src: daemon.json.j2
+    dest: /etc/docker/daemon.json
+
+- name: enable docker
+  shell: systemctl enable docker.service
+
+- name: disable firewalld
+  shell: systemctl stop firewalld
+
+- name: disable firewalld
+  shell: systemctl disable firewalld
+
+- name: disable firewalld
+  shell: iptables -F && iptables -X && iptables -F -t nat && iptables -X -t nat && iptables -P FORWARD ACCEPT
+
+- name: disable selinux
+  shell: setenforce 0 || true
+
+- name: disable selinux
+  lineinfile:
+    state: present
+    path: /etc/selinux/config
+    regexp: '^SELINUX='
+    line: SELINUX=disabled
+
+- name: daemon-reload
+  shell: systemctl daemon-reload
+
+- name: restart docker 
+  shell: systemctl restart docker
+
+- name: cp docker-compose
+  copy:
+   src: /etc/ansible/rpms/docker-compose/
+   dest:  /usr/local/bin/
+
+- name: chmod docker-compose
+  shell: chmod +x /usr/local/bin/docker-compose

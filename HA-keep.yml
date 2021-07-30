@@ -1,0 +1,87 @@
+---
+# - hosts: harbor_01
+#   gather_facts: false
+#   vars:
+#     - harbor_hostname: 192.168.85.13
+#     - harbor_port: 8087
+#     - data_volume: /data01/harbor/harbor-data/
+#     - harbor_admin_password: admin123Admin
+#   roles:
+#     - harbor
+
+# - hosts: harbor_02
+#   gather_facts: false
+#   vars:
+#     - harbor_hostname: 192.168.85.14
+#     - harbor_port: 8087
+#     - data_volume: /data01/harbor/harbor-data/
+#     - harbor_admin_password: admin123Admin
+#   roles:
+#     - harbor
+
+# harbor vip
+- hosts: ha-harbor
+  gather_facts: false
+  vars:
+    vip:
+      - 192.168.160.47
+    virtual_router_id: '60'
+    vrrp_instance_interface: 
+      - eth0
+  roles:
+    - keepalived
+
+# harbor vip
+- hosts: ha-nginx
+  gather_facts: false
+  vars:
+    vip:
+      - 192.168.160.88
+    virtual_router_id: '61'
+    vrrp_instance_interface: 
+      - eth0
+  roles:
+    - keepalived
+
+# k8s vip role改名字叫 keeaplived，加check逻辑，先只启动master那个，跑完了在启动其他的，确保k8s init没有问题
+- hosts: ha-k8s
+  gather_facts: false
+  vars:
+    vip:
+      - 192.168.160.20
+    virtual_router_id: '60'
+    vrrp_instance_interface: 
+      - eth0
+  roles:
+    - keepalived
+
+- hosts: k8s
+  gather_facts: false
+  roles:
+    - k8s-product-test
+
+- hosts: k8s-master-init
+  gather_facts: false
+  tasks:
+  - name: init k8s
+    shell: |
+      kubeadm init --control-plane-endpoint="192.168.160.20:6443"  \
+      --image-repository="192.168.160.47:8888/google_containers"    \
+      --pod-network-cidr="10.244.0.0/16" --kubernetes-version=1.18.19 --upload-certs
+    register: result
+  - name: show
+    debug:
+      msg: "{{ result }}"
+  - name: add admin.conf
+    shell: |
+        mkdir -p $HOME/.kube
+        sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+        sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
+- hosts: k8s-master-join
+  gather_facts: false
+  tasks:
+  - name: join k8s
+    debug: 
+      msg: "{{ result }}"
+  

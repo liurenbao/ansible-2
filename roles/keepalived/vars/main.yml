@@ -1,0 +1,4 @@
+---
+# 网络代理配置，如果没有代理可以不设置
+http_proxy: http://ip:port
+no_proxy: localhost, 127.0.0.0/24, 10.0.0.0/8, kweecr01.huawei.com

@@ -1,0 +1,6 @@
+---
+#- include: config_sysctl.yml
+- include: config_limits.yml
+- include: create_user.yml
+- include: chmod_mq_datadir.yml
+#- include: config_proxy.yml

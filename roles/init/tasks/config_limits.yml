@@ -1,0 +1,8 @@
+---
+- name: modify limits
+  lineinfile:
+    dest: /etc/security/limits.conf
+    line: "{{ item }}"
+  with_items:
+    - "* - nproc 65535"
+    - "* - nofile 1048576"

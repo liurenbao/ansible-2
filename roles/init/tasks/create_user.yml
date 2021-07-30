@@ -1,0 +1,6 @@
+---
+- name: create user
+  user:
+   name: "{{ mq_user }}"
+   password: "{{ mq_user_pass }}"
+   state: present
