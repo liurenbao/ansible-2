@@ -7,5 +7,5 @@
 - name: yum remove kube
   command: yum remove -y kubelet kubeadm kubectl
 - name: clean kube files
-  command: "rm -rf /etc/kubernetes /var/lib/kubelet"
+  command: "rm -rf /etc/kubernetes /var/lib/kubelet /var/lib/etcd"
   ignore_errors: yes

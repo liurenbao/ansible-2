@@ -6,8 +6,8 @@ services:
     network_mode: host
     restart: always
     environment:
-      ZOO_MY_ID: "{{ groups[kafka_group].index(inventory_hostname) }}"
-      ZOO_SERVERS: "{% for host in groups[kafka_group] %}server.{{ groups[kafka_group].index(host)|string +'='+ host +':2888:3888;2181'}} {% endfor %}"
+      ZOO_MY_ID: "{{ groups[group_names[0]].index(inventory_hostname) }}"
+      ZOO_SERVERS: "{% for host in groups[group_names[0]] %}server.{{ groups[group_names[0]].index(host)|string +'='+ host +':2888:3888;2181'}} {% endfor %}"
     volumes:
       - "{{ root_dir }}/zookeeper/data:/data"
       - "{{ root_dir }}/zookeeper/datalog:/datalog"
@@ -20,11 +20,12 @@ services:
     environment:
       KAFKA_ADVERTISED_PORT: 9092
       DOCKER_API_VERSION: 1.22
-      KAFKA_BROKER_ID: "{{ groups[kafka_group].index(inventory_hostname) }}"
+      KAFKA_BROKER_ID: "{{ groups[group_names[0]].index(inventory_hostname) }}"
       KAFKA_ADVERTISED_HOST_NAME: "{{ ansible_ssh_host }}"
-      KAFKA_ZOOKEEPER_CONNECT: "{{ groups[kafka_group] | map('regex_replace', '^(.*)$','\\1:2181') | join(',') }}"
-      KAFKA_HEAP_OPTS: "-Xmx16G -Xms16G"
+      KAFKA_ZOOKEEPER_CONNECT: "{{ groups[group_names[0]] | map('regex_replace', '^(.*)$','\\1:2181') | join(',') }}"
+      KAFKA_HEAP_OPTS: {{ kafka_heap_opts }}
       KAFKA_NUM_PARTITIONS: 5
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://{{ ansible_ssh_host }}:9092
       KAFKA_NUM_NETWORK_THREADS: 9
       KAFKA_NUM_IO_THREADS: 16
       KAFKA_LOG_RETENTION_BYTES: 10737418240

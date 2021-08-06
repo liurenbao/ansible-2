@@ -4,3 +4,5 @@
   command: yum remove docker-ce docker-ce-cli containerd.io -y
 - name: clean docker files
   command: "rm -rf /etc/docker/daemon.json && rm -rf {{ data_root }}"
+- name: clean docker-compose
+  command: "rm -rf /usr/local/bin/docker-compose"

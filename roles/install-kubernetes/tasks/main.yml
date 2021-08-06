@@ -22,5 +22,14 @@
 - name: restart kubelet 
   shell: systemctl restart kubelet
 
+- name: copy master join
+  copy: src=/etc/ansible/k8s_join_shell/{{ groups['k8s-master-init'][0] }}/k8s_master_join.sh dest=k8s_master_join.sh
+- name: master join shell
+  shell: sh k8s_master_join.sh
+- name: add admin.conf
+  shell: |
+    mkdir -p $HOME/.kube
+    cat /etc/kubernetes/admin.conf > $HOME/.kube/config
+    sudo chown $(id -u):$(id -g) $HOME/.kube/config
 
 

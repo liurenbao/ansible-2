@@ -23,7 +23,7 @@
     - ansible_hosts_ip: 192.168.160.50
     - init_shell: 'kubeadm init --control-plane-endpoint="192.168.160.124:6443"  --image-repository="192.168.160.47:8888/google_containers" --pod-network-cidr="10.244.0.0/16" --kubernetes-version=1.18.19 --upload-certs'
   roles:
-    - k8s-init
+    - k8s-master-init
 
 - name: k8s master join
   hosts: k8s-master-join

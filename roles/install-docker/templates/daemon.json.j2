@@ -1,10 +1,10 @@
 {
-  "insecure-registries": {{ insecure_registries }},
-  "exec-opts": ["native.cgroupdriver=systemd"],
+  "insecure-registries": {{ insecure_registries | to_json }},
+  "exec-opts": [ "native.cgroupdriver=systemd" ],
   "log-driver": "json-file",
   "log-opts": {
     "max-size": "200m"
   },
-  "data-root": {{ data_root }},
+  "data-root": "{{ data_root }}",
   "storage-driver": "overlay2"
 }

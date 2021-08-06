@@ -5,3 +5,6 @@ traefik+request+readniess+setupprobe+liveness
 检查一下k8s的ipforwardfor是不是1 （/etc/sysctl.conf） 
 
 所有的依赖都放到harbor.tar.gz 不重新装
+
+
+kubeadm init --control-plane-endpoint="192.168.160.124:6443"  --image-repository="192.168.160.47:8888/google_containers" --pod-network-cidr="10.244.0.0/16" --kubernetes-version=1.18.19 --upload-certs
