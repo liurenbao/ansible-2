@@ -1,6 +1,14 @@
+- name: check has installed
+  stat: path={{ root_dir }}
+  register: p
+- name: print has installed
+  debug:
+    msg: "{{ p }}"
 - name: stop kafka
   command: docker-compose down
   args:
     chdir: "{{ root_dir }}"
+  when: p.stat.isdir is defined and p.stat.isdir
 - name: remove kafka data and other files
   command: "rm -rf {{ root_dir }}"
+  when: p.stat.isdir is defined and p.stat.isdir

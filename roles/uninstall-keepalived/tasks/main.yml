@@ -1,11 +1,21 @@
+- name: check has installed
+  stat: path=/etc/keepalived
+  register: p
+
+- name: print has installed
+  debug:
+    msg: "{{ p }}"
+
 - name: rm -rf /tmp/keepalived
   shell: rm -rf /tmp/keepalived
 
 - name: stop keepalived
   command: systemctl stop keepalived
+  when: p.stat.isdir is defined and p.stat.isdir
 
 - name: unregister keepalived service
   command: systemctl disable keepalived
+  when: p.stat.isdir is defined and p.stat.isdir
 
 - name: yum remove keepalived
   command: yum remove -y keepalived

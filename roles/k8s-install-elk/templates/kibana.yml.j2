@@ -75,18 +75,3 @@ spec:
   ports:
     - port: 5601
   type: NodePort
----
-apiVersion: traefik.containo.us/v1alpha1
-kind: IngressRoute
-metadata:
-  name: kibana
-  namespace: elk
-spec:
-  entryPoints:
-    - web
-  routes:
-    - match: PathPrefix(`/kibana/`)
-      kind: Rule
-      services:
-        - name: kibana
-          port: 5601

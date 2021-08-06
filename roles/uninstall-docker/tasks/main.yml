@@ -1,5 +1,12 @@
+- name: check has installed
+  stat: path={{ data_root }}
+  register: p
+- name: print has installed
+  debug:
+    msg: "{{ p }}"
 - name: stop docker daemon
   command: systemctl stop docker
+  when: p.stat.isdir is defined and p.stat.isdir
 - name: yum remove docker
   command: yum remove docker-ce docker-ce-cli containerd.io -y
 - name: clean docker files

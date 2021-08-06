@@ -1,4 +1,0 @@
-- name: install k8s component
-  hosts: k8s-master-init
-  roles:
-    - k8s-filebeat

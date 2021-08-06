@@ -1,11 +1,16 @@
+- name: check has installed
+  stat: path=/var/lib/kubelet
+  register: p
+- name: print has installed
+  debug:
+    msg: "{{ p }}"
 - name: stop kubelet
   command: systemctl stop kubelet
-  ignore_errors: yes
+  when: p.stat.exists == true
 - name: reset node
   command: kubeadm reset -f
-  ignore_errors: yes
+  when: p.stat.exists == true
 - name: yum remove kube
   command: yum remove -y kubelet kubeadm kubectl
 - name: clean kube files
   command: "rm -rf /etc/kubernetes /var/lib/kubelet /var/lib/etcd"
-  ignore_errors: yes
