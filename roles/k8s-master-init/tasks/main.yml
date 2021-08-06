@@ -1,12 +1,14 @@
----
 - name: init k8s
-  shell: '{{ init_shell }}'
-
+  shell: |
+    kubeadm init --control-plane-endpoint={{ control_plane_endpoint }} \
+    --image-repository={{ image_repository }} \
+    --pod-network-cidr={{ pod_network_cidr }} --kubernetes-version={{ kubernetes_version }} \
+    --upload-certs
   register: result
 - name: show
   debug:
     msg: "{{ result }}"
-- name: add admin.conf
+- name: copy admin.conf
   shell: |
     mkdir -p $HOME/.kube
     cat /etc/kubernetes/admin.conf > $HOME/.kube/config

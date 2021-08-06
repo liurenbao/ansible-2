@@ -20,8 +20,11 @@
   hosts: k8s-master-init
   gather_facts: false
   vars:
-    - ansible_hosts_ip: 192.168.160.50
-    - init_shell: 'kubeadm init --control-plane-endpoint="192.168.160.124:6443"  --image-repository="192.168.160.47:8888/google_containers" --pod-network-cidr="10.244.0.0/16" --kubernetes-version=1.18.19 --upload-certs'
+    ansible_hosts_ip: 192.168.160.50
+    control_plane_endpoint: 192.168.160.124:6443
+    image_repository: 192.168.160.47:8888/google_containers
+    pod_network_cidr: 10.244.0.0/16
+    kubernetes_version: 1.18.19
   roles:
     - k8s-master-init
 
@@ -39,12 +42,6 @@
 
 - name: k8s cert update
   hosts: k8s-master
-  gather_facts: false
-  roles:
-    - k8s-cert-update
-
-- name: k8s install result
-  hosts: k8s-master-init
   gather_facts: false
   roles:
     - k8s-cert-update

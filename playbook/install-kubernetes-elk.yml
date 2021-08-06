@@ -1,0 +1,6 @@
+- name: install k8s components
+  hosts: k8s-master-init
+  vars:
+    root_dir: /data01/kube-manifest/elk
+  roles:
+    - k8s-install-elk

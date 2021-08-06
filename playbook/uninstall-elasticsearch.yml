@@ -1,4 +1,4 @@
-- name: install kafka
+- name: uninstall elasticsearch
   hosts: es
   gather_facts: false
   roles:
