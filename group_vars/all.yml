@@ -1,6 +1,6 @@
 
 work_dir: '/usr/local'
-tmp_dir: '/etc/ansible/rpms/rocketmq'
+tmp_dir: '/etc/ansible/package/rocketmq'
 
 java_zip_name: 'jdk-8u202-linux-x64.tar.gz'
 java_un_name: 'jdk1.8.0_202'

@@ -1,0 +1,6 @@
+- name: stop docker daemon
+  command: systemctl stop docker
+- name: yum remove docker
+  command: yum remove docker-ce docker-ce-cli containerd.io -y
+- name: clean docker files
+  command: "rm -rf /etc/docker/daemon.json && rm -rf {{ data_root }}"

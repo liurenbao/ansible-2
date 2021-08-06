@@ -1,0 +1,6 @@
+- name: stop elasticsearch
+  command: docker-compose down
+  args:
+    chdir: "{{ root_dir }}"
+- name: remove elasticsearch data and other files
+  command: "rm -rf {{ root_dir }}"

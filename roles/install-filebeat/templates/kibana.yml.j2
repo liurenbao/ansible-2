@@ -1,0 +1,92 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kibana
+  namespace: elk
+  labels:
+    app: kibana
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: kibana
+      labels:
+        app: kibana
+    spec:
+      containers:
+        - name: kibana
+          image: 192.168.160.47:8888/public/kibana:7.13.2
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: MONITORING_ENABLED
+              value: 'true'
+            - name: ELASTICSEARCH_HOSTS
+              value: http://elasticsearch.elk:9200
+            - name: SERVER_HOST
+              value: 0.0.0.0
+          resources:
+            limits:
+              cpu: '1'
+              memory: 3Gi
+            requests:
+              cpu: 20m
+              memory: 500Mi
+          readinessProbe:
+            exec:
+              command:
+                - sh
+                - '-c'
+                - |
+                  #!/usr/bin/env bash -e
+                  http () {
+                      local path="${1}"
+                      set -- -XGET -s --fail
+
+                      if [ -n "${ELASTICSEARCH_USERNAME}" ] && [ -n "${ELASTICSEARCH_PASSWORD}" ]; then
+                        set -- "$@" -u "${ELASTICSEARCH_USERNAME}:${ELASTICSEARCH_PASSWORD}"
+                      fi
+
+                      STATUS=$(curl --output /dev/null --write-out "%{http_code}" -k "$@" "http://localhost:5601${path}")
+                      if [[ "${STATUS}" -eq 200 ]]; then
+                        exit 0
+                      fi
+
+                      echo "Error: Got HTTP code ${STATUS} but expected a 200"
+                      exit 1
+                  }
+
+                  http "/app/kibana"
+      restartPolicy: Always
+      securityContext:
+        runAsUser: 1000
+        runAsNonRoot: true
+  selector:
+    matchLabels:
+      app: kibana
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kibana
+  namespace: elk
+spec:
+  selector:
+    app: kibana
+  ports:
+    - port: 5601
+  type: NodePort
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: kibana
+  namespace: elk
+spec:
+  entryPoints:
+    - web
+  routes:
+    - match: PathPrefix(`/kibana/`)
+      kind: Rule
+      services:
+        - name: kibana
+          port: 5601

@@ -1,0 +1,5 @@
+- name: change sysconf
+  hosts: all
+  gather_facts: false
+  roles:
+    - change-sysconf

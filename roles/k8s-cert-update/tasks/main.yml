@@ -1,0 +1,27 @@
+---
+- name: copy update-kubeadm-cert.sh
+  template: src=update-kubeadm-cert.sh.j2 dest=update-kubeadm-cert.sh
+- name: chmod +x update-kubeadm-cert.sh
+  shell: chmod +x ./update-kubeadm-cert.sh
+- name: sh update-kubeadm-cert.sh
+  shell: ./update-kubeadm-cert.sh all
+  register: cert_result
+- name: show result
+  debug:
+    msg: "{{ cert_result }}"
+- name:  cat /etc/kubernetes/kubelet.conf  | tail -n 2
+  shell:  cat /etc/kubernetes/kubelet.conf  | tail -n 2
+  register: kubelet_result
+- name: show kubelet.conf
+  debug:
+    msg: "{{ kubelet_result }}"
+- name: kubectl get node
+  shell: kubectl get node
+  register: kubelet_get_node
+- name: show
+  debug:
+    msg: "{{ kubelet_get_node }}"
+- name: sleep 10
+  shell: sleep 10
+
+

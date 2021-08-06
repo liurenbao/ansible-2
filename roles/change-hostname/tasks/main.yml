@@ -1,0 +1,6 @@
+- name: set hostname
+  command: "hostnamectl set-hostname {{ host_name }}"
+- name: replace hosts file
+  template:
+    src: hosts.j2
+    dest: /etc/hosts

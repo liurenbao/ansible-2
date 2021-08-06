@@ -1,0 +1,12 @@
+- name: create data dir
+  command: mkdir -p {{ data_dir }}
+
+- name: copy logstash config files
+  template:
+    src: '{{ item }}'
+    dest: "{{ data_dir }}/{{ item | regex_replace('\.j2$', '') }}"
+    force: yes
+  with_fileblob: templates/*.j2
+
+- name: apply config yml
+  command: kubectl apply -f {{ data_dir }}

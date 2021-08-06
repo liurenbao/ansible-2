@@ -1,0 +1,15 @@
+version: '3'
+services:
+  elasticsearch:
+    image: "{{ image }}"
+    network_mode: host
+    restart: always
+    environment:
+      ES_JAVA_OPTS: {{ es_java_opts }}
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - "{{ cluster_root_dir }}/data:/usr/share/elasticsearch/data"
+      - "{{ cluster_root_dir }}/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml"

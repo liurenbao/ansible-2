@@ -1,0 +1,11 @@
+- name: install elasticsearch
+  hosts: es
+  gather_facts: false
+  roles:
+    - install-elasticsearch
+  vars:
+    delete_old: true
+    cluster_root_dir: /data01/es
+    cluster_name: es-cluster-7.3.2
+    image: 192.168.160.47:8888/public/elasticsearch:7.13.2
+    es_java_opts: -Xms4G -Xmx4G

@@ -1,0 +1,36 @@
+version: '3'
+services:
+  zookeeper:
+    user: root
+    image: "{{ zookeeper_image }}"
+    network_mode: host
+    restart: always
+    environment:
+      ZOO_MY_ID: "{{ groups[kafka_group].index(inventory_hostname) }}"
+      ZOO_SERVERS: "{% for host in groups[kafka_group] %}server.{{ groups[kafka_group].index(host)|string +'='+ host +':2888:3888;2181'}} {% endfor %}"
+    volumes:
+      - "{{ root_dir }}/zookeeper/data:/data"
+      - "{{ root_dir }}/zookeeper/datalog:/datalog"
+      - "{{ root_dir }}/zookeeper/conf:/conf"
+  kafka:
+    user: root
+    image: "{{ kafka_image }}"
+    network_mode: host
+    restart: always
+    environment:
+      KAFKA_ADVERTISED_PORT: 9092
+      DOCKER_API_VERSION: 1.22
+      KAFKA_BROKER_ID: "{{ groups[kafka_group].index(inventory_hostname) }}"
+      KAFKA_ADVERTISED_HOST_NAME: "{{ ansible_ssh_host }}"
+      KAFKA_ZOOKEEPER_CONNECT: "{{ groups[kafka_group] | map('regex_replace', '^(.*)$','\\1:2181') | join(',') }}"
+      KAFKA_HEAP_OPTS: "-Xmx16G -Xms16G"
+      KAFKA_NUM_PARTITIONS: 5
+      KAFKA_NUM_NETWORK_THREADS: 9
+      KAFKA_NUM_IO_THREADS: 16
+      KAFKA_LOG_RETENTION_BYTES: 10737418240
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - "{{ root_dir }}/kafka:/kafka"
+
+
+

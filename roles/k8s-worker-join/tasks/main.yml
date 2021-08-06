@@ -1,0 +1,5 @@
+---
+- name: copy worker join
+  copy: src=/etc/ansible/k8s_join_shell/{{ groups['k8s-master-init'][0] }}/k8s_worker_join.sh dest=k8s_worker_join.sh
+- name: sh worker_join_shell.sh
+  shell: sh k8s_worker_join.sh

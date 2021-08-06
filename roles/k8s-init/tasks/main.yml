@@ -1,0 +1,42 @@
+---
+- name: init k8s
+  shell: '{{ init_shell }}'
+
+  register: result
+- name: show
+  debug:
+    msg: "{{ result }}"
+- name: add admin.conf
+  shell: |
+    mkdir -p $HOME/.kube
+    cat /etc/kubernetes/admin.conf > $HOME/.kube/config
+    sudo chown $(id -u):$(id -g) $HOME/.kube/config
+- name: print worker join
+  shell: kubeadm token create --print-join-command
+  register: k8s_worker_join
+- name: show k8s_worker_join
+  debug:
+    msg: "{{ k8s_worker_join.stdout }}"
+- name: create k8s_worker_join shell
+  shell: |
+    cat > k8s_worker_join.sh <<EOF
+    {{ k8s_worker_join.stdout }}
+    EOF
+- name: print certifcate_key
+  shell: kubeadm init phase upload-certs --upload-certs | awk 'END {print}'
+  register: certifcate_key
+- name: haha print certifcate
+  debug:
+    msg: "{{ certifcate_key.stdout }}"
+- name: print master join
+  debug:
+    msg:  "{{ k8s_worker_join.stdout }} --control-plane --certificate-key {{ certifcate_key.stdout }}"
+- name: create k8s_master_join shell
+  shell: |
+    cat > k8s_master_join.sh <<EOF
+    {{ k8s_worker_join.stdout }} --control-plane --certificate-key {{ certifcate_key.stdout }}
+    EOF
+- name: copy k8s_master_join to ansible hosts
+  fetch: src=k8s_master_join.sh dest=/etc/ansible/k8s_join_shell/
+- name: copy k8s_worker_join to ansible hosts
+  fetch: src=k8s_worker_join.sh dest=/etc/ansible/k8s_join_shell/

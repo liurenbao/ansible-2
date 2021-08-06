@@ -1,0 +1,17 @@
+---
+- name: copy packages
+  copy: src=/etc/ansible/gpu/*.deb dest=/tmp/gpu/
+
+- name: dpkg install
+  shell: dpkg -i /tmp/gpu/libnvidia-container1_1.4.0-1_amd64.deb && dpkg -i /tmp/gpu/*.deb -y
+
+- name: config docker daemon
+  template:
+    src: daemon.json.j2
+    dest: /etc/docker/daemon.json
+
+- name: daemon-reload
+  shell: systemctl daemon-reload
+
+- name: restart docker
+  shell: systemctl restart docker

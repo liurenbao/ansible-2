@@ -1,0 +1,156 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: logstash-config
+  namespace: elk
+  labels:
+    task: logging
+    k8s-app: logstash
+data:
+  logstash.yml: |
+    pipeline.batch.size: 200
+    pipeline.batch.delay: 50
+    pipeline.unsafe_shutdown: false
+    config.reload.automatic: true
+    config.reload.interval: 3s
+    queue.type: memory
+    http.host: 0.0.0.0
+    http.port: 9600
+    path.config: /usr/share/logstash/pipeline
+    path.data: /usr/share/logstash/data
+    pipeline.workers: 8
+    xpack.monitoring.enabled: true
+    xpack.monitoring.elasticsearch.hosts: [ "http://elasticsearch.elk:9200" ]
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  labels:
+    app: logstash-pipeline
+  name: logstash-pipeline
+  namespace: elk
+data:
+  filter_main.conf: |-
+    filter {
+      grok {
+        patterns_dir => ["/usr/share/logstash/patterns"]
+        match => {
+          "message" => "%{DATESTAMP:DATE}%{SPACE}%{LOGLEVEL:LEVEL}%{SPACE}%{NUMBER}%{GREEDYDATA}]%{JAVACLASS:class}%{SPACE}\\:%{SPACE}%{GREEDYDATA:MESSAGE}"
+        }
+      }
+
+      if [kubernetes][labels][k8s-app] {
+        mutate {
+          add_field => { "service" => "%{[kubernetes][labels][k8s-app]}" }
+        }
+      } else if [kubernetes][labels][app] {
+        mutate {
+          add_field => { "service" => "%{[kubernetes][labels][app]}" }
+        }
+      } else {
+        mutate {
+          add_field => { "service" => "unkown" }
+        }
+      }
+
+      prune {
+        blacklist_names => [ "log.*", "ecs.*", "agent.*", "host.*", "type.*" ]
+      }
+
+    }
+  input_main.conf: |-
+    input {
+      kafka {
+        bootstrap_servers => "kafka.elk:9092"
+        topics => ["log"]
+        type => "log"
+        codec => json { charset => "UTF-8" }
+        consumer_threads => 3
+        auto_offset_reset => earliest
+        decorate_events => false
+      }
+    }
+  output_main.conf: |-
+    output {
+      stdout { codec => rubydebug }
+      elasticsearch {
+        hosts => ["elasticsearch.elk:9200"]
+        manage_template => true
+        template_name => "app-log"
+        index => "log-%{[service]}-%{[kubernetes][namespace]}-%{+YYYY-MM-dd}"
+        document_type => "%{[@metadata][type]}"
+      }
+    }
+---
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  labels:
+    app: logstash-patterns
+  name: logstash-patterns
+  namespace: elk
+data:
+  main: |-
+    LOGLEVEL ([Aa]lert|ALERT|[Tt]race|TRACE|[Dd]ebug|DEBUG|[Nn]otice|NOTICE|[Ii]nfo|INFO|[Ww]arn?(?:ing)?|WARN?(?:ING)?|[Ee]rr?(?:or)?|ERR?(?:OR)?|[Cc]rit?(?:ical)?|CRIT?(?:ICAL)?|[Ff]atal|FATAL|[Ss]evere|SEVERE|EMERG(?:ENCY)?|[Ee]merg(?:ency)?)
+    NUMBER (?:%{BASE10NUM})
+    JAVATHREAD (?:[A-Z]{2}-Processor[\d]+)
+    SPACE \s*
+    CATALINALOG %{CATALINA_DATESTAMP:timestamp} %{JAVACLASS:class} %{JAVALOGMESSAGE:logmessage}
+    JAVACLASS (?:[a-zA-Z$_\.][a-zA-Z$_0-9]*\.)*[a-zA-Z$_][a-zA-Z$_0-9]*
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: logstash
+  namespace: elk
+spec:
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: logstash
+    spec:
+      containers:
+        - name: logstash
+          image: 192.168.160.47:8888/public/logstash:7.13.2
+          imagePullPolicy: Always
+          volumeMounts:
+            - name: logstash-pipeline
+              mountPath: /usr/share/logstash/pipeline
+            - name: logstash-config
+              mountPath: /usr/share/logstash/config/logstash.yml
+              subPath: logstash.yml
+            - name: logstash-patterns
+              mountPath: /usr/share/logstash/patterns
+      volumes:
+        - name: logstash-config
+          configMap:
+            name: logstash-config
+        - name: logstash-pipeline
+          configMap:
+            name: logstash-pipeline
+        - name: logstash-patterns
+          configMap:
+            name: logstash-patterns
+      securityContext:
+        runAsUser: 0
+        fsGroup: 1000
+  selector:
+    matchLabels:
+      app: logstash
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: logstash
+  name: logstash
+  namespace: elk
+spec:
+  ports:
+    - port: 5000
+      targetPort: 5000
+  selector:
+    k8s-app: logstash

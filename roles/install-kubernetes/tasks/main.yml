@@ -1,0 +1,26 @@
+- name: rm rpm
+  shell: rm -rf /tmp/rpm
+
+- name: copy rpm
+  copy:
+    src: /etc/ansible/package/k8s-1.18.19
+    dest: /tmp/
+- name: install rpm
+  shell: yum -y localinstall /tmp/k8s-1.18.19/*
+
+- name: ipforward=1
+  template:
+    src: 99-kubernetes-cri.conf.j2
+    dest: /etc/sysctl.d/99-kubernetes-cri.conf
+
+- name: install rpm
+  shell: sysctl --system
+
+- name: enable kubelet 
+  shell: systemctl enable --now kubelet
+
+- name: restart kubelet 
+  shell: systemctl restart kubelet
+
+
+

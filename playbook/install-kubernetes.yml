@@ -1,0 +1,50 @@
+- name: k8s master vip
+  hosts: k8s-master
+  gather_facts: false
+  vars:
+    vip:
+      - 192.168.160.124
+    virtual_router_id: '55'
+    vrrp_instance_interface:
+      - eth0
+  roles:
+    - install-keepalived
+
+- name: install kubelet kubeadm kubectl
+  hosts: k8s
+  gather_facts: false
+  roles:
+    - install-kubernetes
+
+- name: k8s master init
+  hosts: k8s-master-init
+  gather_facts: false
+  vars:
+    - ansible_hosts_ip: 192.168.160.50
+    - init_shell: 'kubeadm init --control-plane-endpoint="192.168.160.124:6443"  --image-repository="192.168.160.47:8888/google_containers" --pod-network-cidr="10.244.0.0/16" --kubernetes-version=1.18.19 --upload-certs'
+  roles:
+    - k8s-init
+
+- name: k8s master join
+  hosts: k8s-master-join
+  gather_facts: false
+  roles:
+    - k8s-master-join
+
+- name: k8s worker join
+  hosts: k8s-worker
+  gather_facts: false
+  roles:
+    - k8s-worker-join
+
+- name: k8s cert update
+  hosts: k8s-master
+  gather_facts: false
+  roles:
+    - k8s-cert-update
+
+- name: k8s install result
+  hosts: k8s-master-init
+  gather_facts: false
+  roles:
+    - k8s-cert-update

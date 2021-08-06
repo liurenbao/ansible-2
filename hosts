@@ -36,33 +36,31 @@
 192.168.160.50 host_name=k8s-master-3 MASTER_BACKUP=BACKUP ansible_ssh_port=22 ansible_ssh_user=root ansible_ssh_pass=""
 
 [k8s]
-192.168.160.4  ip=192.168.160.4 host_name=k8s-master-1  ansible_ssh_user=root ansible_ssh_pass=""
-192.168.160.5  ip=192.168.160.5 host_name=k8s-master-2  ansible_ssh_user=root ansible_ssh_pass=""
-192.168.160.6  ip=192.168.160.6 host_name=k8s-master-3  ansible_ssh_user=root ansible_ssh_pass=""
-192.168.160.7  ip=192.168.160.7 host_name=k8s-worker-1  ansible_ssh_user=root ansible_ssh_pass=""
-192.168.160.12 ip=192.168.160.12 host_name=k8s-worker-2  ansible_ssh_user=root ansible_ssh_pass=""
-192.168.160.11 ip=192.168.160.11 host_name=k8s-worker-3  ansible_ssh_user=root ansible_ssh_pass=""
+192.168.160.48 host_name=k8s-master-1  ansible_ssh_user=root ansible_ssh_pass=""
+192.168.160.49 host_name=k8s-master-2  ansible_ssh_user=root ansible_ssh_pass=""
+192.168.160.50 host_name=k8s-master-3  ansible_ssh_user=root ansible_ssh_pass=""
+192.168.160.51 host_name=k8s-worker-3  ansible_ssh_user=root ansible_ssh_pass=""
+192.168.160.52 host_name=k8s-worker-2  ansible_ssh_user=root ansible_ssh_pass=""
+192.168.160.53 host_name=k8s-worker-1  ansible_ssh_user=root ansible_ssh_pass=""
 
-[k8s-master-init]
-192.168.160.4 host_name=k8s-master-1  ansible_ssh_user=root ansible_ssh_pass=""
-
-[k8s-master-join]
-192.168.160.5 host_name=k8s-master-2  ansible_ssh_user=root ansible_ssh_pass=""
-192.168.160.6 host_name=k8s-master-3  ansible_ssh_user=root ansible_ssh_pass=""
+[k8s-master]
+#192.168.160.48 host_name=k8s-master-1  ansible_ssh_user=root ansible_ssh_pass=""
+192.168.160.49 host_name=k8s-master-2  ansible_ssh_user=root ansible_ssh_pass=""
+192.168.160.50 host_name=k8s-master-3  ansible_ssh_user=root ansible_ssh_pass=""
 
 [k8s-worker]
-192.168.160.7 host_name=k8s-worker-1  ansible_ssh_user=root ansible_ssh_pass=""
-192.168.160.12 host_name=k8s-worker-2  ansible_ssh_user=root ansible_ssh_pass=""
-192.168.160.11 host_name=k8s-worker-3  ansible_ssh_user=root ansible_ssh_pass=""
+192.168.160.51 host_name=k8s-worker-3  ansible_ssh_user=root ansible_ssh_pass=""
+192.168.160.52 host_name=k8s-worker-2  ansible_ssh_user=root ansible_ssh_pass=""
+192.168.160.53 host_name=k8s-worker-1  ansible_ssh_user=root ansible_ssh_pass=""
 
 [ha-nginx]
 192.168.160.107 host_name=nginx-2 MASTER_BACKUP=MASTER  ansible_ssh_user=root ansible_ssh_pass=""
 192.168.160.106 host_name=nginx-1 MASTER_BACKUP=BACKUP  ansible_ssh_user=root ansible_ssh_pass=""
 
 [es]
-192.168.160.16 host_name=elasticsearch-3 ansible_ssh_user=root ansible_ssh_pass=""
-192.168.160.15 host_name=elasticsearch-2 ansible_ssh_user=root ansible_ssh_pass=""
-192.168.160.14 host_name=elasticsearch-1 ansible_ssh_user=root ansible_ssh_pass=""
+192.168.160.16 host_name=elasticsearch-test-3 ansible_ssh_user=root ansible_ssh_pass=""
+192.168.160.15 host_name=elasticsearch-test-2 ansible_ssh_user=root ansible_ssh_pass=""
+192.168.160.14 host_name=elasticsearch-test-1 ansible_ssh_user=root ansible_ssh_pass=""
 
 [redis]
 192.168.160.101  host_name=redis-6 data_dir=/data01/redis redis_port=6379 ansible_ssh_user=root ansible_ssh_pass=""
@@ -72,5 +70,4 @@
 192.168.160.64   host_name=redis-2 data_dir=/data01/redis redis_port=6379 ansible_ssh_user=root ansible_ssh_pass=""
 192.168.160.62   host_name=redis-1 data_dir=/data01/redis redis_port=6379 ansible_ssh_user=root ansible_ssh_pass=""
 
-[init_redis]
-192.168.160.101 host_name=redis-6 data_dir=/data01/redis redis_port=6379 ansible_ssh_user=root ansible_ssh_pass=""
+

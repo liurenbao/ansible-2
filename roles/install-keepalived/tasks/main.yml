@@ -1,0 +1,70 @@
+---
+# centos 源
+- name: close selinux
+  shell: /sbin/setenforce 0
+  ignore_errors: True
+
+- name: sed selinux
+  shell: sed -i '/^SELINUX=/s/enforcing/disabled/' /etc/selinux/config
+
+- name: close firewalld
+  shell: systemctl stop firewalld &&  systemctl disable firewalld
+#
+#- name: rm -rf /tmp/haproxy
+#  shell: rm -rf /tmp/haproxy
+#
+#- name: mkdir /tmp/haproxy
+#  shell: mkdir -p /tmp/haproxy
+#  
+#- name: cp haproxy
+#  copy:
+#    src: /etc/ansible/package/haproxy/
+#    dest:  /tmp/haproxy/
+#
+#- name: install haproxy 
+#  shell: yum localinstall -y /tmp/haproxy/*.rpm
+#
+#
+#- name: backup haproxy.cfg  
+#  shell: mv /etc/haproxy/haproxy.cfg /etc/haproxy/haproxy.cfg.bak
+#
+#- name: replace haproxy.cfg
+#  template:
+#    src: haproxy.cfg.j2
+#    dest:  /etc/haproxy/haproxy.cfg
+#
+#- name: check syntax
+#  shell: haproxy -c -f /etc/haproxy/haproxy.cfg
+#  
+#- name: start haproxy
+#  shell: systemctl start haproxy && systemctl enable haproxy
+#
+- name: rm -rf /tmp/keepalived
+  shell: rm -rf /tmp/keepalived 
+
+- name: mkdir /tmp/keepalived
+  shell: mkdir -p /tmp/keepalived 
+  
+- name: cp  keepalived
+  copy:
+    src: /etc/ansible/package/keepalived/
+    dest:  /tmp/keepalived/
+
+- name: install keepalived 
+  shell: yum localinstall -y /tmp/keepalived/*.rpm
+
+- name: replace keepalived.conf
+  template:
+    src: keepalived.conf.j2
+    dest:  /etc/keepalived/keepalived.conf
+
+
+#- name: start Keepalived
+#  shell: systemctl start keepalived && systemctl enable keepalived
+#
+#- name: restart all
+#  shell: systemctl restart haproxy && systemctl start keepalived
+
+- name: start Keepalived
+  shell: systemctl start keepalived && systemctl enable keepalived
+

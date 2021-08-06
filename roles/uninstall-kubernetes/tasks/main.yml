@@ -1,0 +1,11 @@
+- name: stop kubelet
+  command: systemctl stop kubelet
+  ignore_errors: yes
+- name: reset node
+  command: kubeadm reset -f
+  ignore_errors: yes
+- name: yum remove kube
+  command: yum remove -y kubelet kubeadm kubectl
+- name: clean kube files
+  command: "rm -rf /etc/kubernetes /var/lib/kubelet"
+  ignore_errors: yes

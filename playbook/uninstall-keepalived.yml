@@ -1,0 +1,4 @@
+- name: uninstall haproxy
+  hosts: k8s-master
+  roles:
+    - uninstall-keepalived

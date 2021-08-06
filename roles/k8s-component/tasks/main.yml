@@ -1,0 +1,7 @@
+- name: install filebeat
+  template:
+    src: '{{ item.src }}'
+    dest: {{ dest_dir }}/{{ item.path }}
+    force: yes
+  with_filetree: templates/
+  when: item.state == 'file'

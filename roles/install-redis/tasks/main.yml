@@ -1,0 +1,41 @@
+---
+- name: somaxconneconn
+  shell: echo 511 > /proc/sys/net/core/somaxconn
+
+- name: copy docker compose
+  shell: mkdir -p {{ data_dir }}/data
+
+- name: add file to data ，让redis有写权限
+  shell: echo 1 > {{ data_dir }}/data/test.log
+
+- name: copy docker compose
+  template: src=docker-compose.yml.j2 dest={{ data_dir }}/docker-compose.yml
+
+- name: copy redis
+  template: src=redis.conf.j2 dest={{ data_dir }}/redis.conf
+
+- name: hugepage never
+  shell: echo never > /sys/kernel/mm/transparent_hugepage/enabled
+
+- name: sysctl redis.conf
+  template:
+    src: redis-conn.conf.j2
+    dest: /etc/sysctl.d/redis-conn.conf
+
+- name: sysctl redis-conn.conf
+  shell: sysctl --system
+
+- name: stop redis
+  shell: docker-compose down
+  args:
+   chdir: "{{ data_dir }}"
+
+- name: start redis
+  shell: docker-compose  up -d
+  args:
+   chdir: "{{ data_dir }}"
+   
+- name: validate redis
+  shell: docker-compose ps | grep redis
+  args:
+   chdir: "{{ data_dir }}"

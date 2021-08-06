@@ -1,0 +1,6 @@
+- name: stop redis
+  command: docker-compose down
+  args:
+    chdir: "{{ root_dir }}"
+- name: remove redis data and other files
+  command: "rm -rf {{ root_dir }}"

@@ -1,0 +1,6 @@
+- import_playbook: "playbook/uninstall-kubernetes.yml"
+- import_playbook: "playbook/uninstall-elasticsearch.yml"
+- import_playbook: "playbook/uninstall-kafka.yml"
+- import_playbook: "playbook/uninstall-redis.yml"
+- import_playbook: "playbook/uninstall-docker.yml"
+- import_playbook: "playbook/uninstall-keepalived.yml"

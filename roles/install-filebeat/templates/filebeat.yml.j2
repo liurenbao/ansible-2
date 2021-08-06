@@ -1,0 +1,158 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: filebeat-config
+  namespace: elk
+  labels:
+    app: filebeat
+data:
+  filebeat.yml: |-
+    filebeat.inputs:
+      - type: container
+        paths:
+          - /var/lib/docker/containers/*/*.log
+        multiline.pattern: '^\d+\.\d+\.\d+\.\d+\.'
+        multiline.negate: true
+        multiline.match: after
+        processors:
+          - add_kubernetes_metadata:
+              in_cluster: true
+    output.kafka:
+      hosts: [ "kafka.elk:9092" ]
+      topic: log
+      required_acks: 0
+      worker: 8
+      keep_alive: 15
+    monitoring:
+      enabled: true
+      elasticsearch:
+        hosts: [ "http://elasticsearch.elk:9200" ]
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: filebeat
+  namespace: elk
+  labels:
+    app: filebeat
+spec:
+  selector:
+    matchLabels:
+      app: filebeat
+  template:
+    metadata:
+      labels:
+        app: filebeat
+    spec:
+      serviceAccountName: filebeat
+      terminationGracePeriodSeconds: 60
+      dnsPolicy: ClusterFirstWithHostNet
+      containers:
+        - name: filebeat
+          image: 192.168.160.47:8888/public/elastic/filebeat:7.13.2
+          args:
+            - '-e'
+            - '-E'
+            - http.enabled=true
+          env:
+            - name: NODE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
+            - name: POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: metadata.namespace
+          securityContext:
+            runAsUser: 0
+          resources:
+            limits:
+              memory: 200Mi
+            requests:
+              cpu: 100m
+              memory: 100Mi
+          volumeMounts:
+            - name: config
+              mountPath: /usr/share/filebeat/filebeat.yml
+              readOnly: true
+              subPath: filebeat.yml
+            - name: data
+              mountPath: /usr/share/filebeat/data
+            - name: varlibdockercontainers
+              mountPath: /var/lib/docker/containers
+              readOnly: true
+            - name: varrundockersock
+              readOnly: true
+              mountPath: /var/run/docker.sock
+          livenessProbe:
+            exec:
+              command:
+                - sh
+                - '-c'
+                - curl --fail 127.0.0.1:5066
+          readinessProbe:
+            exec:
+              command:
+                - sh
+                - '-c'
+                - filebeat test output
+      volumes:
+        - name: config
+          configMap:
+            name: filebeat-config
+        - name: varlibdockercontainers
+          hostPath:
+            path: /data01/docker/containers
+        - name: varrundockersock
+          hostPath:
+            path: /var/run/docker.sock
+        - name: data
+          hostPath:
+            path: /var/lib/filebeat-data
+            type: DirectoryOrCreate
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: filebeat
+  namespace: elk
+subjects:
+  - kind: ServiceAccount
+    name: filebeat
+    namespace: elk
+roleRef:
+  kind: ClusterRole
+  name: filebeat
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: filebeat
+  namespace: elk
+  labels:
+    app: filebeat
+rules:
+  - apiGroups: [ "" ]
+    resources:
+      - namespaces
+      - pods
+      - nodes
+    verbs:
+      - get
+      - watch
+      - list
+  - apiGroups: [ "apps" ]
+    resources:
+      - replicasets
+    verbs: [ "get", "list", "watch" ]
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: filebeat
+  namespace: elk
+  labels:
+    app: filebeat

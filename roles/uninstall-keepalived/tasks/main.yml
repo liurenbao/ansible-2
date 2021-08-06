@@ -1,0 +1,14 @@
+- name: rm -rf /tmp/keepalived
+  shell: rm -rf /tmp/keepalived
+
+- name: stop keepalived
+  command: systemctl stop keepalived
+
+- name: unregister keepalived service
+  command: systemctl disable keepalived
+
+- name: yum remove keepalived
+  command: yum remove -y keepalived
+
+- name: remove keepalived.conf
+  command: rm -f /etc/keepalived/keepalived.conf

@@ -1,0 +1,7 @@
+cluster.name: "{{ cluster_name }}"
+node.name: {{ host_name }}
+network.host: 0.0.0.0
+discovery.seed_hosts: {{ groups[es_host_group] | to_json }}
+bootstrap.memory_lock: true
+xpack.monitoring.collection.enabled: true
+cluster.initial_master_nodes: {{ groups[es_host_group] | to_json }}
