@@ -14,7 +14,7 @@ traefik+request+readniess+setupprobe+liveness
 
 harbor安装怎么自动化 且快？？
 
---- 单独写校验的role K8S校验POD是否全部ok
+--- 单独写校验的role K8S校验POD是否全部ok kubectl get pod -A | grep -v Running
 
 keepalived检查脚本
 
