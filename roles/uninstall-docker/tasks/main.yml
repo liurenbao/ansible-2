@@ -8,7 +8,7 @@
   command: systemctl stop docker
   when: p.stat.isdir is defined and p.stat.isdir
 - name: yum remove docker
-  command: yum remove docker-ce docker-ce-cli containerd.io -y
+  shell: yum remove docker-ce docker-ce-cli containerd.io -y
 - name: clean docker files
   command: "rm -rf /etc/docker/daemon.json && rm -rf {{ data_root }}"
 - name: clean docker-compose

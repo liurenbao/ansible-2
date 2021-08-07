@@ -1,16 +1,6 @@
-- name: stop old docker containers
-  command: chdir={{ root_dir }} docker-compose down
-  ignore_errors: yes
-
-- name: remove old dir
-  shell: rm -rf {{ root_dir }}
-  when: delete_old == true
-  ignore_errors: yes
-
 - name: create dir
   file:
     path: "{{ root_dir }}"
-    recurse: yes
     state: directory
 
 - name: dispatch docker-compose
