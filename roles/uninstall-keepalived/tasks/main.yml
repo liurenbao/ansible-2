@@ -12,13 +12,15 @@
 - name: stop keepalived
   command: systemctl stop keepalived
   when: p.stat.isdir is defined and p.stat.isdir
+  ignore_errors: yes
 
 - name: unregister keepalived service
   command: systemctl disable keepalived
   when: p.stat.isdir is defined and p.stat.isdir
+  ignore_errors: yes
 
 - name: yum remove keepalived
   command: yum remove -y keepalived
 
 - name: remove keepalived.conf
-  command: rm -f /etc/keepalived/
+  command: rm -rf /etc/keepalived/

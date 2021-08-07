@@ -1,4 +1,16 @@
 ---
+- name: mkdir mq_datadir/store
+  shell: mkdir -p {{mq_datadir}}/store
+
+- name: chmod rocketmq datadir
+  shell: chown -R {{ mq_user }} {{mq_datadir}}/store
+
+- name: create user
+  user:
+    name: "{{ mq_user }}"
+    password: "{{ mq_user_pass }}"
+    state: present
+
 - name: modify sysctl
   lineinfile:
     dest: /etc/sysctl.conf

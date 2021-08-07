@@ -56,7 +56,7 @@
   shell: chmod +x /usr/local/bin/docker-compose
 
 - name: create docker data-root
-  shell: mkdir -p {{ data_root }}
+  shell: mkdir -p {{ docker_data_root }}
 
 - name: create docker config dir
   shell: mkdir -p /etc/docker/

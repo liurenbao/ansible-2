@@ -88,7 +88,7 @@ protected-mode yes
 
 # Accept connections on the specified port, default is 6379 (IANA #815344).
 # If port 0 is specified Redis will not listen on a TCP socket.
-port {{ redis_port }}
+port 6379
 
 # TCP listen() backlog.
 #
@@ -857,7 +857,7 @@ acllog-max-len 128
 # limit for maxmemory so that there is some free RAM on the system for replica
 # output buffers (but this is not needed if the policy is 'noeviction').
 #
-maxmemory {{ maxmemory }}
+maxmemory {{ redis_maxmemory }}
 
 # MAXMEMORY POLICY: how Redis will select what to remove when maxmemory
 # is reached. You can select one from the following behaviors:

@@ -1,7 +1,0 @@
----
-- name: mkdir mq_datadir/store
-  shell: mkdir -p {{mq_datadir}}/store
-
-- name: chmod rocketmq datadir
-  shell: |
-         chown -R {{ mq_user }} {{mq_datadir}}/store

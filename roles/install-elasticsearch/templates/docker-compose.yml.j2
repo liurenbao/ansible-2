@@ -1,7 +1,7 @@
 version: '3'
 services:
   elasticsearch:
-    image: "{{ image }}"
+    image: "{{ es_image }}"
     network_mode: host
     restart: always
     environment:
@@ -11,5 +11,5 @@ services:
         soft: -1
         hard: -1
     volumes:
-      - "{{ root_dir }}/data:/usr/share/elasticsearch/data"
-      - "{{ root_dir }}/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml"
+      - "{{ es_root_dir }}/data:/usr/share/elasticsearch/data"
+      - "{{ es_root_dir }}/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml"

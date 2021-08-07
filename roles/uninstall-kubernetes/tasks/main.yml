@@ -13,4 +13,4 @@
 - name: yum remove kube
   command: yum remove -y kubelet kubeadm kubectl
 - name: clean kube files
-  command: "rm -rf /etc/kubernetes /var/lib/kubelet /var/lib/etcd"
+  command: "rm -rf /etc/kubernetes /var/lib/kubelet /var/lib/etcd /etc/sysctl.d/99-kubernetes-cri.conf"

@@ -1,12 +1,6 @@
 - name: k8s master vip
   hosts: k8s-master
   gather_facts: false
-  vars:
-    vip:
-      - 192.168.160.124
-    virtual_router_id: '55'
-    vrrp_instance_interface:
-      - eth0
   roles:
     - install-keepalived
 
@@ -19,11 +13,6 @@
 - name: k8s master init
   hosts: k8s-master-init
   gather_facts: false
-  vars:
-    control_plane_endpoint: 192.168.160.124:6443
-    image_repository: 192.168.160.47:8888/google_containers
-    pod_network_cidr: 10.244.0.0/16
-    kubernetes_version: 1.18.19
   roles:
     - k8s-master-init
 

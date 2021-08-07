@@ -6,7 +6,7 @@ metadata:
   name: main
   namespace: monitoring
 spec:
-  image: 192.168.160.47:8888/public/alertmanager:v0.20.0
+  image: "{{ image_repository }}/public/alertmanager:v0.20.0"
   nodeSelector:
     kubernetes.io/os: linux
   replicas: 3

@@ -1,14 +1,14 @@
-- name: check has installed
-  stat: path={{ root_dir }}
-  register: p
-- name: print has installed
-  debug:
-    msg: "{{ p }}"
-- name: stop redis
-  command: docker-compose down
+- name: Check that the data exists
+  stat:
+    path: "{{ redis_data_dir }}"
+  register: file_status
+
+- name: clear data
+  shell: docker-compose down
   args:
-    chdir: "{{ root_dir }}"
-  when: p.stat.isdir is defined and p.stat.isdir
-- name: remove redis data and other files
-  command: "rm -rf {{ root_dir }}"
-  when: p.stat.isdir is defined and p.stat.isdir
+    chdir: "{{ redis_data_dir }}"
+  when: file_status.stat.exists == True
+
+- name: Ansible delete directory example
+  shell: rm -rf {{ redis_data_dir }}
+  when: file_status.stat.exists == True

@@ -1,3 +1,4 @@
+# 注意：卸载会删除数据，安装的软件，已修改的系统配置不会回滚
 - import_playbook: "playbook/uninstall-kubernetes.yml"
 - import_playbook: "playbook/uninstall-elasticsearch.yml"
 - import_playbook: "playbook/uninstall-kafka.yml"

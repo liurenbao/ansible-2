@@ -9,9 +9,9 @@ services:
       ZOO_MY_ID: "{{ groups[group_names[0]].index(inventory_hostname) }}"
       ZOO_SERVERS: "{% for host in groups[group_names[0]] %}server.{{ groups[group_names[0]].index(host)|string +'='+ host +':2888:3888;2181'}} {% endfor %}"
     volumes:
-      - "{{ root_dir }}/zookeeper/data:/data"
-      - "{{ root_dir }}/zookeeper/datalog:/datalog"
-      - "{{ root_dir }}/zookeeper/conf:/conf"
+      - "{{ kafka_root_dir }}/zookeeper/data:/data"
+      - "{{ kafka_root_dir }}/zookeeper/datalog:/datalog"
+      - "{{ kafka_root_dir }}/zookeeper/conf:/conf"
   kafka:
     user: root
     image: "{{ kafka_image }}"
@@ -31,7 +31,7 @@ services:
       KAFKA_LOG_RETENTION_BYTES: 10737418240
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock"
-      - "{{ root_dir }}/kafka:/kafka"
+      - "{{ kafka_root_dir }}/kafka:/kafka"
 
 
 

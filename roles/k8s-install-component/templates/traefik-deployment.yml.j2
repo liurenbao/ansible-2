@@ -24,7 +24,7 @@ spec:
       serviceAccountName: traefik-ingress-controller
       containers:
         - name: traefik
-          image: 192.168.160.47:8888/traefik/traefik:v2.4.9
+          image: "{{ image_repository }}/traefik/traefik:v2.4.9"
           args:
             - --log.level=INFO
             - --api
@@ -57,13 +57,13 @@ spec:
             httpGet:
               port: 8080
               path: /dashboard
-            successThreshold: 3
+            successThreshold: 1
             periodSeconds: 3
           livenessProbe:
             httpGet:
               port: 8080
               path: /dashboard
-            successThreshold: 3
+            successThreshold: 1
             periodSeconds: 3
 ---
 apiVersion: v1

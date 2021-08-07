@@ -46,7 +46,7 @@ spec:
         app: blackbox
     spec:
       containers:
-        - image: 192.168.160.47:8888/public/blackbox-exporter:v0.19.0
+        - image: "{{ image_repository }}/public/blackbox-exporter:v0.19.0"
           name: blackbox
           args:
             - --config.file=/etc/blackbox_exporter/blackbox.yml

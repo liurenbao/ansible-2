@@ -114,7 +114,7 @@ spec:
     spec:
       containers:
         - name: logstash
-          image: 192.168.160.47:8888/public/logstash:7.13.2
+          image: "{{ image_repository }}/public/logstash:7.13.2"
           imagePullPolicy: Always
           volumeMounts:
             - name: logstash-pipeline
