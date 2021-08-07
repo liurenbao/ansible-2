@@ -19,3 +19,6 @@ harbor安装怎么自动化 且快？？
 keepalived检查脚本
 
 kubeadm init --control-plane-endpoint="192.168.160.124:6443"  --image-repository="192.168.160.47:8888/google_containers" --pod-network-cidr="10.244.0.0/16" --kubernetes-version=1.18.19 --upload-certs
+
+&&& 脚本跑完把 dashboard地址/token，grafana地址/密码，kibana地址/密码打印到文件保存，harbor地址/用户名密码
+traefik地址/密码，Nginx地址
