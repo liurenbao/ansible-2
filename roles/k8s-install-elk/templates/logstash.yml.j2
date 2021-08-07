@@ -21,7 +21,7 @@ data:
     path.data: /usr/share/logstash/data
     pipeline.workers: 8
     xpack.monitoring.enabled: true
-    xpack.monitoring.elasticsearch.hosts: [ "http://elasticsearch.elk:9200" ]
+    xpack.monitoring.elasticsearch.hosts: {{ groups['es'] | map('regex_replace', '^(.*)$','\\1:9200') | list | to_json}}
 ---
 apiVersion: v1
 kind: ConfigMap
