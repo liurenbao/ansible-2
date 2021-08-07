@@ -15,10 +15,10 @@ vrrp_script check_haproxy {
 
 vrrp_instance VI_1 {
     state {{ MASTER_BACKUP }}
-{% for ip in vrrp_instance_interface %}
+{% for ip in keepalived_vrrp_instance_interface %}
     interface {{ ip }}   
 {% endfor %}
-    virtual_router_id {{ virtual_router_id }}
+    virtual_router_id {{ keepalived_virtual_router_id }}
     priority 250
     nopreempt
     advert_int 1
@@ -27,9 +27,7 @@ vrrp_instance VI_1 {
         auth_pass 35f18af7190d51c9f7f78f37300a0cbd
     }
     virtual_ipaddress {
-{% for ip in vip %}
-       {{ ip }}
-{% endfor %}
+       {{ keepalived_vip }}
     }
     track_script {
         check_haproxy

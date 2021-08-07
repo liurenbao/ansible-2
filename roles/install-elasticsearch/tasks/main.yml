@@ -1,23 +1,23 @@
 - name: create dir
   file:
-    path: "{{ root_dir }}"
+    path: "{{ es_root_dir }}"
     state: directory
 
 - name: dispatch docker-compose
   template:
     src: docker-compose.yml.j2
-    dest: "{{ root_dir }}/docker-compose.yml"
+    dest: "{{ es_root_dir }}/docker-compose.yml"
 
 - name: dispatch config file
   template:
     src: elasticsearch.yml.j2
-    dest: "{{ root_dir }}/elasticsearch.yml"
+    dest: "{{ es_root_dir }}/elasticsearch.yml"
 
 - name: chmod data dir
-  shell: "mkdir -p {{ root_dir }}/data && chmod 776 -R {{ root_dir }}/data"
+  shell: "mkdir -p {{ es_root_dir }}/data && chmod 776 -R {{ es_root_dir }}/data"
 
 - name: docker-compose up
-  shell: docker-compose -f {{ root_dir }}/docker-compose.yml up -d
+  shell: docker-compose -f {{ es_root_dir }}/docker-compose.yml up -d
 
 - name: check es state
   shell: sleep 30 && curl http://localhost:9200/_cat/health?v

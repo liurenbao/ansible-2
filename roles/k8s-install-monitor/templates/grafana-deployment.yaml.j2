@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - env: [ ]
-          image: 192.168.160.47:8888/public/grafana:6.6.0
+          image: "{{ image_repository }}/public/grafana:6.6.0"
           name: grafana
           ports:
             - containerPort: 3000

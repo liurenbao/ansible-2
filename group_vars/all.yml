@@ -1,0 +1,41 @@
+image_repository: '192.168.160.47:8888'
+# docker
+docker_insecure_registries:
+  - 192.168.160.47:8888
+docker_data_root: '/data01/docker'
+
+# es
+es_root_dir: '/data01/es'
+es_cluster_name: 'es-cluster-7.3.2'
+es_image: '{{ image_repository }}/public/elasticsearch:7.13.2'
+es_java_opts: '-Xms4G -Xmx4G'
+
+# kafka
+zookeeper_image: '{{ image_repository }}/public/zookeeper-official:3.7'
+kafka_image: '{{ image_repository }}/public/kafka:2.13-2.7.0'
+kafka_root_dir: '/data01/kafka'
+kafka_heap_opts: '-Xmx4G -Xms4G'
+
+# keepalived
+keepalived_vip: 192.168.160.124
+keepalived_virtual_router_id: '55'
+keepalived_vrrp_instance_interface:
+  - eth0
+
+# kubernetes
+control_plane_endpoint: '{{ keepalived_vip }}:6443'
+google_image_repository: '{{ image_repository }}/google_containers'
+pod_network_cidr: '10.244.0.0/16'
+kubernetes_version: '1.18.19'
+component_manifest_dir: '/data01/kube-manifest'
+
+# elk
+elk_manifest_root_dir: '{{ component_manifest_dir }}/elk'
+
+# monitor
+monitor_manifest_root_dir: '{{ component_manifest_dir }}/monitor'
+
+# redis
+redis_data_dir: '/data01/redis'
+redis_image: '{{ image_repository }}/public/redis:6.2.4'
+redis_maxmemory: '51539607552'

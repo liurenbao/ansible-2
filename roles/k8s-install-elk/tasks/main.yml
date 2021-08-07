@@ -1,14 +1,14 @@
 - name: ensure directory structure exists
   file:
-    path: '{{ root_dir }}'
+    path: '{{ elk_manifest_root_dir }}'
     state: directory
 
 - name: copy config templates to master
   template:
     src: '{{ item.src }}'
-    dest: "{{ root_dir }}/{{ item.path | regex_replace('\\.j2$', '') }}"
+    dest: "{{ elk_manifest_root_dir }}/{{ item.path | regex_replace('\\.j2$', '') }}"
   with_filetree: templates/
   when: item.state == 'file'
 
 - name: apply config yaml
-  command: kubectl apply -f {{ root_dir }}
+  command: kubectl apply -f {{ elk_manifest_root_dir }}

@@ -3,8 +3,3 @@
   gather_facts: false
   roles:
     - install-kafka
-  vars:
-    zookeeper_image: 192.168.160.47:8888/public/zookeeper-official:3.7
-    kafka_image: 192.168.160.47:8888/public/kafka:2.13-2.7.0
-    root_dir: /data01/kafka
-    kafka_heap_opts: "-Xmx4G -Xms4G"

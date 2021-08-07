@@ -1,27 +1,27 @@
 - name: ensure directory structure exists
   file:
-    path: '{{ root_dir }}'
+    path: '{{ monitor_manifest_root_dir }}'
     state: directory
 
 - name: ensure directories exists
   file:
     state: directory
-    dest: '{{ root_dir }}/{{ item.path }}'
+    dest: '{{ monitor_manifest_root_dir }}/{{ item.path }}'
   with_filetree: 'files/'
   when: item.state == 'directory'
 
 - name: copy config templates to master
   copy:
     src: '{{ item.src }}'
-    dest: "{{ root_dir }}/{{ item.path | regex_replace('\\.j2$', '') }}"
+    dest: "{{ monitor_manifest_root_dir }}/{{ item.path | regex_replace('\\.j2$', '') }}"
   with_filetree: 'files/'
   when: item.state == 'file'
 
 - name: copy deploy.sh
   template:
     src: deploy.sh.j2
-    dest: "{{ root_dir }}/deploy.sh"
+    dest: "{{ monitor_manifest_root_dir }}/deploy.sh"
 
 - name: deploy
-  shell: "chmod +x {{ root_dir }}/deploy.sh && /bin/bash -c {{ root_dir }}/deploy.sh"
+  shell: "chmod +x {{ monitor_manifest_root_dir }}/deploy.sh && /bin/bash -c {{ monitor_manifest_root_dir }}/deploy.sh"
 

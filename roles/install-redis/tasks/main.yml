@@ -1,35 +1,16 @@
 ---
 
-- name: Check that the data exists
-  stat:
-    path: "{{ data_dir }}"
-  register: file_status
-
-- name: clearall value
-  debug:
-    msg: "{{ clearall }}"
-
-- name: clear data
-  shell: docker-compose down
-  args:
-    chdir: "{{ data_dir }}"
-  when: clearall == "yes" and file_status.stat.exists == True
-
-- name: Ansible delete directory example
-  shell: rm -rf {{ data_dir }}
-  when: clearall=='yes' and file_status.stat.exists == True
-
 - name: somaxconneconn
   shell: echo 511 > /proc/sys/net/core/somaxconn
 
 - name: copy docker compose
-  shell: mkdir -p {{ data_dir }}/data
+  shell: mkdir -p {{ redis_data_dir }}/data
 
 - name: copy docker compose
-  template: src=docker-compose.yml.j2 dest={{ data_dir }}/docker-compose.yml
+  template: src=docker-compose.yml.j2 dest={{ redis_data_dir }}/docker-compose.yml
 
 - name: copy redis
-  template: src=redis.conf.j2 dest={{ data_dir }}/redis.conf
+  template: src=redis.conf.j2 dest={{ redis_data_dir }}/redis.conf
 
 - name: hugepage never
   shell: echo never > /sys/kernel/mm/transparent_hugepage/enabled
@@ -45,32 +26,32 @@
 - name: copy join command
   template:
     src: create-cluster.sh.j2
-    dest: "{{ data_dir }}/create-cluster.sh"
+    dest: "{{ redis_data_dir }}/create-cluster.sh"
 
 - name: chmod create-cluster shell
-  command: chmod +x {{ data_dir }}/create-cluster.sh
+  command: chmod +x {{ redis_data_dir }}/create-cluster.sh
 
 - name: stop redis
   shell: docker-compose down
   args:
-    chdir: "{{ data_dir }}"
+    chdir: "{{ redis_data_dir }}"
 
 - name: start redis
   shell: docker-compose up -d
   args:
-    chdir: "{{ data_dir }}"
+    chdir: "{{ redis_data_dir }}"
 
 - name: validate redis
   shell: sleep 10 && docker-compose ps
   args:
-    chdir: "{{ data_dir }}"
+    chdir: "{{ redis_data_dir }}"
   register: check
 
 - name: show
   debug: var=check.stdout verbosity=0
 
 - name: chmod
-  command: sh -c {{ data_dir }}/create-cluster.sh
+  command: sh -c {{ redis_data_dir }}/create-cluster.sh
   when: ansible_ssh_host == groups[group_names[0]][0]
 
 - name: sleep 10
@@ -81,8 +62,10 @@
 - name: show cluster info
   debug:
     msg: "{{ redis_cluster_info }}"
+
 - name: sleep 5
   shell: sleep 5
+
 - name: redis cluster info
   shell: docker exec -it redis-node01 /bin/sh -c 'redis-cli cluster info' | grep cluster_state
   register: result
