@@ -2,5 +2,6 @@
   hosts: k8s-master-init
   vars:
     root_dir: /data01/kube-manifest/elk
+    docker_data_root: /data01/docker
   roles:
     - k8s-install-elk

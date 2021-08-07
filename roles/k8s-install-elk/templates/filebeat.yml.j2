@@ -19,7 +19,7 @@ data:
           - add_kubernetes_metadata:
               in_cluster: true
     output.kafka:
-      hosts: [ "kafka.elk:9092" ]
+      hosts: {{ groups['kafka'] | map('regex_replace', '^(.*)$','\\1:9092') | list | to_json }}
       topic: log
       required_acks: 0
       worker: 8
@@ -27,7 +27,7 @@ data:
     monitoring:
       enabled: true
       elasticsearch:
-        hosts: [ "http://elasticsearch.elk:9200" ]
+        hosts: {{ groups['es'] | map('regex_replace', '^(.*)$','\\1:9200') | list | to_json }}
 ---
 apiVersion: apps/v1
 kind: DaemonSet
@@ -104,7 +104,7 @@ spec:
             name: filebeat-config
         - name: varlibdockercontainers
           hostPath:
-            path: /data01/docker/containers
+            path: "{{ docker_data_root }}/containers"
         - name: varrundockersock
           hostPath:
             path: /var/run/docker.sock

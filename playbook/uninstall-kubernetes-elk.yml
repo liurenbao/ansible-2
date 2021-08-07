@@ -1,0 +1,6 @@
+- name: uninstall k8s elk
+  hosts: k8s-master-init
+  vars:
+    root_dir: /data01/kube-manifest/elk
+  roles:
+    - uninstall-k8s-elk

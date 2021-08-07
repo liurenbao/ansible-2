@@ -1,3 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kibana-config
+data:
+  kibana.yml: |
+    server.name: kibana-kubernetes
+    server.host: 0.0.0.0
+    elasticsearch.hosts: {{ groups['es'] | map('regex_replace', '^(.*)$','\\1:9200') | list | to_json}}
+    monitoring.ui.container.elasticsearch.enabled: true
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -17,19 +28,12 @@ spec:
         - name: kibana
           image: 192.168.160.47:8888/public/kibana:7.13.2
           imagePullPolicy: IfNotPresent
-          env:
-            - name: MONITORING_ENABLED
-              value: 'true'
-            - name: ELASTICSEARCH_HOSTS
-              value: http://elasticsearch.elk:9200
-            - name: SERVER_HOST
-              value: 0.0.0.0
           resources:
             limits:
               cpu: '1'
               memory: 3Gi
             requests:
-              cpu: 20m
+              cpu: 50m
               memory: 500Mi
           readinessProbe:
             exec:
@@ -74,4 +78,5 @@ spec:
     app: kibana
   ports:
     - port: 5601
+      nodePort: 30001
   type: NodePort
