@@ -20,7 +20,6 @@
   hosts: k8s-master-init
   gather_facts: false
   vars:
-    ansible_hosts_ip: 192.168.160.50
     control_plane_endpoint: 192.168.160.124:6443
     image_repository: 192.168.160.47:8888/google_containers
     pod_network_cidr: 10.244.0.0/16
