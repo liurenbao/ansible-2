@@ -8,3 +8,5 @@
 - import_playbook: "playbook/install-kubernetes-component.yml"
 - import_playbook: "playbook/install-kubernetes-elk.yml"
 - import_playbook: "playbook/install-kubernetes-monitor.yml"
+
+# fixme keepalived 检查脚本
