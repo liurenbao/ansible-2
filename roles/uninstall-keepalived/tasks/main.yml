@@ -21,4 +21,4 @@
   command: yum remove -y keepalived
 
 - name: remove keepalived.conf
-  command: rm -f /etc/keepalived/keepalived.conf
+  command: rm -f /etc/keepalived/
