@@ -10,7 +10,7 @@ spec:
   - name: http
     port: 3000
     targetPort: http
-    nodePort: 30000
+    nodePort: 30004
   selector:
     app: grafana
   type: NodePort

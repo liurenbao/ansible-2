@@ -75,4 +75,5 @@ spec:
     - port: 9115
       targetPort: 9115
       name: monitor
+      nodePort: 30003
   type: NodePort
