@@ -1,6 +1,4 @@
 - hosts: uninstall redis
   gather_facts: false
-  vars:
-    root_dir: /data01/redis
   roles:
     - uninstall-redis

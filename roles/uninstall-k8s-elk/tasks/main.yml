@@ -1,14 +1,11 @@
 - name: check has installed
-  stat: path={{ root_dir }}
+  stat: path={{ elk_manifest_root_dir }}
   register: p
-- name: print has installed
-  debug:
-    msg: "{{ p }}"
 - name: delete filebeat logstash kibana
-  command: kubectl delete -f {{ root_dir }}
+  command: kubectl delete -f {{ elk_manifest_root_dir }}
   args:
-    chdir: "{{ root_dir }}"
+    chdir: "{{ elk_manifest_root_dir }}"
   when: p.stat.isdir is defined and p.stat.isdir
 - name: remove manifest files
-  command: "rm -rf {{ root_dir }}"
+  command: "rm -rf {{ elk_manifest_root_dir }}"
   when: p.stat.isdir is defined and p.stat.isdir

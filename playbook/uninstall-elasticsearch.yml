@@ -3,5 +3,3 @@
   gather_facts: false
   roles:
     - uninstall-elasticsearch
-  vars:
-    root_dir: /data01/es

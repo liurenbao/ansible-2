@@ -2,10 +2,6 @@
   stat: path=/etc/keepalived
   register: p
 
-- name: print has installed
-  debug:
-    msg: "{{ p }}"
-
 - name: rm -rf /tmp/keepalived
   shell: rm -rf /tmp/keepalived
 

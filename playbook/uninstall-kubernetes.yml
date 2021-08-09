@@ -1,6 +1,12 @@
-- name: uninstall kubernetes
+- name: uninstall kubernetes worker
   hosts:
     - k8s-worker
+  gather_facts: false
+  roles:
+    - uninstall-kubernetes
+
+- name: uninstall kubernetes master
+  hosts:
     - k8s-master
   gather_facts: false
   roles:

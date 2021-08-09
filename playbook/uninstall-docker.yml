@@ -1,7 +1,5 @@
 - name: uninstall docker
   hosts: k8s
   gather_facts: false
-  vars:
-    data_root: /data01/docker
   roles:
     - uninstall-docker

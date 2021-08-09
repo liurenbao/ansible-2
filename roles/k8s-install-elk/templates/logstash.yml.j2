@@ -62,7 +62,7 @@ data:
   input_main.conf: |-
     input {
       kafka {
-        bootstrap_servers => "kafka.elk:9092"
+        bootstrap_servers => "{{ groups['kafka'] | map('regex_replace', '^(.*)$','\\1:9092') | list | join(',') }}"
         topics => ["log"]
         type => "log"
         codec => json { charset => "UTF-8" }
@@ -75,7 +75,7 @@ data:
     output {
       stdout { codec => rubydebug }
       elasticsearch {
-        hosts => ["elasticsearch.elk:9200"]
+        hosts => {{ groups['es'] | map('regex_replace', '^(.*)$','\\1:9200') | list | to_json}}
         manage_template => true
         template_name => "app-log"
         index => "log-%{[service]}-%{[kubernetes][namespace]}-%{+YYYY-MM-dd}"

@@ -2,11 +2,11 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: kibana-config
+  namespace: elk
 data:
   kibana.yml: |
-    server.name: kibana-kubernetes
-    server.host: 0.0.0.0
-    elasticsearch.hosts: {{ groups['es'] | map('regex_replace', '^(.*)$','\\1:9200') | list | to_json}}
+    server.host: "0"
+    elasticsearch.hosts: {{ groups['es'] | map('regex_replace', '^(.*)$','http://\\1:9200') | list | to_json }}
     monitoring.ui.container.elasticsearch.enabled: true
 ---
 apiVersion: apps/v1
@@ -60,7 +60,15 @@ spec:
                   }
 
                   http "/app/kibana"
+          volumeMounts:
+            - mountPath: /usr/share/kibana/config/kibana.yml
+              subPath: kibana.yml
+              name: kibana-config
       restartPolicy: Always
+      volumes:
+        - name: kibana-config
+          configMap:
+            name: kibana-config
       securityContext:
         runAsUser: 1000
         runAsNonRoot: true
