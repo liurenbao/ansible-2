@@ -42,3 +42,8 @@
 
 - name: harbor url
   shell: 'echo "|harbor | {{ image_repository }} | - |" >> {{ kube_component_file }}'
+
+- name: fetch result to ansible node
+  fetch:
+    src: '{{ kube_component_file }}'
+    dest: '/etc/ansible'

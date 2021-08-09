@@ -1,0 +1,5 @@
+- name: install docker prune
+  hosts: k8s
+  gather_facts: false
+  roles:
+    - install-docker-clean-cron

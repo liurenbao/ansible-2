@@ -1,0 +1,5 @@
+- name: add etcd backup cron
+  cron:
+    name: "backup etcd"
+    special_time: "hourly"
+    job: ""
