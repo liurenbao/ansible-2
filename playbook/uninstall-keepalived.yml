@@ -1,5 +1,7 @@
 - name: uninstall keepalived
   hosts: k8s-master
   gather_facts: false
+  ignore_errors: true
+  ignore_unreachable: true
   roles:
     - uninstall-keepalived

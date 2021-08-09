@@ -1,5 +1,7 @@
 - name: uninstall elasticsearch
   hosts: es
   gather_facts: false
+  ignore_errors: true
+  ignore_unreachable: true
   roles:
     - uninstall-elasticsearch
