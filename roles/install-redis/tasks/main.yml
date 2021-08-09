@@ -52,16 +52,18 @@
 
 - name: chmod
   command: sh -c {{ redis_data_dir }}/create-cluster.sh
-  when: ansible_ssh_host == groups[group_names[0]][0]
+  when: ansible_ssh_host == groups['redis'][0]
 
 - name: sleep 10
   shell: sleep 10
-- name: show cluster info
-  shell:  docker exec -it redis-node01 /bin/sh -c 'redis-cli cluster info'
+- name: get cluster info
+  shell: docker exec -it redis-node01 /bin/sh -c 'redis-cli cluster info'
   register: redis_cluster_info
+
 - name: show cluster info
   debug:
     msg: "{{ redis_cluster_info }}"
+  when: ansible_ssh_host == groups['redis'][0]
 
 - name: sleep 5
   shell: sleep 5

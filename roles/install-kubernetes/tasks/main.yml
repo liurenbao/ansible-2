@@ -21,9 +21,3 @@
 
 - name: restart kubelet 
   shell: systemctl restart kubelet
-
-- name: install etcdctl
-  copy:
-    src: /etc/ansible/tools/etcdctl
-    dest: /usr/local/bin
-    mode: 0744

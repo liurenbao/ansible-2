@@ -42,3 +42,6 @@ redis_maxmemory: '51539607552'
 
 # component result file
 kube_component_file: '{{ component_manifest_dir }}/kube-component.md'
+
+# etcd backup
+etcd_backup_root_dir: '/data01/etcd'
