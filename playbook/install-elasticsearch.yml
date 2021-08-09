@@ -2,4 +2,5 @@
   hosts: es
   gather_facts: false
   roles:
+    - change-sysconf
     - install-elasticsearch

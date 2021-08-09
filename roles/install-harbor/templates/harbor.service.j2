@@ -7,7 +7,7 @@ Requires=docker.service
 Type=simple
 Restart=on-failure
 RestartSec=5
-ExecStart=/usr/local/bin/docker-compose -f /data01/harbor/docker-compose.yml up
-ExecStop=/usr/local/bin/docker-compose -f /data01/harbor/docker-compose.yml down
+ExecStart=/usr/local/bin/docker-compose -f {{ harbor_root_dir }}/docker-compose.yml up
+ExecStop=/usr/local/bin/docker-compose -f {{ harbor_root_dir }}/docker-compose.yml down
 [Install]
 WantedBy=multi-user.target

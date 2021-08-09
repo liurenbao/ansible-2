@@ -1,8 +1,24 @@
 image_repository: '192.168.160.47:8888'
 # docker
 docker_insecure_registries:
-  - 192.168.160.47:8888
+  - 'xcz'
 docker_data_root: '/data01/docker'
+
+## harbor
+harbor_keepalived_vip: 192.168.160.39
+harbor_keepalived_virtual_router_id: '66'
+harbor_keepalived_vrrp_instance_interface: eth0
+harbor_tar: '/etc/ansible/package/harbor_20210809.tar.gz'
+harbor_root_dir: '/data01/harbor'
+harbor_hostname: '192.168.160.39'
+harbor_port: '80'
+harbor_password: 'admin123Admin'
+harbor_data_volume: '{{ harbor_root_dir }}/harbor-data'
+
+# nginx todo
+#nginx_keepalived_vip: 192.168.160.3
+#nginx_keepalived_virtual_router_id: '55'
+#nginx_keepalived_vrrp_instance_interface: eth0
 
 # es
 es_root_dir: '/data01/es'
@@ -16,14 +32,13 @@ kafka_image: '{{ image_repository }}/public/kafka:2.13-2.7.0'
 kafka_root_dir: '/data01/kafka'
 kafka_heap_opts: '-Xmx4G -Xms4G'
 
-# keepalived
-keepalived_vip: 192.168.160.124
-keepalived_virtual_router_id: '55'
-keepalived_vrrp_instance_interface:
-  - eth0
+# k8s
+k8s_keepalived_vip: 192.168.160.5
+k8s_keepalived_virtual_router_id: '55'
+k8s_keepalived_vrrp_instance_interface: eth0
 
 # kubernetes
-control_plane_endpoint: '{{ keepalived_vip }}:6443'
+control_plane_endpoint: '{{ k8s_keepalived_vip }}:6443'
 google_image_repository: '{{ image_repository }}/google_containers'
 pod_network_cidr: '10.244.0.0/16'
 kubernetes_version: '1.18.19'

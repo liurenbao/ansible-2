@@ -1,0 +1,10 @@
+- name: install nginx vip
+  hosts: nginx
+  gather_facts: false
+  vars:
+    keepalived_vip: '{{ nginx_keepalived_vip }}'
+    keepalived_virtual_router_id: '{{ nginx_keepalived_virtual_router_id }}'
+    keepalived_vrrp_instance_interface:
+      - '{{ nginx_keepalived_vrrp_instance_interface }}'
+  roles:
+    - install-keepalived
