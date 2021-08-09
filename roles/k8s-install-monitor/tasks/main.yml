@@ -1,26 +1,29 @@
-- name: ensure directory structure exists
-  file:
-    path: '{{ monitor_manifest_root_dir }}'
-    state: directory
-
-- name: ensure directories exists
-  file:
-    state: directory
-    dest: '{{ monitor_manifest_root_dir }}/{{ item.path }}'
-  with_filetree: 'files/'
-  when: item.state == 'directory'
-
-- name: copy config templates to master
+- name: send ymls to remote host
   copy:
+    src: 'files/config.tar'
+    dest: '{{ monitor_manifest_root_dir }}/'
+
+- name: send config files to master
+  unarchive:
+    src: '{{ monitor_manifest_root_dir }}/config.tar'
+    dest: '{{ monitor_manifest_root_dir }}'
+    remote_src: yes
+
+- name: remove archive file
+  command: 'rm -rf {{ monitor_manifest_root_dir }}/config.tar'
+
+- name: Ensure files are populated from templates
+  template:
     src: '{{ item.src }}'
-    dest: "{{ monitor_manifest_root_dir }}/{{ item.path | regex_replace('\\.j2$', '') }}"
-  with_filetree: 'files/'
+    dest: "{{ monitor_manifest_root_dir }}/{{ item.path | regex_replace('.j2$', '') }}"
+  with_filetree: 'templates/'
   when: item.state == 'file'
 
-- name: copy deploy.sh
-  template:
-    src: deploy.sh.j2
-    dest: "{{ monitor_manifest_root_dir }}/deploy.sh"
+#- name: copy templates to master
+#  template:
+#    src: "{{ item }}"
+#    dest: "{{ monitor_manifest_root_dir }}/{{ item | basename | regex_replace('.j2$', '') }}"
+#    with_filetree: "templates/"
 
 - name: deploy
   shell: "chmod +x {{ monitor_manifest_root_dir }}/deploy.sh && /bin/bash -c {{ monitor_manifest_root_dir }}/deploy.sh"

@@ -39,3 +39,6 @@ monitor_manifest_root_dir: '{{ component_manifest_dir }}/monitor'
 redis_data_dir: '/data01/redis'
 redis_image: '{{ image_repository }}/public/redis:6.2.4'
 redis_maxmemory: '51539607552'
+
+# component result file
+kube_component_file: '{{ component_manifest_dir }}/kube-component.md'

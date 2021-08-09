@@ -1,0 +1,44 @@
+- name: create kube component file
+  file:
+    path: '{{ kube_component_file }}'
+    state: absent
+
+
+- name: init markdown line
+  shell: |
+    echo "| component | url | auth |" >> {{ kube_component_file }}
+    echo "| --- | --- | --- |" >> {{ kube_component_file }}
+
+- name: k8s dashboard url
+  shell: 'echo "https://{{ groups["k8s-master-init"][0] }}:30000"'
+  register: k8s_dashboard_url
+
+- name: k8s dashboard token
+  shell: |
+    secret_name=$(kubectl -n kube-system get secret | grep admin-user-token | awk '{print $1}')
+    kubectl -n kube-system describe secret  $secret_name | grep "token:"
+  register: k8s_dashboard_token
+
+- name: k8s dashboard
+  shell: echo "|k8s-dashbaord | {{ k8s_dashboard_url.stdout }} | {{ k8s_dashboard_token.stdout }} |">> {{ kube_component_file }}
+
+
+- name: traefik dashboard
+  shell: 'echo "|traefik | http://{{ groups["k8s-master-init"][0] }}:31000 | - |" >> {{ kube_component_file }}'
+
+- name: grafana dashboard
+  shell: 'echo "| grafana | http://{{ groups["k8s-master-init"][0] }}:30004 | - |" >> {{ kube_component_file }}'
+
+- name: prometheus dashboard
+  shell: 'echo "| prometheus | http://{{ groups["k8s-master-init"][0] }}:30002 | - |" >> {{ kube_component_file }}'
+
+- name: kibana dashboard
+  shell: 'echo "|kibana | http://{{ groups["k8s-master-init"][0] }}:30001 | - |" >> {{ kube_component_file }}'
+
+- name: redis connect string
+  shell: |
+    redis_connect_string='{{ groups["redis"] | map("regex_replace", "^(.*)$","\1:6379") | join(",") }}'
+    echo "|redis | $redis_connect_string | - |" >> {{ kube_component_file }}
+
+- name: harbor url
+  shell: 'echo "|harbor | {{ image_repository }} | - |" >> {{ kube_component_file }}'

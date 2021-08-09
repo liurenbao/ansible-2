@@ -65,6 +65,9 @@ spec:
               path: /dashboard
             successThreshold: 1
             periodSeconds: 3
+      tolerations:
+        - key: node-role.kubernetes.io/master
+          operator: Exists
 ---
 apiVersion: v1
 kind: Service

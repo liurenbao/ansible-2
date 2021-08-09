@@ -1,0 +1,5 @@
+- name: collect install result
+  hosts: k8s-master-init
+  gather_facts: false
+  roles:
+    - collect-install-result
