@@ -1,4 +1,4 @@
-- name: install k8s components
+- name: install k8s monitor
   hosts: k8s-master-init
   gather_facts: false
   roles:

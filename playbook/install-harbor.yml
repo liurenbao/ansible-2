@@ -1,0 +1,16 @@
+- name: install harbor vip
+  hosts: harbor
+  vars:
+    keepalived_vip: '{{ harbor_keepalived_vip }}'
+    keepalived_virtual_router_id: '{{ harbor_keepalived_virtual_router_id }}'
+    keepalived_vrrp_instance_interface:
+      - '{{ harbor_keepalived_vrrp_instance_interface }}'
+  gather_facts: false
+  roles:
+    - install-keepalived
+
+- name: install harbor
+  gather_facts: false
+  hosts: harbor
+  roles:
+    - install-harbor

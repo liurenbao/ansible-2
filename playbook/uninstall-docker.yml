@@ -1,5 +1,7 @@
 - name: uninstall docker
   hosts: k8s
   gather_facts: false
+  ignore_errors: true
+  ignore_unreachable: true
   roles:
     - uninstall-docker

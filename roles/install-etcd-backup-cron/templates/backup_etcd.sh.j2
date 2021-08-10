@@ -1,0 +1,11 @@
+# back up
+backup_dir={{ etcd_backup_dir }}/backup
+mkdir -p "$backup_dir"
+ETCDCTL_API=3 etcdctl --endpoints=https://127.0.0.1:2379 \
+--cacert=/etc/kubernetes/pki/etcd/ca.crt \
+--cert=/etc/kubernetes/pki/etcd/server.crt \
+--key=/etc/kubernetes/pki/etcd/server.key \
+snapshot save $backup_dir/etcd-snapshot-$(date +%Y%m%d).db
+
+# remove old
+find $backup_dir -name "etcd-snapshot-*.db" -mtime +7 -type f | xargs rm -f

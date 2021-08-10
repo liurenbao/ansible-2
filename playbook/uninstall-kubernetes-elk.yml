@@ -1,4 +1,6 @@
 - name: uninstall k8s elk
   hosts: k8s-master-init
+  ignore_errors: true
+  ignore_unreachable: true
   roles:
     - uninstall-k8s-elk

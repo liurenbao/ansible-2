@@ -11,3 +11,5 @@
   command: yum remove -y kubelet kubeadm kubectl
 - name: clean kube files
   command: "rm -rf /etc/kubernetes /var/lib/kubelet /var/lib/etcd /etc/sysctl.d/99-kubernetes-cri.conf"
+- name: clean custom manifest
+  command: 'rm -rf {{ component_manifest_dir }}'

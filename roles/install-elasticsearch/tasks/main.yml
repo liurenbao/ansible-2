@@ -22,12 +22,12 @@
 - name: check es state
   shell: sleep 30 && curl http://localhost:9200/_cat/health?v
   register: result
-  when: ansible_ssh_host == groups[group_names[0]][0]
+  when: ansible_ssh_host == groups['es'][0]
 
 - name: show result
   debug:
     msg: "{{ result.stdout_lines }}"
-  when: ansible_ssh_host == groups[group_names[0]][0]
+  when: ansible_ssh_host == groups['es'][0]
 
 - name: pause
   command: sleep 10

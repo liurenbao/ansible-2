@@ -31,7 +31,7 @@ http:
 # The initial password of Harbor admin
 # It only works in first time to install harbor
 # Remember Change the admin password from UI after launching Harbor.
-harbor_admin_password: admin123Admin
+harbor_admin_password: {{ harbor_password }}
 
 # Harbor DB configuration
 database:
@@ -44,7 +44,7 @@ database:
   max_open_conns: 1000
 
 # The default data volume
-data_volume: {{ data_volume }}
+data_volume: {{ harbor_data_volume }}
 
 # Harbor Storage settings by default is using /data dir on local filesystem
 # Uncomment storage_service setting If you want to using external storage

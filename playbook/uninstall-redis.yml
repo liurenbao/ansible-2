@@ -1,4 +1,6 @@
 - hosts: uninstall redis
   gather_facts: false
+  ignore_errors: true
+  ignore_unreachable: true
   roles:
     - uninstall-redis

@@ -1,0 +1,6 @@
+- name: install etcd backup cron
+  hosts:
+    - k8s-master
+  gather_facts: false
+  roles:
+    - install-etcd-backup-cron

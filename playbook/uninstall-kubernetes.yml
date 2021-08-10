@@ -2,12 +2,15 @@
   hosts:
     - k8s-worker
   gather_facts: false
+  ignore_errors: true
+  ignore_unreachable: true
   roles:
     - uninstall-kubernetes
-
 - name: uninstall kubernetes master
   hosts:
     - k8s-master
   gather_facts: false
+  ignore_errors: true
+  ignore_unreachable: true
   roles:
     - uninstall-kubernetes

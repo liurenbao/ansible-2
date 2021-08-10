@@ -9,6 +9,7 @@
 
 - name: close firewalld
   shell: systemctl stop firewalld &&  systemctl disable firewalld
+
 - name: rm -rf /tmp/keepalived
   shell: rm -rf /tmp/keepalived 
 

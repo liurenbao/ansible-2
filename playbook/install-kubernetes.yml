@@ -1,10 +1,15 @@
-- name: k8s master vip
+- name: k8s control plane vip
   hosts: k8s-master
   gather_facts: false
+  vars:
+    keepalived_vip: "{{ k8s_keepalived_vip }}"
+    keepalived_virtual_router_id: "{{ k8s_keepalived_virtual_router_id }}"
+    keepalived_vrrp_instance_interface:
+      - "{{ k8s_keepalived_vrrp_instance_interface }}"
   roles:
     - install-keepalived
 
-- name: install kubelet kubeadm kubectl
+- name: install kubelet kubeadm kubect
   hosts: k8s
   gather_facts: false
   roles:
