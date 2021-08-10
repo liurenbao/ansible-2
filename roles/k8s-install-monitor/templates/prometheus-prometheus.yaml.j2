@@ -6,16 +6,26 @@ metadata:
   name: k8s
   namespace: monitoring
 spec:
+  storage:
+    volumeClaimTemplate:
+      spec:
+        storageClassName: nfs-storage
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: {{ prometheus_storage }}
   alerting:
     alertmanagers:
-    - name: alertmanager-main
-      namespace: monitoring
-      port: web
+      - name: alertmanager-main
+        namespace: monitoring
+        port: web
   image: "{{ image_repository }}/public/prometheus:v2.15.2"
   nodeSelector:
     kubernetes.io/os: linux
-  podMonitorNamespaceSelector: {}
-  podMonitorSelector: {}
+  podMonitorNamespaceSelector: { }
+  podMonitorSelector: { }
+  retention: {{ prometheus_data_retention }}
   replicas: 2
   resources:
     requests:
@@ -32,6 +42,6 @@ spec:
     name: prometheus-additional
     key: prometheus-additional.yaml
   serviceAccountName: prometheus-k8s
-  serviceMonitorNamespaceSelector: {}
-  serviceMonitorSelector: {}
+  serviceMonitorNamespaceSelector: { }
+  serviceMonitorSelector: { }
   version: v2.15.2

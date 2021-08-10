@@ -1,7 +1,37 @@
-- import_playbook: "playbook/change-hostname.yml"
-- import_playbook: "playbook/install-docker.yml"
-- import_playbook: "playbook/install-harbor.yml"
-- import_playbook: "playbook/install-nginx.yml"
+- name: change hostname
+  hosts: all
+  gather_facts: false
+  roles:
+    - change-hostname
+
+
+- name: install docker
+  gather_facts: false
+  hosts: docker
+  roles:
+    - install-docker
+
+
+- name: install harbor vip
+  hosts: harbor
+  vars:
+    keepalived_vip: '{{ harbor_keepalived_vip }}'
+    keepalived_virtual_router_id: '{{ harbor_keepalived_virtual_router_id }}'
+    keepalived_vrrp_instance_interface:
+      - '{{ harbor_keepalived_vrrp_instance_interface }}'
+  gather_facts: false
+  roles:
+    - install-keepalived
+- name: install harbor
+  gather_facts: false
+  hosts: harbor
+  roles:
+    - install-harbor
+
+#- import_playbook: "playbook/change-hostname.yml"
+#- import_playbook: "playbook/install-docker.yml"
+#- import_playbook: "playbook/install-harbor.yml"
+#- import_playbook: "playbook/install-nginx.yml"
 - import_playbook: "playbook/install-kubernetes.yml"
 - import_playbook: "playbook/install-kafka.yml"
 - import_playbook: "playbook/install-elasticsearch.yml"
@@ -9,3 +39,4 @@
 - import_playbook: "playbook/install-kubernetes-component.yml"
 - import_playbook: "playbook/install-kubernetes-elk.yml"
 - import_playbook: "playbook/install-kubernetes-monitor.yml"
+- import_playbook: "playbook/collect-install-result.yml"

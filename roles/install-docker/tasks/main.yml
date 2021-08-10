@@ -36,6 +36,9 @@
     regexp: '^SELINUX='
     line: SELINUX=disabled
 
+- name: remove old packages
+  shell: rm -rf /local/docker-repo
+
 - name: mkdir /local/docker
   shell: mkdir -p /local/docker-repo
 

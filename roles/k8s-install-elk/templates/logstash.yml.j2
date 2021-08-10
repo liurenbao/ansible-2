@@ -54,6 +54,16 @@ data:
         }
       }
 
+      if [kubernetes][namespace] {
+        mutate {
+          add_field => { "namespace" => "%{[kubernetes][namespace]}" }
+        }
+      } else {
+        mutate {
+          add_field => { "namespace" => "unkown" }
+        }
+      }
+
       prune {
         blacklist_names => [ "log.*", "ecs.*", "agent.*", "host.*", "type.*" ]
       }
@@ -62,6 +72,8 @@ data:
   input_main.conf: |-
     input {
       kafka {
+        id => "kafka"
+        client_id => "kafka"
         bootstrap_servers => "{{ groups['kafka'] | map('regex_replace', '^(.*)$','\\1:9092') | list | join(',') }}"
         topics => ["log"]
         type => "log"
@@ -78,7 +90,7 @@ data:
         hosts => {{ groups['es'] | map('regex_replace', '^(.*)$','\\1:9200') | list | to_json}}
         manage_template => true
         template_name => "app-log"
-        index => "log-%{[service]}-%{[kubernetes][namespace]}-%{+YYYY-MM-dd}"
+        index => "log-%{[service]}-%{[namespace]}-%{+YYYY-MM-dd}"
         document_type => "%{[@metadata][type]}"
       }
     }
@@ -106,7 +118,7 @@ metadata:
   name: logstash
   namespace: elk
 spec:
-  replicas: 2
+  replicas: 5
   template:
     metadata:
       labels:
@@ -140,17 +152,3 @@ spec:
   selector:
     matchLabels:
       app: logstash
----
-apiVersion: v1
-kind: Service
-metadata:
-  labels:
-    app: logstash
-  name: logstash
-  namespace: elk
-spec:
-  ports:
-    - port: 5000
-      targetPort: 5000
-  selector:
-    k8s-app: logstash

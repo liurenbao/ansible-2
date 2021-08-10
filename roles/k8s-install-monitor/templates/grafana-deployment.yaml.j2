@@ -119,8 +119,6 @@ spec:
         runAsUser: 65534
       serviceAccountName: grafana
       volumes:
-        - emptyDir: { }
-          name: grafana-storage
         - name: grafana-datasources
           secret:
             secretName: grafana-datasources
@@ -196,3 +194,8 @@ spec:
         - configMap:
             name: grafana-dashboard-workload-total
           name: grafana-dashboard-workload-total
+        - name: grafana-storage
+          persistentVolumeClaim:
+            claimName: grafana-storage
+
+

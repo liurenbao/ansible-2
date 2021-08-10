@@ -8,6 +8,9 @@
 - name: install rpm
   shell: yum -y localinstall /tmp/k8s-1.18.19/*
 
+- name: install nfs-utils
+  shell: yum install nfs-utils -y
+
 - name: ipforward=1
   template:
     src: 99-kubernetes-cri.conf.j2

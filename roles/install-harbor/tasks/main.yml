@@ -3,6 +3,7 @@
 
 - name: unarchive harbor
   unarchive: src={{ harbor_tar }} dest={{ harbor_root_dir }}
+  when: harbor_archive_already_existed == false
  
 - name: copy harbor.yml
   template: src=harbor.yml.j2 dest={{ harbor_root_dir }}/harbor.yml
