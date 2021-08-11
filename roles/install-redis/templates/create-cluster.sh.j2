@@ -1,1 +1,1 @@
-docker exec redis-node01 redis-cli --cluster create {% for host in groups['redis'] %}{{ host +':6379'}} {% endfor %} --cluster-replicas 1 --cluster-yes
+docker exec -T redis-node01 redis-cli --cluster create {% for host in groups['redis'] %}{{ host +':6379'}} {% endfor %} --cluster-replicas 1 --cluster-yes

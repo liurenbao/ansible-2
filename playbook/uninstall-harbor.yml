@@ -5,3 +5,11 @@
   ignore_unreachable: true
   roles:
     - uninstall-harbor
+
+- name: uninstall keepalived
+  hosts: harbor
+  gather_facts: false
+  ignore_errors: true
+  ignore_unreachable: true
+  roles:
+    - uninstall-keepalived

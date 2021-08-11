@@ -1,10 +1,19 @@
+- name: check has installed
+  stat: path={{ harbor_root_dir }}
+  register: p
+
 - name: create harbor dir
   shell: mkdir -p {{ harbor_root_dir }}
 
-- name: unarchive harbor
-  unarchive: src={{ harbor_tar }} dest={{ harbor_root_dir }}
-  when: harbor_archive_already_existed == false
- 
+- name: copy harbor
+  copy:
+    src: "{{ harbor_tar }}"
+    dest: "{{ harbor_root_dir }}/harbor.tar"
+    force: yes
+
+- name: unarchive harbor tar
+  shell: tar -zxf {{ harbor_root_dir }}/harbor.tar -C {{ harbor_root_dir }}
+
 - name: copy harbor.yml
   template: src=harbor.yml.j2 dest={{ harbor_root_dir }}/harbor.yml
  

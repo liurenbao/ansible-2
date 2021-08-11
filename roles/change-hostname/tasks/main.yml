@@ -1,5 +1,5 @@
 - name: set hostname
-  command: "hostnamectl set-hostname {{ host_name }}"
+  shell: hostnamectl set-hostname {{ host_name }}
 - name: replace hosts file
   template:
     src: hosts.j2

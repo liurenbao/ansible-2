@@ -1,8 +1,8 @@
 ## harbor
-harbor_keepalived_vip: 192.168.160.79
+harbor_keepalived_vip: 192.168.160.5
 harbor_keepalived_virtual_router_id: '66'
 harbor_keepalived_vrrp_instance_interface: eth0
-harbor_tar: '/etc/ansible/package/harbor_20210810.tar.gz'
+harbor_tar: '/etc/ansible/package/harbor/harbor.tar.gz'
 harbor_root_dir: '/data01/harbor'
 harbor_port: '80'
 harbor_password: 'admin123Admin'
@@ -13,7 +13,6 @@ image_repository: '{{ harbor_keepalived_vip }}:{{ harbor_port }}'
 docker_insecure_registries:
   - '{{ image_repository }}'
 docker_data_root: '/data01/docker'
-harbor_archive_already_existed: false
 
 # nginx todo
 #nginx_keepalived_vip: 192.168.160.3
@@ -33,7 +32,7 @@ kafka_root_dir: '/data01/kafka'
 kafka_heap_opts: '-Xmx16G -Xms16G'
 
 # k8s
-k8s_keepalived_vip: 192.168.160.43
+k8s_keepalived_vip: 192.168.160.56
 k8s_keepalived_virtual_router_id: '55'
 k8s_keepalived_vrrp_instance_interface: eth0
 

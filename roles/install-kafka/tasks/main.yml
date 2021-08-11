@@ -15,7 +15,7 @@
 - name: pause
   command: sleep 30
 - name: create topic
-  command: docker-compose exec kafka kafka-topics.sh --zookeeper localhost:2181 --create --topic test --partitions 5 --replication-factor 1
+  command: docker-compose exec -T kafka kafka-topics.sh --zookeeper localhost:2181 --create --topic test --partitions 5 --replication-factor 1
   args:
     chdir: "{{ kafka_root_dir }}"
   register: create_result
