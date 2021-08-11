@@ -1,0 +1,11 @@
+- name: check has installed
+  stat: path={{ harbor_root_dir }}
+  register: p
+- name: stop harbor
+  command: docker-compose down
+  args:
+    chdir: "{{ harbor_root_dir }}"
+  when: p.stat.isdir is defined and p.stat.isdir
+- name: remove harbor data and other files
+  command: "rm -rf {{ harbor_root_dir }}"
+  when: p.stat.isdir is defined and p.stat.isdir

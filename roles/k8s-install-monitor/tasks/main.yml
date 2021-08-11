@@ -1,3 +1,6 @@
+- name: clean old manifest
+  shell: 'rm -rf {{ monitor_manifest_root_dir }}'
+
 - name: send ymls to remote host
   copy:
     src: 'files/config.tar'
@@ -12,7 +15,7 @@
 - name: remove archive file
   command: 'rm -rf {{ monitor_manifest_root_dir }}/config.tar'
 
-- name: Ensure files are populated from templates
+- name: copy template to remote
   template:
     src: '{{ item.src }}'
     dest: "{{ monitor_manifest_root_dir }}/{{ item.path | regex_replace('.j2$', '') }}"
@@ -22,3 +25,8 @@
 - name: deploy
   shell: "chmod +x {{ monitor_manifest_root_dir }}/deploy.sh && /bin/bash -c {{ monitor_manifest_root_dir }}/deploy.sh"
 
+- name: re-deploy setup
+  shell: "kubectl apply -f {{ monitor_manifest_root_dir }}/setup/"
+
+- name: re-deploy monitor
+  shell: "kubectl apply -f {{ monitor_manifest_root_dir }}/"

@@ -1,19 +1,19 @@
-image_repository: '192.168.160.47:8888'
-# docker
-docker_insecure_registries:
-  - 'xcz'
-docker_data_root: '/data01/docker'
-
 ## harbor
-harbor_keepalived_vip: 192.168.160.39
+harbor_keepalived_vip: 192.168.160.79
 harbor_keepalived_virtual_router_id: '66'
 harbor_keepalived_vrrp_instance_interface: eth0
-harbor_tar: '/etc/ansible/package/harbor_20210809.tar.gz'
+harbor_tar: '/etc/ansible/package/harbor_20210810.tar.gz'
 harbor_root_dir: '/data01/harbor'
-harbor_hostname: '192.168.160.39'
 harbor_port: '80'
 harbor_password: 'admin123Admin'
 harbor_data_volume: '{{ harbor_root_dir }}/harbor-data'
+
+# docker
+image_repository: '{{ harbor_keepalived_vip }}:{{ harbor_port }}'
+docker_insecure_registries:
+  - '{{ image_repository }}'
+docker_data_root: '/data01/docker'
+harbor_archive_already_existed: false
 
 # nginx todo
 #nginx_keepalived_vip: 192.168.160.3
@@ -30,10 +30,10 @@ es_java_opts: '-Xms4G -Xmx4G'
 zookeeper_image: '{{ image_repository }}/public/zookeeper-official:3.7'
 kafka_image: '{{ image_repository }}/public/kafka:2.13-2.7.0'
 kafka_root_dir: '/data01/kafka'
-kafka_heap_opts: '-Xmx4G -Xms4G'
+kafka_heap_opts: '-Xmx16G -Xms16G'
 
 # k8s
-k8s_keepalived_vip: 192.168.160.5
+k8s_keepalived_vip: 192.168.160.43
 k8s_keepalived_virtual_router_id: '55'
 k8s_keepalived_vrrp_instance_interface: eth0
 
@@ -48,7 +48,12 @@ component_manifest_dir: '/data01/kube-manifest'
 elk_manifest_root_dir: '{{ component_manifest_dir }}/elk'
 
 # monitor
+nfs_server: '192.168.160.35'
+nfs_path: '/data01/k8spv'
 monitor_manifest_root_dir: '{{ component_manifest_dir }}/monitor'
+prometheus_storage: '20Gi'
+prometheus_data_retention: '35d'
+grafana_storage: '20Gi'
 
 # redis
 redis_data_dir: '/data01/redis'
