@@ -72,3 +72,17 @@
 192.168.160.75	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="redis-4"
 192.168.160.4	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="redis-5"
 192.168.160.82	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="redis-6"
+
+
+[rocketmq-console]
+192.168.160.93	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="redis-1"
+192.168.160.7	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="redis-2"
+[rocketmq-namesrv]
+192.168.160.93	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="redis-1"
+192.168.160.7	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="redis-2"
+[rocketmq-master]
+192.168.160.74	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="redis-3" broker_name=broker-a
+192.168.160.75	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="redis-4" broker_name=broker-b
+[rocketmq-slave]
+192.168.160.4	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="redis-5" broker_name=broker-a-s
+192.168.160.82	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="redis-6" broker_name=broker-b-s

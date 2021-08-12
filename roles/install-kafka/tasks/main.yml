@@ -26,7 +26,7 @@
   when: ansible_ssh_host == groups['kafka'][0]
 
 - name: list topic
-  command: docker-compose exec kafka  kafka-topics.sh  --zookeeper localhost:2181 --list
+  command: docker-compose exec -T kafka  kafka-topics.sh  --zookeeper localhost:2181 --list
   args:
     chdir: "{{ kafka_root_dir }}"
   register: list_result

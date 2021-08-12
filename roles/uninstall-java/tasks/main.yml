@@ -1,23 +1,16 @@
-- name: ensure jdk dir exist
-  file:
-    path: "{{ jdk_dir }}"
-    state: directory
-
-- name: unzip java
-  unarchive: 
-    src: "{{ package_dir }}/jdk/jdk-8u202-linux-x64.tar.gz"
-    dest: "{{ jdk_dir }}"
-
-- name: set java env conf
+- name: remove env
   lineinfile:
     dest: /etc/profile
-    state: present
+    state: absent
     line: "{{ item }}"
   with_items:
     - "export JAVA_HOME={{ jdk_dir }}"
     - "export JRE_HOME=${JAVA_HOME}/jre"
     - "export CLASSPATH=.:${JAVA_HOME}/lib:${JRE_HOME}/lib"
     - "export PATH=${JAVA_HOME}/bin:$PATH"
-    
+
 - name: java profile enable
   shell: source /etc/profile
+
+- name: remove jdk dir
+  command: "rm -rf {{ jdk_dir }}"

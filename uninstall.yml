@@ -6,3 +6,5 @@
 - import_playbook: "playbook/uninstall-redis.yml"
 - import_playbook: "playbook/uninstall-docker.yml"
 - import_playbook: "playbook/uninstall-keepalived.yml"
+- import_playbook: "playbook/uninstall-rocketmq.yml"
+- import_playbook: "playbook/uninstall-java.yml"

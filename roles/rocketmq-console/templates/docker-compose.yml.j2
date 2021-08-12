@@ -1,0 +1,11 @@
+version: '3'
+services:
+  rocketmq-console:
+    image: "{{ image_repository }}/public/rocketmq-console:2.0.0"
+    restart: always
+    network_mode: host
+    environment:
+      NAMESRV_ADDR: "{{ groups['rocketmq-namesrv'] | map('regex_replace', '^(.*)$','\\1:9876') | join(';') }}"
+      DATA_PATH: "/var/lib/rocketmq-console/data"
+    volumes:
+      - "{{ mq_data_root_dir }}/data:/var/lib/rocketmq-console/data"

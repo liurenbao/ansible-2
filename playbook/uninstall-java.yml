@@ -1,0 +1,5 @@
+- name: remove env
+  hosts: rocketmq-console
+  gather_facts: false
+  roles:
+    - uninstall-java

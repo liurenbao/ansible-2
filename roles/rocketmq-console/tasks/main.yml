@@ -1,26 +1,8 @@
----
-- name: mv tmp rocketmq-console dir
-  shell: rm -rf /tmp/rocketmq-console/
+- name: create root dir
+  command: mkdir -p {{ mq_data_root_dir }}
 
-- name: create tmp dir
-  shell: mkdir -p /tmp/rocketmq-console/
+- name: send docker-compose.yml
+  template: src=docker-compose.yml.j2 dest={{ mq_data_root_dir }}/docker-compose.yml
 
-- name: copy rocketmq-console-jar
-  copy: src={{ tmp_dir }}/{{ mq_console_name }} dest=/tmp/rocketmq-console/
-
-- name: copy rocketmq-console dockerfile
-  copy: src={{ tmp_dir }}/Dockerfile dest=/tmp/rocketmq-console/
-
-- name: docker build
-  shell: docker build /tmp/rocketmq-console/ -t {{ image_name }}
-
-- name: docker stop container
-  shell: docker stop $(docker ps -q)
-  ignore_errors: yes
-
-- name: docker rm container
-  shell: docker rm {{ container_name }}
-  ignore_errors: yes
-
-- name: docker run
-  shell: docker run -d --restart=always -p 8080:8080 --name {{ container_name }}  {{ image_name }}
+- name: start up rocketmq-console
+  command: docker-compose -f {{ mq_data_root_dir }}/docker-compose.yml up -d

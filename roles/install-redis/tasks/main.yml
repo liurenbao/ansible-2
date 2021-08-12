@@ -51,13 +51,15 @@
   debug: var=check.stdout verbosity=0
 
 - name: chmod
-  command: sh -c {{ redis_data_dir }}/create-cluster.sh
+  command: sh create-cluster.sh
+  args:
+    chdir: "{{ redis_data_dir }}"
   when: ansible_ssh_host == groups['redis'][0]
 
 - name: sleep 10
   shell: sleep 10
 - name: get cluster info
-  shell: docker exec -it redis-node01 /bin/sh -c 'redis-cli cluster info'
+  shell: docker exec -i redis-node01 /bin/sh -c 'redis-cli cluster info'
   register: redis_cluster_info
 
 - name: show cluster info
@@ -65,10 +67,12 @@
     msg: "{{ redis_cluster_info }}"
   when: ansible_ssh_host == groups['redis'][0]
 
-- name: sleep 5
-  shell: sleep 5
-
 - name: redis cluster info
-  shell: docker exec -it redis-node01 /bin/sh -c 'redis-cli cluster info' | grep cluster_state
+  shell: docker-compose exec -T redis-cluster /bin/sh -c 'redis-cli cluster info' | grep cluster_state
+  args:
+    chdir: "{{ redis_data_dir }}"
   register: result
   failed_when: ' "cluster_state:ok" not in result.stdout'
+
+- name: sleep 5
+  shell: sleep 5

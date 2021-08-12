@@ -1,8 +1,9 @@
+package_dir: '/etc/ansible/package'
 ## harbor
 harbor_keepalived_vip: 192.168.160.5
 harbor_keepalived_virtual_router_id: '66'
 harbor_keepalived_vrrp_instance_interface: eth0
-harbor_tar: '/etc/ansible/package/harbor/harbor.tar.gz'
+harbor_tar: '{{ package_dir }}/harbor/harbor.tar.gz'
 harbor_root_dir: '/data01/harbor'
 harbor_port: '80'
 harbor_password: 'admin123Admin'
@@ -30,6 +31,16 @@ zookeeper_image: '{{ image_repository }}/public/zookeeper-official:3.7'
 kafka_image: '{{ image_repository }}/public/kafka:2.13-2.7.0'
 kafka_root_dir: '/data01/kafka'
 kafka_heap_opts: '-Xmx16G -Xms16G'
+
+# jdk
+jdk_dir: '/data01/jdk1.8.0_202'
+
+# roketmq
+mq_work_dir: '/data01/rocketmq'
+mq_package_dir: '{{ package_dir }}/rocketmq'
+mq_user: 'rocketmq'
+mq_user_pass: 'rocketmq123'
+mq_data_root_dir: '/data01/rocketmq'
 
 # k8s
 k8s_keepalived_vip: 192.168.160.56
