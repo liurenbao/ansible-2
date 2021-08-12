@@ -34,6 +34,5 @@
 - import_playbook: "playbook/install-kubernetes-component.yml"
 - import_playbook: "playbook/install-kubernetes-elk.yml"
 - import_playbook: "playbook/install-kubernetes-monitor.yml"
-- import_playbook: "playbook/install-java.yml"
 - import_playbook: "playbook/install-rocketmq.yml"
 - import_playbook: "playbook/collect-install-result.yml"
