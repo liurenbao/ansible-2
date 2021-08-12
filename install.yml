@@ -4,13 +4,11 @@
   roles:
     - change-hostname
 
-
 - name: install docker
   gather_facts: false
   hosts: docker
   roles:
     - install-docker
-
 
 - name: install harbor vip
   hosts: harbor
