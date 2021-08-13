@@ -3,7 +3,7 @@
 
 - name: copy rpm
   copy:
-    src: /etc/ansible/package/k8s-1.18.19
+    src: "{{ package_dir }}/k8s-1.18.19"
     dest: /tmp/
 - name: install rpm
   shell: yum -y localinstall /tmp/k8s-1.18.19/*

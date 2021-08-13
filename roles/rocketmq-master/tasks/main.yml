@@ -1,87 +1,45 @@
----
-- name: mkdir mq_datadir/store
-  shell: mkdir -p {{mq_datadir}}/store
-
-- name: chmod rocketmq datadir
-  shell: chown -R {{ mq_user }} {{mq_datadir}}/store
-
-- name: create user
-  user:
-    name: "{{ mq_user }}"
-    password: "{{ mq_user_pass }}"
-    state: present
-
-- name: modify sysctl
-  lineinfile:
-    dest: /etc/sysctl.conf
-    line: "{{ item }}"
-  with_items:
-    - "fs.file-max = 1048576"
-    - "net.ipv4.ip_local_port_range = 1024 65535"
-    - "net.ipv4.tcp_mem = 786432 2097152 3145728"
-    - "net.ipv4.tcp_rmem = 4096 4096 16777216"
-    - "net.ipv4.tcp_wmem = 4096 4096 16777216"
-    - "net.core.somaxconn = 65535"
-    - "vm.overcommit_memory = 1"
-    - "vm.min_free_kbytes = 5000000"
-    - "vm.drop_caches = 1"
-    - "vm.zone_reclaim_mode = 0"
-    - "vm.max_map_count = 655360"
-    - "vm.dirty_background_ratio = 50"
-    - "vm.dirty_ratio = 50"
-    - "vm.page-cluster = 3"
-    - "vm.dirty_writeback_centisecs = 360000"
-    - "vm.swappiness = 10"
-
-- name: sysctl enable
-  shell: sysctl -p /etc/sysctl.conf
-
-- name: unzip rocketmq
-  unarchive: 
-    src: "{{ item }}"
-    dest: "{{ work_dir }}"
-    creates: "{{ work_dir }}/{{ mq_unzip_name }}"
-  with_fileglob:
-    - "{{ tmp_dir }}/{{ mq_zip_name }}"
-
-- name: rename dir rocketmq
+- name: create dirs
   shell: |
-         rm -rf {{ work_dir }}/rocketmq
-         mv -u {{ work_dir }}/{{ mq_unzip_name }} {{ work_dir }}/rocketmq
+    mkdir -p {{ mq_data_root_dir }}
+    mkdir -p {{ mq_work_dir }}/logs
+    mkdir -p {{ mq_work_dir }}/conf/2m-2s-sync
+    rm -rf {{ mq_work_dir }}/conf/2m-2s-sync/*.properties
 
-- name: rocketmq-directory-conf
-  shell: |
-         mkdir -p {{ work_dir }}/rocketmq/logs
-         rm -rf {{ work_dir }}/rocketmq/conf/2m-2s-sync/*.properties
+- name: send rocketmq to remote
+  unarchive:
+    src: "{{ mq_package_dir }}/rocketmq-all-4.7.1-bin-release.tar.gz"
+    dest: "{{ mq_work_dir }}"
 
-- name: rocketmq master conf
+- name: send rocketmq master conf
   template:
     src: broker-m.properties.j2
-    dest: "{{ work_dir }}/rocketmq/conf/2m-2s-sync/{{ broker_name }}.properties"
+    dest: "{{ mq_work_dir }}/conf/2m-2s-sync/{{ broker_name }}.properties"
 
 - name: replace rocketmq manager script
   template:
     src: rmq-tools.sh.j2
-    dest: "{{ work_dir }}/rocketmq/bin/rmq-tools.sh"
+    dest: "{{ mq_work_dir }}/bin/rmq-tools.sh"
     owner: "{{ mq_user }}"
     mode: '0755'
-
-- name: mq-user permission
-  shell: |
-         chown -R {{ mq_user }} {{ work_dir }}/rocketmq
-         chmod -R 760 {{ work_dir }}/rocketmq
 
 - name: set mq env conf
   lineinfile:
     dest: /etc/profile
     line: "{{ item }}"
   with_items:
-    - "export RMQ_BIN={{ work_dir }}/rocketmq/bin"
+    - "export RMQ_BIN={{ mq_work_dir }}/bin"
     - "export PATH=$RMQ_BIN:$PATH"
-    - "export ROCKETMQ_HOME={{ work_dir }}/rocketmq"
+    - "export ROCKETMQ_HOME={{ mq_work_dir }}"
 
 - name: enable profile
-  raw: source /etc/profile
+  shell: source /etc/profile
+
+- name: mq-user permission
+  shell: |
+    chown -R {{ mq_user }} {{ mq_work_dir }}
+    chmod -R 760 {{ mq_work_dir }}
+    chown -R {{ mq_user }} {{mq_data_root_dir}}
 
 - name: start mq
-  command: "su {{ mq_user }} -c '{{ work_dir }}/rocketmq/bin/rmq-tools.sh {{ broker_name }} restart'"
+  become_user: "{{ mq_user }}"
+  shell: "{{ mq_work_dir }}/bin/rmq-tools.sh {{ broker_name }} restart"

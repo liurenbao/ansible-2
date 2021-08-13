@@ -18,7 +18,7 @@
   
 - name: cp keepalived
   copy:
-    src: /etc/ansible/package/keepalived/
+    src: '{{ package_dir }}/keepalived/'
     dest:  /tmp/keepalived/
 
 - name: install keepalived 

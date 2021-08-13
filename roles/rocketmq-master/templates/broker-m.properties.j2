@@ -7,7 +7,7 @@ brokerRole=SYNC_MASTER
 flushDiskType=SYNC_FLUSH
 
 ##namesrvAddr
-namesrvAddr={% for host in groups['rocketmq-namesrv'] %}{{ hostvars[host].ip }}:9876{% if not loop.last %};{% endif %}{% endfor %}
+namesrvAddr={% for host in groups['rocketmq-namesrv'] %}{{ host }}:9876{% if not loop.last %};{% endif %}{% endfor %}
 
 ##Broker
 listenPort=10911
@@ -19,8 +19,9 @@ maxMessageSize = 2097152
 defaultTopicQueueNums = 4
 
 #brokerIP1
-brokerIP1 = {{ ip }}
-brokerIP2 = {{ ip }}
+brokerIP1 = {{ ansible_ssh_host }}
+brokerIP2 = {{ ansible_ssh_host }}
+
 #storePathRootDir-storePathCommitLog
-storePathRootDir = {{ mq_datadir }}/store
-storePathCommitLog = {{ mq_datadir }}/store/commitlog
+storePathRootDir = {{ mq_data_root_dir }}/store
+storePathCommitLog = {{ mq_data_root_dir }}/store/commitlog

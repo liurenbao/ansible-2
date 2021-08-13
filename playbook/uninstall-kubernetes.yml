@@ -14,3 +14,10 @@
   ignore_unreachable: true
   roles:
     - uninstall-kubernetes
+
+- name: remove kubernetes dirs
+  shell: |
+    rm -rf /etc/kubernetes
+    rm -rf /var/lib/kubelet
+    rm -rf /var/lib/etcd
+

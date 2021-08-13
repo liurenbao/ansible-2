@@ -5,13 +5,13 @@
 . /etc/init.d/functions
 
 # Add Java env
-export JAVA_HOME=/usr/local/java
+export JAVA_HOME={{ jdk_dir }}
 export JRE_HOME=${JAVA_HOME}/jre
 export PATH=${JAVA_HOME}/bin:$PATH
 export CLASSPATH=.:${JAVA_HOME}/lib:${JRE_HOME}/lib
 
 RMQ_ROLE=$1
-RMQ_DIR="{{ work_dir }}/rocketmq"
+RMQ_DIR="{{ mq_work_dir }}"
 RMQ_BIN="${RMQ_DIR}/bin"
 RMQ_CONF="${RMQ_DIR}/conf/2m-2s-sync"
 

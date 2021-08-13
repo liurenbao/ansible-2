@@ -1,43 +1,40 @@
 ---
-- name: init-java
+- name: install jdk
   gather_facts: false
-  hosts: initsc
+  hosts:
+    - rocketmq-namesrv
+    - rocketmq-master
+    - rocketmq-slave
   roles:
-    - init
-    - java
-  tags: java
+    - change-sysconf
+    - install-java
+  tasks:
+    - name: create rocketmq user
+      user:
+        name: "{{ mq_user }}"
+        password: "{{ mq_user_pass }}"
+        state: present
 
 - name: install-rocketmq-namesrv
   gather_facts: false
   hosts: rocketmq-namesrv
   roles:
     - rocketmq-namesrv
-  tags: rocketmq-namesrv
 
 - name: install-rocketmq-master
   gather_facts: false
   hosts: rocketmq-master
   roles:
     - rocketmq-master
-  tags: rocketmq-master
 
-- name: install-rocketmq-slave
+- name: install rocketmq slave
   gather_facts: false
   hosts: rocketmq-slave
   roles:
     - rocketmq-slave
-  tags: rocketmq-slave
-
-- name: install-docker
-  gather_facts: false
-  hosts: docker
-  roles:
-    - docker
-  tags: docker
 
 - name: start rocketmq-console
   gather_facts: false
-  hosts: docker
+  hosts: rocketmq-console
   roles:
     - rocketmq-console
-  tags: rocketmq-console
