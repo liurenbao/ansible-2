@@ -1,11 +1,11 @@
 package_dir: '/etc/ansible/package'
 ## harbor
-harbor_keepalived_vip: 192.168.160.5
-harbor_keepalived_virtual_router_id: '66'
+harbor_keepalived_vip: 192.168.160.47
+harbor_keepalived_virtual_router_id: '240'
 harbor_keepalived_vrrp_instance_interface: eth0
 harbor_tar: '{{ package_dir }}/harbor/harbor.tar.gz'
 harbor_root_dir: '/data01/harbor'
-harbor_port: '80'
+harbor_port: '8888'
 harbor_password: 'admin123Admin'
 harbor_data_volume: '{{ harbor_root_dir }}/harbor-data'
 
@@ -15,10 +15,13 @@ docker_insecure_registries:
   - '{{ image_repository }}'
 docker_data_root: '/data01/docker'
 
-# nginx todo
-#nginx_keepalived_vip: 192.168.160.3
-#nginx_keepalived_virtual_router_id: '55'
-#nginx_keepalived_vrrp_instance_interface: eth0
+# nginx
+nginx_root_dir: '/data01/nginx'
+nginx_image: '{{ image_repository }}/public/nginx:1.21.1'
+nginx_keepalived_vip: 192.168.160.5
+traefik_web_port: 31001
+nginx_keepalived_virtual_router_id: '5'
+nginx_keepalived_vrrp_instance_interface: eth0
 
 # es
 es_root_dir: '/data01/es'

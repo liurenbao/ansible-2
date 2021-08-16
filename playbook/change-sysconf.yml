@@ -1,5 +1,11 @@
 - name: change sysconf
-  hosts: es
+  hosts:
+    - rocketmq-console
+    - rocketmq-namesrv
+    - rocketmq-master
+    - rocketmq-slave
+    - es
+    - kafka
   gather_facts: false
   roles:
     - change-sysconf

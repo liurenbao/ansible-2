@@ -1,0 +1,14 @@
+version: '3'
+services:
+  nginx:
+    image: "{{ nginx_image }}"
+    restart: always
+    ports:
+      - 80:80
+      - 443:443
+      - 8080:8080
+    volumes:
+      - ./conf.d:/etc/nginx/conf.d
+      - ./log:/var/log/nginx
+      - ./www:/var/www
+      - /etc/letsencrypt:/etc/letsencrypt

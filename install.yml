@@ -26,7 +26,7 @@
   roles:
     - install-harbor
 
-#- import_playbook: "playbook/install-nginx.yml"
+- import_playbook: "playbook/install-nginx.yml"
 - import_playbook: "playbook/install-kubernetes.yml"
 - import_playbook: "playbook/install-kafka.yml"
 - import_playbook: "playbook/install-elasticsearch.yml"

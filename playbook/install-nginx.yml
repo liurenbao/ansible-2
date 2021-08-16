@@ -8,3 +8,4 @@
       - '{{ nginx_keepalived_vrrp_instance_interface }}'
   roles:
     - install-keepalived
+    - install-nginx

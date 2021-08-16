@@ -1,0 +1,37 @@
+- name: check docker-compose file exists
+  stat:
+    path: "{{ nginx_root_dir }}"
+  register: dir
+
+- name: stop existed nginx
+  shell: docker-compose down
+  when: dir.stat.exists == true
+  args:
+    chdir: "{{ nginx_root_dir }}"
+
+- name: create nginx root dir
+  file:
+    path: "{{ nginx_root_dir }}"
+    state: directory
+
+- name: send docker-compose file to remote
+  template:
+    src: docker-compose.yml.j2
+    dest: '{{ nginx_root_dir }}/docker-compose.yml'
+
+- name: create nginx conf dir
+  file:
+    path: '{{ nginx_root_dir }}/conf.d'
+    state: directory
+
+- name: send nginx conf to remote
+  template:
+    src: '{{ item.src }}'
+    dest: "{{ nginx_root_dir }}/conf.d/{{ item.path | regex_replace('.j2$', '') }}"
+  with_filetree: 'templates/'
+  when: item.state == 'file'
+
+- name: start nginx
+  shell: docker-compose up -d
+  args:
+    chdir: '{{ nginx_root_dir }}'
