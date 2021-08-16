@@ -22,11 +22,17 @@
   with_filetree: 'templates/'
   when: item.state == 'file'
 
-- name: deploy
-  shell: "chmod +x {{ monitor_manifest_root_dir }}/deploy.sh && /bin/bash -c {{ monitor_manifest_root_dir }}/deploy.sh"
+- name: chmod deploy.sh
+  shell: "chmod +x deploy.sh"
+  args:
+    chdir: "{{ monitor_manifest_root_dir }}"
 
-- name: re-deploy setup
-  shell: "kubectl apply -f {{ monitor_manifest_root_dir }}/setup/"
+- name: deploy.sh
+  shell: "sh deploy.sh"
+  args:
+    chdir: "{{ monitor_manifest_root_dir }}"
 
-- name: re-deploy monitor
-  shell: "kubectl apply -f {{ monitor_manifest_root_dir }}/"
+- name: deploy.sh
+  shell: "sleep 15 && sh deploy.sh"
+  args:
+    chdir: "{{ monitor_manifest_root_dir }}"

@@ -9,6 +9,9 @@ metadata:
 data:
   filebeat.yml: |-
     filebeat.inputs:
+      - type: file
+        paths:
+          - /data01/rms-server/Logs/*.log
       - type: container
         paths:
           - /var/lib/docker/containers/*/*.log
@@ -86,6 +89,9 @@ spec:
             - name: varrundockersock
               readOnly: true
               mountPath: /var/run/docker.sock
+            - name: rms-log
+              readOnly: true
+              mountPath: /data01/rms-server/Logs
           livenessProbe:
             exec:
               command:
@@ -112,6 +118,12 @@ spec:
           hostPath:
             path: /var/lib/filebeat-data
             type: DirectoryOrCreate
+        - name: rms-log
+          hostPath:
+            path: /data01/rms-server/Logs
+      tolerations:
+        - effect: NoSchedule
+          operator: Exists
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
