@@ -48,6 +48,10 @@ data:
         mutate {
           add_field => { "service" => "%{[kubernetes][labels][app]}" }
         }
+      } else if [kubernetes][container][name] {
+         mutate {
+           add_field => { "service" => "%{[kubernetes][container][name]}" }
+         }
       } else {
         mutate {
           add_field => { "service" => "unknown" }
