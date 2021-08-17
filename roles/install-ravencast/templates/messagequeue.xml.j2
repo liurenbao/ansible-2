@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<resource name="MessageQueue" type="mq" encoding="UTF-8" redirect="true" resource-history="true" res-advertisement="false" >
+ <threadpool initial="30" max="950" timer="1" >
+ </threadpool>
+ <logoption log-path="" stacktrace="true" logonerror="true" logonwarning="true" logondata="false" logonalert="false" alertonerror="true" alertonwarning="true" SMTPHost="" mailfrom="" mailto="" mailonalert="false" logretention="10" dataretention="10" targetalert="Localhost" async-logging="false" trace-path="" trace-appender="RollingFileAppender" trace-maxsize="100" trace-maxindex="20" trace-level="OFF" trace-data-size-limit="200" verbose-log-path="" verbose-log-appender="RollingFileAppender" verboselogmaxsize="30" verboselogmaxindex="5" verboseloglevel="DEBUG" verboselogpatternondetail="false" verboseloginterval="60" file-on-error-path="" fileonerror="false" />
+ <auth>
+  <users/>
+  <trusted-hosts>
+   <trusted-host host-name="127.0.0.1" />
+   <trusted-host host-name="localhost" />
+  </trusted-hosts>
+ </auth>
+ <security>
+  <ssl-certs storelocation="" storetype="Default" password="bWlyYWNvbQ==" />
+  <trust-certs storelocation="" storetype="Default" password="bWlyYWNvbQ==" />
+  <client-certs storelocation="" storetype="Default" password="bWlyYWNvbQ==" />
+ </security>
+ <services>
+  <service name="Resource Browse Service" class="com.ravencast.nest.framework.service.rcbrowse.ResourceBrowseService" start-mode="Auto start" >
+   <listener class="com.ravencast.nest.framework.service.DefaultTCPConnection" listen-port="0" join-group="" bind="" transport="tcp" concurrent="100" maxpacket-size="16384" packet-buffer-pool="100" secure="false" private-password="" client-auth="false" tcpnodelay="true" keepalive="true" sendbuffer="0" receivebuffer="0" >
+   </listener>
+   <handlers>
+    <handler path="/index" class="com.ravencast.nest.framework.management.DefaultIndexHandler" />
+    <handler path="/resource/" class="com.ravencast.nest.framework.management.DefaultResourceHandler" />
+    <handler path="/list" class="com.ravencast.nest.framework.management.DefaultIndexListHandler" />
+    <handler path="/" class="com.ravencast.nest.framework.service.http.FileService" />
+   </handlers>
+  </service>
+  <service name="Resource Discovery Service" class="com.ravencast.nest.framework.service.discovery.SPDPService" start-mode="Auto start" target-port="10103" target-address="127.0.0.1" hbterm="30000" >
+   <listener class="com.ravencast.nest.framework.service.DefaultUDPConnection" listen-port="0" join-group="" bind="" transport="udp" concurrent="100" maxpacket-size="16384" packet-buffer-pool="100" secure="false" private-password="" client-auth="false" tcpnodelay="true" keepalive="true" sendbuffer="0" receivebuffer="0" >
+   </listener>
+  </service>
+  <service name="Guaranteed Message Service" class="com.ravencast.nest.mq.guaranteed.GuaranteedMessageService" start-mode="Auto start" >
+   <queue-manager name="Unicast Sequence File Queue Manager" class="com.ravencast.nest.mq.guaranteed.file.sequence.UnicastSequenceFileQueueManager" start-mode="Auto start" queue-tick-term="10" qindexible="true" base-storage="" />
+  </service>
+  <service name="Messaging Service" class="com.ravencast.nest.mq.nio.transport.IOIMessagingService" start-mode="Auto start" bound-warning="0" bound-tear-off="0" msg-monitoring="false" bind-address="0.0.0.0" bind-port="10101" ssl="false" backlog="1024" send-buffer="0" receive-buffer="0" connection-buffer="32768" max-connection="0" qos-limit="unlimit" enable-collector="false" collect-session="false" >
+   <inter-message bind-addr="{{ ansible_ssh_host }}" bind-port="7800" mcast-addr="228.8.8.8" groupname="DefaultGroup" usetcp="true" tcphosts="{{ ravencast_tcphosts }}" maxinactivequeue="86400" memoryLimitOfQueues="100" >
+   </inter-message>
+  </service>
+  <service name="Process Management Supporter" class="com.ravencast.nest.framework.process.PMSupporter" start-mode="Auto start" process-name="messagequeue" ip="localhost" port="10104" retryInterval="10" >
+  </service>
+ </services>
+</resource>

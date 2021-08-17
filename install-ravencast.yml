@@ -1,0 +1,6 @@
+- name: install ravencast
+  hosts: ravencast-1,ravencast-2,ravencast-3
+  gather_facts: false
+  roles:
+    - install-java
+    - install-ravencast

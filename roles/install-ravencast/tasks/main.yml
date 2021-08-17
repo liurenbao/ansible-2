@@ -1,0 +1,88 @@
+# ptyprocess 給pexpect用
+- name: Unarchive ptyprocess
+  unarchive:
+    src: '{{ package_dir }}/pexpect/ptyprocess-0.7.0.tar.gz'
+    dest: /root
+    mode: 0755
+    owner: root
+    group: root
+- name: install ptyprocess
+  shell: "cd /root/ptyprocess-0.7.0;python ./setup.py install"
+- name: Unarchive pexpect
+  unarchive:
+    src: '{{ package_dir }}/pexpect/pexpect-4.8.0.tar.gz'
+    dest: /root
+    mode: 0755
+    owner: root
+    group: root
+- name: install pexpect
+  shell: "cd /root/pexpect-4.8.0;python ./setup.py install"
+
+- name: yum install ksh -y
+  shell: yum install ksh -y
+
+- name: scp jar
+  copy:
+    src: '{{ package_dir }}/ravencast/RavenCastMQ-installer-3.0-standard.jar'
+    dest: RavenCastMQ-installer-3.0-standard.jar
+
+- name: stop ravencast
+  shell: sh stop.sh
+  args:
+    chdir: "{{ ravencast_path }}/bin"
+  ignore_errors: true
+
+- name: rm ravencast
+  shell: rm -rf "{{ ravencast_path }}"
+  ignore_errors: true
+
+#    java读 ~/.bashrc里面的环境变量
+- name: java -jar RavenCastMQ-installer-3.0-standard.jar -console
+  expect:
+    command: java -jar RavenCastMQ-installer-3.0-standard.jar -console
+    responses:
+      "press 1 to accept, 2 to reject, 3 to redisplay": "1"
+      "press 1 to continue, 2 to quit, 3 to redisplay": "1"
+      "Select target path*": "{{ ravencast_path }}"
+      "input selection:": "1"
+  register: install_ravencast_result
+
+- name: show install ravencast result
+  debug:
+    msg: "{{ install_ravencast_result }}"
+
+- name: scp lisence.key
+  template:
+    src: license.key.j2
+    dest: "{{ ravencast_path }}/licenses/license.key"
+
+- name: scp messagequeue
+  template:
+    src: messagequeue.j2
+    dest: "{{  ravencast_path }}/bin/messagequeue"
+
+- name: scp messagequeue.xml
+  template:
+    src: messagequeue.xml.j2
+    dest: "{{ ravencast_path }}/conf/messagequeue.xml"
+
+- name: scp startup.sh
+  template:
+    src: start.sh.j2
+    dest: "{{ ravencast_path }}/bin/start.sh"
+
+- name: start messagequeue
+  shell: ./messagequeue
+  args:
+    chdir: "{{  ravencast_path }}/bin"
+
+- name: start console
+  shell: ./console
+  args:
+    chdir: "{{  ravencast_path }}/bin"
+
+- name: add rc.local
+  lineinfile:
+    dest: /etc/rc.d/rc.local
+    state: present
+    line: "exec {{  ravencast_path }}/bin/start.sh"
