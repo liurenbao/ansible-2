@@ -1,6 +1,8 @@
 - name: install jdk
   gather_facts: false
   hosts:
-    - rocketmq-console
+    - rocketmq-namesrv
+    - rocketmq-master
+    - rocketmq-slave
   roles:
     - install-java

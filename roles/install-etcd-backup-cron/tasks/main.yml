@@ -4,10 +4,16 @@
     dest: /usr/local/bin
     mode: 0744
 
+- name: create backup dir
+  file:
+    path: '{{ etcd_backup_root_dir }}'
+    state: directory
+
 - name: install backup shell
   template:
     src: backup_etcd.sh.j2
     dest: "{{ etcd_backup_root_dir }}/backup_etcd.sh"
+    mode: 740
 
 - name: add etcd backup cron
   cron:
