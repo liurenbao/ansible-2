@@ -16,8 +16,11 @@
     - uninstall-kubernetes
 
 - name: remove kubernetes dirs
-  shell: |
-    rm -rf /etc/kubernetes
-    rm -rf /var/lib/kubelet
-    rm -rf /var/lib/etcd
+  hosts: k8s
+  tasks:
+    - name: remove kubernetes dirs
+      shell: |
+        rm -rf /etc/kubernetes
+        rm -rf /var/lib/kubelet
+        rm -rf /var/lib/etcd
 

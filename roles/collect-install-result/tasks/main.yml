@@ -48,10 +48,15 @@
     rocketmq_namesrv="{{ groups['rocketmq-namesrv'] | map('regex_replace', '^(.*)$','\1:9876') | join(';') }}"
     echo "|rocketmq | $rocketmq_namesrv | - |" >> {{ kube_component_file }}
 
-- name: rocketmq namesrv
+- name: rocketmq console
   shell: |
     rocketmq_console="{{ groups['rocketmq-console'] | map('regex_replace', '^(.*)$','http://\1:8080') | join(' ') }}"
     echo "|rocketmq | $rocketmq_console | - |" >> {{ kube_component_file }}
+
+- name: ravencast dashboard
+  shell: |
+    ravencast_dashboard="{{ groups['ravencast*'] | map('regex_replace', '^(.*)$','http://\1:10103') | join(' ') }}"
+    echo "|ravencast | $ravencast_dashboard | - |" >> {{ kube_component_file }}
 
 
 - name: fetch result to ansible node

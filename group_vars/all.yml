@@ -1,7 +1,7 @@
 package_dir: '/etc/ansible/package'
 ## harbor
-harbor_keepalived_vip: 192.168.163.69
-harbor_keepalived_virtual_router_id: '69'
+harbor_keepalived_vip: 192.168.163.120
+harbor_keepalived_virtual_router_id: '120'
 harbor_keepalived_vrrp_instance_interface: eth0
 harbor_tar: '{{ package_dir }}/harbor/harbor.tar.gz'
 harbor_root_dir: '/data01/harbor'
@@ -18,9 +18,9 @@ docker_data_root: '/data01/docker'
 # nginx
 nginx_root_dir: '/data01/nginx'
 nginx_image: '{{ image_repository }}/public/nginx:1.21.1'
-nginx_keepalived_vip: 192.168.163.77
+nginx_keepalived_vip: 192.168.163.125
 traefik_web_port: 31001
-nginx_keepalived_virtual_router_id: '77'
+nginx_keepalived_virtual_router_id: '125'
 nginx_keepalived_vrrp_instance_interface: eth0
 
 # es
@@ -37,17 +37,19 @@ kafka_heap_opts: '-Xmx16G -Xms16G'
 
 # jdk
 jdk_dir: '/data01/jdk1.8.0_202'
-
 # roketmq
 mq_work_dir: '/data01/rocketmq'
 mq_package_dir: '{{ package_dir }}/rocketmq'
 mq_user: 'rocketmq'
 mq_user_pass: 'rocketmq123'
 mq_data_root_dir: '/data01/rocketmq'
+# ravencast
+ravencast_xms_xmx_args: '-Xms4096m -Xmx16384m'
+ravencast_root_dir: '/data01/ravencast'
 
 # k8s
-k8s_keepalived_vip: 192.168.163.76
-k8s_keepalived_virtual_router_id: '76'
+k8s_keepalived_vip: 192.168.163.123
+k8s_keepalived_virtual_router_id: '123'
 k8s_keepalived_vrrp_instance_interface: eth0
 
 # kubernetes

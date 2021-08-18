@@ -1,0 +1,28 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: test-service-monitor
+  namespace: monitoring
+spec:
+  endpoints:
+    - interval: 10s
+      scrapeTimeout: 10s
+      port: monitor
+      scheme: http
+      path: /probe
+      metricRelabelings:
+        - sourceLabels: [ __address__ ]
+          targetLabel: __param_target
+        - sourceLabels: [ __param_target ]
+          targetLabel: instance
+        - replacement: this_is_a_service_name
+          targetLabel: target_name
+      params:
+        module: [ http_2xx ]
+        target: [ '127.0.0.1:9200' ]
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: blackbox
+  namespaceSelector:
+    matchNames:
+      - monitoring

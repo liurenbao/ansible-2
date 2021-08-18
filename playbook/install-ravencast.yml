@@ -1,0 +1,26 @@
+- name: install ravencast
+  hosts: ravencast-1
+  gather_facts: false
+  vars:
+    ravencast_tcphosts: "{{ groups['ravencast-1'] | regex_replace('^(.*)$','\\1:[7800]') | join(',') }}"
+  roles:
+    - install-java
+    - install-ravencast
+
+- name: install ravencast
+  hosts: ravencast-2
+  gather_facts: false
+  vars:
+    ravencast_tcphosts: "{{ groups['ravencast-2'] | regex_replace('^(.*)$','\\1:[7800]') | join(',') }}"
+  roles:
+    - install-java
+    - install-ravencast
+
+- name: install ravencast
+  hosts: ravencast-3
+  gather_facts: false
+  vars:
+    ravencast_tcphosts: "{{ groups['ravencast-3'] | regex_replace('^(.*)$','\\1:[7800]') | join(',') }}"
+  roles:
+    - install-java
+    - install-ravencast

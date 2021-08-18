@@ -1,3 +1,3 @@
 #!/bin/ksh
-#nohup $JAVA_HOME/bin/java -cp ./startup-*.jar {{ xms_xmx_args }} -Dexist.start.debug=true com.ravencast.nest.start.Main messagequeue > /dev/null &
-nohup java -cp ./startup-*.jar {{ xms_xmx_args }} -Dexist.start.debug=true com.ravencast.nest.start.Main messagequeue > /dev/null &
+#nohup $JAVA_HOME/bin/java -cp ./startup-*.jar {{ ravencast_xms_xmx_args }} -Dexist.start.debug=true com.ravencast.nest.start.Main messagequeue > /dev/null &
+nohup java -cp ./startup-*.jar {{ ravencast_xms_xmx_args }} -Dexist.start.debug=true com.ravencast.nest.start.Main messagequeue > /dev/null &

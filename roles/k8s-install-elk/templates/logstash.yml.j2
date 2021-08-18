@@ -33,13 +33,6 @@ metadata:
 data:
   filter_main.conf: |-
     filter {
-      grok {
-        patterns_dir => ["/usr/share/logstash/patterns"]
-        match => {
-          "message" => "%{DATESTAMP:DATE}%{SPACE}%{LOGLEVEL:LEVEL}%{SPACE}%{NUMBER}%{GREEDYDATA}]%{JAVACLASS:class}%{SPACE}\\:%{SPACE}%{GREEDYDATA:MESSAGE}"
-        }
-      }
-
       if [kubernetes][labels][k8s-app] {
         mutate {
           add_field => { "service" => "%{[kubernetes][labels][k8s-app]}" }
@@ -70,6 +63,13 @@ data:
 
       prune {
         blacklist_names => [ "log.*", "ecs.*", "agent.*", "host.*", "type.*" ]
+      }
+
+      grok {
+        break_on_match => true
+        patterns_dir => ["/usr/share/logstash/patterns"]
+        match => { "message" => "%{DATESTAMP:DATE}%{SPACE}%{LOGLEVEL:LEVEL}%{SPACE}%{NUMBER}%{GREEDYDATA}]%{JAVACLASS:class}%{SPACE}\\:%{SPACE}%{GREEDYDATA:MESSAGE}" }
+        match => { "message" => "%{DATESTAMP:DATE}:%{SPACE}[%{JAVACLASS:class}|%{LOGLEVEL:LEVEL}]%{SPACE}%{GREEDYDATA:MESSAGE}" }
       }
 
     }
@@ -132,6 +132,13 @@ spec:
         - name: logstash
           image: "{{ image_repository }}/public/logstash:7.13.2"
           imagePullPolicy: Always
+          resources:
+            limits:
+              memory: '4Gi'
+              cpu: '4'
+            requests:
+              memory: '500Mi'
+              cpu: '200m'
           volumeMounts:
             - name: logstash-pipeline
               mountPath: /usr/share/logstash/pipeline

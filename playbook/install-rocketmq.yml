@@ -38,3 +38,20 @@
   hosts: rocketmq-console
   roles:
     - rocketmq-console
+
+#- name: check rocketmq status
+#  hosts: rocketmq-master
+#  gather_facts: false
+#  tasks:
+#    - name: check rocketmq status
+#      shell: |
+#        namesrv='{{ groups["rocketmq-namesrv"] | map("regex_replace", "^(.*)$", "\\1:9876") | join(";") }}'
+#        ./mqadmin clusterList -n $namesrv
+#      args:
+#        chdir: "{{ mq_work_dir }}/bin"
+#      register: mqstatus
+#      when: groups['rocketmq-master'][0] == ansible_ssh_host
+#    - name: show rocketmq status
+#      debug:
+#        msg: "{{ mqstatus.stdout }}"
+#      when: groups['rocketmq-master'][0] == ansible_ssh_host
