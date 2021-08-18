@@ -1,5 +1,5 @@
 # km create secret generic prometheus-additional --from-file prometheus-additional.yaml
-- job_name: 'kubernetes-service-endpoints'
+- job_name: 'kubernetes-service-metrics'
   kubernetes_sd_configs:
     - role: endpoints
   relabel_configs:
@@ -55,7 +55,7 @@
     - source_labels: [ __meta_kubernetes_service_name ]
       target_label: kubernetes_name
 
-- job_name: 'kubernetes-tcp-service'
+- job_name: 'kubernetes-tcp-services'
   metrics_path: /probe
   params:
     module: [ tcp_connect ]
