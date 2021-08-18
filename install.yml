@@ -4,12 +4,6 @@
   roles:
     - change-hostname
 
-- name: install docker
-  gather_facts: false
-  hosts: docker
-  roles:
-    - install-docker
-
 - name: install harbor vip
   hosts: harbor
   vars:
@@ -20,6 +14,7 @@
   gather_facts: false
   roles:
     - install-keepalived
+
 - name: install harbor
   gather_facts: false
   hosts: harbor

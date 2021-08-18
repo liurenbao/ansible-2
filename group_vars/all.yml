@@ -1,7 +1,7 @@
 package_dir: '/etc/ansible/package'
 ## harbor
-harbor_keepalived_vip: 192.168.163.120
-harbor_keepalived_virtual_router_id: '120'
+harbor_keepalived_vip: 192.168.163.244
+harbor_keepalived_virtual_router_id: '244'
 harbor_keepalived_vrrp_instance_interface: eth0
 harbor_tar: '{{ package_dir }}/harbor/harbor.tar.gz'
 harbor_root_dir: '/data01/harbor'
@@ -18,9 +18,9 @@ docker_data_root: '/data01/docker'
 # nginx
 nginx_root_dir: '/data01/nginx'
 nginx_image: '{{ image_repository }}/public/nginx:1.21.1'
-nginx_keepalived_vip: 192.168.163.125
+nginx_keepalived_vip: 192.168.163.245
 traefik_web_port: 31001
-nginx_keepalived_virtual_router_id: '125'
+nginx_keepalived_virtual_router_id: '245'
 nginx_keepalived_vrrp_instance_interface: eth0
 
 # es
@@ -48,8 +48,8 @@ ravencast_xms_xmx_args: '-Xms4096m -Xmx16384m'
 ravencast_root_dir: '/data01/ravencast'
 
 # k8s
-k8s_keepalived_vip: 192.168.163.123
-k8s_keepalived_virtual_router_id: '123'
+k8s_keepalived_vip: 192.168.163.246
+k8s_keepalived_virtual_router_id: '246'
 k8s_keepalived_vrrp_instance_interface: eth0
 
 # kubernetes

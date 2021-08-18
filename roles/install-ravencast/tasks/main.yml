@@ -90,3 +90,6 @@
     dest: /etc/rc.d/rc.local
     state: present
     line: "exec {{ ravencast_root_dir }}/bin/start.sh"
+
+- name: refresh iptables
+  shell: iptables -F

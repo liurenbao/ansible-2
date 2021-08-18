@@ -22,6 +22,13 @@
   with_filetree: 'templates/'
   when: item.state == 'file'
 
+- name: move prometheus-additional.yaml
+  shell: |
+    mkdir -p prometheus-addtional
+    mv prometheus-additional.yaml prometheus-addtional
+  args:
+    chdir: "{{ monitor_manifest_root_dir }}"
+
 - name: chmod deploy.sh
   shell: "chmod +x deploy.sh"
   args:

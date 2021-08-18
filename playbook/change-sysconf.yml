@@ -1,6 +1,5 @@
 - name: change sysconf
   hosts:
-    - rocketmq-console
     - rocketmq-namesrv
     - rocketmq-master
     - rocketmq-slave

@@ -55,8 +55,8 @@
 
 - name: ravencast dashboard
   shell: |
-    ravencast_dashboard="{{ groups['ravencast*'] | map('regex_replace', '^(.*)$','http://\1:10103') | join(' ') }}"
-    echo "|ravencast | $ravencast_dashboard | - |" >> {{ kube_component_file }}
+    ravencast_dashboard="{{ groups['ravencast'] | map('regex_replace', '^(.*)$','http://\1:10103') | join(' ') }}"
+    echo "|ravencast | $ravencast_dashboard | ravencast/integration |" >> {{ kube_component_file }}
 
 
 - name: fetch result to ansible node
