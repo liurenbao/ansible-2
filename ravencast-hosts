@@ -10,7 +10,12 @@
 192.168.163.120 ansible_ssh_user=root ansible_ssh_pass="Huawei@777.com"
 192.168.163.125 ansible_ssh_user=root ansible_ssh_pass="Huawei@777.com"
 
-[all:vars]
+[ravencast:children]
+ravencast-1
+ravencast-2
+ravencast-3
+
+[ravencast:vars]
 ravencast_xms_xmx_args=-Xms4096m -Xmx16384m
 ravencast_root_dir=/data01/ravencast
 
