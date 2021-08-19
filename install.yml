@@ -4,6 +4,36 @@
   roles:
     - change-hostname
 
+# 生成ssh key
+- hosts: localhost
+  tasks:
+    - name: ssh key 生成
+      openssh_keypair:
+        path: ~/.ssh/id_rsa
+
+#拷贝ssh key到harbor机器
+- hosts: harbor
+  tasks:
+    - name: ssh-copy
+      authorized_key: user=root key="{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+    - name: rm -f harbor_root_dir
+      shell: "rm -rf {{ harbor_root_dir }}"
+      ignore_errors: true
+    - name: mkdir harbor
+      shell: "mkdir -p {{ harbor_root_dir }}"
+
+#拷贝harbor压缩包到 harbor服务器
+- hosts: localhost
+  name: copy harbor
+  gather_facts: false
+  vars:
+    harbor_hosts: "{{groups['harbor']|join(',')}}"
+  tasks:
+    - name: copy harbor
+      shell: "scp -r {{ harbor_tar }} {{ item }}:{{ harbor_root_dir }}"
+      with_items: '{{ harbor_hosts.split(",") }}'
+
+# 安装vip
 - name: install harbor vip
   hosts: harbor
   vars:
@@ -15,6 +45,7 @@
   roles:
     - install-keepalived
 
+# 安装harbor
 - name: install harbor
   gather_facts: false
   hosts: harbor

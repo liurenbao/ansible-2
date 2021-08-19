@@ -47,7 +47,7 @@
     src: '{{ package_dir }}/docker/'
     dest: /local/docker-repo/
 
-- name: insntall docker
+- name: install docker
   shell: yum localinstall -y /local/docker-repo/*.rpm
 
 - name: cp docker-compose

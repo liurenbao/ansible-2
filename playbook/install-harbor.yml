@@ -1,3 +1,28 @@
+---
+- hosts: localhost
+  tasks:
+    - name: ssh key 生成
+      openssh_keypair:
+        path: ~/.ssh/id_rsa
+
+- hosts: harbor
+  tasks:
+    - name: ssh-copy
+      authorized_key: user=root key="{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+
+- hosts: localhost
+  name: copy harbor
+  gather_facts: false
+  vars:
+    harbor_hosts: "{{groups['harbor']|join(',')}}"
+  tasks:
+   - name: mkdir harbor
+     shell: "mkdir -p {{ harbor_root_dir }}"
+
+   - name: copy harbor
+     shell: "scp -r {{ harbor_tar }} {{ item }}:{{ harbor_root_dir }}"
+     with_items: '{{ harbor_hosts.split(",") }}'
+
 - name: install harbor vip
   hosts: harbor
   vars:
@@ -14,3 +39,4 @@
   hosts: harbor
   roles:
     - install-harbor
+

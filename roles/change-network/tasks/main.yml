@@ -3,14 +3,20 @@
     path: /etc/sysconfig/network-scripts/ifcfg-eth0
     state: present
     regexp: '^NETMASK'
-    line: NETMASK=255.255.255.128
+    line: NETMASK=255.255.255.192
 
 - name: set /etc/sysconfig/network
   lineinfile:
-    path: /etc/sysconfig/network
+    path: /etc/sysconfig/network-scripts/ifcfg-eth0
     state: present
     regexp: '^GATEWAY'
-    line: GATEWAY=192.168.160.126
+    line: GATEWAY=192.168.161.254
 
+- name: set /etc/sysconfig/network
+  lineinfile:
+    path: /etc/sysconfig/network-scripts/ifcfg-eth0
+    state: present
+    regexp: '^IPADDR'
+    line: IPADDR={{ ansible_ssh_host }}
 #- name: restart
 #  shell: service restart network

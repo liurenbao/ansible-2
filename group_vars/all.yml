@@ -1,12 +1,12 @@
 package_dir: '/etc/ansible/package'
 ## harbor
-harbor_keepalived_vip: 192.168.163.244
-harbor_keepalived_virtual_router_id: '244'
+harbor_keepalived_vip: 192.168.163.240
+harbor_keepalived_virtual_router_id: '240'
 harbor_keepalived_vrrp_instance_interface: eth0
 harbor_tar: '{{ package_dir }}/harbor/harbor.tar.gz'
 harbor_root_dir: '/data01/harbor'
 harbor_port: '80'
-harbor_password: 'test123Test'
+harbor_password: 'admin123Admin'
 harbor_data_volume: '{{ harbor_root_dir }}/harbor-data'
 
 # docker
@@ -18,14 +18,14 @@ docker_data_root: '/data01/docker'
 # nginx
 nginx_root_dir: '/data01/nginx'
 nginx_image: '{{ image_repository }}/public/nginx:1.21.1'
-nginx_keepalived_vip: 192.168.163.245
+nginx_keepalived_vip: 192.168.163.239
 traefik_web_port: 31001
-nginx_keepalived_virtual_router_id: '245'
+nginx_keepalived_virtual_router_id: '239'
 nginx_keepalived_vrrp_instance_interface: eth0
 
 # es
 es_root_dir: '/data01/es'
-es_cluster_name: 'es-cluster-7.3.2'
+es_cluster_name: 'es-mouyongde-cluster-7.3.2'
 es_image: '{{ image_repository }}/public/elasticsearch:7.13.2'
 es_java_opts: '-Xms16G -Xmx16G'
 
@@ -48,8 +48,8 @@ ravencast_xms_xmx_args: '-Xms4096m -Xmx16384m'
 ravencast_root_dir: '/data01/ravencast'
 
 # k8s
-k8s_keepalived_vip: 192.168.163.246
-k8s_keepalived_virtual_router_id: '246'
+k8s_keepalived_vip: 192.168.163.241
+k8s_keepalived_virtual_router_id: '241'
 k8s_keepalived_vrrp_instance_interface: eth0
 
 # kubernetes
@@ -73,10 +73,11 @@ grafana_storage: '20Gi'
 # redis
 redis_data_dir: '/data01/redis'
 redis_image: '{{ image_repository }}/public/redis:6.2.4'
+#32G大小的3/4
 redis_maxmemory: '51539607552'
 
 # component result file
 kube_component_file: '{{ component_manifest_dir }}/kube-component.md'
 
 # etcd backup
-etcd_backup_root_dir: '/data01/etcd'
+etcd_backup_root_dir: '/data01/etcd-backup'

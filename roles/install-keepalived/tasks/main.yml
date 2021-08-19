@@ -30,5 +30,5 @@
     dest:  /etc/keepalived/keepalived.conf
 
 - name: start Keepalived
-  shell: systemctl start keepalived && systemctl enable keepalived
+  shell: systemctl restart keepalived && systemctl enable keepalived
 
