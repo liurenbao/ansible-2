@@ -68,8 +68,14 @@ data:
       grok {
         break_on_match => true
         patterns_dir => ["/usr/share/logstash/patterns"]
-        match => { "message" => "%{DATESTAMP:DATE}%{SPACE}%{LOGLEVEL:LEVEL}%{SPACE}%{NUMBER}%{GREEDYDATA}]%{JAVACLASS:class}%{SPACE}\\:%{SPACE}%{GREEDYDATA:MESSAGE}" }
-        match => { "message" => "%{DATESTAMP:DATE}:%{SPACE}[%{JAVACLASS:class}|%{LOGLEVEL:LEVEL}]%{SPACE}%{GREEDYDATA:MESSAGE}" }
+        match => { "message" => "%{TIMESTAMP:timestamp}(:)?%{SPACE}\[%{PROG:program}\|%{LOGLEVEL:level}\]" }
+        match => { "message" => "%{TIMESTAMP:timestamp}%{SPACE}%{LOGLEVEL:level}" }
+        match => { "message" => "\[%{IDENTIFIER:source}\]%{SPACE}HOST=\[%{HOSTNAME:host}\]%{SPACE}(RID=\[%{BASE10NUM:rid}\])?%{SPACE}TIME=\[%{TIMESTAMP:timestamp}\]%{SPACE}(CLIENT=\[%{DATA:client}\])?%{SPACE}(Type=\[%{WORD:level}\])?%{SPACE}(SVC=\[%{IDENTIFIER:svc}\])?%{SPACE}(DurTime=\[%{BASE10NUM:DurTime}\])?" }
+      }
+
+      date {
+        match => [ "timestamp", "yyyy-MM-dd HH:mm:ss.SSS" ]
+        target => "@timestamp"
       }
 
     }
@@ -109,12 +115,9 @@ metadata:
   namespace: elk
 data:
   main: |-
-    LOGLEVEL ([Aa]lert|ALERT|[Tt]race|TRACE|[Dd]ebug|DEBUG|[Nn]otice|NOTICE|[Ii]nfo|INFO|[Ww]arn?(?:ing)?|WARN?(?:ING)?|[Ee]rr?(?:or)?|ERR?(?:OR)?|[Cc]rit?(?:ical)?|CRIT?(?:ICAL)?|[Ff]atal|FATAL|[Ss]evere|SEVERE|EMERG(?:ENCY)?|[Ee]merg(?:ency)?)
-    NUMBER (?:%{BASE10NUM})
-    JAVATHREAD (?:[A-Z]{2}-Processor[\d]+)
-    SPACE \s*
-    CATALINALOG %{CATALINA_DATESTAMP:timestamp} %{JAVACLASS:class} %{JAVALOGMESSAGE:logmessage}
-    JAVACLASS (?:[a-zA-Z$_\.][a-zA-Z$_0-9]*\.)*[a-zA-Z$_][a-zA-Z$_0-9]*
+    FULLYEAR (?>\d\d){2}
+    TIMESTAMP %{FULLYEAR}-%{MONTHNUM}-%{MONTHDAY}[T ]%{HOUR}:?%{MINUTE}(?::?%{SECOND})?%{ISO8601_TIMEZONE}?
+    IDENTIFIER [a-zA-Z\.\-_]+
 ---
 apiVersion: apps/v1
 kind: Deployment
