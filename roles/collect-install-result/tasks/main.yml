@@ -35,6 +35,9 @@
 - name: kibana dashboard
   shell: 'echo "|kibana | http://{{ groups["k8s-master-init"][0] }}:30001 | - |" >> {{ kube_component_file }}'
 
+- name: nginx web port
+  shell: 'echo "|nginx | http://{{ nginx_keepalived_vip }} | - |" >> {{ kube_component_file }}'
+
 - name: redis connect string
   shell: |
     redis_connect_string='{{ groups["redis"] | map("regex_replace", "^(.*)$","\1:6379") | join(",") }}'
@@ -46,12 +49,12 @@
 - name: rocketmq namesrv
   shell: |
     rocketmq_namesrv="{{ groups['rocketmq-namesrv'] | map('regex_replace', '^(.*)$','\1:9876') | join(';') }}"
-    echo "|rocketmq | $rocketmq_namesrv | - |" >> {{ kube_component_file }}
+    echo "|rocketmq-namesrv | $rocketmq_namesrv | - |" >> {{ kube_component_file }}
 
 - name: rocketmq console
   shell: |
     rocketmq_console="{{ groups['rocketmq-console'] | map('regex_replace', '^(.*)$','http://\1:8080') | join(' ') }}"
-    echo "|rocketmq | $rocketmq_console | - |" >> {{ kube_component_file }}
+    echo "|rocketmq-console | $rocketmq_console | admin/admin |" >> {{ kube_component_file }}
 
 - name: ravencast dashboard
   shell: |
