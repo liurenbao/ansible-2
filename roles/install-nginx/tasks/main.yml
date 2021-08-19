@@ -9,6 +9,10 @@
   args:
     chdir: "{{ nginx_root_dir }}"
 
+- name: remove old dir
+  shell: "rm -rf {{ nginx_root_dir }}"
+  when: dir.stat.exists == true
+
 - name: create nginx root dir
   file:
     path: "{{ nginx_root_dir }}"
@@ -26,10 +30,13 @@
 
 - name: send nginx conf to remote
   template:
-    src: '{{ item.src }}'
-    dest: "{{ nginx_root_dir }}/conf.d/{{ item.path | regex_replace('.j2$', '') }}"
-  with_filetree: 'templates/'
-  when: item.state == 'file'
+    src: 'traefik.conf.j2'
+    dest: "{{ nginx_root_dir }}/conf.d/traefik.conf"
+
+- name: send nginx.conf
+  template:
+    src: nginx.conf.j2
+    dest: '{{ nginx_root_dir }}/nginx.conf'
 
 - name: start nginx
   shell: docker-compose up -d

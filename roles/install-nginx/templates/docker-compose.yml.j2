@@ -9,6 +9,7 @@ services:
       - 8080:8080
     volumes:
       - ./conf.d:/etc/nginx/conf.d
+      - ./nginx.conf:/etc/nginx/nginx.conf
       - ./log:/var/log/nginx
       - ./www:/var/www
       - /etc/letsencrypt:/etc/letsencrypt
