@@ -1,88 +1,84 @@
 [harbor]
-192.168.163.105	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="harbor-1"	MASTER_BACKUP=MASTER
-192.168.163.104	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="harbor-2"	MASTER_BACKUP=BACKUP
+192.168.163.199	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="harbor-1"	MASTER_BACKUP=MASTER
+192.168.163.220	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="harbor-2"	MASTER_BACKUP=BACKUP
 
 [k8s]
-192.168.163.108	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="k8s-master-1"
-192.168.163.92	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="k8s-master-2"
-192.168.163.101	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="k8s-master-3"
-192.168.163.78	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="k8s-worker-1"
-192.168.163.65	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="k8s-worker-2"
-192.168.163.62	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="k8s-worker-3"
-192.168.163.87	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="k8s-worker-4"
-192.168.163.73	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="k8s-worker-5"
+192.168.163.200	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="k8s-master-1"
+192.168.163.206	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="k8s-master-2"
+192.168.163.180	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="k8s-master-3"
+192.168.163.182	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="k8s-worker-1"
+192.168.163.209	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="k8s-worker-2"
+192.168.163.215	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="k8s-worker-3"
 
 [k8s-master]
-192.168.163.108	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="k8s-master-1"	MASTER_BACKUP=MASTER
-192.168.163.92	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="k8s-master-2"	MASTER_BACKUP=BACKUP
-192.168.163.101	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="k8s-master-3"	MASTER_BACKUP=BACKUP
+192.168.163.200	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="k8s-master-1"	MASTER_BACKUP=MASTER
+192.168.163.206	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="k8s-master-2"	MASTER_BACKUP=BACKUP
+192.168.163.180	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="k8s-master-3"	MASTER_BACKUP=BACKUP
 
 [k8s-master-init]
-192.168.163.108	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="k8s-master-1"
+192.168.163.200	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="k8s-master-1"
 
 [k8s-master-join]
-192.168.163.92	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="k8s-master-2"
-192.168.163.101	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="k8s-master-3"
+192.168.163.206	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="k8s-master-2"
+192.168.163.180	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="k8s-master-3"
 
 [k8s-worker]
-192.168.163.78	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="k8s-worker-1"
-192.168.163.65	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="k8s-worker-2"
-192.168.163.62	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="k8s-worker-3"
-192.168.163.87	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="k8s-worker-4"
-192.168.163.73	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="k8s-worker-5"
+192.168.163.182	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="k8s-worker-1"
+192.168.163.209	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="k8s-worker-2"
+192.168.163.215	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="k8s-worker-3"
 
 [rocketmq-console]
-192.168.163.96	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="rocketmq-console-1"
+192.168.163.158	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="rocketmq-console-1"
 
 [rocketmq-namesrv]
-192.168.163.76	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="rocketmq-namesrv-1"
-192.168.163.81	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="rocketmq-namesrv-2"
+192.168.163.226	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="rocketmq-namesrv-1"
+192.168.163.223	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="rocketmq-namesrv-2"
 
 [rocketmq-master]
-192.168.163.88	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="rocketmq-master-1"	broker_name=broker-a
-192.168.163.70	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="rocketmq-master-2"	broker_name=broker-b
+192.168.163.234	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="rocketmq-master-1"	broker_name=broker-a
+192.168.163.163	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="rocketmq-master-2"	broker_name=broker-b
 
 [rocketmq-slave]
-192.168.163.90	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="rocketmq-slave-1"	broker_name=broker-a-s
-192.168.163.110	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="rocketmq-slave-2"	broker_name=broker-b-s
+192.168.163.185	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="rocketmq-slave-1"	broker_name=broker-a-s
+192.168.163.168	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="rocketmq-slave-2"	broker_name=broker-b-s
 
 [nginx]
-192.168.163.53	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="nginx-1"	MASTER_BACKUP=MASTER
-192.168.163.36	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="nginx-2"	MASTER_BACKUP=BACKUP
+192.168.163.156	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="nginx-1"	MASTER_BACKUP=MASTER
+192.168.163.152	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="nginx-2"	MASTER_BACKUP=BACKUP
 
 [es]
-192.168.163.102	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="es-1"
-192.168.163.69	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="es-2"
-192.168.163.93	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="es-3"
-192.168.163.71	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="es-4"
-192.168.163.51	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="es-5"
-192.168.163.60	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="es-6"
+192.168.163.197	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="es-1"
+192.168.163.216	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="es-2"
+192.168.163.195	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="es-3"
+192.168.163.205	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="es-4"
+192.168.163.160	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="es-5"
+192.168.163.151	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="es-6"
 
 [kafka]
-192.168.163.109	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="kafka-1"
-192.168.163.74	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="kafka-2"
-192.168.163.89	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="kafka-3"
+192.168.163.169	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="kafka-1"
+192.168.163.165	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="kafka-2"
+192.168.163.173	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="kafka-3"
 
 [redis]
-192.168.163.38	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="redis-1"
-192.168.163.95	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="redis-2"
-192.168.163.83	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="redis-3"
-192.168.163.75	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="redis-4"
-192.168.163.112	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="redis-5"
-192.168.163.79	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="redis-6"
+192.168.163.233	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="redis-1"
+192.168.163.190	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="redis-2"
+192.168.163.224	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="redis-3"
+192.168.163.184	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="redis-4"
+192.168.163.181	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="redis-5"
+192.168.163.208	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="redis-6"
 
 [ravencast-1]
-192.168.163.91	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="ravencast-1"
-192.168.163.97	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="ravencast-2"
+192.168.163.219	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="ravencast-1"
+192.168.163.207	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="ravencast-2"
 [ravencast-2]
-192.168.163.107	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="ravencast-3"
-192.168.163.100	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="ravencast-4"
+192.168.163.222	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="ravencast-3"
+192.168.163.229	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="ravencast-4"
 [ravencast-3]
-192.168.163.82	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="ravencast-5"
-192.168.163.98	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="ravencast-6"
+192.168.163.186	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="ravencast-5"
+192.168.163.225	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="ravencast-6"
 [ravencast-4]
-192.168.163.99	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="ravencast-7"
-192.168.163.77	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="ravencast-8"
+192.168.163.211	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="ravencast-7"
+192.168.163.212	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="ravencast-8"
 
 [ravencast:children]
 ravencast-1
@@ -91,16 +87,16 @@ ravencast-3
 ravencast-4
 
 [ravencast-1:vars]
-ravencast_tcphosts=192.168.163.91[7800],192.168.163.97[7800]
+ravencast_tcphosts=192.168.163.219[7800],192.168.163.207[7800]
 
 [ravencast-2:vars]
-ravencast_tcphosts=192.168.163.107[7800],192.168.163.100[7800]
+ravencast_tcphosts=192.168.163.222[7800],192.168.163.229[7800]
 
 [ravencast-3:vars]
-ravencast_tcphosts=192.168.163.82[7800],192.168.163.98[7800]
+ravencast_tcphosts=192.168.163.186[7800],192.168.163.225[7800]
 
 [ravencast-4:vars]
-ravencast_tcphosts=192.168.163.99[7800],192.168.163.77[7800]
+ravencast_tcphosts=192.168.163.211[7800],192.168.163.212[7800]
 
 [nas]
 192.168.160.35  ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"
