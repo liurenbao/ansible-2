@@ -4,6 +4,9 @@
   roles:
     - change-hostname
 
+- name: install docker
+  import_playbook: playbook/install-docker.yml
+
 # 生成ssh key
 - hosts: localhost
   tasks:

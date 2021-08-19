@@ -4,7 +4,6 @@
     state: directory
 
 - name: copy app manifest template
-- name: copy app manifest template
   template:
     src: '{{ item.src }}'
     dest: "{{ component_manifest_dir }}/app/{{ item.path | regex_replace('\\.j2$', '') }}"
