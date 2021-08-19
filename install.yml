@@ -29,6 +29,7 @@
 - import_playbook: "playbook/install-kubernetes-component.yml"
 - import_playbook: "playbook/install-kubernetes-elk.yml"
 - import_playbook: "playbook/install-kubernetes-monitor.yml"
+- import_playbook: "playbook/install-app.yml"
 - import_playbook: "playbook/install-etcd-backup-cron.yml"
 - import_playbook: "playbook/install-rocketmq.yml"
 - import_playbook: "playbook/install-ravencast.yml"
