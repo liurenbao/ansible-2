@@ -95,7 +95,7 @@ data:
     }
   output_main.conf: |-
     output {
-      stdout { codec => rubydebug }
+      # stdout { codec => rubydebug }
       elasticsearch {
         hosts => {{ groups['es'] | map('regex_replace', '^(.*)$','\\1:9200') | list | to_json}}
         manage_template => true
