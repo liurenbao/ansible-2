@@ -1,0 +1,12 @@
+- name: create dir
+  file:
+    path: "{{ component_manifest_dir }}/app"
+    state: directory
+
+- name: copy app manifest
+  copy:
+    src: files/
+    dest: "{{ component_manifest_dir }}/app/"
+
+- name: apply app manifest
+  shell: "kubectl apply -f {{ component_manifest_dir }}/app/"
