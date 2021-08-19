@@ -19,8 +19,8 @@ docker_data_root: '/data01/docker'
 nginx_root_dir: '/data01/nginx'
 nginx_image: '{{ image_repository }}/public/nginx:1.21.1'
 nginx_keepalived_vip: 192.168.163.245
-traefik_web_port: 31001
 nginx_keepalived_virtual_router_id: '245'
+traefik_web_port: 31001
 nginx_keepalived_vrrp_instance_interface: eth0
 
 # es
@@ -43,37 +43,36 @@ mq_package_dir: '{{ package_dir }}/rocketmq'
 mq_user: 'rocketmq'
 mq_user_pass: 'rocketmq123'
 mq_data_root_dir: '/data01/rocketmq'
-# ravencast
-ravencast_xms_xmx_args: '-Xms4096m -Xmx16384m'
-ravencast_root_dir: '/data01/ravencast'
 
-# k8s
+# ravencast
+ravencast_root_dir: '/data01/ravencast'
+ravencast_xms_xmx_args: '-Xms4096m -Xmx16384m'
+
+# kubernetes
 k8s_keepalived_vip: 192.168.163.246
 k8s_keepalived_virtual_router_id: '246'
 k8s_keepalived_vrrp_instance_interface: eth0
-
-# kubernetes
 control_plane_endpoint: '{{ k8s_keepalived_vip }}:6443'
 google_image_repository: '{{ image_repository }}/google_containers'
 pod_network_cidr: '10.244.0.0/16'
-kubernetes_version: '1.18.19'
 component_manifest_dir: '/data01/kube-manifest'
 etcd_backup_dir: '/data01/etcd'
+
 # elk
 elk_manifest_root_dir: '{{ component_manifest_dir }}/elk'
 
 # monitor
 nfs_server: '192.168.160.35'
-nfs_path: '/data01/k8s-test-pv'
+monitor_nfs_path: '/data01/monitoring'
 monitor_manifest_root_dir: '{{ component_manifest_dir }}/monitor'
+grafana_storage: '20Gi'
 prometheus_storage: '20Gi'
 prometheus_data_retention: '35d'
-grafana_storage: '20Gi'
 
 # redis
 redis_data_dir: '/data01/redis'
 redis_image: '{{ image_repository }}/public/redis:6.2.4'
-redis_maxmemory: '51539607552'
+redis_maxmemory: '25769803776' # 24Gi
 
 # component result file
 kube_component_file: '{{ component_manifest_dir }}/kube-component.md'
