@@ -64,7 +64,7 @@ elk_manifest_root_dir: '{{ component_manifest_dir }}/elk'
 
 # monitor
 nfs_server: '192.168.160.35'
-nfs_path: '/data01/k8s-test-pv'
+monitor_nfs_path: '/data01/monitoring'
 monitor_manifest_root_dir: '{{ component_manifest_dir }}/monitor'
 prometheus_storage: '20Gi'
 prometheus_data_retention: '35d'
