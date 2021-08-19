@@ -98,11 +98,11 @@ spec:
             - name: NFS_SERVER
               value: "{{ nfs_server }}"
             - name: NFS_PATH
-              value: "{{ nfs_path }}"
+              value: "{{ monitor_nfs_path }}"
       volumes:
         - name: nfs-client-root
           nfs:
-            path: "{{ nfs_path }}"
+            path: "{{ monitor_nfs_path }}"
             server: "{{ nfs_server }}"
   selector:
     matchLabels:

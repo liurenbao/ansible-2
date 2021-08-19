@@ -2,7 +2,7 @@
   shell: |
     kubeadm init --control-plane-endpoint={{ control_plane_endpoint }} \
     --image-repository={{ google_image_repository }} \
-    --pod-network-cidr={{ pod_network_cidr }} --kubernetes-version={{ kubernetes_version }} \
+    --pod-network-cidr={{ pod_network_cidr }} --kubernetes-version=1.18.19 \
     --upload-certs
   register: result
 - name: show

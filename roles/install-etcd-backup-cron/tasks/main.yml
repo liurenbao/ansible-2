@@ -19,4 +19,4 @@
   cron:
     name: "backup etcd"
     special_time: "hourly"
-    job: "{{ etcd_backup_root_dir }}/backup_etcd.sh"
+    job: "sh {{ etcd_backup_root_dir }}/backup_etcd.sh"

@@ -1,0 +1,5 @@
+- name: install app
+  hosts: k8s-master-init
+  gather_facts: false
+  roles:
+    - install-app

@@ -3,3 +3,12 @@
   gather_facts: false
   roles:
     - k8s-install-monitor
+
+- name: create nas dir for monitoring
+  hosts: nas
+  gather_facts: false
+  tasks:
+    - name: create nas dir
+      file:
+        path: "{{ monitor_nfs_path }}"
+        state: directory

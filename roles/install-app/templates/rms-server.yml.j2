@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rms-server
+  namespace: rms
+  labels:
+    app: rms-server
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: rms-server
+      labels:
+        app: rms-server
+    spec:
+      securityContext:
+        runAsUser: 0
+      containers:
+        - name: rms-server
+          image: "{{ image_repository }}/rms/rms-server:1.4"
+          imagePullPolicy: Always
+          volumeMounts:
+            - mountPath: /opt/RMSServer_linux/Logs
+              name: log-dir
+      restartPolicy: Always
+      volumes:
+        - name: log-dir
+          hostPath:
+           path:  /data01/rms-server/Logs
+  selector:
+    matchLabels:
+      app: rms-server
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: rms-server
+  namespace: rms
+spec:
+  selector:
+    app: rms-server
+  ports:
+    - port: 8100
+      name: port1
+    - port: 8200
+      name: port2

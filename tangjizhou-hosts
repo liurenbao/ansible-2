@@ -58,7 +58,6 @@
 192.168.163.51	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="es-5"
 192.168.163.60	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="es-6"
 
-
 [kafka]
 192.168.163.109	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="kafka-1"
 192.168.163.74	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="kafka-2"
@@ -102,3 +101,6 @@ ravencast_tcphosts=192.168.163.82[7800],192.168.163.98[7800]
 
 [ravencast-4:vars]
 ravencast_tcphosts=192.168.163.99[7800],192.168.163.77[7800]
+
+[nas]
+192.168.160.35  ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"

@@ -1,2 +1,3 @@
 - name: set hostname
   shell: hostnamectl set-hostname {{ host_name }}
+  when: host_name is defined

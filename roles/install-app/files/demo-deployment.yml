@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: demo-monitoring
+  namespace: monitoring
+  labels:
+    app: demo-monitoring
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: demo-monitoring
+      labels:
+        app: demo-monitoring
+    spec:
+      containers:
+        - name: demo-monitoring
+          image: 192.168.160.47:8888/public/demo-monitoring:1.0
+          imagePullPolicy: Always
+          env:
+            - name: IS_LOG
+              value: 'false'
+            - name: DEMO_LOG
+              value: "[SERVICE] HOST=[LAPTOP-9SM86PH6] RID=[202108201806383860041] TIME=[2021-08-20 18:06:38.391] CLIENT=[] Type=[I] SVC=[CommViewData]
+	Request end within 0.005s"
+          resources:
+            requests:
+              cpu: '2'
+      restartPolicy: Always
+  selector:
+    matchLabels:
+      app: demo-monitoring
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: demo-monitoring
+  namespace: monitoring
+  annotations:
+    # 使用tcp检测应用存活性，自动获取service的端口
+    prometheus.io/tcp-probe: "true"
+    # 使用http检测应用存活性，手动提供支持http检测的端口
+    prometheus.io/http-probe: "true"
+    prometheus.io/http-probe-port: "8080"
+    prometheus.io/http-probe-path: "/demo-monitoring/actuator/health"
+    # 抓取应用的各项监控指标
+    prometheus.io/scrape: "true"
+    prometheus.io/port: '8080'
+    prometheus.io/scheme: "http"
+    prometheus.io/path: '/demo-monitoring/actuator/prometheus'
+spec:
+  selector:
+    app: demo-monitoring
+  ports:
+    - port: 8080

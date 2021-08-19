@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rms-ui
+  namespace: rms
+  labels:
+    app: rms-ui
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: rms-ui
+      labels:
+        app: rms-ui
+    spec:
+      containers:
+        - name: rms-ui
+          image: "{{ image_repository }}/rms/rms-ui:1.1"
+          imagePullPolicy: Always
+          env:
+            - name: ASPNETCORE_ENVIRONMENT
+              value: Testing
+          readinessProbe:
+            httpGet:
+              port: 80
+              path: /
+          livenessProbe:
+            httpGet:
+              port: 80
+              path: /
+      restartPolicy: Always
+  selector:
+    matchLabels:
+      app: rms-ui
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: rms-ui
+  namespace: rms
+spec:
+  selector:
+    app: rms-ui
+  ports:
+    - port: 80
+      nodePort: 30895
+  type: NodePort
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: rms-ui
+  namespace: rms
+spec:
+  entryPoints:
+    - web
+  routes:
+    - match: PathPrefix(`/rms/`)
+      kind: Rule
+      services:
+        - name: rms
+          port: 80
