@@ -17,7 +17,7 @@ spec:
         runAsUser: 0
       containers:
         - name: rms-server
-          image: 192.168.160.47:8888/rms/rms-server:1.4
+          image: "{{ image_repository }}/rms/rms-server:1.4"
           imagePullPolicy: Always
           volumeMounts:
             - mountPath: /opt/RMSServer_linux/Logs

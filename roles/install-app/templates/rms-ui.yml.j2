@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: rms-ui
-          image: 192.168.160.47:8888/rms/rms-ui:1.1
+          image: "{{ image_repository }}/rms/rms-ui:1.1"
           imagePullPolicy: Always
           env:
             - name: ASPNETCORE_ENVIRONMENT
