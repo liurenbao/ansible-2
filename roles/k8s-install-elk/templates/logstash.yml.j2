@@ -100,7 +100,7 @@ data:
         hosts => {{ groups['es'] | map('regex_replace', '^(.*)$','\\1:9200') | list | to_json}}
         manage_template => true
         template_name => "app-log"
-        index => "log-%{[service]}-%{[namespace]}-%{+YYYY-MM-dd}"
+        index => "log-%{[service]}-%{[namespace]}-%{+YYYY-MM}"
         document_type => "%{[@metadata][type]}"
       }
     }
