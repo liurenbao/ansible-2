@@ -44,3 +44,8 @@
 - name: start mq
   become_user: "{{ mq_user }}"
   shell: "{{ mq_work_dir }}/bin/rmq-tools.sh {{ broker_name }} restart"
+
+- name: rotato rockemq logs
+  template:
+    src: rocketmq.j2
+    dest: /etc/logrotate.d/rocketmq
