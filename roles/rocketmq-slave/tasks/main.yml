@@ -1,25 +1,25 @@
 - name: create dirs
   shell: |
-    mkdir -p {{ mq_data_root_dir }}
-    mkdir -p {{ mq_work_dir }}/logs
-    mkdir -p {{ mq_work_dir }}/conf/2m-2s-sync
-    rm -rf {{ mq_work_dir }}/conf/2m-2s-sync/*.properties
+    mkdir -p {{ rocketmq_root_dir }}
+    mkdir -p {{ rocketmq_root_dir }}/logs
+    mkdir -p {{ rocketmq_root_dir }}/conf/2m-2s-sync
+    rm -rf {{ rocketmq_root_dir }}/conf/2m-2s-sync/*.properties
 
 - name: send rocketmq to remote
   unarchive:
-    src: "{{ mq_package_dir }}/rocketmq-all-4.7.1-bin-release.tar.gz"
-    dest: "{{ mq_work_dir }}"
+    src: "{{ rocketmq_package_dir }}/rocketmq-all-4.7.1-bin-release.tar.gz"
+    dest: "{{ rocketmq_root_dir }}"
 
 - name: send rocketmq master conf
   template:
     src: broker-s.properties.j2
-    dest: "{{ mq_work_dir }}/conf/2m-2s-sync/{{ broker_name }}.properties"
+    dest: "{{ rocketmq_root_dir }}/conf/2m-2s-sync/{{ broker_name }}.properties"
 
 - name: replace rocketmq manager script
   template:
     src: rmq-tools.sh.j2
-    dest: "{{ mq_work_dir }}/bin/rmq-tools.sh"
-    owner: "{{ mq_user }}"
+    dest: "{{ rocketmq_root_dir }}/bin/rmq-tools.sh"
+    owner: "{{ rocketmq_user }}"
     mode: '0755'
 
 - name: set mq env conf
@@ -27,23 +27,23 @@
     dest: /etc/profile
     line: "{{ item }}"
   with_items:
-    - "export RMQ_BIN={{ mq_work_dir }}/bin"
+    - "export RMQ_BIN={{ rocketmq_root_dir }}/bin"
     - "export PATH=$RMQ_BIN:$PATH"
-    - "export ROCKETMQ_HOME={{ mq_work_dir }}"
+    - "export ROCKETMQ_HOME={{ rocketmq_root_dir }}"
 
 - name: enable profile
   shell: source /etc/profile
 
 - name: mq-user permission
   shell: |
-    chown -R {{ mq_user }} {{ mq_work_dir }}
-    chown -R {{ mq_user }} {{ mq_data_root_dir}}
-    chmod -R 770 {{ mq_work_dir }}
-    chmod -R 770 {{ mq_data_root_dir }}
+    chown -R {{ rocketmq_user }} {{ rocketmq_root_dir }}
+    chown -R {{ rocketmq_user }} {{ rocketmq_root_dir}}
+    chmod -R 770 {{ rocketmq_root_dir }}
+    chmod -R 770 {{ rocketmq_root_dir }}
 
 - name: start mq
-  become_user: "{{ mq_user }}"
-  shell: "{{ mq_work_dir }}/bin/rmq-tools.sh {{ broker_name }} restart"
+  become_user: "{{ rocketmq_user }}"
+  shell: "{{ rocketmq_root_dir }}/bin/rmq-tools.sh {{ broker_name }} restart"
 
 - name: rotato rockemq logs
   template:

@@ -38,11 +38,10 @@ kafka_heap_opts: '-Xmx16G -Xms16G'
 # jdk
 jdk_dir: '/data01/jdk1.8.0_202'
 # roketmq
-mq_work_dir: '/data01/rocketmq'
-mq_package_dir: '{{ package_dir }}/rocketmq'
-mq_user: 'rocketmq'
-mq_user_pass: 'rocketmq123'
-mq_data_root_dir: '/data01/rocketmq'
+rocketmq_root_dir: '/data01/rocketmq'
+rocketmq_package_dir: '{{ package_dir }}/rocketmq'
+rocketmq_user: 'rocketmq'
+rocketmq_user_pass: 'rocketmq123'
 # ravencast
 ravencast_xms_xmx_args: '-Xms4096m -Xmx16384m'
 ravencast_root_dir: '/data01/ravencast'

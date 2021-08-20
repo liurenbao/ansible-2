@@ -8,4 +8,4 @@ services:
       NAMESRV_ADDR: {{ groups["rocketmq-namesrv"] | map("regex_replace", "^(.*)$", "\\1:9876") | join(";") }}
       DATA_PATH: "/var/lib/rocketmq-console/data"
     volumes:
-      - "{{ mq_data_root_dir }}/data:/var/lib/rocketmq-console/data"
+      - "{{ rocketmq_root_dir }}/data:/var/lib/rocketmq-console/data"

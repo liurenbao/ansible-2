@@ -4,13 +4,13 @@
   tasks:
     - name: check docker container running
       stat:
-        path: "{{ mq_work_dir }}/docker-compose.yml"
+        path: "{{ rocketmq_root_dir }}/docker-compose.yml"
       register: docker_compose_file
     - name: stop rocketmq console
       shell: docker-compose down
       when: docker_compose_file.stat.exists == true
       args:
-        chdir: "{{ mq_work_dir }}"
+        chdir: "{{ rocketmq_root_dir }}"
 
 - name: uninstall rocketmq namesrv
   gather_facts: false
@@ -18,12 +18,12 @@
   tasks:
     - name: check docker container running
       stat:
-        path: "{{ mq_work_dir }}/bin/rmq-tools.sh"
+        path: "{{ rocketmq_root_dir }}/bin/rmq-tools.sh"
       register: rocketmq_tools
     - name: remove rocketmq namesrv
-      become_user: "{{ mq_user }}"
+      become_user: "{{ rocketmq_user }}"
       when: rocketmq_tools.stat.exists == true
-      shell: "{{ mq_work_dir }}/bin/rmq-tools.sh namesrv stop"
+      shell: "{{ rocketmq_root_dir }}/bin/rmq-tools.sh namesrv stop"
 
 - name: uninstall rocketmq slave
   gather_facts: false
@@ -33,12 +33,12 @@
   tasks:
     - name: check docker container running
       stat:
-        path: "{{ mq_work_dir }}/bin/rmq-tools.sh"
+        path: "{{ rocketmq_root_dir }}/bin/rmq-tools.sh"
       register: rocketmq_tools
     - name: remove rocketmq slave
       when: rocketmq_tools.stat.exists == true
-      become_user: "{{ mq_user }}"
-      shell: "{{ mq_work_dir }}/bin/rmq-tools.sh {{ broker_name }} stop"
+      become_user: "{{ rocketmq_user }}"
+      shell: "{{ rocketmq_root_dir }}/bin/rmq-tools.sh {{ broker_name }} stop"
 
 - name: remove rocketmq env
   gather_facts: false
@@ -54,9 +54,9 @@
         line: "{{ item }}"
         state: absent
       with_items:
-        - "export RMQ_BIN={{ mq_work_dir }}/bin"
+        - "export RMQ_BIN={{ rocketmq_root_dir }}/bin"
         - "export PATH=$RMQ_BIN:$PATH"
-        - "export ROCKETMQ_HOME={{ mq_work_dir }}"
+        - "export ROCKETMQ_HOME={{ rocketmq_root_dir }}"
 
 - name: remove rocketmq user
   gather_facts: false
@@ -69,7 +69,7 @@
       shell: sleep 10
     - name: remove rocketmq user
       user:
-        name: "{{ mq_user }}"
+        name: "{{ rocketmq_user }}"
         state: absent
 
 - name: remove rocketmq dirs
@@ -82,5 +82,5 @@
   tasks:
     - name: remove rocketmq dirs
       shell: |
-        rm -rf {{ mq_work_dir }}
-        rm -rf {{ mq_data_root_dir }}
+        rm -rf {{ rocketmq_root_dir }}
+        rm -rf {{ rocketmq_root_dir }}

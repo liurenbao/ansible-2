@@ -22,5 +22,5 @@ defaultTopicQueueNums = 4
 brokerIP1 = {{ ansible_ssh_host }}
 brokerIP2 = {{ ansible_ssh_host }}
 #storePathRootDir-storePathCommitLog
-storePathRootDir = {{ mq_data_root_dir }}/store
-storePathCommitLog = {{ mq_data_root_dir }}/store/commitlog
+storePathRootDir = {{ rocketmq_root_dir }}/store
+storePathCommitLog = {{ rocketmq_root_dir }}/store/commitlog
