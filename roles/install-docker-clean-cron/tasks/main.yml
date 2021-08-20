@@ -1,5 +1,5 @@
 - name: add docker clean cron
   cron:
     name: "docker clean"
-    special_time: "hourly"
+    special_time: "monthly"
     job: "docker system prune -af"

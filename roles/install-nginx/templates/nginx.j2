@@ -1,0 +1,11 @@
+{{ nginx_root_dir }}/log/*.log {
+    daily
+    dateext
+    missingok
+    rotate 31
+    nocompress
+    sharedscripts
+    postrotate
+        docker container kill nginx_nginx_1  -s USR1
+    endscript
+}

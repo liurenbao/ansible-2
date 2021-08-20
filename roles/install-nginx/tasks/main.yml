@@ -42,3 +42,8 @@
   shell: docker-compose up -d
   args:
     chdir: '{{ nginx_root_dir }}'
+
+- name: rotate nginx logs
+  template:
+    src: nginx.j2
+    dest: /etc/logrotate.d/nginx
