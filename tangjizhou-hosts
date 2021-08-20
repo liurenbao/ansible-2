@@ -43,8 +43,8 @@
 192.168.163.235	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="rocketmq-slave-2"	broker_name=broker-b-s
 
 [nginx]
-192.168.163.108	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="nginx-1"	MASTER_BACKUP=MASTER
-192.168.163.23	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="nginx-2"	MASTER_BACKUP=BACKUP
+192.168.163.105 ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="nginx-1"	MASTER_BACKUP=MASTER
+192.168.163.65	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="nginx-2"	MASTER_BACKUP=BACKUP
 
 [es]
 192.168.163.105	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="es-1"
