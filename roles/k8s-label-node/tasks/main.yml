@@ -1,0 +1,6 @@
+- name: label k8s node
+  # fixme
+  shell: |
+    {%- for host in groups['k8s'] -%}
+       kubectl label node {{ hostvars[host].host_name }} {{ hostvars[host].label }}
+    {%- endfor -%}

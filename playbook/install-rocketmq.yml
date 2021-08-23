@@ -11,8 +11,8 @@
   tasks:
     - name: create rocketmq user
       user:
-        name: "{{ mq_user }}"
-        password: "{{ mq_user_pass }}"
+        name: "{{ rocketmq_user }}"
+        password: "{{ rocketmq_user_pass }}"
         state: present
 
 - name: install-rocketmq-namesrv
@@ -48,7 +48,7 @@
 #        namesrv='{{ groups["rocketmq-namesrv"] | map("regex_replace", "^(.*)$", "\\1:9876") | join(";") }}'
 #        ./mqadmin clusterList -n $namesrv
 #      args:
-#        chdir: "{{ mq_work_dir }}/bin"
+#        chdir: "{{ rocketmq_root_dir }}/bin"
 #      register: mqstatus
 #      when: groups['rocketmq-master'][0] == ansible_ssh_host
 #    - name: show rocketmq status

@@ -23,6 +23,11 @@
     src: docker-compose.yml.j2
     dest: '{{ nginx_root_dir }}/docker-compose.yml'
 
+- name: send filebeat config
+  template:
+    src: filebeat.yml.j2
+    dest: '{{ nginx_root_dir }}/filebeat.yml'
+
 - name: create nginx conf dir
   file:
     path: '{{ nginx_root_dir }}/conf.d'
@@ -42,3 +47,8 @@
   shell: docker-compose up -d
   args:
     chdir: '{{ nginx_root_dir }}'
+
+- name: rotate nginx logs
+  template:
+    src: nginx.j2
+    dest: /etc/logrotate.d/nginx

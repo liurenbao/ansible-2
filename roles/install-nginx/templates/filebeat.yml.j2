@@ -1,0 +1,32 @@
+filebeat.inputs:
+  - type: log
+    paths:
+      - /var/log/nginx/*.log
+    multiline.pattern: '(^\d{4}-\d{1,2}-\d{1,2}|^\[)'
+    multiline.negate: true
+    multiline.match: after
+    processors:
+      - add_fields:
+          target: ''
+          fields:
+            kubernetes.labels.app: nginx
+            kubernetes.namespace: loadbalance
+      - drop_fields:
+          fields:
+            - "agent"
+            - "host"
+            - "log"
+            - "input"
+            - "ecs"
+            - "container"
+          ignore_missing: true
+output.kafka:
+  hosts: {{ groups[ "kafka" ] | map("regex_replace", "^(.*)$","\\1:9092") | list | to_json }}
+  topic: log
+  required_acks: 0
+  worker: 8
+  keep_alive: 15
+  monitoring:
+    enabled: true
+    elasticsearch:
+      hosts: {{ groups[ "es" ] | map("regex_replace", "^(.*)$","\\1:9200") | list | to_json }}

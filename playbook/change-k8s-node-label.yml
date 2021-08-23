@@ -1,0 +1,5 @@
+- name: change k8s node label
+  hosts: k8s-master-init
+  gather_facts: false
+  roles:
+    - k8s-label-node
