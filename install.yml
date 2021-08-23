@@ -27,12 +27,12 @@
 
 #拷贝harbor压缩包到 harbor服务器
 - hosts: localhost
-  name: copy harbor
+  name: copy harbor from localhost
   gather_facts: false
   vars:
     harbor_hosts: "{{groups['harbor']|join(',')}}"
   tasks:
-    - name: copy harbor
+    - name: copy harbor scp -r
       shell: "scp -r {{ harbor_tar }} {{ item }}:{{ harbor_root_dir }}"
       with_items: '{{ harbor_hosts.split(",") }}'
 

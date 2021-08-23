@@ -18,5 +18,5 @@
 - name: add etcd backup cron
   cron:
     name: "backup etcd"
-    special_time: "hourly"
+    special_time: "daily"
     job: "sh {{ etcd_backup_root_dir }}/backup_etcd.sh"

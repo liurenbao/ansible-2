@@ -1,7 +1,7 @@
 package_dir: '/etc/ansible/package'
 ## harbor
-harbor_keepalived_vip: 192.168.163.240
-harbor_keepalived_virtual_router_id: '240'
+harbor_keepalived_vip: 192.168.163.250
+harbor_keepalived_virtual_router_id: '250'
 harbor_keepalived_vrrp_instance_interface: eth0
 harbor_tar: '{{ package_dir }}/harbor/harbor.tar.gz'
 harbor_root_dir: '/data01/harbor'
@@ -18,9 +18,9 @@ docker_data_root: '/data01/docker'
 # nginx
 nginx_root_dir: '/data01/nginx'
 nginx_image: '{{ image_repository }}/public/nginx:1.21.1'
-nginx_keepalived_vip: 192.168.163.239
+nginx_keepalived_vip: 192.168.163.251
 traefik_web_port: 31001
-nginx_keepalived_virtual_router_id: '239'
+nginx_keepalived_virtual_router_id: '251'
 nginx_keepalived_vrrp_instance_interface: eth0
 
 # es
@@ -48,8 +48,8 @@ ravencast_xms_xmx_args: '-Xms4096m -Xmx16384m'
 ravencast_root_dir: '/data01/ravencast'
 
 # k8s
-k8s_keepalived_vip: 192.168.163.241
-k8s_keepalived_virtual_router_id: '241'
+k8s_keepalived_vip: 192.168.163.252
+k8s_keepalived_virtual_router_id: '252'
 k8s_keepalived_vrrp_instance_interface: eth0
 
 # kubernetes
@@ -64,11 +64,11 @@ elk_manifest_root_dir: '{{ component_manifest_dir }}/elk'
 
 # monitor
 nfs_server: '192.168.160.35'
-monitor_nfs_path: '/data01/monitoring'
+monitor_nfs_path: '/data02/monitoring'
 monitor_manifest_root_dir: '{{ component_manifest_dir }}/monitor'
-prometheus_storage: '20Gi'
+prometheus_storage: '50Gi'
 prometheus_data_retention: '35d'
-grafana_storage: '20Gi'
+grafana_storage: '50Gi'
 
 # redis
 redis_data_dir: '/data01/redis'
