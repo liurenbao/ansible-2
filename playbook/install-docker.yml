@@ -10,3 +10,4 @@
     - rocketmq-console
   roles:
     - install-docker
+    - install-docker-clean-cron

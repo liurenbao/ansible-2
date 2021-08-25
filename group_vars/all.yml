@@ -1,47 +1,79 @@
+# 离线文件安装包所在目录
 package_dir: '/etc/ansible/package'
+
 ## harbor
+# harbor主备vip
 harbor_keepalived_vip: 192.168.163.250
+# keepalived的route id
 harbor_keepalived_virtual_router_id: '250'
+# keepalived vip的网卡信息
 harbor_keepalived_vrrp_instance_interface: eth0
+# harbor压缩包
 harbor_tar: '{{ package_dir }}/harbor/harbor.tar.gz'
+# harbor安装目录
 harbor_root_dir: '/data01/harbor'
+# harbor启动端口
 harbor_port: '80'
+# harbor密码
 harbor_password: 'admin123Admin'
+# harbor安装数据目录
 harbor_data_volume: '{{ harbor_root_dir }}/harbor-data'
 
 # docker
+# harbor私服地址
 image_repository: '{{ harbor_keepalived_vip }}:{{ harbor_port }}'
+#docker insecure registry，可能有多个，用harbor地址就可以了
 docker_insecure_registries:
   - '{{ image_repository }}'
+# docker数据目录
 docker_data_root: '/data01/docker'
 
 # nginx
+# Nginx 数据目录
 nginx_root_dir: '/data01/nginx'
+# Nginx镜像
 nginx_image: '{{ image_repository }}/public/nginx:1.21.1'
+# Nginx vip
 nginx_keepalived_vip: 192.168.163.251
+# Nginx直接代理traefik http端口
 traefik_web_port: 31001
+# Nginx vip的route id
 nginx_keepalived_virtual_router_id: '251'
+# Nginx vip的网卡
 nginx_keepalived_vrrp_instance_interface: eth0
 
 # es
+# es数据盘
 es_root_dir: '/data01/es'
-es_cluster_name: 'es-mouyongde-cluster-7.3.2'
+# es集群名
+es_cluster_name: 'es-qd-cluster-7.3.2'
+# es镜像地址
 es_image: '{{ image_repository }}/public/elasticsearch:7.13.2'
+# es jvm信息
 es_java_opts: '-Xms16G -Xmx16G'
 
 # kafka
+# zk镜像地址
 zookeeper_image: '{{ image_repository }}/public/zookeeper-official:3.7'
+# kafka镜像地址
 kafka_image: '{{ image_repository }}/public/kafka:2.13-2.7.0'
+# kafka数据目录
 kafka_root_dir: '/data01/kafka'
+# kafka jvm信息
 kafka_heap_opts: '-Xmx16G -Xms16G'
 
 # jdk
 jdk_dir: '/data01/jdk1.8.0_202'
+
 # roketmq
+# rocketmq根目录
 rocketmq_root_dir: '/data01/rocketmq'
+# rocketmq 安装包路径
 rocketmq_package_dir: '{{ package_dir }}/rocketmq'
+# rocketmq启动用户
 rocketmq_user: 'rocketmq'
 rocketmq_user_pass: 'rocketmq123'
+
 # ravencast
 ravencast_xms_xmx_args: '-Xms4096m -Xmx16384m'
 ravencast_root_dir: '/data01/ravencast'
@@ -58,7 +90,7 @@ pod_network_cidr: '10.244.0.0/16'
 kubernetes_version: '1.18.19'
 component_manifest_dir: '/data01/kube-manifest'
 etcd_backup_dir: '/data01/etcd'
-# elk
+# k8s部署elk组件路径
 elk_manifest_root_dir: '{{ component_manifest_dir }}/elk'
 
 # monitor
@@ -75,7 +107,7 @@ redis_image: '{{ image_repository }}/public/redis:6.2.4'
 #32G大小的3/4
 redis_maxmemory: '51539607552'
 
-# component result file
+# k8s部署的component结果文件
 kube_component_file: '{{ component_manifest_dir }}/kube-component.md'
 
 # etcd backup

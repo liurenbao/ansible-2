@@ -1,3 +1,4 @@
+# k8s master 创建vip
 - name: k8s control plane vip
   hosts: k8s-master
   gather_facts: false
@@ -9,32 +10,44 @@
   roles:
     - install-keepalived
 
-- name: install kubelet kubeadm kubect
+# 安装kubelet  kubeadm kubectl
+- name: install kubelet kubeadm kubectl
   hosts: k8s
   gather_facts: false
   roles:
     - install-kubernetes
 
+# master init命令
 - name: k8s master init
   hosts: k8s-master-init
   gather_facts: false
   roles:
     - k8s-master-init
 
+# master join命令
 - name: k8s master join
   hosts: k8s-master-join
   gather_facts: false
   roles:
     - k8s-master-join
 
+# master worker join
 - name: k8s worker join
   hosts: k8s-worker
   gather_facts: false
   roles:
     - k8s-worker-join
 
+# 更新K8S证书
 - name: k8s cert update
   hosts: k8s-master
   gather_facts: false
   roles:
     - k8s-cert-update
+
+# 备份etcd集群信息
+- name: etcd backup
+  hosts: k8s-master
+  gather_facts: false
+  roles:
+    - install-etcd-backup-cron

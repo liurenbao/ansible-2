@@ -59,7 +59,6 @@
 192.168.163.208	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="kafka-2"
 192.168.163.146	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="kafka-3"
 
-
 [redis]
 192.168.163.222	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="redis-1"
 192.168.163.211	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="redis-2"
@@ -68,19 +67,29 @@
 192.168.163.212	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="redis-5"
 192.168.163.233	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="redis-6"
 
-
 [ravencast-1]
 192.168.163.226	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="ravencast-1"
 192.168.163.190	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="ravencast-2"
+[ravencast-1:vars]
+ravencast_tcphosts=192.168.163.226[7800],192.168.163.190[7800]
+
 [ravencast-2]
 192.168.163.165	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="ravencast-3"
 192.168.163.209	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="ravencast-4"
+[ravencast-2:vars]
+ravencast_tcphosts=192.168.163.165[7800],192.168.163.209[7800]
+
 [ravencast-3]
 192.168.163.169	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="ravencast-5"
 192.168.163.225	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="ravencast-6"
+[ravencast-3:vars]
+ravencast_tcphosts=192.168.163.169[7800],192.168.163.225[7800]
+
 [ravencast-4]
 192.168.163.199	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="ravencast-7"
 192.168.163.186	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name="ravencast-8"
+[ravencast-4:vars]
+ravencast_tcphosts=192.168.163.199[7800],192.168.163.186[7800]
 
 [ravencast:children]
 ravencast-1
@@ -88,14 +97,5 @@ ravencast-2
 ravencast-3
 ravencast-4
 
-[ravencast-1:vars]
-ravencast_tcphosts=192.168.163.226[7800],192.168.163.190[7800]
 
-[ravencast-2:vars]
-ravencast_tcphosts=192.168.163.165[7800],192.168.163.209[7800]
 
-[ravencast-3:vars]
-ravencast_tcphosts=192.168.163.169[7800],192.168.163.225[7800]
-
-[ravencast-4:vars]
-ravencast_tcphosts=192.168.163.199[7800],192.168.163.186[7800]
