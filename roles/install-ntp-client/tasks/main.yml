@@ -1,0 +1,31 @@
+- name: yum install ntp -y
+  shell: yum install ntp -y
+
+- name: systemctl enable ntpd
+  shell: systemctl enable ntpd
+
+- name: /etc/ntp.conf
+  template:
+    src: ntp.conf.j2
+    dest: /etc/ntp.conf
+
+- name: /etc/sysconfig/ntpd
+  template:
+    src: ntp.conf.j2
+    dest: /etc/sysconfig/ntpd
+
+- name: service ntpd start/stop/restart
+  shell: service ntpd stop
+
+- name: ntpdate  ntp-server
+  shell: ntpdate  {{ ntp_server }}
+
+- name: service ntpd start/stop/restart
+  shell: service ntpd start
+
+- name: crontab ntp -d -u
+  cron:
+    name: "ntpdate"
+    special_time: "hourly"
+    job: "service ntpd stop && /usr/sbin/ntpdate {{ ntp_server }} && /sbin/hwclock -w && service ntpd start"
+

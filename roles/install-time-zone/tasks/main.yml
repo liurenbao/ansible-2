@@ -1,0 +1,10 @@
+- name: timedatectl set-timezone Asia/Shanghai
+  shell: timedatectl set-timezone Asia/Shanghai
+
+- name: date
+  shell: date
+  register: date_value
+
+- name: show date
+  debug:
+    msg: "{{ date_value }}"

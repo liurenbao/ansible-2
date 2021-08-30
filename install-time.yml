@@ -1,0 +1,7 @@
+- name: change time
+  hosts: all
+  gather_facts: false
+  roles:
+    - install-yum-client
+    - install-ntp-client
+    - install-time-zone

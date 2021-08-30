@@ -1,0 +1,7 @@
+- name: install ntp client
+  hosts: all
+  gather_facts: false
+  vars:
+    ntp_server: '{{ ntp_server }}'
+  roles:
+    - install-ntp-client

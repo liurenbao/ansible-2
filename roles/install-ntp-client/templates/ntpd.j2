@@ -1,0 +1,6 @@
+# Drop root to id 'ntp:ntp' by default.
+OPTIONS="-u ntp:ntp -p /var/run/ntpd.pid"
+# Set to 'yes' to sync hw clock after successful ntpdate
+SYNC_HWCLOCK=yes #make no into yes; BIOS的时间也会跟着修改
+# Additional options for ntpdate
+NTPDATE_OPTIONS=""

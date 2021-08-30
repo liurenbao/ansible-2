@@ -1,0 +1,20 @@
+driftfile /var/lib/ntp/ntp.drift
+statistics loopstats peerstats clockstats
+filegen loopstats file loopstats type day enable
+filegen peerstats file peerstats type day enable
+filegen clockstats file clockstats type day enable
+#server 0.ubuntu.pool.ntp.org
+#server 1.ubuntu.pool.ntp.org
+#server 2.ubuntu.pool.ntp.org
+#server 3.ubuntu.pool.ntp.org
+#server s1a.time.edu.cn prefer
+#server s2a.time.edu.cn
+#server s2b.time.edu.cn
+#server s2e.time.edu.cn
+#server ntp.ubuntu.com
+#使用上级始终源
+server {{ ntp_server }} prefer
+# 当前服务器可以被当做时钟源
+restrict default mask 255.255.0.0 nomodify
+restrict 127.0.0.1
+restrict ::1
