@@ -138,12 +138,12 @@ spec:
             - name: varlibdockercontainers
               mountPath: /var/lib/docker/containers
               readOnly: true
+            - name: varlibdockeroverlay
+              mountPath: /var/lib/docker/overlay2
+              readOnly: true
             - name: varrundockersock
               readOnly: true
               mountPath: /var/run/docker.sock
-            - name: rms-log
-              readOnly: true
-              mountPath: /data01/rms-server/Logs
           livenessProbe:
             exec:
               command:
@@ -163,6 +163,9 @@ spec:
         - name: varlibdockercontainers
           hostPath:
             path: "{{ docker_data_root }}/containers"
+        - name: varlibdockeroverlay
+          hostPath:
+            path: "{{ docker_data_root }}/overlay2"
         - name: varrundockersock
           hostPath:
             path: /var/run/docker.sock
