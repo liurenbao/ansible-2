@@ -1,5 +1,3 @@
-- name: clear old dir
-  command: rm -rf {{ kafka_root_dir }}
 - name: create root dir
   command: mkdir -p {{ kafka_root_dir }}
 - name: install with docker compose
