@@ -1,0 +1,12 @@
+- name: rm -rf /etc/yum.repos.d/*.repo
+  shell: rm -rf /etc/yum.repos.d/*.repo
+
+- name: replace /etc/yum.repos.d/CentOS-Local.repo
+  template:
+    src: CentOS-Local.repo.j2
+    dest: /etc/yum.repos.d/CentOS-Local.repo
+
+- name: yum makecache
+  shell: yum makecache
+
+
