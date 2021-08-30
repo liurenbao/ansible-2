@@ -11,46 +11,67 @@ data:
     filebeat.inputs:
       - type: log
         paths:
-          - /data01/rms-server/Logs/*.log
+          - "/var/lib/docker/overlay2/*/diff/opt/RMSServer_linux/Logs/*.log"
+        multiline.pattern: '^\d{4}-\d{1,2}-\d{1,2}'
+        multiline.negate: true
+        multiline.match: after
         processors:
           - add_fields:
               target: ''
               fields:
                 kubernetes.labels.app: rms-server
                 kubernetes.namespace: rms
-      - type: container
+      - type: log
         paths:
-          - /var/lib/docker/containers/*/*.log
-        multiline.pattern: '(^\d{4}-\d{1,2}-\d{1,2}|^\[)'
+          - "/var/lib/docker/overlay2/*/diff/PlantUMes/Server/log/meslog*.log"
+        multiline.pattern: '(^\[SERVICE\]|^\[SYSTEM\]|^\[SQL\])'
         multiline.negate: true
         multiline.match: after
         processors:
-          - add_kubernetes_metadata:
-              in_cluster: true
-          - drop_fields:
+          - add_fields:
+              target: ''
               fields:
-                - "agent"
-                - "host"
-                - "log"
-                - "input"
-                - "ecs"
-                - "container"
-              ignore_missing: true
-          - drop_event:
-              when:
-                or:
-                  - equals:
-                      kubernetes.namespace: default
-                  - equals:
-                      kubernetes.namespace: traefik
-                  - equals:
-                      kubernetes.namespace: elk
-                  - equals:
-                      kubernetes.namespace: monitoring
-                  - equals:
-                      kubernetes.namespace: kube-system
-                  - equals:
-                      kubernetes.namespace: kubernetes-dashboard
+                kubernetes.labels.app: mes-server
+                kubernetes.namespace: mes
+    filebeat.autodiscover:
+      providers:
+        - type: kubernetes
+          templates:
+            - condition:
+              config:
+                - type: container
+                  paths:
+                    - "/var/lib/docker/containers/*/*.log"
+                  multiline.pattern: '^\d{4}-\d{1,2}-\d{1,2}'
+                  multiline.negate: true
+                  multiline.match: after
+                  processors:
+                    - add_kubernetes_metadata:
+                        in_cluster: true
+                    - drop_fields:
+                        fields:
+                          - "agent"
+                          - "host"
+                          - "log"
+                          - "input"
+                          - "ecs"
+                          - "container"
+                        ignore_missing: true
+                    - drop_event:
+                        when:
+                          or:
+                            - equals:
+                                kubernetes.namespace: default
+                            - equals:
+                                kubernetes.namespace: traefik
+                            - equals:
+                                kubernetes.namespace: elk
+                            - equals:
+                                kubernetes.namespace: monitoring
+                            - equals:
+                                kubernetes.namespace: kube-system
+                            - equals:
+                                kubernetes.namespace: kubernetes-dashboard
     output.kafka:
       hosts: {{ groups['kafka'] | map('regex_replace', '^(.*)$','\\1:9092') | list | to_json }}
       topic: log
