@@ -1,9 +1,3 @@
-- name: install k8s monitor
-  hosts: k8s-master-init
-  gather_facts: false
-  roles:
-    - k8s-install-monitor
-
 - name: create nas dir for monitoring
   hosts: nas
   gather_facts: false
@@ -12,3 +6,9 @@
       file:
         path: "{{ monitor_nfs_path }}"
         state: directory
+
+- name: install k8s monitor
+  hosts: k8s-master-init
+  gather_facts: false
+  roles:
+    - k8s-install-monitor

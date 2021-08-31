@@ -1,0 +1,25 @@
+- name: install required softwares
+  shell: yum install rpcbind nfs-utils -y
+
+- name: start nfs server
+  shell: systemctl start rpcbind nfs-server
+
+- name: enable nfs server
+  shell: systemctl enable rpcbind nfs-server
+
+- name: config firewalld
+  shell: |
+    firewall-cmd --permanent --add-service mountd
+    firewall-cmd --permanent --add-service rpc-bind
+    firewall-cmd --permanent --add-service nfs
+    firewall-cmd --reload
+
+- name: config nfs permission
+  lineinfile:
+    path: /etc/exports
+    line: "{{ nfs_root_dir }} 192.168.0.0/16(insecure,rw,sync,no_root_squash,no_all_squash)"
+    state: present
+
+- name: re-export nfs dir
+  shell: exportfs -r
+

@@ -5,9 +5,9 @@ yum_base_url: 'http://192.168.161.202/yum/'
 
 ## harbor
 # harbor主备vip
-harbor_keepalived_vip: 192.168.163.250
+harbor_keepalived_vip: 192.168.160.47
 # keepalived的route id
-harbor_keepalived_virtual_router_id: '250'
+harbor_keepalived_virtual_router_id: '47'
 # keepalived vip的网卡信息
 harbor_keepalived_vrrp_instance_interface: eth0
 # harbor压缩包
@@ -15,7 +15,7 @@ harbor_tar: '{{ package_dir }}/harbor/harbor.tar.gz'
 # harbor安装目录
 harbor_root_dir: '/data01/harbor'
 # harbor启动端口
-harbor_port: '80'
+harbor_port: '8888'
 # harbor密码
 harbor_password: 'admin123Admin'
 # harbor安装数据目录
@@ -48,7 +48,7 @@ nginx_keepalived_vrrp_instance_interface: eth0
 # es数据盘
 es_root_dir: '/data01/es'
 # es集群名
-es_cluster_name: 'es-qd-cluster-7.3.2'
+es_cluster_name: 'es-mouyongde-cluster-7.3.2'
 # es镜像地址
 es_image: '{{ image_repository }}/public/elasticsearch:7.13.2'
 # es jvm信息
@@ -81,8 +81,8 @@ ravencast_xms_xmx_args: '-Xms4096m -Xmx16384m'
 ravencast_root_dir: '/data01/ravencast'
 
 # k8s
-k8s_keepalived_vip: 192.168.163.252
-k8s_keepalived_virtual_router_id: '252'
+k8s_keepalived_vip: 192.168.160.253
+k8s_keepalived_virtual_router_id: '253'
 k8s_keepalived_vrrp_instance_interface: eth0
 
 # kubernetes
@@ -96,8 +96,9 @@ etcd_backup_dir: '/data01/etcd'
 elk_manifest_root_dir: '{{ component_manifest_dir }}/elk'
 
 # monitor
-nfs_server: '192.168.160.35'
-monitor_nfs_path: '/data02/monitoring'
+nfs_root_dir: '/data01'
+nfs_server: "{{ groups['nas'][0] }}"
+monitor_nfs_path: '{{ nfs_root_dir }}/monitoring'
 monitor_manifest_root_dir: '{{ component_manifest_dir }}/monitor'
 prometheus_storage: '50Gi'
 prometheus_data_retention: '35d'

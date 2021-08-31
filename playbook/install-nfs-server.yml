@@ -1,0 +1,5 @@
+- name: install nfs server
+  hosts: nas
+  gather_facts: false
+  roles:
+    - install-nfs-server
