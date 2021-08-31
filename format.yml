@@ -1,0 +1,47 @@
+filebeat.inputs:
+  - type: log
+    paths:
+      - /data01/rms-server/Logs/*.log
+    processors:
+      - add_fields:
+          target: ''
+          fields:
+            kubernetes.labels.app: rms-server
+            kubernetes.namespace: rms
+  - type: log
+    paths:
+      - "/var/lib/docker/overlay2/*/diff/PlantUMes/Server/log/meslog*.log"
+    processors:
+      - add_fields:
+          target: ''
+          fields:
+            kubernetes.labels.app: plantumes
+            kubernetes.namespace: mes
+    multiline.pattern: '^\['
+    multiline.negate: true
+    multiline.match: after
+filebeat.autodiscover:
+  providers:
+    - type: kubernetes
+      templates:
+        - condition:
+          config:
+            - type: container
+              paths:
+                - "/var/lib/docker/containers/*/*.log"
+              multiline.pattern: '(^\d{4}-\d{1,2}-\d{1,2}|^\[)'
+              multiline.negate: true
+              multiline.match: after
+              processors:
+                - add_kubernetes_metadata:
+                    in_cluster: true
+output.kafka:
+  hosts: [ "192.168.161.198:9092", "192.168.161.199:9092", "192.168.161.200:9092" ]
+  topic: log
+  required_acks: 0
+  worker: 8
+  keep_alive: 15
+monitoring:
+  enabled: true
+  elasticsearch:
+    hosts: [ "192.168.161.194:9200", "192.168.161.195:9200", "192.168.161.196:9200" ]

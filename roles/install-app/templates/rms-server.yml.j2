@@ -19,14 +19,7 @@ spec:
         - name: rms-server
           image: "{{ image_repository }}/rms/rms-server:1.4"
           imagePullPolicy: Always
-          volumeMounts:
-            - mountPath: /opt/RMSServer_linux/Logs
-              name: log-dir
       restartPolicy: Always
-      volumes:
-        - name: log-dir
-          hostPath:
-           path:  /data01/rms-server/Logs
   selector:
     matchLabels:
       app: rms-server
