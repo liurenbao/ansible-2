@@ -57,7 +57,8 @@ es_image: '{{ image_repository }}/public/elasticsearch:7.13.2'
 es_java_opts: '-Xms16G -Xmx16G'
 es_clear_at_day: 20
 es_clear_month_ago: 3
-
+es_log_replicas: 1
+es_log_shards: 60
 
 # kafka
 # zk镜像地址

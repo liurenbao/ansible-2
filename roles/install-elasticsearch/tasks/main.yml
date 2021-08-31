@@ -19,13 +19,14 @@
 - name: docker-compose up
   shell: docker-compose -f {{ es_root_dir }}/docker-compose.yml up -d
 
-- name: clear expired index
+- name: add clear cron job
   cron:
     name: 'clear es expired index'
     minute: 0
     hour: 0
     day: '{{ es_clear_at_day }}'
     job: 'curl -XDELETE http://localhost:9200/*-$(date -d "{{ es_clear_month_ago }} month ago" +%Y-%m)'
+
 - name: check es state
   shell: sleep 30 && curl http://localhost:9200/_cat/health?v
   register: result
@@ -35,6 +36,10 @@
   debug:
     msg: "{{ result.stdout_lines }}"
   when: ansible_ssh_host == groups['es'][0]
+
+- name: add index template
+  shell: |
+    curl -H 'Content-Type: application/json' -XPUT -d '{ "index_patterns":["log-*"],"settings":{"number_of_replicas": {{ es_log_replicas }},"number_of_shards": {{ es_log_shards }} } }' http://localhost:9200/_template/app-log
 
 - name: pause
   command: sleep 10
