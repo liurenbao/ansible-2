@@ -10,3 +10,11 @@
     insertafter: '^\s+-\s--enable-admission-plugins=.+'
     line: '    - --runtime-config=settings.k8s.io/v1alpha1=true'
     state: present
+
+- name: wait api server restart
+  shell: sleep 20
+
+- name: wait api server ready
+  wait_for:
+    port: 6443
+    state: present

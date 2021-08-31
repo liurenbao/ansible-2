@@ -19,6 +19,13 @@
 - name: docker-compose up
   shell: docker-compose -f {{ es_root_dir }}/docker-compose.yml up -d
 
+- name: clear expired index
+  cron:
+    name: 'clear es expired index'
+    minute: 0
+    hour: 0
+    day: '{{ es_clear_at_day }}'
+    job: 'curl -XDELETE http://localhost:9200/*-$(date -d "{{ es_clear_month_ago }} month ago" +%Y-%m)'
 - name: check es state
   shell: sleep 30 && curl http://localhost:9200/_cat/health?v
   register: result
