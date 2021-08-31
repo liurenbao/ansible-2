@@ -33,41 +33,6 @@ metadata:
 data:
   filter_main.conf: |-
     filter {
-
-      # detect app name
-      if [kubernetes][labels][k8s-app] {
-        mutate {
-          add_field => { "service" => "%{[kubernetes][labels][k8s-app]}" }
-        }
-      } else if [kubernetes][labels][app] {
-        mutate {
-          add_field => { "service" => "%{[kubernetes][labels][app]}" }
-        }
-      } else if [kubernetes][container][name] {
-         mutate {
-           add_field => { "service" => "%{[kubernetes][container][name]}" }
-         }
-      } else {
-        mutate {
-          add_field => { "service" => "unknown" }
-        }
-      }
-
-      # detect app namespace
-      if [kubernetes][namespace] {
-        mutate {
-          add_field => { "namespace" => "%{[kubernetes][namespace]}" }
-        }
-      } else {
-        mutate {
-          add_field => { "namespace" => "unknown" }
-        }
-      }
-      # remove unnecessary fields
-      prune {
-        blacklist_names => [ "log.*", "ecs.*", "agent.*", "host.*", "type.*" ]
-      }
-
       # format message
       grok {
         break_on_match => true
@@ -104,7 +69,7 @@ data:
         hosts => {{ groups['es'] | map('regex_replace', '^(.*)$','\\1:9200') | list | to_json}}
         manage_template => true
         template_name => "app-log"
-        index => "log-%{[service]}-%{[namespace]}-%{+YYYY-MM}"
+        index => "log-%{[kubernetes][labels][app]}-%{[kubernetes][namespace]}-%{+YYYY-MM}"
         document_type => "%{[@metadata][type]}"
       }
     }

@@ -31,6 +31,12 @@
   roles:
     - k8s-master-join
 
+- name: install pod presets
+  hosts: k8s-master
+  gather_facts: false
+  roles:
+    - k8s-install-podprests
+
 # master worker join
 - name: k8s worker join
   hosts: k8s-worker

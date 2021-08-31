@@ -1,0 +1,5 @@
+- name: install k8s podprests
+  gather_facts: false
+  hosts: localhost
+  roles:
+    - k8s-install-podprests

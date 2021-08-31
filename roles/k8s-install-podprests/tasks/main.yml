@@ -1,0 +1,12 @@
+- name: add enable-admission-plugins
+  replace:
+    path: /etc/kubernetes/manifests/kube-apiserver.yaml
+    regexp: '^(\s+-\s--enable-admission-plugins=.*(?<!PodPreset)$)'
+    replace: '\1,PodPreset'
+
+- name: add runtime config
+  lineinfile:
+    path: /etc/kubernetes/manifests/kube-apiserver.yaml
+    insertafter: '^\s+-\s--enable-admission-plugins=.+'
+    line: '    - --runtime-config=settings.k8s.io/v1alpha1=true'
+    state: present
