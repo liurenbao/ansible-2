@@ -10,7 +10,7 @@
     echo "| --- | --- | --- |" >> {{ kube_component_file }}
 
 - name: k8s dashboard url
-  shell: 'echo "https://{{ groups["k8s-master-init"][0] }}:30000"'
+  shell: 'echo "https://{{ k8s_keepalived_vip }}:30000"'
   register: k8s_dashboard_url
 
 - name: k8s dashboard token
@@ -24,16 +24,16 @@
 
 
 - name: traefik dashboard
-  shell: 'echo "|traefik | http://{{ groups["k8s-master-init"][0] }}:31000 | - |" >> {{ kube_component_file }}'
+  shell: 'echo "|traefik | http://{{ k8s_keepalived_vip }}:31000 | - |" >> {{ kube_component_file }}'
 
 - name: grafana dashboard
-  shell: 'echo "| grafana | http://{{ groups["k8s-master-init"][0] }}:30004 | - |" >> {{ kube_component_file }}'
+  shell: 'echo "| grafana | http://{{ k8s_keepalived_vip }}:30004 | - |" >> {{ kube_component_file }}'
 
 - name: prometheus dashboard
-  shell: 'echo "| prometheus | http://{{ groups["k8s-master-init"][0] }}:30002 | - |" >> {{ kube_component_file }}'
+  shell: 'echo "| prometheus | http://{{ k8s_keepalived_vip }}:30002 | - |" >> {{ kube_component_file }}'
 
 - name: kibana dashboard
-  shell: 'echo "|kibana | http://{{ groups["k8s-master-init"][0] }}:30001 | - |" >> {{ kube_component_file }}'
+  shell: 'echo "|kibana | http://{{ k8s_keepalived_vip }}:30001 | - |" >> {{ kube_component_file }}'
 
 - name: nginx web port
   shell: 'echo "|nginx | http://{{ nginx_keepalived_vip }} | - |" >> {{ kube_component_file }}'
