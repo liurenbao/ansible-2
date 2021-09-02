@@ -1,5 +1,7 @@
 # km create secret generic prometheus-additional --from-file prometheus-additional.yaml
 - job_name: 'kubernetes-service-metrics'
+  scrape_interval: 15s
+  scrape_timeout: 10s
   kubernetes_sd_configs:
     - role: endpoints
   relabel_configs:
@@ -23,12 +25,17 @@
       regex: __meta_kubernetes_service_label_(.+)
     - source_labels: [ __meta_kubernetes_namespace ]
       action: replace
-      target_label: kubernetes_namespace
+      target_label: namespace
     - source_labels: [ __meta_kubernetes_service_name ]
       action: replace
-      target_label: kubernetes_name
+      target_label: service
+  metric_relabel_configs:
+    - action: drop
+      regex: __meta_kubernetes_.+
 
 - job_name: 'kubernetes-http-services'
+  scrape_interval: 15s
+  scrape_timeout: 10s
   metrics_path: /probe
   params:
     module: [ http_2xx ]  # 使用定义的http模块
@@ -51,11 +58,16 @@
     - action: labelmap
       regex: __meta_kubernetes_service_label_(.+)
     - source_labels: [ __meta_kubernetes_namespace ]
-      target_label: kubernetes_namespace
+      target_label: namespace
     - source_labels: [ __meta_kubernetes_service_name ]
-      target_label: kubernetes_name
+      target_label: service
+  metric_relabel_configs:
+    - action: drop
+      regex: __meta_kubernetes_.+
 
 - job_name: 'kubernetes-tcp-services'
+  scrape_interval: 15s
+  scrape_timeout: 10s
   metrics_path: /probe
   params:
     module: [ tcp_connect ]
@@ -74,6 +86,9 @@
     - action: labelmap
       regex: __meta_kubernetes_ingress_label_(.+)
     - source_labels: [ __meta_kubernetes_namespace ]
-      target_label: kubernetes_namespace
-    - source_labels: [ __meta_kubernetes_ingress_name ]
-      target_label: kubernetes_name
+      target_label: namespace
+    - source_labels: [ __meta_kubernetes_service_name ]
+      target_label: service
+  metric_relabel_configs:
+    - action: drop
+      regex: __meta_kubernetes_.+

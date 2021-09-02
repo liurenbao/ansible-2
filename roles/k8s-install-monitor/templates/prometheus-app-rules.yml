@@ -1,0 +1,19 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  labels:
+    prometheus: k8s
+    role: alert-rules
+  name: app-rules
+  namespace: monitoring
+spec:
+  groups:
+    - name: app-probe-status
+      rules:
+        - alert: ServiceDown
+          annotations:
+            message: service [{{ $labels.service}}] in namespace [{{ $labels.namespace }}] is down
+          expr: probe_success{} == 0
+          for: 30s
+          labels:
+            severity: critical

@@ -109,6 +109,7 @@ monitor_manifest_root_dir: '{{ component_manifest_dir }}/monitor'
 prometheus_storage: '50Gi'
 prometheus_data_retention: '35d'
 grafana_storage: '50Gi'
+alertmanager_storage: '20Gi'
 
 # redis
 redis_data_dir: '/data01/redis'
