@@ -8,6 +8,7 @@
     - es
     - nginx
     - rocketmq-console
+    - docker
   roles:
     - install-docker
     - install-docker-clean-cron
