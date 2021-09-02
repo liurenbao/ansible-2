@@ -1,56 +1,64 @@
-filebeat.inputs:
-  - type: log
-    paths:
-      - /var/lib/docker/overlay2/*/diff/opt/RMSServer_linux/Logs/*.log
-    multiline.pattern: '^\d{4}-\d{1,2}-\d{1,2}'
-    multiline.negate: true
-    multiline.match: after
-    processors:
-      - add_fields:
-          target: ''
-          fields:
-            kubernetes.labels.app: rms-server
-            kubernetes.namespace: rms
-  - type: container
-    paths:
-      - /var/lib/docker/containers/*/*.log
-    multiline.pattern: '^\d{4}-\d{1,2}-\d{1,2}'
-    multiline.negate: true
-    multiline.match: after
-    processors:
-      - add_kubernetes_metadata:
-          in_cluster: true
-      - drop_fields:
-          fields:
-            - "agent"
-            - "host"
-            - "log"
-            - "input"
-            - "ecs"
-            - "container"
-          ignore_missing: true
-      - drop_event:
-          when:
-            or:
-              - equals:
-                  kubernetes.namespace: default
-              - equals:
-                  kubernetes.namespace: traefik
-              - equals:
-                  kubernetes.namespace: elk
-              - equals:
-                  kubernetes.namespace: monitoring
-              - equals:
-                  kubernetes.namespace: kube-system
-              - equals:
-                  kubernetes.namespace: kubernetes-dashboard
-output.kafka:
-  hosts: [ "192.168.161.203:9092", "192.168.161.198:9092", "192.168.161.201:9092" ]
-  topic: log
-  required_acks: 0
-  worker: 8
-  keep_alive: 15
-monitoring:
-  enabled: true
-  elasticsearch:
-    hosts: [ "192.168.161.200:9200", "192.168.161.196:9200", "192.168.161.193:9200" ]
+global:
+  resolve_timeout: 5m
+  smtp_smarthost: 'localhost:25'
+  smtp_from: 'alertmanager@example.org'
+  smtp_auth_username: 'alertmanager'
+  smtp_auth_password: 'password'
+inhibit_rules:
+  - equal:
+      - namespace
+      - alertname
+    source_match:
+      severity: critical
+    target_match_re:
+      severity: warning|info
+  - equal:
+      - namespace
+      - alertname
+    source_match:
+      severity: warning
+    target_match_re:
+      severity: info
+route:
+  group_by:
+    - namespace
+    - alertname
+    - severity
+  group_wait: 30s
+  group_interval: 5m
+  repeat_interval: 12h
+  receiver: default
+  routes:
+    - receiver: webhook
+receivers:
+  - name: default
+    email_configs:
+      - to: zhangsan@qq.com
+        send_resolved: true
+  - name: webhook
+    webhook_configs:
+      - url: http://www.baidu.com
+        send_resolved: true
+---
+global:
+  resolve_timeout: 5m
+  route:
+    group_by:
+      - namespace
+      - alertname
+    group_interval: 5m
+    group_wait: 30s
+    receiver: default
+    repeat_interval: 3h
+    routes:
+      - match:
+        receiver: webhook
+  receivers:
+    - name: default
+      email_configs:
+        - to: zhangsan@qq.com
+          send_resolved: true
+    - name: webhook
+      webhook_configs:
+        - url: http://www.baidu.com
+          send_resolved: true
