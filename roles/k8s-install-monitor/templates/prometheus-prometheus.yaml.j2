@@ -14,7 +14,7 @@ spec:
           - ReadWriteOnce
         resources:
           requests:
-            storage: {{ prometheus_storage }}
+            storage: '{{ prometheus_storage }}'
   alerting:
     alertmanagers:
       - name: alertmanager-main
@@ -25,7 +25,7 @@ spec:
     kubernetes.io/os: linux
   podMonitorNamespaceSelector: { }
   podMonitorSelector: { }
-  retention: {{ prometheus_data_retention }}
+  retention: '{{ prometheus_data_retention }}'
   replicas: 2
   resources:
     requests:

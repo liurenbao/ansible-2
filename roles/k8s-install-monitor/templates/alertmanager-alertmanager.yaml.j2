@@ -20,6 +20,9 @@ spec:
           requests:
             storage: {{ alertmanager_storage }}
   image: '{{ image_repository }}/public/alertmanager:v0.23.0'
+  externalUrl: "http://{{ k8s_keepalived_vip }}:30005"
+  logLevel: debug
+  retention: '{{ alertmanager_data_retention }}'
   nodeSelector:
     kubernetes.io/os: linux
   podMetadata:
