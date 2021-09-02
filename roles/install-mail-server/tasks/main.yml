@@ -1,0 +1,9 @@
+- name: yum -y remove postfix
+  shell: yum -y remove postfix
+- name: rm postfix image
+  shell: docker stop mailserver && docker rm -f mailserver
+- name: start postfix
+  shell:  |
+     docker run -d  -p 80:80 -p 443:443 -p 25:25 -p 110:110 -p 143:143 -p 465:465 \
+     -p 587:587 -p 993:993 -p 995:995 -p 4190:4190 -e TZ=Asia/Shanghai -v /data01/mail-data:/data \
+     --name "mailserver" -h "{{ mail_host }}" --restart=always -t {{ mail_image }}

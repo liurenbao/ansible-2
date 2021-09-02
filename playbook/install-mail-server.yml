@@ -1,0 +1,6 @@
+- name: install mail server
+  hosts:
+    - mail-server
+  gather_facts: false
+  roles:
+    - install-mail-server
