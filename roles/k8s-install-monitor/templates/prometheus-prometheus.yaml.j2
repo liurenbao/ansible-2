@@ -28,8 +28,12 @@ spec:
   retention: '{{ prometheus_data_retention }}'
   replicas: 2
   resources:
+    limits:
+      memory: 2Gi
+      cpu: '2'
     requests:
       memory: 400Mi
+      cpu: '500m'
   ruleSelector:
     matchLabels:
       prometheus: k8s
