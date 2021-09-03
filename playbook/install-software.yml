@@ -1,0 +1,6 @@
+- name: install necessary softwares
+  hosts: all
+  gather_facts: false
+  tasks:
+    - name: install software
+      shell: yum install rysnc telnet nfs-utils -y
