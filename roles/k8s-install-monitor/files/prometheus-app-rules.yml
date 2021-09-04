@@ -12,8 +12,13 @@ spec:
       rules:
         - alert: ServiceDown
           annotations:
-            message: service [{{ $labels.service}}] in namespace [{{ $labels.namespace }}] is down
+            message: Service [{{ $labels.service}}] in namespace [{{ $labels.namespace }}] is down
           expr: probe_success{} == 0
           for: 30s
           labels:
             severity: critical
+    - name: ravencast license expire
+        expr: ravencast_expire_days_total{} < 7
+        for: 5s
+        labels:
+          severity: warning

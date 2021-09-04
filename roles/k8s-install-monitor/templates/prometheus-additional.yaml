@@ -7,8 +7,8 @@ metadata:
 stringData:
   prometheus-additional.yaml: |-
     - job_name: 'kubernetes-service-metrics'
-      scrape_interval: 5s
-      scrape_timeout: 5s
+      scrape_interval: 10s
+      scrape_timeout: 10s
       kubernetes_sd_configs:
         - role: endpoints
       relabel_configs:
@@ -37,12 +37,12 @@ stringData:
           action: replace
           target_label: service
       metric_relabel_configs:
-        - action: drop
+        - action: labeldrop
           regex: __meta_kubernetes_.+
 
     - job_name: 'kubernetes-http-services'
-      scrape_interval: 5s
-      scrape_timeout: 5s
+      scrape_interval: 10s
+      scrape_timeout: 10s
       metrics_path: /probe
       params:
         module: [ http_2xx ]  # 使用定义的http模块
@@ -69,12 +69,12 @@ stringData:
         - source_labels: [ __meta_kubernetes_service_name ]
           target_label: service
       metric_relabel_configs:
-        - action: drop
+        - action: labeldrop
           regex: __meta_kubernetes_.+
 
     - job_name: 'kubernetes-tcp-services'
-      scrape_interval: 5s
-      scrape_timeout: 5s
+      scrape_interval: 10s
+      scrape_timeout: 10s
       metrics_path: /probe
       params:
         module: [ tcp_connect ]
@@ -97,5 +97,5 @@ stringData:
         - source_labels: [ __meta_kubernetes_service_name ]
           target_label: service
       metric_relabel_configs:
-        - action: drop
+        - action: labeldrop
           regex: __meta_kubernetes_.+
