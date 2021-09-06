@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: busybox
+  labels:
+    app: busybox
+spec:
+  template:
+    metadata:
+      name: busybox
+      labels:
+        app: busybox
+    spec:
+      containers:
+        - name: busybox
+          image: '{{ image_repository }}/public/busybox:1.34'
+          command: [ "tail", "-f", "/dev/termination-log" ]
+          imagePullPolicy: IfNotPresent
+      restartPolicy: Always
+  selector:
+    matchLabels:
+      app: busybox

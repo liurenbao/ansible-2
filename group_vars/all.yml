@@ -87,8 +87,8 @@ ravencast_xms_xmx_args: '-Xms4096m -Xmx16384m'
 ravencast_root_dir: '/data01/ravencast'
 
 # k8s
-k8s_keepalived_vip: 192.168.160.253
-k8s_keepalived_virtual_router_id: '253'
+k8s_keepalived_vip: 192.168.160.78
+k8s_keepalived_virtual_router_id: '78'
 k8s_keepalived_vrrp_instance_interface: eth0
 
 # kubernetes
@@ -109,6 +109,8 @@ monitor_manifest_root_dir: '{{ component_manifest_dir }}/monitor'
 prometheus_storage: '50Gi'
 prometheus_data_retention: '35d'
 grafana_storage: '50Gi'
+alertmanager_storage: '20Gi'
+alertmanager_data_retention: '120h'
 
 # redis
 redis_data_dir: '/data01/redis'

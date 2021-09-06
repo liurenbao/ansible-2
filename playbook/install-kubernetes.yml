@@ -35,7 +35,7 @@
   hosts: k8s-master
   gather_facts: false
   roles:
-    - k8s-install-podprests
+    - k8s-change-config
 
 # master worker join
 - name: k8s worker join

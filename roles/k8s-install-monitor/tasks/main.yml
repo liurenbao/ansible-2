@@ -1,19 +1,10 @@
 - name: clean old manifest
   shell: 'rm -rf {{ monitor_manifest_root_dir }}'
 
-- name: send ymls to remote host
-  copy:
-    src: 'files/config.tar'
-    dest: '{{ monitor_manifest_root_dir }}/'
-
-- name: send config files to master
-  unarchive:
-    src: '{{ monitor_manifest_root_dir }}/config.tar'
+- name: send config files to k8s master
+  synchronize:
+    src: files/
     dest: '{{ monitor_manifest_root_dir }}'
-    remote_src: yes
-
-- name: remove archive file
-  command: 'rm -rf {{ monitor_manifest_root_dir }}/config.tar'
 
 - name: copy template to remote
   template:
@@ -21,13 +12,6 @@
     dest: "{{ monitor_manifest_root_dir }}/{{ item.path | regex_replace('.j2$', '') }}"
   with_filetree: 'templates/'
   when: item.state == 'file'
-
-- name: move prometheus-additional.yaml
-  shell: |
-    mkdir -p prometheus-addtional
-    mv prometheus-additional.yaml prometheus-addtional
-  args:
-    chdir: "{{ monitor_manifest_root_dir }}"
 
 - name: chmod deploy.sh
   shell: "chmod +x deploy.sh"

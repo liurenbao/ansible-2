@@ -1,3 +1,16 @@
+- name: modify kube controller manager bind address
+  replace:
+    path: /etc/kubernetes/manifests/kube-controller-manager.yaml
+    regexp: '^(\s+-\s--bind-address)=127.0.0.1'
+    replace: '\1=0.0.0.0'
+
+- name: modify kube scheduler bind address
+  replace:
+    path: /etc/kubernetes/manifests/kube-scheduler.yaml
+    regexp: '^(\s+-\s--bind-address)=127.0.0.1'
+    replace: '\1=0.0.0.0'
+
+# 支持podprests
 - name: add enable-admission-plugins
   replace:
     path: /etc/kubernetes/manifests/kube-apiserver.yaml
