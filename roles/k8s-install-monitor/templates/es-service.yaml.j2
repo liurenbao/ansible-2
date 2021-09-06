@@ -5,6 +5,16 @@ metadata:
   namespace: monitoring
 subsets:
   - addresses:
-      - ip:
+      - ip: 192.168.161.200
+      - ip: 192.168.161.196
+      - ip: 192.168.161.193
     ports:
-      - port:
+      - port: 9114
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: elasticsearch
+spec:
+  ports:
+    - port: 9114
