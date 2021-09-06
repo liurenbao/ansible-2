@@ -1,12 +1,17 @@
 version: '3'
 services:
-  redis-cluster:
-    image: {{ redis_image }}
+  redis:
+    image: '{{ redis_image }}'
     container_name: redis-node01
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - $PWD/redis.conf:/usr/local/etc/redis/redis.conf
       - $PWD/data/:/data/
-    network_mode: "host"
+    network_mode: host
     restart: always
     command: redis-server /usr/local/etc/redis/redis.conf
+  redis-exporter:
+    image: '{{ image_repository }}/public/redis_exporter:v1.27.0-alpine'
+    network_mode: host
+    restart: always
+    command: -redis.addr redis://redis:6379

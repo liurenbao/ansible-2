@@ -51,8 +51,6 @@ nginx_keepalived_vrrp_instance_interface: eth0
 es_root_dir: '/data01/es'
 # es集群名
 es_cluster_name: 'es-mouyongde-cluster-7.3.2'
-# es镜像地址
-es_image: '{{ image_repository }}/public/elasticsearch:7.13.2'
 # es jvm信息
 es_java_opts: '-Xms16G -Xmx16G'
 es_clear_at_day: 20

@@ -1,11 +1,11 @@
 version: '3'
 services:
   elasticsearch:
-    image: "{{ es_image }}"
+    image: '{{ image_repository }}/public/elasticsearch:7.13.2'
     network_mode: host
     restart: always
     environment:
-      ES_JAVA_OPTS: {{ es_java_opts }}
+      ES_JAVA_OPTS: '{{ es_java_opts }}'
     ulimits:
       memlock:
         soft: -1
@@ -13,3 +13,9 @@ services:
     volumes:
       - "{{ es_root_dir }}/data:/usr/share/elasticsearch/data"
       - "{{ es_root_dir }}/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml"
+  elasticsearch-exporter:
+    image: '{{ image_repository }}/public/elasticsearch-exporter:v1.2.1'
+    command:
+      - '--es.uri=http://elasticsearch:9200'
+    restart: always
+    network_mode: host

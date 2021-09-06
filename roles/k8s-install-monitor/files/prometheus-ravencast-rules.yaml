@@ -8,12 +8,10 @@ metadata:
   namespace: monitoring
 spec:
   groups:
-    - name: app-probe-status
+    - name: ravencast license expire
       rules:
         - alert: ServiceDown
-          annotations:
-            message: Service [{{ $labels.service}}] in namespace [{{ $labels.namespace }}] is down
-          expr: probe_success{} == 0
-          for: 30s
+          expr: ravencast_expire_days_total{} < 7
+          for: 5s
           labels:
-            severity: critical
+            severity: warning
