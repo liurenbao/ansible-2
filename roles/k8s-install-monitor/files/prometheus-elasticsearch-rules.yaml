@@ -50,14 +50,6 @@ spec:
           annotations:
             summary: Elasticsearch Cluster Yellow (instance {{ $labels.instance }})
             description: "Elastic Cluster Yellow status.  VALUE = {{ $value }}"
-        - alert: ElasticsearchHealthyNodes
-          expr: elasticsearch_cluster_health_number_of_nodes < 9
-          for: 0m
-          labels:
-            severity: critical
-          annotations:
-            summary: Elasticsearch Healthy Nodes (instance {{ $labels.instance }})
-            description: "Missing node in Elasticsearch cluster.  VALUE = {{ $value }}"
         - alert: ElasticsearchInitializingShardsTooLong
           expr: elasticsearch_cluster_health_initializing_shards > 0
           for: 15m
