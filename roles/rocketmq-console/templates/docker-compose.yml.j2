@@ -10,7 +10,7 @@ services:
     volumes:
       - "{{ rocketmq_root_dir }}/data:/var/lib/rocketmq-console/data"
   rocketmq-exporter:
-    image: '{{ image_repository }}/public/rocketmq-exporter:0.2.0'
+    image: '{{ image_repository }}/public/rocketmq-exporter:0.0.2'
     network_mode: host
     restart: always
     command:
