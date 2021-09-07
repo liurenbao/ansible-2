@@ -4,11 +4,11 @@ metadata:
   labels:
     prometheus: k8s
     role: alert-rules
-  name: blackbox-probe
+  name: blackbox-probe-rules
   namespace: monitoring
 spec:
   groups:
-    - name: blackbox-probe
+    - name: blackbox
       rules:
         - alert: BlackboxProbeFailed
           expr: probe_success == 0

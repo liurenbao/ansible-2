@@ -65,23 +65,33 @@
 192.168.160.108	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name=redis-uat-2
 192.168.160.113	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name=redis-uat-1
 
-[ravencast-1]
-[ravencast-2]
-[ravencast-3]
-[ravencast-4]
+[ravencast-mes]
+192.168.160.208	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name=ravencast-mes-uat-1
+192.168.160.209	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name=ravencast-mes-uat-2
+[ravencast-eis]
+192.168.160.204	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name=ravencast-eis-uat-1
+192.168.160.205	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name=ravencast-eis-uat-2
+[ravencast-fdc1]
+192.168.160.200	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name=ravencast-fdc1-uat-1
+192.168.160.201	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name=ravencast-fdc1-uat-2
+[ravencast-fdc2]
+192.168.160.210	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name=ravencast-fdc2-uat-1
+192.168.160.211	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name=ravencast-fdc2-uat-2
+
 [ravencast:children]
-ravencast-1
-ravencast-2
-ravencast-3
-ravencast-4
-[ravencast-1:vars]
-ravencast_tcphosts=192.168.160.205[7800],192.168.160.204[7800]
-[ravencast-2:vars]
-ravencast_tcphosts=192.168.160.211[7800],192.168.160.210[7800]
-[ravencast-3:vars]
-ravencast_tcphosts=192.168.160.201[7800],192.168.160.200[7800]
-[ravencast-4:vars]
+ravencast-mes
+ravencast-eis
+ravencast-fdc1
+ravencast-fdc2
+
+[ravencast-mes:vars]
 ravencast_tcphosts=192.168.160.209[7800],192.168.160.208[7800]
+[ravencast-eis:vars]
+ravencast_tcphosts=192.168.160.211[7800],192.168.160.210[7800]
+[ravencast-fdc1:vars]
+ravencast_tcphosts=192.168.160.201[7800],192.168.160.200[7800]
+[ravencast-fdc2:vars]
+ravencast_tcphosts=192.168.160.205[7800],192.168.160.204[7800]
 
 [nas]
 192.168.160.35  ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com" host_name=nas-uat
