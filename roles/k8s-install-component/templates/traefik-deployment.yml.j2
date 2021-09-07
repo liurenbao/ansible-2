@@ -26,13 +26,19 @@ spec:
         - name: traefik
           image: "{{ image_repository }}/traefik/traefik:v2.4.9"
           args:
-            - --log.level=INFO
+            - --log.level=ERROR
             - --api
             - --api.insecure
             - --entrypoints.web.address=:80
             - --entrypoints.tcpep.address=:8000
             - --entrypoints.udpep.address=:9000/udp
             - --providers.kubernetescrd
+            - --metrics.prometheus=true
+            - --metrics.prometheus.buckets=0.100000, 0.300000, 1.200000, 5.000000
+            - --metrics.prometheus.addEntryPointsLabels=true
+            - --entryPoints.metrics.address=:8082
+            - --metrics.prometheus.entryPoint=metrics
+            - --metrics.prometheus.addServicesLabels=true
           ports:
             - name: web
               containerPort: 80
@@ -98,5 +104,10 @@ spec:
       name: udpep
       targetPort: 9000
       nodePort: 31003
+    - protocol: TCP
+      port: 8082
+      name: prometheus
+      targetPort: 8082
+      nodePort: 31004
   externalTrafficPolicy: Local
   type: NodePort

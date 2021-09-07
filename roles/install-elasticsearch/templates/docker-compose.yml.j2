@@ -16,6 +16,6 @@ services:
   elasticsearch-exporter:
     image: '{{ image_repository }}/public/elasticsearch-exporter:v1.2.1'
     command:
-      - '--es.uri=http://elasticsearch:9200'
+      - '--es.uri=http://localhost:9200'
     restart: always
     network_mode: host

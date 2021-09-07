@@ -1,28 +1,25 @@
 apiVersion: v1
 kind: Endpoints
 metadata:
-  name: redis
+  name: kafka
   namespace: monitoring
 subsets:
   - addresses:
-      - ip: 192.168.160.110
-      - ip: 192.168.160.111
-      - ip: 192.168.160.109
-      - ip: 192.168.160.112
-      - ip: 192.168.160.108
-      - ip: 192.168.160.113
+      - ip: 192.168.161.201
+      - ip: 192.168.161.198
+      - ip: 192.168.161.203
     ports:
-      - port: 9121
+      - port: 9308
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: redis
+  name: kafka
   namespace: monitoring
   annotations:
     prometheus.io/scrape: "true"
-    prometheus.io/port: '9121'
+    prometheus.io/port: '9308'
     prometheus.io/scheme: "http"
 spec:
   ports:
-    - port: 9121
+    - port: 9308

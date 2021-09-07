@@ -19,10 +19,4 @@ services:
     volumes:
       - ./log:/var/log/nginx
       - ./filebeat.yml:/usr/share/filebeat/filebeat.yml
-  nginx-exporter:
-    image: '{{ image_repository }}/public/nginx-prometheus-exporter:0.9.0'
-    restart: always
-    network_mode: host
-    command:
-      - --nginx.scrape-uri=http://nginx:8080/stub_status
 

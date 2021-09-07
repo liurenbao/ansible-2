@@ -3,10 +3,6 @@ kind: Alertmanager
 metadata:
   labels:
     alertmanager: main
-    app.kubernetes.io/component: alert-router
-    app.kubernetes.io/name: alertmanager
-    app.kubernetes.io/part-of: kube-prometheus
-    app.kubernetes.io/version: 0.23.0
   name: main
   namespace: monitoring
 spec:
@@ -18,20 +14,14 @@ spec:
           - ReadWriteOnce
         resources:
           requests:
-            storage: {{ alertmanager_storage }}
-  image: '{{ image_repository }}/public/alertmanager:v0.23.0'
+            storage: '{{ alertmanager_storage }}'
+  image: '{{ image_repository }}/public/alertmanager:v0.20.0'
   externalUrl: "http://{{ k8s_keepalived_vip }}:30005"
   logLevel: debug
   retention: '{{ alertmanager_data_retention }}'
   nodeSelector:
     kubernetes.io/os: linux
-  podMetadata:
-    labels:
-      app.kubernetes.io/component: alert-router
-      app.kubernetes.io/name: alertmanager
-      app.kubernetes.io/part-of: kube-prometheus
-      app.kubernetes.io/version: 0.23.0
-  replicas: 3
+  replicas: 1
   resources:
     limits:
       cpu: 100m
@@ -44,4 +34,4 @@ spec:
     runAsNonRoot: true
     runAsUser: 1000
   serviceAccountName: alertmanager-main
-  version: 0.23.0
+  version: v0.20.0

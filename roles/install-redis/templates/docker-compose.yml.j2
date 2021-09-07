@@ -1,6 +1,6 @@
 version: '3'
 services:
-  redis:
+  redis-cluster:
     image: '{{ redis_image }}'
     container_name: redis-node01
     volumes:
@@ -13,5 +13,7 @@ services:
   redis-exporter:
     image: '{{ image_repository }}/public/redis_exporter:v1.27.0-alpine'
     network_mode: host
+    environment:
+      REDIS_EXPORTER_INCL_SYSTEM_METRICS: true
     restart: always
-    command: -redis.addr redis://redis:6379
+    command: -redis.addr redis://localhost:6379
