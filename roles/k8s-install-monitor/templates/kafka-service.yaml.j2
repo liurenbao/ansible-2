@@ -5,9 +5,9 @@ metadata:
   namespace: monitoring
 subsets:
   - addresses:
-      - ip: 192.168.161.201
-      - ip: 192.168.161.198
-      - ip: 192.168.161.203
+{% for host in groups['kafka'] %}
+      - ip: {{ host }}
+{% endfor %}
     ports:
       - port: 9308
 ---
