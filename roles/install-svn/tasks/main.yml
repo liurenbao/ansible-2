@@ -1,0 +1,49 @@
+- name: check docker-compose file exists
+  stat:
+    path: "{{ svn_root_dir }}"
+  register: dir
+
+- name: stop existed svn
+  shell: docker-compose down
+  when: dir.stat.exists == true
+  args:
+    chdir: "{{ svn_root_dir }}"
+
+- name: create svn root dir
+  file:
+    path: "{{ svn_root_dir }}"
+    state: directory
+
+- name: send docker-compose file to remote
+  template:
+    src: docker-compose.yml.j2
+    dest: '{{ svn_root_dir }}/docker-compose.yml'
+
+#  svn/svn_repo、svn/svn_repo
+- name: create svn_repo
+  file:
+    path: "{{ svn_root_dir }}/svn_repo"
+    state: directory
+
+- name: create svn_config
+  file:
+    path: "{{ svn_root_dir }}/svn_config"
+    state: directory
+    mode: '0777'
+
+- name: Create a file if it does not exist
+  file:
+    path: "{{ svn_root_dir }}/svn_config/passwd"
+    state: touch
+    mode: '0777'
+
+- name: Create a file if it does not exist
+  file:
+    path: "{{ svn_root_dir }}/svn_config/subversion-access-control"
+    state: touch
+    mode: '0777'
+
+- name: start svn
+  shell: docker-compose up -d
+  args:
+    chdir: "{{ svn_root_dir }}"
