@@ -1,29 +1,22 @@
-# 离线文件安装包所在目录
+# 离线文件安装包所在目录-----------------------------------------------------------------------
 package_dir: '/etc/ansible/package'
 ntp_server: '192.168.160.59'
 yum_base_url: 'http://192.168.161.202/yum/'
 
-
-## harbor
+## harbor----------------------------------------------------------------------------------
 # harbor主备vip
 harbor_keepalived_vip: 192.168.160.47
-# keepalived的route id
+harbor_port: '8888'
 harbor_keepalived_virtual_router_id: '47'
-# keepalived vip的网卡信息
 harbor_keepalived_vrrp_instance_interface: eth0
+harbor_root_dir: '/data01/harbor'
 # harbor压缩包
 harbor_tar: '{{ package_dir }}/harbor/harbor.tar.gz'
-# harbor安装目录
-harbor_root_dir: '/data01/harbor'
-# harbor启动端口
-harbor_port: '8888'
-# harbor密码
 harbor_password: 'admin123Admin'
 # harbor安装数据目录
 harbor_data_volume: '{{ harbor_root_dir }}/harbor-data'
 
-
-# docker
+# docker-----------------------------------------------------------------------------------
 # harbor私服地址
 image_repository: '{{ harbor_keepalived_vip }}:{{ harbor_port }}'
 #docker insecure registry，可能有多个，用harbor地址就可以了
@@ -32,16 +25,14 @@ docker_insecure_registries:
 # docker数据目录
 docker_data_root: '/data01/docker'
 
-
-# nginx
+# nginx---------------------------------------------------------------------------------------
 # Nginx 数据目录
 nginx_root_dir: '/data01/nginx'
 nginx_keepalived_vip: 192.168.163.251
 nginx_keepalived_virtual_router_id: '251'
 nginx_keepalived_vrrp_instance_interface: eth0
 
-
-# es
+# es----------------------------------------------------------------------------------------
 # es数据盘
 es_root_dir: '/data01/es'
 # es集群名
@@ -53,30 +44,24 @@ es_clear_month_ago: 3
 es_log_replicas: 1
 es_log_shards: 60
 
-
-# kafka
+# kafka---------------------------------------------------------------------------------------
 # kafka数据目录
 kafka_root_dir: '/data01/kafka'
 # kafka jvm信息
 kafka_heap_opts: '-Xmx16G -Xms16G'
 
-# jdk
+# roketmq------------------------------------------------------------------------------------
 jdk_dir: '/data01/jdk1.8.0_202'
-
-
-# roketmq
-# rocketmq根目录
 rocketmq_root_dir: '/data01/rocketmq'
 rocketmq_package_dir: '{{ package_dir }}/rocketmq'
 rocketmq_user: 'rocketmq'
 rocketmq_user_pass: 'rocketmq123'
 
-
-# ravencast
+# ravencast-----------------------------------------------------------------------------------
 ravencast_xms_xmx_args: '-Xms4096m -Xmx16384m'
 ravencast_root_dir: '/data01/ravencast'
 
-# k8s
+# k8s-----------------------------------------------------------------------------------------
 k8s_keepalived_vip: 192.168.160.78
 k8s_keepalived_virtual_router_id: '78'
 k8s_keepalived_vrrp_instance_interface: eth0
@@ -88,7 +73,7 @@ elk_manifest_root_dir: '{{ component_manifest_dir }}/elk'
 kube_component_file: '{{ component_manifest_dir }}/kube-component.md'
 etcd_backup_root_dir: '/data01/etcd-backup'
 
-# monitor
+# monitor--------------------------------------------------------------------------------------
 nfs_root_dir: '/data01'
 nfs_server: "{{ groups['nas'][0] }}"
 monitor_nfs_path: '{{ nfs_root_dir }}/monitoring'
@@ -106,9 +91,7 @@ alertmanager_email_to: tangjizhou@huawei.com
 node_exporter_root_dir: /data01/node-exporter
 process_exporter_root_dir: /data01/process-exporter
 
-
-# redis
+# redis---------------------------------------------------------------------------------------
 redis_data_dir: '/data01/redis'
-redis_image: '{{ image_repository }}/public/redis:6.2.4'
 #32G大小的3/4
 redis_maxmemory: '51539607552'

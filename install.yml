@@ -1,6 +1,12 @@
 - name: change hostname
   import_playbook: playbook/change-hostname.yml
 
+- name: install ntp
+  import_playbook: playbook/install-ntp-client.yml
+
+- name: change sys conf
+  import_playbook: playbook/change-sysconf.yml
+
 - name: install docker
   import_playbook: playbook/install-docker.yml
 
@@ -16,7 +22,7 @@
 - import_playbook: playbook/install-kubernetes-elk.yml
 - import_playbook: playbook/install-nfs-server.yml
 - import_playbook: playbook/install-kubernetes-monitor.yml
-- import_playbook: playbook/install-app.yml
 - import_playbook: playbook/install-rocketmq.yml
 - import_playbook: playbook/install-ravencast.yml
+- import_playbook: playbook/install-app.yml
 - import_playbook: playbook/collect-install-result.yml
