@@ -15,6 +15,6 @@ filegen clockstats file clockstats type day enable
 #使用上级始终源
 server {{ ntp_server }} prefer
 # 当前服务器可以被当做时钟源
-restrict default mask 255.255.0.0 nomodify
+restrict default mask 0.0.0.0 nomodify
 restrict 127.0.0.1
 restrict ::1
