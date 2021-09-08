@@ -1,0 +1,14 @@
+- name: check docker-compose file exists
+  stat:
+    path: "{{ svn_root_dir }}"
+  register: dir
+
+- name: stop existed svn
+  shell: docker-compose down
+  when: dir.stat.exists == true
+  args:
+    chdir: "{{ svn_root_dir }}"
+
+- name: remove old dir
+  shell: "rm -rf {{ svn_root_dir }}"
+  when: dir.stat.exists == true
