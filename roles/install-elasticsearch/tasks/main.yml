@@ -16,6 +16,9 @@
 - name: chmod data dir
   shell: "mkdir -p {{ es_root_dir }}/data && chmod 776 -R {{ es_root_dir }}/data"
 
+- name: docker-compose down
+  shell: docker-compose -f {{ es_root_dir }}/docker-compose.yml down
+
 - name: docker-compose up
   shell: docker-compose -f {{ es_root_dir }}/docker-compose.yml up -d
 
