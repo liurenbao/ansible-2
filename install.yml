@@ -1,70 +1,22 @@
 - name: change hostname
-  hosts: all
-  gather_facts: false
-  roles:
-    - change-hostname
+  import_playbook: playbook/change-hostname.yml
 
 - name: install docker
   import_playbook: playbook/install-docker.yml
 
-# 生成ssh key
-#- hosts: localhost
-#  tasks:
-#    - name: ssh key 生成
-#      openssh_keypair:
-#        path: ~/.ssh/id_rsa
-#
-##拷贝ssh key到harbor机器
-#- hosts: harbor
-#  tasks:
-#    - name: ssh-copy
-#      authorized_key: user=root key="{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
-#    - name: rm -f harbor_root_dir
-#      shell: "rm -rf {{ harbor_root_dir }}"
-#      ignore_errors: true
-#    - name: mkdir harbor
-#      shell: "mkdir -p {{ harbor_root_dir }}"
-#
-##拷贝harbor压缩包到 harbor服务器
-#- hosts: localhost
-#  name: copy harbor from localhost
-#  gather_facts: false
-#  vars:
-#    harbor_hosts: "{{groups['harbor']|join(',')}}"
-#  tasks:
-#    - name: copy harbor scp -r
-#      shell: "scp -r {{ harbor_tar }} {{ item }}:{{ harbor_root_dir }}"
-#      with_items: '{{ harbor_hosts.split(",") }}'
-#
-## 安装vip
-#- name: install harbor vip
-#  hosts: harbor
-#  vars:
-#    keepalived_vip: '{{ harbor_keepalived_vip }}'
-#    keepalived_virtual_router_id: '{{ harbor_keepalived_virtual_router_id }}'
-#    keepalived_vrrp_instance_interface:
-#      - '{{ harbor_keepalived_vrrp_instance_interface }}'
-#  gather_facts: false
-#  roles:
-#    - install-keepalived
-#
-## 安装harbor
 #- name: install harbor
-#  gather_facts: false
-#  hosts: harbor
-#  roles:
-#    - install-harbor
+#  import_playbook: playbook/install-harbor.yml
 
-- import_playbook: "playbook/install-nginx.yml"
-- import_playbook: "playbook/install-kubernetes.yml"
-- import_playbook: "playbook/install-kafka.yml"
-- import_playbook: "playbook/install-elasticsearch.yml"
-- import_playbook: "playbook/install-redis.yml"
-- import_playbook: "playbook/install-kubernetes-component.yml"
-- import_playbook: "playbook/install-kubernetes-elk.yml"
-- import_playbook: "playbook/install-nfs-server.yml"
-- import_playbook: "playbook/install-kubernetes-monitor.yml"
-- import_playbook: "playbook/install-app.yml"
-- import_playbook: "playbook/install-rocketmq.yml"
-- import_playbook: "playbook/install-ravencast.yml"
-- import_playbook: "playbook/collect-install-result.yml"
+- import_playbook: playbook/install-nginx.yml
+- import_playbook: playbook/install-kubernetes.yml
+- import_playbook: playbook/install-kafka.yml
+- import_playbook: playbook/install-elasticsearch.yml
+- import_playbook: playbook/install-redis.yml
+- import_playbook: playbook/install-kubernetes-component.yml
+- import_playbook: playbook/install-kubernetes-elk.yml
+- import_playbook: playbook/install-nfs-server.yml
+- import_playbook: playbook/install-kubernetes-monitor.yml
+- import_playbook: playbook/install-app.yml
+- import_playbook: playbook/install-rocketmq.yml
+- import_playbook: playbook/install-ravencast.yml
+- import_playbook: playbook/collect-install-result.yml

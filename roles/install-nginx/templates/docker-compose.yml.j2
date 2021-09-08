@@ -1,7 +1,7 @@
 version: '3'
 services:
   nginx:
-    image: "{{ nginx_image }}"
+    image: '{{ image_repository }}/public/nginx:1.21.1'
     restart: always
     ports:
       - 80:80

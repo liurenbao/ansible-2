@@ -1,0 +1,19 @@
+version: '3'
+services:
+  node-exporter:
+    image: "{{ image_repository }}/public/node-exporter:v0.18.1"
+    restart: always
+    network_mode: host
+    command:
+      - --web.listen-address=127.0.0.1:9100
+      - --path.procfs=/host/proc
+      - --path.sysfs=/host/sys
+      - --path.rootfs=/host/root
+      - --no-collector.wifi
+      - --no-collector.hwmon
+      - --collector.filesystem.ignored-mount-points=^/(dev|proc|sys|var/lib/docker/.+)($|/)
+      - --collector.filesystem.ignored-fs-types=^(autofs|binfmt_misc|cgroup|configfs|debugfs|devpts|devtmpfs|fusectl|hugetlbfs|mqueue|overlay|proc|procfs|pstore|rpc_pipefs|securityfs|sysfs|tracefs)$
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/host/root:ro
