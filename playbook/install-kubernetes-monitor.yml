@@ -12,3 +12,13 @@
   gather_facts: false
   roles:
     - k8s-install-monitor
+
+- name: install external monitor
+  gather_facts: false
+  hosts:
+    - eap
+    - fdc
+    - apc
+  roles:
+    - install-node-exporter
+    - install-process-exporter

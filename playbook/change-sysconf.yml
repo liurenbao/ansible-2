@@ -1,5 +1,6 @@
 - name: change sysconf
   hosts:
+    - nginx
     - rocketmq-namesrv
     - rocketmq-master
     - rocketmq-slave

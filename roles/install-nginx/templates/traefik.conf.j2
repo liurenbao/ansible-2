@@ -1,6 +1,6 @@
 upstream traefik {
     {% for host in groups['k8s-worker'] %}
-      server {{ host }}:{{ traefik_web_port }}  max_fails=0;
+      server {{ host }}:31001  max_fails=0;
     {% endfor %}
 }
 
