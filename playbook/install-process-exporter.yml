@@ -1,0 +1,11 @@
+- name: install process exporter
+  gather_facts: false
+  hosts:
+    - ravencast
+    - nas
+    - rocketmq-namesrv
+    - rocketmq-master
+    - rocketmq-slave
+  roles:
+    - install-docker
+    - install-node-exporter

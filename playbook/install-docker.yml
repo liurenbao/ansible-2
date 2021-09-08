@@ -11,4 +11,3 @@
     - docker
   roles:
     - install-docker
-    - install-docker-clean-cron

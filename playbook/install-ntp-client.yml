@@ -2,6 +2,6 @@
   hosts: all
   gather_facts: false
   vars:
-    ntp_server: '{{ ntp_server }}'
+    ntp_server: '{{ ntp_server_addr }}'
   roles:
     - install-ntp-client
