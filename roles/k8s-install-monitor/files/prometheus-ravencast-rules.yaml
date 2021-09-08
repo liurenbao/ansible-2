@@ -4,14 +4,33 @@ metadata:
   labels:
     prometheus: k8s
     role: alert-rules
-  name: app-rules
+  name: ravencast-rules
   namespace: monitoring
 spec:
   groups:
-    - name: ravencast license expire
+    - name: ravencast
       rules:
-        - alert: ServiceDown
-          expr: ravencast_expire_days_total{} < 7
-          for: 5s
+        - alert: RavencastAgentDown
+          expr: up{service="ravencast"} == 0
+          for: 0m
           labels:
             severity: warning
+          annotations:
+            summary: Ravencast down (instance {{ $labels.instance }})
+            description: "Ravencast service down"
+        - alert: RavencastLicenseExpiring
+          expr: ravencast_expire_days_total{} < 30
+          for: 0m
+          labels:
+            severity: warning
+          annotations:
+            summary: Ravencast license will expire in 30 days (instance {{ $labels.instance }})
+            description: "Ravencast license will expire"
+        - alert: RavencastQueueWait
+          expr: ravencast_queue_wait_count_total{} > 2000
+          for: 3m
+          labels:
+            severity: warning
+          annotations:
+            summary: Ravencast queue has too many waiting messages (instance {{ $labels.instance }})
+            description: "Ravencast queue has too many waiting messages, count = {{ $value }}"

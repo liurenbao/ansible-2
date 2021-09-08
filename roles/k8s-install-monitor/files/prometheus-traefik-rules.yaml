@@ -1,0 +1,20 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  labels:
+    prometheus: k8s
+    role: alert-rules
+  name: traefik-rules
+  namespace: monitoring
+spec:
+  groups:
+    - name: traefik
+      rules:
+        - alert: TraefikServiceDown
+          expr: absent(up{service="traefik"} == 1) OR up{service="traefik"} == 0
+          for: 0m
+          labels:
+            severity: critical
+          annotations:
+            summary: Traefik service down (instance {{ $labels.instance }})
+            description: "All Traefik services are down.  VALUE = {{ $value }}"

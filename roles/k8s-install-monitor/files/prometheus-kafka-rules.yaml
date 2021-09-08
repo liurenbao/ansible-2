@@ -1,0 +1,29 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  labels:
+    prometheus: k8s
+    role: alert-rules
+  name: kafka-rules
+  namespace: monitoring
+spec:
+  groups:
+    - name: kafka
+      rules:
+        - alert: KafkaTopicsReplicas
+          expr: sum(kafka_topic_partition_in_sync_replica) by (topic, instance) < 3
+          for: 0m
+          labels:
+            severity: critical
+          annotations:
+            summary: Kafka topics replicas (instance {{ $labels.instance }})
+            description: "Too few kafka topic in-sync partition.  VALUE = {{ $value }}"
+        - alert: KafkaConsumersGroup
+          expr: sum(kafka_consumergroup_lag) by (consumergroup, instance) > 50000
+          for: 1m
+          labels:
+            severity: critical
+          annotations:
+            summary: Kafka consumers group (instance {{ $labels.instance }})
+            description: "Kafka consumers group are too lagged.  VALUE = {{ $value }}"
+

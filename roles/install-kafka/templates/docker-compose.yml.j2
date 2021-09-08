@@ -2,7 +2,7 @@ version: '3'
 services:
   zookeeper:
     user: root
-    image: "{{ zookeeper_image }}"
+    image: '{{ image_repository }}/public/zookeeper-official:3.7'
     network_mode: host
     restart: always
     environment:
@@ -14,7 +14,7 @@ services:
       - "{{ kafka_root_dir }}/zookeeper/conf:/conf"
   kafka:
     user: root
-    image: "{{ kafka_image }}"
+    image: '{{ image_repository }}/public/kafka:2.13-2.7.0'
     network_mode: host
     restart: always
     environment:
@@ -23,7 +23,7 @@ services:
       KAFKA_BROKER_ID: "{{ groups['kafka'].index(inventory_hostname) }}"
       KAFKA_ADVERTISED_HOST_NAME: "{{ ansible_ssh_host }}"
       KAFKA_ZOOKEEPER_CONNECT: "{{ groups['kafka'] | map('regex_replace', '^(.*)$','\\1:2181') | join(',') }}"
-      KAFKA_HEAP_OPTS: {{ kafka_heap_opts }}
+      KAFKA_HEAP_OPTS: '{{ kafka_heap_opts }}'
       KAFKA_NUM_PARTITIONS: 9
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://{{ ansible_ssh_host }}:9092
       KAFKA_NUM_NETWORK_THREADS: 9
@@ -32,6 +32,18 @@ services:
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock"
       - "{{ kafka_root_dir }}/kafka:/kafka"
+  kafka-exporter:
+    image: '{{ image_repository }}/public/kafka-exporter:1.3.1'
+    restart: always
+    network_mode: host
+    depends_on:
+      - zookeeper
+      - kafka
+    command:
+      - --log.enable-sarama
+{% for host in groups['kafka'] %}
+      - --kafka.server={{ host }}:9092
+{% endfor %}
 
 
 

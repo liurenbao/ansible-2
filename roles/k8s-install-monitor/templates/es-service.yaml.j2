@@ -5,6 +5,24 @@ metadata:
   namespace: monitoring
 subsets:
   - addresses:
-      - ip:
+{% for host in groups['es'] %}
+      - ip: {{ host }}
+{% endfor %}
     ports:
-      - port:
+      - port: 9114
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: elasticsearch
+  namespace: monitoring
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: '9114'
+    prometheus.io/scheme: "http"
+    prometheus.io/http-probe: "true"
+    prometheus.io/http-probe-port: "9200"
+    prometheus.io/http-probe-path: "/"
+spec:
+  ports:
+    - port: 9114

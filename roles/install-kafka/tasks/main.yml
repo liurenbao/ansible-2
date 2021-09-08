@@ -1,23 +1,32 @@
 - name: create root dir
   command: mkdir -p {{ kafka_root_dir }}
+
 - name: install with docker compose
   template: src=docker-compose.yml.j2 dest={{ kafka_root_dir }}/docker-compose.yml
+
 - name: shutdown kafka
   command: docker-compose -f {{ kafka_root_dir }}/docker-compose.yml down
+
 - name: create container volums
   command: mkdir -p {{ kafka_root_dir }}/zookeeper/conf {{ kafka_root_dir }}/zookeeper/data {{ kafka_root_dir }}/zookeeper/datalog
+
 - name: chmod dir
   command: chmod -R a+rwx {{ kafka_root_dir }}/zookeeper/conf {{ kafka_root_dir }}/zookeeper/data {{ kafka_root_dir }}/zookeeper/datalog
+
 - name: start up kafka
   command: docker-compose -f {{ kafka_root_dir }}/docker-compose.yml up -d
+
 - name: pause
   command: sleep 30
+
 - name: create topic
   command: docker-compose exec -T kafka kafka-topics.sh --zookeeper localhost:2181 --create --topic test --partitions 5 --replication-factor 1
   args:
     chdir: "{{ kafka_root_dir }}"
   register: create_result
   when: ansible_ssh_host == groups['kafka'][0]
+  ignore_errors: yes
+
 - name: show result
   debug:
     msg: "{{ create_result.stdout }}"
@@ -29,6 +38,7 @@
     chdir: "{{ kafka_root_dir }}"
   register: list_result
   when: ansible_ssh_host == groups['kafka'][0]
+
 - name: show result
   debug:
     msg: "{{ list_result.stdout }}"

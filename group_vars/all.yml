@@ -59,10 +59,6 @@ es_log_replicas: 1
 es_log_shards: 60
 
 # kafka
-# zk镜像地址
-zookeeper_image: '{{ image_repository }}/public/zookeeper-official:3.7'
-# kafka镜像地址
-kafka_image: '{{ image_repository }}/public/kafka:2.13-2.7.0'
 # kafka数据目录
 kafka_root_dir: '/data01/kafka'
 # kafka jvm信息
@@ -109,6 +105,11 @@ prometheus_data_retention: '35d'
 grafana_storage: '50Gi'
 alertmanager_storage: '20Gi'
 alertmanager_data_retention: '120h'
+alertmanager_smtp_server: 192.168.160.1:587
+alertmanager_smtp_from: mouyongde@huawei.com
+alertmanager_smtp_username: mouyongde@huawei.com
+alertmanager_smtp_password: Huawei@777.com
+alertmanager_email_to: tangjizhou@huawei.com
 
 # redis
 redis_data_dir: '/data01/redis'
