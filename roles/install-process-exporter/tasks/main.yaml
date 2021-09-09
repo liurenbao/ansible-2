@@ -1,6 +1,11 @@
-- name: create dir
+- name: create root dir
   file:
     path: '{{ process_exporter_root_dir }}'
+    state: directory
+
+- name: create config dir
+  file:
+    path: '{{ process_exporter_root_dir }}/config'
     state: directory
 
 - name: docker-compose stat
@@ -20,9 +25,9 @@
     dest: '{{ process_exporter_root_dir }}/docker-compose.yaml'
 
 - name: send config file
-  template:
-      src: config.yaml
-      dest: '{{ process_exporter_root_dir }}/config.yaml'
+  copy:
+    src: config.yaml
+    dest: '{{ process_exporter_root_dir }}/config/config.yaml'
 
 - name: docker-compose up
   shell: docker-compose up -d

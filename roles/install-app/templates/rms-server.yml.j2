@@ -17,9 +17,54 @@ spec:
         runAsUser: 0
       containers:
         - name: rms-server
-          image: "{{ image_repository }}/rms/rms-server:1.4"
+          image: 192.168.160.47:8888/rms/rms-server:1.8
           imagePullPolicy: Always
+          env:
+            - name: RMS_MODE
+              value: "uat"
+          startupProbe:
+            httpGet:
+              port: 8080
+              path: /metrics
+            initialDelaySeconds: 30
+            timeoutSeconds: 1
+            periodSeconds: 3
+            successThreshold: 1
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              port: 8080
+              path: /metrics
+            timeoutSeconds: 1
+            periodSeconds: 3
+            successThreshold: 1
+            failureThreshold: 3
+          livenessProbe:
+            httpGet:
+              port: 8080
+              path: /metrics
+          resources:
+            limits:
+              cpu: '4'
+              memory: 8Gi
+            requests:
+              cpu: '2'
+              memory: 1Gi
+          lifecycle:
+            preStop:
+              exec:
+                command: [ "sleep" ,"40" ]
+      terminationGracePeriodSeconds: 120
       restartPolicy: Always
+      tolerations:
+        - key: node.kubernetes.io/not-ready
+          operator: Exists
+          effect: NoExecute
+          tolerationSeconds: 2
+        - key: node.kubernetes.io/unreachable
+          operator: Exists
+          effect: NoExecute
+          tolerationSeconds: 2
   selector:
     matchLabels:
       app: rms-server
@@ -29,6 +74,14 @@ kind: Service
 metadata:
   name: rms-server
   namespace: rms
+  annotations:
+    prometheus.io/http-probe: "true"
+    prometheus.io/http-probe-port: "8080"
+    prometheus.io/http-probe-path: "/viability"
+    prometheus.io/scrape: "true"
+    prometheus.io/port: '8080'
+    prometheus.io/scheme: "http"
+    prometheus.io/path: '/metrics'
 spec:
   selector:
     app: rms-server
@@ -37,3 +90,5 @@ spec:
       name: port1
     - port: 8200
       name: port2
+    - port: 8080
+      name: web

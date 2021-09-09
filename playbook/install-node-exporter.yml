@@ -4,10 +4,10 @@
     - es
     - redis
     - kafka
-#    - ravencast
-#    - nas
-#    - rocketmq-namesrv
-#    - rocketmq-master
-#    - rocketmq-slave
+    - ravencast
+    - nas
+    - rocketmq-namesrv
+    - rocketmq-master
+    - rocketmq-slave
   roles:
     - install-node-exporter

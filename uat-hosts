@@ -66,8 +66,8 @@
 192.168.160.113	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name=redis-uat-1
 
 [ravencast-mes]
-192.168.160.208	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name=ravencast-mes-uat-1
-192.168.160.209	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name=ravencast-mes-uat-2
+192.168.161.208	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name=ravencast-mes-uat-1
+192.168.161.209	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name=ravencast-mes-uat-2
 [ravencast-eis]
 192.168.160.200	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name=ravencast-fdc-uat-1
 192.168.160.201	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name=ravencast-fdc-uat-2
@@ -85,7 +85,7 @@ ravencast-fdc
 ravencast-apc
 
 [ravencast-mes:vars]
-ravencast_tcphosts=192.168.160.209[7800],192.168.160.208[7800]
+ravencast_tcphosts=192.168.161.209[7800],192.168.161.208[7800]
 [ravencast-eis:vars]
 ravencast_tcphosts=192.168.160.201[7800],192.168.160.200[7800]
 [ravencast-fdc:vars]
