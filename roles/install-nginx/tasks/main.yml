@@ -1,6 +1,6 @@
 - name: check docker-compose file exists
   stat:
-    path: "{{ nginx_root_dir }}"
+    path: "{{ nginx_root_dir }}/docker-compose.yml"
   register: dir
 
 - name: stop existed nginx
