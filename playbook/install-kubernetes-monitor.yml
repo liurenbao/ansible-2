@@ -12,28 +12,3 @@
   gather_facts: false
   roles:
     - k8s-install-monitor
-
-- name: install node exporter
-  gather_facts: false
-  hosts:
-   - es
-   - redis
-   - kafka
-   - ravencast
-   - nas
-   - rocketmq-namesrv
-   - rocketmq-master
-   - rocketmq-slave
-  roles:
-   - install-node-exporter
-
-- name: install process exporter
-  gather_facts: false
-  hosts:
-   - ravencast
-   - nas
-   - rocketmq-namesrv
-   - rocketmq-master
-   - rocketmq-slave
-  roles:
-   - install-process-exporter

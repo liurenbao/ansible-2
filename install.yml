@@ -15,14 +15,17 @@
 
 - import_playbook: playbook/install-nginx.yml
 - import_playbook: playbook/install-kubernetes.yml
+- import_playbook: playbook/install-kubernetes-component.yml
+- import_playbook: playbook/change-k8s-node-label.yml
 - import_playbook: playbook/install-kafka.yml
 - import_playbook: playbook/install-elasticsearch.yml
 - import_playbook: playbook/install-redis.yml
-- import_playbook: playbook/install-kubernetes-component.yml
 - import_playbook: playbook/install-kubernetes-elk.yml
 # - import_playbook: playbook/install-nfs-server.yml
 - import_playbook: playbook/install-kubernetes-monitor.yml
 - import_playbook: playbook/install-rocketmq.yml
 - import_playbook: playbook/install-ravencast.yml
-- import_playbook: playbook/install-app.yml
+#- import_playbook: playbook/install-app.yml
+- import_playbook: playbook/install-node-exporter.yml
+- import_playbook: playbook/install-process-exporter.yml
 - import_playbook: playbook/collect-install-result.yml

@@ -1,3 +1,8 @@
+- name: clean old redis docker files
+  file:
+    path: '{{ redis_data_dir }}'
+    state: absent
+
 - name: somaxconneconn
   shell: echo 511 > /proc/sys/net/core/somaxconn
 
@@ -8,7 +13,7 @@
   template: src=docker-compose.yml.j2 dest={{ redis_data_dir }}/docker-compose.yml
 
 - name: copy redis
-  template: src=redis.conf.j2 dest={{ redis_data_dir }}/redis.caonf
+  template: src=redis.conf.j2 dest={{ redis_data_dir }}/redis.conf
 
 - name: hugepage never
   shell: echo never > /sys/kernel/mm/transparent_hugepage/enabled
@@ -48,11 +53,11 @@
 - name: show
   debug: var=check.stdout verbosity=0
 
-#- name: chmod
-#  command: sh create-cluster.sh
-#  args:
-#    chdir: "{{ redis_data_dir }}"
-#  when: ansible_ssh_host == groups['redis'][0]
+- name: chmod
+  command: sh create-cluster.sh
+  args:
+    chdir: "{{ redis_data_dir }}"
+  when: ansible_ssh_host == groups['redis'][0]
 
 - name: sleep 10
   shell: sleep 10
