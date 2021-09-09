@@ -1,0 +1,28 @@
+- name: create jenkins root dir
+  file:
+    path: '{{ jenkins_dir }}'
+    state: directory
+
+- name: create jenkins data dir
+  file:
+    path: '{{ jenkins_dir }}/data'
+    state: directory
+    mode: '0777'
+
+- name: cp docker-compose
+  template:
+    src: docker-compose.yml.j2
+    dest: '{{ jenkins_dir }}/docker-compose.yml'
+
+- name: start jenkins
+  shell: docker-compose up -d
+  args:
+   chdir: "{{ jenkins_dir }}"
+
+- name: cat data/secrets/initialAdminPassword
+  shell: cat {{ jenkins_dir }}/data/secrets/initialAdminPassword
+  register: initialAdminPassword
+
+- name: show jenksin password
+  debug:
+    msg: "{{ initialAdminPassword.stdout }}"

@@ -1,0 +1,2 @@
+jenkins_root_dir: '/data01/jenkins'
+jenkins_image_url: '192.168.160.47:8888/public/jenkins:2.60.3'
