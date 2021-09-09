@@ -7,5 +7,4 @@
     - rocketmq-master
     - rocketmq-slave
   roles:
-    - install-docker
-    - install-node-exporter
+    - install-process-exporter

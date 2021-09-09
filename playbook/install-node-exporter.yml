@@ -1,13 +1,5 @@
 - name: install node exporter
   gather_facts: false
-  hosts:
-    - es
-    - redis
-    - kafka
-#    - ravencast
-#    - nas
-#    - rocketmq-namesrv
-#    - rocketmq-master
-#    - rocketmq-slave
+  hosts: all,!k8s
   roles:
     - install-node-exporter
