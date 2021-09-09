@@ -7,7 +7,7 @@ metadata:
 stringData:
   prometheus-additional.yaml: |-
     - job_name: 'kubernetes-service-metrics'
-      scrape_interval: 30s
+      scrape_interval: 15s
       scrape_timeout: 10s
       kubernetes_sd_configs:
         - role: endpoints
@@ -41,7 +41,7 @@ stringData:
           regex: __meta_kubernetes_.+
 
     - job_name: 'kubernetes-http-services'
-      scrape_interval: 30s
+      scrape_interval: 15s
       scrape_timeout: 10s
       metrics_path: /probe
       params:
@@ -73,7 +73,7 @@ stringData:
           regex: __meta_kubernetes_.+
 
     - job_name: 'kubernetes-tcp-services'
-      scrape_interval: 30s
+      scrape_interval: 15s
       scrape_timeout: 10s
       metrics_path: /probe
       params:

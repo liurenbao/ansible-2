@@ -1,5 +1,0 @@
-- name: install docker clean cron
-  hosts: k8s
-  gather_facts: false
-  roles:
-    - install-docker-clean-cron

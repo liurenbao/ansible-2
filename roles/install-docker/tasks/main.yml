@@ -78,3 +78,9 @@
 
 - name: restart docker
   shell: systemctl restart docker
+
+- name: add docker clean cron
+  cron:
+    name: "docker clean"
+    special_time: "monthly"
+    job: "docker system prune -af"
