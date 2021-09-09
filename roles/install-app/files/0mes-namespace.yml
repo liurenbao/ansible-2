@@ -7,7 +7,7 @@ apiVersion: settings.k8s.io/v1alpha1
 kind: PodPreset
 metadata:
   name: change-timezone
-  namespace: mes
+  namespace: plantu
 spec:
   selector:
     matchLabels:

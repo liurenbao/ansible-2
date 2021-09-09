@@ -1,4 +1,29 @@
 # deployment配置必需：启动，存活，就绪三探针，优雅停机配置，资源request和limit，故障节点容忍，双机房部署配置
+
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: test
+---
+apiVersion: settings.k8s.io/v1alpha1
+kind: PodPreset
+metadata:
+  name: change-timezone
+  namespace: test
+spec:
+  selector:
+    matchLabels:
+  env:
+    - name: TZ
+      value: "Asia/Shanghai"
+  volumeMounts:
+    - name: timezone
+      mountPath: /etc/localtime
+  volumes:
+    - name: timezone
+      hostPath:
+        path: /usr/share/zoneinfo/Asia/Shanghai
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -64,9 +89,11 @@ spec:
       tolerations:
         - key: node.kubernetes.io/not-ready
           operator: Exists
+          effect: NoExecute
           tolerationSeconds: 2
         - key: node.kubernetes.io/unreachable
           operator: Exists
+          effect: NoExecute
           tolerationSeconds: 2
 ---
 # 集群内部服务监控

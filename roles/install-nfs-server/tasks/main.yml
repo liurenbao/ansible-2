@@ -7,12 +7,22 @@
 - name: enable nfs server
   shell: systemctl enable rpcbind nfs-server
 
+- name: firewalld status
+  service:
+    name: firewalld
+  register: firewalld
+
+- name: firewalld status
+  debug:
+    msg: '{{ firewalld }}'
+
 - name: config firewalld
   shell: |
     firewall-cmd --permanent --add-service mountd
     firewall-cmd --permanent --add-service rpc-bind
     firewall-cmd --permanent --add-service nfs
     firewall-cmd --reload
+  when: firewalld.status.ActiveState == 'active'
 
 - name: config nfs permission
   lineinfile:

@@ -14,6 +14,6 @@ services:
     image: '{{ image_repository }}/public/redis_exporter:v1.27.0-alpine'
     network_mode: host
     environment:
-      REDIS_EXPORTER_INCL_SYSTEM_METRICS: true
+      REDIS_EXPORTER_INCL_SYSTEM_METRICS: "true"
     restart: always
     command: -redis.addr redis://localhost:6379

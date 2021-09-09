@@ -28,15 +28,15 @@ docker_data_root: '/data01/docker'
 # nginx---------------------------------------------------------------------------------------
 # Nginx 数据目录
 nginx_root_dir: '/data01/nginx'
-nginx_keepalived_vip: 192.168.163.251
-nginx_keepalived_virtual_router_id: '251'
+nginx_keepalived_vip: 192.168.163.253
+nginx_keepalived_virtual_router_id: '253'
 nginx_keepalived_vrrp_instance_interface: eth0
 
 # es----------------------------------------------------------------------------------------
 # es数据盘
 es_root_dir: '/data01/es'
 # es集群名
-es_cluster_name: 'es-mouyongde-cluster-7.3.2'
+es_cluster_name: 'es-practice-cluster-7.3.2'
 # es jvm信息
 es_java_opts: '-Xms16G -Xmx16G'
 es_clear_at_day: 20
@@ -62,8 +62,8 @@ ravencast_xms_xmx_args: '-Xms4096m -Xmx16384m'
 ravencast_root_dir: '/data01/ravencast'
 
 # k8s-----------------------------------------------------------------------------------------
-k8s_keepalived_vip: 192.168.160.78
-k8s_keepalived_virtual_router_id: '78'
+k8s_keepalived_vip: 192.168.163.251
+k8s_keepalived_virtual_router_id: '251'
 k8s_keepalived_vrrp_instance_interface: eth0
 control_plane_endpoint: '{{ k8s_keepalived_vip }}:6443'
 pod_network_cidr: '10.244.0.0/16'

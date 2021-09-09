@@ -1,6 +1,9 @@
 - name: clean old manifest
   shell: 'rm -rf {{ monitor_manifest_root_dir }}'
 
+- name: install rsync
+  shell: yum install rsync -y
+
 - name: send config files to k8s master
   synchronize:
     src: files/
