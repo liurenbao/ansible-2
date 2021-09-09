@@ -1,0 +1,8 @@
+- name: install jenkins
+  hosts: jenkins
+  gather_facts: false
+  vars:
+    jenkins_dir: "{{ jenkins_root_dir }}"
+    jenkins_image: "{{ jenkins_image_url }}"
+  roles:
+    - install-jenkins

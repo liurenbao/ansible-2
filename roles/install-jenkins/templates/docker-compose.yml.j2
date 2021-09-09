@@ -1,0 +1,11 @@
+version: '3'    # 定义版本，不指定默认为版本 1，新版本功能更多
+services:       # 容器
+  jenkins:
+    image: '{{ jenkins_image }}'    # 镜像
+    container_name: jenkins         # 容器名称
+    restart: always                 # 同 --restart 参数
+    ports:                          # 端口映射，同 -p 参数，本地端口:容器端口
+      - '8080:8080'
+      - '50000:50000'
+    volumes:                        # 数据卷,本地文件夹:容器文件夹
+      - './data:/var/jenkins_home'
