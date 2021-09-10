@@ -12,10 +12,6 @@
     name: firewalld
   register: firewalld
 
-- name: firewalld status
-  debug:
-    msg: '{{ firewalld }}'
-
 - name: config firewalld
   shell: |
     firewall-cmd --permanent --add-service mountd

@@ -21,7 +21,7 @@
 - import_playbook: playbook/install-elasticsearch.yml
 - import_playbook: playbook/install-redis.yml
 - import_playbook: playbook/install-kubernetes-elk.yml
-# - import_playbook: playbook/install-nfs-server.yml
+- import_playbook: playbook/install-nfs-server.yml
 - import_playbook: playbook/install-kubernetes-monitor.yml
 - import_playbook: playbook/install-rocketmq.yml
 - import_playbook: playbook/install-ravencast.yml

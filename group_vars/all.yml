@@ -1,3 +1,8 @@
+#---------------------
+# 注意修改内存配置
+# 注意修改VIP地址
+#---------------------
+
 # 离线文件安装包所在目录-----------------------------------------------------------------------
 package_dir: '/etc/ansible/package'
 ntp_server_addr: '192.168.160.59'
@@ -38,7 +43,7 @@ es_root_dir: '/data01/es'
 # es集群名
 es_cluster_name: 'es-practice-cluster-7.3.2'
 # es jvm信息
-es_java_opts: '-Xms16G -Xmx16G'
+es_java_opts: '-Xms4G -Xmx8G'
 es_clear_at_day: 20
 es_clear_month_ago: 3
 es_log_replicas: 1
@@ -48,7 +53,7 @@ es_log_shards: 60
 # kafka数据目录
 kafka_root_dir: '/data01/kafka'
 # kafka jvm信息
-kafka_heap_opts: '-Xmx16G -Xms16G'
+kafka_heap_opts: '-Xmx2G -Xms1G'
 
 # roketmq------------------------------------------------------------------------------------
 jdk_dir: '/data01/jdk1.8.0_202'
@@ -58,7 +63,7 @@ rocketmq_user: 'rocketmq'
 rocketmq_user_pass: 'rocketmq123'
 
 # ravencast-----------------------------------------------------------------------------------
-ravencast_xms_xmx_args: '-Xms4096m -Xmx16384m'
+ravencast_xms_xmx_args: '-Xms2G -Xmx8G'
 ravencast_root_dir: '/data01/ravencast'
 
 # k8s-----------------------------------------------------------------------------------------
@@ -94,4 +99,4 @@ process_exporter_root_dir: /data01/process-exporter
 # redis---------------------------------------------------------------------------------------
 redis_data_dir: '/data01/redis'
 #32G大小的3/4
-redis_maxmemory: '51539607552'
+redis_maxmemory: '{{ 10|int * 1024|int * 1024|int * 1024|int }}'

@@ -19,3 +19,5 @@ services:
       - '--es.uri=http://localhost:9200'
     restart: always
     network_mode: host
+    depends_on:
+      - elasticsearch
