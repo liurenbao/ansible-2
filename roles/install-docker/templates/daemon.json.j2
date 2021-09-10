@@ -3,7 +3,8 @@
   "exec-opts": [ "native.cgroupdriver=systemd" ],
   "log-driver": "json-file",
   "log-opts": {
-    "max-size": "200m"
+    "max-size": "100m",
+    "max-file": "10"
   },
   "data-root": "{{ docker_data_root }}",
   "storage-driver": "overlay2"
