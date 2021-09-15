@@ -39,19 +39,42 @@
   roles:
     - rocketmq-console
 
-#- name: check rocketmq status
-#  hosts: rocketmq-master
-#  gather_facts: false
-#  tasks:
-#    - name: check rocketmq status
-#      shell: |
-#        namesrv='{{ groups["rocketmq-namesrv"] | map("regex_replace", "^(.*)$", "\\1:9876") | join(";") }}'
-#        ./mqadmin clusterList -n $namesrv
-#      args:
-#        chdir: "{{ rocketmq_root_dir }}/bin"
-#      register: mqstatus
-#      when: groups['rocketmq-master'][0] == ansible_ssh_host
-#    - name: show rocketmq status
-#      debug:
-#        msg: "{{ mqstatus.stdout }}"
-#      when: groups['rocketmq-master'][0] == ansible_ssh_host
+- name: create topic
+  gather_facts: false
+  hosts: rocketmq-namesrv
+  tasks:
+    - name: set java env conf ~/.bashrc
+      lineinfile:
+        dest: ~/.bashrc
+        state: present
+        line: "{{ item }}"
+      with_items:
+        - "export JAVA_HOME={{ jdk_dir }}"
+        - "export JRE_HOME=${JAVA_HOME}/jre"
+        - "export CLASSPATH=.:${JAVA_HOME}/lib:${JRE_HOME}/lib"
+        - "export PATH=${JAVA_HOME}/bin:$PATH"
+    - name: create topic
+      shell: |
+         ./mqadmin updateTopic -n localhost:9876 -b {{ groups["rocketmq-master"][0] }}:10911 -t {{ item }} -p 6 -r 16 -w 16
+         ./mqadmin updateTopic -n localhost:9876 -b {{ groups["rocketmq-master"][1] }}:10911 -t {{ item }} -p 6 -r 16 -w 16
+      when: groups['rocketmq-namesrv'][0] == ansible_ssh_host
+      args:
+        chdir: "{{ rocketmq_root_dir }}/bin"
+      with_items:
+        - "{{ rocket_topic_list }}"
+
+#     查看rocketmq topic，先暂时不做。。直接进页面看
+#     - name: show rocketmq topic topic list
+#       shell: ./mqadmin topicRoute -t {{ item }} -n localhost:9876
+#       when: groups['rocketmq-namesrv'][0] == ansible_ssh_host
+#       args:
+#         chdir: "{{ rocketmq_root_dir }}/bin"
+#       register: result
+#       with_items:
+#         - "{{ rocket_topic_list }}"
+#
+#     - name: show result
+#       debug:
+#          msg: "{{ item }}"
+#       with_items:
+#         - "{{ result }}"

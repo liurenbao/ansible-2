@@ -7,6 +7,13 @@
         path: "{{ monitor_nfs_path }}"
         state: directory
 
+- name: install sync
+  hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: install rsync
+      shell: yum install rsync -y
+
 - name: install k8s monitor
   hosts: k8s-master-init
   gather_facts: false
