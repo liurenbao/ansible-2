@@ -69,7 +69,7 @@ data:
         hosts => {{ groups['es'] | map('regex_replace', '^(.*)$','\\1:9200') | list | to_json}}
         manage_template => true
         template_name => "app-log"
-        index => "log-%{[kubernetes][labels][app]}-%{[kubernetes][namespace]}-%{+YYYY-MM}-%{+xxxx-ww}"
+        index => "log-%{[kubernetes][labels][app]}-%{[kubernetes][namespace]}-%{+YYYY-MM}-%{+xxxx.ww}"
         document_type => "%{[@metadata][type]}"
       }
     }
