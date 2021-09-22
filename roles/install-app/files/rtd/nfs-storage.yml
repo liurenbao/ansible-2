@@ -1,9 +1,8 @@
----
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
   name: nfs-storage
-  namespace: monitoring
+  namespace: rtd
 provisioner: provisioner-nfs
 allowVolumeExpansion: true
 ---
@@ -11,7 +10,7 @@ kind: ServiceAccount
 apiVersion: v1
 metadata:
   name: nfs-client-provisioner
-  namespace: monitoring
+  namespace: rtd
 ---
 kind: ClusterRole
 apiVersion: rbac.authorization.k8s.io/v1
@@ -34,11 +33,11 @@ rules:
 kind: ClusterRoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  name: monitoring-nfs-client-provisioner
+  name: rtd-nfs-client-provisioner
 subjects:
   - kind: ServiceAccount
     name: nfs-client-provisioner
-    namespace: monitoring
+    namespace: rtd
 roleRef:
   kind: ClusterRole
   name: nfs-client-provisioner
@@ -48,7 +47,7 @@ kind: Role
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: nfs-client-provisioner
-  namespace: monitoring
+  namespace: rtd
 rules:
   - apiGroups: [ "" ]
     resources: [ "endpoints" ]
@@ -58,11 +57,11 @@ kind: RoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: nfs-client-provisioner-rolebinding
-  namespace: monitoring
+  namespace: rtd
 subjects:
   - kind: ServiceAccount
     name: nfs-client-provisioner
-    namespace: monitoring
+    namespace: rtd
 roleRef:
   kind: Role
   name: nfs-client-provisioner
@@ -72,7 +71,7 @@ kind: Deployment
 apiVersion: apps/v1
 metadata:
   name: nfs-client-provisioner
-  namespace: monitoring
+  namespace: rtd
 spec:
   replicas: 1
   strategy:

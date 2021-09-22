@@ -9,7 +9,7 @@ metadata:
     k8s-app: logstash
 data:
   logstash.yml: |
-    pipeline.batch.size: 200
+    pipeline.batch.size: 2000
     pipeline.batch.delay: 50
     pipeline.unsafe_shutdown: false
     config.reload.automatic: true
@@ -57,7 +57,7 @@ data:
         topics => ["log"]
         type => "log"
         codec => json { charset => "UTF-8" }
-        consumer_threads => 3
+        consumer_threads => 8
         auto_offset_reset => earliest
         decorate_events => false
       }
@@ -107,10 +107,10 @@ spec:
           resources:
             limits:
               memory: '4Gi'
-              cpu: '4'
+              cpu: '8'
             requests:
               memory: '500Mi'
-              cpu: '200m'
+              cpu: '1'
           volumeMounts:
             - name: logstash-pipeline
               mountPath: /usr/share/logstash/pipeline
