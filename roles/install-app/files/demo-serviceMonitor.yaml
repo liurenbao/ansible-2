@@ -2,7 +2,7 @@ apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   name: test-service-monitor
-  namespace: monitoring
+  namespace: test
 spec:
   endpoints:
     - interval: 10s

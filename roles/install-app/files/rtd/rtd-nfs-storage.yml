@@ -84,7 +84,7 @@ spec:
       serviceAccountName: nfs-client-provisioner
       containers:
         - name: nfs-client-provisioner
-          image: "{{ image_repository }}/public/nfs-client-provisioner:v3.1.0-k8s1.11"
+          image: 192.168.160.47:8888/public/nfs-client-provisioner:v3.1.0-k8s1.11
           imagePullPolicy: IfNotPresent
           volumeMounts:
             - name: nfs-client-root
@@ -93,14 +93,14 @@ spec:
             - name: PROVISIONER_NAME
               value: provisioner-nfs
             - name: NFS_SERVER
-              value: "{{ nfs_server }}"
+              value: 192.168.160.35
             - name: NFS_PATH
-              value: "{{ monitor_nfs_path }}"
+              value: /data01/rtd
       volumes:
         - name: nfs-client-root
           nfs:
-            path: "{{ monitor_nfs_path }}"
-            server: "{{ nfs_server }}"
+            path: /data01/rtd
+            server: 192.168.160.35
   selector:
     matchLabels:
       app: nfs-client-provisioner

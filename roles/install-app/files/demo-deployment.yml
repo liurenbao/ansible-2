@@ -25,7 +25,7 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: demo-monitoring-{{ zone }}
+  name: demo-monitoring-dc1
   namespace: test
   labels:
     app: demo-monitoring
@@ -41,7 +41,7 @@ spec:
         app: demo-monitoring
     spec:
       nodeSelector:
-        zone: '{{ zone }}'
+        zone: dc1
       containers:
         - name: demo-monitoring
           image: 192.168.160.47:8888/public/demo-monitoring:1.0

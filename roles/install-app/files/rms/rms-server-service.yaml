@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: rms-server
+  namespace: rms
+  annotations:
+    prometheus.io/http-probe: "true"
+    prometheus.io/http-probe-port: "8080"
+    prometheus.io/http-probe-path: "/viability"
+    prometheus.io/scrape: "true"
+    prometheus.io/port: '8080'
+    prometheus.io/scheme: "http"
+    prometheus.io/path: '/metrics'
+spec:
+  selector:
+    app: rms-server
+  ports:
+    - port: 8100
+      name: port1
+    - port: 8200
+      name: port2
+    - port: 8080
+      name: web
