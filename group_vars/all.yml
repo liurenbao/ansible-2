@@ -43,7 +43,7 @@ es_root_dir: '/data01/es'
 # es集群名
 es_cluster_name: 'es-practice-cluster-7.3.2'
 # es jvm信息
-es_java_opts: '-Xms4G -Xmx8G'
+es_java_opts: '-Xms8G -Xmx8G'
 es_clear_at_day: 20
 es_clear_month_ago: 3
 es_log_replicas: 1
@@ -73,7 +73,6 @@ k8s_keepalived_vrrp_instance_interface: eth0
 control_plane_endpoint: '{{ k8s_keepalived_vip }}:6443'
 pod_network_cidr: '10.244.0.0/16'
 component_manifest_dir: '/data01/kube-manifest'
-etcd_backup_dir: '/data01/etcd'
 elk_manifest_root_dir: '{{ component_manifest_dir }}/elk'
 kube_component_file: '{{ component_manifest_dir }}/kube-component.md'
 etcd_backup_root_dir: '/data01/etcd-backup'
