@@ -53,5 +53,5 @@
 - name: add cron job
   cron:
     user: '{{ rocketmq_user }}'
-    minute: *
+    minute: '*'
     job: '{{ rocketmq_root_dir }}/bin/rmq-tools.sh {{ broker_name }} start'
