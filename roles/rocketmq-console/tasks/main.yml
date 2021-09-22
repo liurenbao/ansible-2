@@ -4,5 +4,8 @@
 - name: send docker-compose.yml
   template: src=docker-compose.yml.j2 dest={{ rocketmq_root_dir }}/docker-compose.yml
 
+- name: stop rocketmq-console
+  command: docker-compose -f {{ rocketmq_root_dir }}/docker-compose.yml down
+
 - name: start up rocketmq-console
   command: docker-compose -f {{ rocketmq_root_dir }}/docker-compose.yml up -d

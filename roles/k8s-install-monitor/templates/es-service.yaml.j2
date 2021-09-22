@@ -10,6 +10,9 @@ subsets:
 {% endfor %}
     ports:
       - port: 9114
+        name: metrics
+      - port: 9200
+        name: web
 ---
 apiVersion: v1
 kind: Service
@@ -22,10 +25,13 @@ metadata:
     prometheus.io/scheme: "http"
     prometheus.io/http-probe: "true"
     prometheus.io/http-probe-port: "9200"
-    prometheus.io/http-probe-path: "/"
+    prometheus.io/http-probe-path: "/_cat/health"
 spec:
   ports:
     - port: 9114
+      name: metrics
+    - port: 9200
+      name: web
 ---
 apiVersion: v1
 kind: Endpoints

@@ -1,7 +1,254 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: rms-server-configs
+  namespace: rms
+data:
+  config_drill.yml: |
+    app_config:
+      # is_enable: 1
+      app_workers: 32
+      app_group: /JD/PRD/RMS
+      log_path: /opt/RMSServer_linux/Logs
+      log_file_name: app.log
+      db_log_file_name: app.log
+      log_keep: 30
+      log_encrypted: 0
+
+    ui_service:
+      # is_enable: 1
+      ui_srv_list: "{'/JD/PRD/RMS1':'8100', '/JD/PRD/RMS2':'8200'}"
+      ui_max_workers: 3
+      tcp_max_conns: 20
+      tcp_t3: 45
+      log_path: /opt/RMSServer_linux/Logs
+      log_file_name: app.log
+      db_log_file_name: app.log
+      log_keep: 30
+
+    mq:
+      mq_host: 192.168.163.141:10101;192.168.163.178:10101
+      mq_port: 10104
+      mq_t3: 45
+      channel_rule: /JD/PRD/EAP/RMS/$EqpId
+
+    smtp_setting:
+      smtp_server: xxxx
+      smtp_port: 25
+      mail_user_name: RMSServer@xxx.com
+      mail_password: xxx
+      mail_display_name: RMS Server
+    db_setting:
+      host: "192.168.163.246"
+      user: "omm"
+      password: "Gauss_123"
+      port: "15400"
+      db_log_level: NONE
+  config_test.yml: |
+    app_config:
+      # is_enable: 1
+      app_workers: 32
+      app_group: /JD/TST/RMS
+      log_path: /opt/RMSServer_linux/Logs
+      log_file_name: app.log
+      db_log_file_name: app.log
+      log_keep: 30
+      log_encrypted: 0
+
+    ui_service:
+      # is_enable: 1
+      ui_srv_list: "{'/JD/TST/RMS1':'8100', '/JD/TST/RMS2':'8200'}"
+      ui_max_workers: 3
+      tcp_max_conns: 20
+      tcp_t3: 45
+      log_path: /opt/RMSServer_linux/Logs
+      log_file_name: app.log
+      db_log_file_name: app.log
+      log_keep: 30
+
+    mq:
+      mq_host: 192.168.161.208:10101;192.168.161.209:10101
+      mq_port: 10104
+      mq_t3: 45
+      channel_rule: /JD/TST/EAP/RMS/$EqpId
+
+    smtp_setting:
+      smtp_server: xxxx
+      smtp_port: 25
+      mail_user_name: RMSServer@xxx.com
+      mail_password: xxx
+      mail_display_name: RMS Server
+    db_setting:
+      host: '192.168.160.203'
+      user: 'rms'
+      password: 'Gauss_123'
+      port: '25400'
+      db_log_level: NONE
+  config_uat.yml: |
+    app_config:
+      # is_enable: 1
+      app_workers: 32
+      app_group: /DEV1/RMS
+      log_path: /opt/RMSServer_linux/Logs
+      log_file_name: app.log
+      db_log_file_name: app.log
+      log_keep: 30
+      log_encrypted: 0
+
+    ui_service:
+      # is_enable: 1
+      ui_srv_list: "{'DEV1/RMS1':'8100', 'DEV1/RMS2':'8200'}"
+      ui_max_workers: 3
+      tcp_max_conns: 20
+      tcp_t3: 45
+      log_path: /opt/RMSServer_linux/Logs
+      log_file_name: app.log
+      db_log_file_name: app.log
+      log_keep: 30
+
+    mq:
+      mq_host: 192.168.160.23:10101
+      mq_port: 10104
+      mq_t3: 45
+      channel_rule: ''
+
+    smtp_setting:
+      smtp_server: xxxx
+      smtp_port: 25
+      mail_user_name: RMSServer@xxx.com
+      mail_password: xxx
+      mail_display_name: RMS Server
+    db_setting:
+      host: '192.168.160.24'
+      user: 'omm'
+      password: 'Gauss_123'
+      port: '15400'
+      db_log_level: NONE
+  config_prod.yml: |
+    app_config:
+      # is_enable: 1
+      app_workers: 32
+      app_group: /JD/PRD/RMS
+      log_path: /opt/RMSServer_linux/Logs
+      log_file_name: app.log
+      db_log_file_name: app.log
+      log_keep: 30
+      log_encrypted: 0
+
+    ui_service:
+      # is_enable: 1
+      ui_srv_list: "{'/JD/PRD/RMS1':'8100', '/JD/PRD/RMS2':'8200'}"
+      ui_max_workers: 3
+      tcp_max_conns: 20
+      tcp_t3: 45
+      log_path: /opt/RMSServer_linux/Logs
+      log_file_name: app.log
+      db_log_file_name: app.log
+      log_keep: 30
+
+    mq:
+      mq_host: 10.12.107.201:7800;10.12.107.202:7800
+      mq_port: 10104
+      mq_t3: 45
+      channel_rule: /JD/PRD/EAP/RMS/$EqpId
+
+    smtp_setting:
+      smtp_server: xxxx
+      smtp_port: 25
+      mail_user_name: RMSServer@xxx.com
+      mail_password: xxx
+      mail_display_name: RMS Server
+    db_setting:
+      host: 'xx.xx.xx.xx'
+      user: 'xxx'
+      password: 'xxxx'
+      port: 'xxx'
+      db_log_level: NONE
+  config_pilot.yml: |
+    app_config:
+      # is_enable: 1
+      app_workers: 32
+      app_group: /PIE1/RMS
+      log_path: /opt/RMSServer_linux/Logs
+      log_file_name: app.log
+      db_log_file_name: app.log
+      log_keep: 30
+      log_encrypted: 0
+
+    ui_service:
+      # is_enable: 1
+      ui_srv_list: "{'PIE1/RMS1':'8100', 'PIE1/RMS2':'8200'}"
+      ui_max_workers: 3
+      tcp_max_conns: 20
+      tcp_t3: 45
+      log_path: /opt/RMSServer_linux/Logs
+      log_file_name: app.log
+      db_log_file_name: app.log
+      log_keep: 30
+
+    mq:
+      mq_host: 192.168.160.63:10101
+      mq_port: 10104
+      mq_t3: 45
+      channel_rule: ''
+
+    smtp_setting:
+      smtp_server: xxxx
+      smtp_port: 25
+      mail_user_name: RMSServer@xxx.com
+      mail_password: xxx
+      mail_display_name: RMS Server
+    db_setting:
+      host: '192.168.160.24'
+      user: 'omm'
+      password: 'Gauss_123'
+      port: '15400'
+      db_log_level: NONE
+  config.yml: |
+    app_config:
+      # is_enable: 1
+      app_workers: 32
+      app_group: /DEV1/RMS
+      log_path: /opt/RMSServer_linux/Logs
+      log_file_name: app.log
+      db_log_file_name: app.log
+      log_keep: 30
+      log_encrypted: 0
+
+    ui_service:
+      # is_enable: 1
+      ui_srv_list: "{'/DEV1/RMS1':'8100', '/DEV1/RMS2':'8200'}"
+      ui_max_workers: 3
+      tcp_max_conns: 20
+      tcp_t3: 45
+      log_path: /opt/RMSServer_linux/Logs
+      log_file_name: app.log
+      db_log_file_name: app.log
+      log_keep: 30
+
+    mq:
+      mq_host: 192.168.160.23:10101
+      mq_port: 10104
+      mq_t3: 45
+      channel_rule: ''
+
+    smtp_setting:
+      smtp_server: xxxx
+      smtp_port: 25
+      mail_user_name: RMSServer@xxx.com
+      mail_password: xxx
+      mail_display_name: RMS Server
+    db_setting:
+      host: '192.168.160.24'
+      user: 'omm'
+      password: 'Gauss_123'
+      port: '15400'
+      db_log_level: NONE
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: rms-server
+  name: rms-server-{{ zone }}
   namespace: rms
   labels:
     app: rms-server
@@ -13,6 +260,9 @@ spec:
       labels:
         app: rms-server
     spec:
+      nodeSelector:
+        # 双机房部署
+        zone: '{{ zone }}'
       securityContext:
         runAsUser: 0
       containers:
@@ -85,7 +335,6 @@ metadata:
     prometheus.io/http-probe: "true"
     prometheus.io/http-probe-port: "8080"
     prometheus.io/http-probe-path: "/viability"
-
     prometheus.io/scrape: "true"
     prometheus.io/port: '8080'
     prometheus.io/scheme: "http"
