@@ -1,22 +1,22 @@
-- name: change hostname
-  import_playbook: playbook/change-hostname.yml
-
-- name: install ntp
-  import_playbook: playbook/install-ntp-client.yml
-
-- name: change sys conf
-  import_playbook: playbook/change-sysconf.yml
-
+# - name: change hostname
+#   import_playbook: playbook/change-hostname.yml
+#
+# - name: install ntp
+#   import_playbook: playbook/install-ntp-client.yml
+#
+# - name: change sys conf
+#   import_playbook: playbook/change-sysconf.yml
+#
 - name: install docker
   import_playbook: playbook/install-docker.yml
-
-#- name: install harbor
-#  import_playbook: playbook/install-harbor.yml
-
-- import_playbook: playbook/install-nginx.yml
-- import_playbook: playbook/install-kubernetes.yml
-- import_playbook: playbook/install-kubernetes-component.yml
-- import_playbook: playbook/change-k8s-node-label.yml
+#
+# - name: install harbor
+#   import_playbook: playbook/install-harbor.yml
+#
+# - import_playbook: playbook/install-nginx.yml
+# - import_playbook: playbook/install-kubernetes.yml
+# - import_playbook: playbook/install-kubernetes-component.yml
+# - import_playbook: playbook/change-k8s-node-label.yml
 - import_playbook: playbook/install-kafka.yml
 - import_playbook: playbook/install-elasticsearch.yml
 - import_playbook: playbook/install-redis.yml

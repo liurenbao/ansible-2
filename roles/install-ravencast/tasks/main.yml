@@ -74,6 +74,7 @@
   template:
     src: start.sh.j2
     dest: "{{ ravencast_root_dir }}/bin/start.sh"
+    mode: "0755"
 
 - name: start messagequeue
   shell: ./messagequeue

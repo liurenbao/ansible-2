@@ -55,8 +55,16 @@
     src: /etc/ansible/tools/docker-compose
     dest: /usr/local/bin/
 
+- name: cp helm
+  copy:
+    src: /etc/ansible/tools/helm
+    dest: /usr/local/bin/
+
 - name: chmod docker-compose
   shell: chmod +x /usr/local/bin/docker-compose
+
+- name: chmod helm
+  shell: chmod +x /usr/local/bin/helm
 
 - name: create docker data-root
   shell: mkdir -p {{ docker_data_root }}

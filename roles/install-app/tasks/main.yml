@@ -15,5 +15,35 @@
     src: files/
     dest: "{{ component_manifest_dir }}/app/"
 
+# 用循环 fixme
 - name: apply app manifest
-  shell: "kubectl apply -f {{ component_manifest_dir }}/app/"
+  shell: "kubectl apply -f {{ component_manifest_dir }}/app/mes"
+
+- name: apply app manifest
+  shell: "kubectl apply -f {{ component_manifest_dir }}/app/rms"
+
+- name: apply app manifest
+  shell: "kubectl apply -f {{ component_manifest_dir }}/app/spc"
+
+- name: apply app manifest
+  shell: "kubectl create namespace rtd"
+
+- name: apply rtd zookeeper
+  shell: "helm upgrade --install rtd-zookeeper -n rtd ."
+  args:
+    chdir: "{{ component_manifest_dir }}/app/rtd/zookeeper"
+
+- name: apply rtd rtd-web
+  shell: "helm upgrade --install rtd-web -n rtd ."
+  args:
+    chdir: "{{ component_manifest_dir }}/app/rtd/rtd-web"
+
+- name: apply rtd ruleengine
+  shell: "helm upgrade --install rtd-ruleengine -n rtd ."
+  args:
+    chdir: "{{ component_manifest_dir }}/app/rtd/ruleengine"
+
+- name: apply rtd workflow
+  shell: "helm upgrade --install workflow -n rtd ."
+  args:
+    chdir: "{{ component_manifest_dir }}/app/rtd/workflow"

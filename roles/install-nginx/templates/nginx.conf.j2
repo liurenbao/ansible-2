@@ -22,5 +22,6 @@ http {
 
   sendfile        on;
   keepalive_timeout  65;
+  client_max_body_size 100m;
   include /etc/nginx/conf.d/*.conf;
 }
