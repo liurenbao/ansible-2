@@ -48,18 +48,21 @@
 [nginx]
 
 [es]
-192.168.161.200	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name=es-uat-3
-192.168.161.196	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name=es-uat-1
-192.168.161.193	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name=es-uat-2
+192.168.161.200	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name=es-uat-1
+192.168.161.199	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name=es-uat-2
+192.168.161.242	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name=es-uat-3
+192.168.163.194	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name=es-uat-4
+192.168.163.69	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name=es-uat-5
+192.168.163.82	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name=es-uat-6
 
 [kafka]
-192.168.161.203	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name=kafka-uat-1
-192.168.161.198	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name=kafka-uat-2
-192.168.161.201	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name=kafka-uat-3
+192.168.161.194	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name=kafka-uat-1
+192.168.161.193	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name=kafka-uat-2
+192.168.161.195	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name=kafka-uat-3
 
 [redis]
 192.168.160.110	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name=redis-uat-6
-192.168.160.111	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name=redis-uat-5
+192.168.160.114	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name=redis-uat-5
 192.168.160.109	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name=redis-uat-4
 192.168.160.112	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name=redis-uat-3
 192.168.160.108	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name=redis-uat-2

@@ -67,8 +67,8 @@ ravencast_xms_xmx_args: '-Xms2G -Xmx8G'
 ravencast_root_dir: '/data01/ravencast'
 
 # k8s-----------------------------------------------------------------------------------------
-k8s_keepalived_vip: 192.168.163.251
-k8s_keepalived_virtual_router_id: '251'
+k8s_keepalived_vip: 192.168.160.78
+k8s_keepalived_virtual_router_id: '78'
 k8s_keepalived_vrrp_instance_interface: eth0
 control_plane_endpoint: '{{ k8s_keepalived_vip }}:6443'
 pod_network_cidr: '10.244.0.0/16'
