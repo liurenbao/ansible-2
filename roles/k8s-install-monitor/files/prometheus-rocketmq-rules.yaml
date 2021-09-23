@@ -20,7 +20,7 @@ spec:
           and is falling behind (behind value {{$value}}).'
             summary: consumer lag behind
         - alert: GroupGetLatencyByStoretime
-          expr: rocketmq_group_get_latency_by_storetime > 1000
+          expr: rocketmq_group_get_latency_by_storetime > 10000
           for: 3m
           labels:
             severity: warning
