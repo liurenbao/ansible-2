@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: guassdb-monitor-server
+  namespace: monitoring
+  labels:
+    app: guassdb-monitor-server
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: guassdb-monitor-server
+      labels:
+        app: guassdb-monitor-server
+    spec:
+      containers:
+        - name: guassdb-monitor-server
+          image: 192.168.160.47:8888/public/gaussdb-monitor-server:1.0.0
+          imagePullPolicy: Always
+      restartPolicy: Always
+  selector:
+    matchLabels:
+      app: guassdb-monitor-server
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: guassdb-monitor-server
+  namespace: monitoring
+spec:
+  selector:
+    app: guassdb-monitor-server
+  ports:
+    - port: 9990
+  type: ClusterIP
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: guassdb-monitor-server
+  namespace: monitoring
+spec:
+  entryPoints:
+    - web
+  routes:
+    - kind: Rule
+      match: PathPrefix(`/guassdb-monitor-server/`)
+      services:
+        - name: guassdb-monitor-server
+          port: 9990

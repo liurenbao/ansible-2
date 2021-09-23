@@ -9,8 +9,8 @@ metadata:
     k8s-app: logstash
 data:
   logstash.yml: |
-    pipeline.batch.size: 2000
-    pipeline.batch.delay: 50
+    pipeline.batch.size: 1000
+    pipeline.batch.delay: 5
     pipeline.unsafe_shutdown: false
     config.reload.automatic: true
     config.reload.interval: 3s

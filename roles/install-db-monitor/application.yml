@@ -1,0 +1,13 @@
+server:
+  port: 9998
+  servlet:
+    context-path: /guassdb-monitor-agent
+  
+spring:
+  application:
+    name: imonitor-agent
+
+#自定义配置参数
+base:
+  #monitor-server端访问地址
+  serverUrl: http://192.168.160.5/guassdb-monitor-server

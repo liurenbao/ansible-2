@@ -45,6 +45,12 @@
 [rocketmq-slave]
 192.168.160.32	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name=rocketmq-slave-uat-2	broker_name=broker-b-s
 192.168.160.124	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name=rocketmq-slave-uat-1	broker_name=broker-a-s
+
+[rocketmq:children]
+rocketmq-namesrv
+rocketmq-master
+rocketmq-slave
+
 [nginx]
 
 [es]
