@@ -25,14 +25,11 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: demo-monitoring-dc1
+  name: demo-monitoring
   namespace: test
   labels:
     app: demo-monitoring
 spec:
-  selector:
-    matchLabels:
-      app: demo-monitoring
   replicas: 1
   template:
     metadata:
@@ -40,52 +37,51 @@ spec:
       labels:
         app: demo-monitoring
     spec:
-      nodeSelector:
-        zone: dc1
       containers:
         - name: demo-monitoring
           image: 192.168.160.47:8888/public/demo-monitoring:1.0
           imagePullPolicy: Always
-          env:
-            - name: INTERVAL
-              value: '2000'
-          # 三探针
           startupProbe:
             httpGet:
               port: 8080
-              path: /demo-monitoring/actuator/health
-            initialDelaySeconds: 30
-            timeoutSeconds: 1
-            periodSeconds: 3
+              path: /demo-monitoring
             successThreshold: 1
             failureThreshold: 3
-          readinessProbe:
-            httpGet:
-              port: 8080
-              path: /demo-monitoring/actuator/health
-            timeoutSeconds: 1
-            periodSeconds: 3
-            successThreshold: 1
-            failureThreshold: 3
+            initialDelaySeconds: 20
           livenessProbe:
             httpGet:
               port: 8080
-              path: /demo-monitoring/actuator/health
-          # 资源限制
+              path: /demo-monitoring
+            successThreshold: 1
+            failureThreshold: 3
+            periodSeconds: 3
+            timeoutSeconds: 5
+          readinessProbe:
+            httpGet:
+              port: 8080
+              path: /demo-monitoring
+            successThreshold: 1
+            failureThreshold: 3
+            periodSeconds: 3
+            timeoutSeconds: 5
+          env:
+            - name: INTERVAL
+              value: '50000'
+            - name: IS_LOG
+              value: 'false'
           resources:
+            requests:
+              cpu: '0.2'
+              memory: 200Mi
             limits:
               cpu: '2'
-              memory: 200Mi
-            requests:
-              cpu: '200m'
-              memory: 100Mi
-          # 优雅停机
+              memory: 800Mi
           lifecycle:
             preStop:
               exec:
-                command: [ "sleep" ,"40" ]
-      terminationGracePeriodSeconds: 120
+                command: [ "sleep", "30" ]
       restartPolicy: Always
+      terminationGracePeriodSeconds: 120
       tolerations:
         - key: node.kubernetes.io/not-ready
           operator: Exists
@@ -95,22 +91,20 @@ spec:
           operator: Exists
           effect: NoExecute
           tolerationSeconds: 2
+  selector:
+    matchLabels:
+      app: demo-monitoring
 ---
-# 集群内部服务监控
 apiVersion: v1
 kind: Service
 metadata:
   name: demo-monitoring
   namespace: test
   annotations:
-    # 以下 tcp/http检测应用可用性，二选一（和健康检查不同，此处需检测应用依赖项，如消息队列，缓存，数据库等）
-    # 使用tcp检测应用可用性，自动获取service的port字段
     prometheus.io/tcp-probe: "true"
-    # 使用http检测应用可用性，手动提供支持http检测的端口
     prometheus.io/http-probe: "true"
     prometheus.io/http-probe-port: "8080"
-    prometheus.io/http-probe-path: "/demo-monitoring/actuator/health"
-    # 抓取应用的监控指标,路径不填写则为：/metrics
+    prometheus.io/http-probe-path: "/demo-monitoring/sleep/1"
     prometheus.io/scrape: "true"
     prometheus.io/port: '8080'
     prometheus.io/scheme: "http"
@@ -120,3 +114,18 @@ spec:
     app: demo-monitoring
   ports:
     - port: 8080
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: demo-monitoring
+  namespace: test
+spec:
+  entryPoints:
+    - web
+  routes:
+    - kind: Rule
+      match: PathPrefix(`/demo-monitoring/`)
+      services:
+        - name: demo-monitoring
+          port: 8080
