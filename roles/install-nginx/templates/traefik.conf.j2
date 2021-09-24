@@ -11,8 +11,8 @@ upstream rms {
 }
 
 server {
-    listen       80;
-    listen  [::]:80;
+    listen       80 backlog=65534;
+    listen  [::]:80 backlog=65534;
     server_name  localhost;
 
     location / {
@@ -26,8 +26,8 @@ server {
 }
 
 server {
-    listen       30895;
-    listen  [::]:30895;
+    listen       30895 backlog=65534;
+    listen  [::]:30895 backlog=65534;
     server_name  localhost;
 
     location / {

@@ -16,8 +16,7 @@ metadata:
 kind: ClusterRole
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  name: nfs-client-provisioner-runner
-  namespace: monitoring
+  name: nfs-client-provisioner
 rules:
   - apiGroups: [ "" ]
     resources: [ "persistentvolumes" ]
@@ -35,21 +34,20 @@ rules:
 kind: ClusterRoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  name: run-nfs-client-provisioner
-  namespace: monitoring
+  name: monitoring-nfs-client-provisioner
 subjects:
   - kind: ServiceAccount
     name: nfs-client-provisioner
     namespace: monitoring
 roleRef:
   kind: ClusterRole
-  name: nfs-client-provisioner-runner
+  name: nfs-client-provisioner
   apiGroup: rbac.authorization.k8s.io
 ---
 kind: Role
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  name: leader-locking-nfs-client-provisioner
+  name: nfs-client-provisioner
   namespace: monitoring
 rules:
   - apiGroups: [ "" ]
@@ -59,7 +57,7 @@ rules:
 kind: RoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  name: leader-locking-nfs-client-provisioner
+  name: nfs-client-provisioner-rolebinding
   namespace: monitoring
 subjects:
   - kind: ServiceAccount
@@ -67,7 +65,7 @@ subjects:
     namespace: monitoring
 roleRef:
   kind: Role
-  name: leader-locking-nfs-client-provisioner
+  name: nfs-client-provisioner
   apiGroup: rbac.authorization.k8s.io
 ---
 kind: Deployment

@@ -34,7 +34,13 @@
   become_user: "{{ rocketmq_user }}"
   shell: "{{ rocketmq_root_dir }}/bin/rmq-tools.sh namesrv restart"
 
-- name: rotato rockemq logs
+- name: rotate rockemq logs
   template:
     src: rocketmq.j2
     dest: /etc/logrotate.d/rocketmq
+
+- name: add cron job
+  cron:
+    user: '{{ rocketmq_user }}'
+    minute: '*'
+    job: '{{ rocketmq_root_dir }}/bin/rmq-tools.sh namesrv start'

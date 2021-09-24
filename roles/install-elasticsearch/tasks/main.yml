@@ -40,9 +40,16 @@
     msg: "{{ result.stdout_lines }}"
   when: ansible_ssh_host == groups['es'][0]
 
+- name: send index template conf
+  template:
+    src: index-template.json.j2
+    dest: '{{ es_root_dir }}/index-template.json'
+
 - name: add index template
   shell: |
-    curl -H 'Content-Type: application/json' -XPUT -d '{ "index_patterns":["log-*"],"settings":{"number_of_replicas": {{ es_log_replicas }},"number_of_shards": {{ es_log_shards }} } }' http://localhost:9200/_template/app-log
+    curl -H 'Content-Type: application/json' -XPUT -d @index-template.json http://localhost:9200/_template/app-log
+  args:
+    chdir: '{{ es_root_dir }}'
 
 - name: pause
   command: sleep 10

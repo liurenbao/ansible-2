@@ -2,7 +2,6 @@
   gather_facts: false
   hosts:
     - ravencast
-    - nas
     - rocketmq-namesrv
     - rocketmq-master
     - rocketmq-slave

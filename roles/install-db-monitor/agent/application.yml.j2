@@ -1,0 +1,13 @@
+server:
+  port: {{ gaussdb_agent_server_port }}
+  servlet:
+    context-path: /guassdb-monitor-agent
+  
+spring:
+  application:
+    name: imonitor-agent
+
+#自定义配置参数
+base:
+  #monitor-server端访问地址
+  serverUrl: 'http://{{ nginx_keepalived_vip }}/guassdb-monitor-server'

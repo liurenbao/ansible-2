@@ -1,8 +1,8 @@
 - name: change hostname
   import_playbook: playbook/change-hostname.yml
 
-- name: install ntp
-  import_playbook: playbook/install-ntp-client.yml
+- name: install time
+  import_playbook: playbook/install-time.yml
 
 - name: change sys conf
   import_playbook: playbook/change-sysconf.yml

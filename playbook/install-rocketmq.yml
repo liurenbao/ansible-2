@@ -55,8 +55,8 @@
         - "export PATH=${JAVA_HOME}/bin:$PATH"
     - name: create topic
       shell: |
-         ./mqadmin updateTopic -n localhost:9876 -b {{ groups["rocketmq-master"][0] }}:10911 -t {{ item }} -p 6 -r 16 -w 16
-         ./mqadmin updateTopic -n localhost:9876 -b {{ groups["rocketmq-master"][1] }}:10911 -t {{ item }} -p 6 -r 16 -w 16
+        ./mqadmin updateTopic -n localhost:9876 -b {{ groups["rocketmq-master"][0] }}:10911 -t {{ item }} -p 6 -r 16 -w 16
+        ./mqadmin updateTopic -n localhost:9876 -b {{ groups["rocketmq-master"][1] }}:10911 -t {{ item }} -p 6 -r 16 -w 16
       when: groups['rocketmq-namesrv'][0] == ansible_ssh_host
       args:
         chdir: "{{ rocketmq_root_dir }}/bin"

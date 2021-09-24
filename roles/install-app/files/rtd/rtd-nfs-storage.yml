@@ -1,0 +1,106 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: nfs-storage
+  namespace: rtd
+provisioner: provisioner-nfs
+allowVolumeExpansion: true
+---
+kind: ServiceAccount
+apiVersion: v1
+metadata:
+  name: nfs-client-provisioner
+  namespace: rtd
+---
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: nfs-client-provisioner
+rules:
+  - apiGroups: [ "" ]
+    resources: [ "persistentvolumes" ]
+    verbs: [ "get", "list", "watch", "create", "delete" ]
+  - apiGroups: [ "" ]
+    resources: [ "persistentvolumeclaims" ]
+    verbs: [ "get", "list", "watch", "update" ]
+  - apiGroups: [ "storage.k8s.io" ]
+    resources: [ "storageclasses" ]
+    verbs: [ "get", "list", "watch" ]
+  - apiGroups: [ "" ]
+    resources: [ "events" ]
+    verbs: [ "create", "update", "patch" ]
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: rtd-nfs-client-provisioner
+subjects:
+  - kind: ServiceAccount
+    name: nfs-client-provisioner
+    namespace: rtd
+roleRef:
+  kind: ClusterRole
+  name: nfs-client-provisioner
+  apiGroup: rbac.authorization.k8s.io
+---
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: nfs-client-provisioner
+  namespace: rtd
+rules:
+  - apiGroups: [ "" ]
+    resources: [ "endpoints" ]
+    verbs: [ "get", "list", "watch", "create", "update", "patch" ]
+---
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: nfs-client-provisioner-rolebinding
+  namespace: rtd
+subjects:
+  - kind: ServiceAccount
+    name: nfs-client-provisioner
+    namespace: rtd
+roleRef:
+  kind: Role
+  name: nfs-client-provisioner
+  apiGroup: rbac.authorization.k8s.io
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: nfs-client-provisioner
+  namespace: rtd
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: nfs-client-provisioner
+    spec:
+      serviceAccountName: nfs-client-provisioner
+      containers:
+        - name: nfs-client-provisioner
+          image: 192.168.160.47:8888/public/nfs-client-provisioner:v3.1.0-k8s1.11
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+            - name: nfs-client-root
+              mountPath: /persistentvolumes
+          env:
+            - name: PROVISIONER_NAME
+              value: provisioner-nfs
+            - name: NFS_SERVER
+              value: 192.168.160.35
+            - name: NFS_PATH
+              value: /data01/rtd
+      volumes:
+        - name: nfs-client-root
+          nfs:
+            path: /data01/rtd
+            server: 192.168.160.35
+  selector:
+    matchLabels:
+      app: nfs-client-provisioner

@@ -1,5 +1,0 @@
-- name: set timezone
-  hosts: all
-  gather_facts: false
-  roles:
-    - install-time-zone

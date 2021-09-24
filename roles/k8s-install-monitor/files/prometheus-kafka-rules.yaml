@@ -19,7 +19,7 @@ spec:
             summary: Kafka topics replicas (instance {{ $labels.instance }})
             description: "Too few kafka topic in-sync partition.  VALUE = {{ $value }}"
         - alert: KafkaConsumersGroup
-          expr: sum(kafka_consumergroup_lag) by (consumergroup, instance) > 50000
+          expr: sum(kafka_consumergroup_lag) by (consumergroup, instance) > 500000
           for: 1m
           labels:
             severity: critical

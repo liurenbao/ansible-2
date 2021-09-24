@@ -1,3 +1,44 @@
+- name: change sysconf
+  lineinfile:
+    line: "{{ item }}"
+    path: /etc/sysctl.conf
+  with_items:
+    - "fs.file-max = 65000"
+    - "net.ipv4.ip_local_port_range = 1024 65000"
+    - "net.ipv4.tcp_window_scaling = 1"
+    - "net.core.somaxconn = 262144"
+    - "net.core.netdev_max_backlog = 5000"
+    - "net.ipv4.tcp_fin_timeout = 30"
+    - "net.ipv4.tcp_keepalive_time = 30"
+    - "net.ipv4.tcp_tw_reuse = 1"
+    - "net.ipv4.tcp_max_tw_buckets = 10000"
+    - "net.ipv4.tcp_syncookies = 1"
+    - "net.ipv4.tcp_tw_recycle = 0"
+    - "net.ipv6.conf.all.disable_ipv6 = 1"
+    - "net.ipv6.conf.default.disable_ipv6 = 1"
+    - "net.ipv6.conf.lo.disable_ipv6 = 1"
+    - "net.ipv4.tcp_rmem = 4096 87380 8388608"
+    - "net.ipv4.tcp_wmem = 4096 87380 8388608"
+    - "net.core.rmem_max = 8388608"
+    - "net.core.wmem_max = 8388608"
+    - "net.ipv4.ip_forward = 0"
+    - "net.ipv4.conf.all.send_redirects = 0"
+    - "net.ipv4.conf.default.send_redirects = 0"
+
+- name: sysctl enable
+  shell: sysctl -p /etc/sysctl.conf
+
+- name: refresh iptables
+  shell: iptables -F
+
+- name: change limits.conf
+  lineinfile:
+    dest: /etc/security/limits.conf
+    line: "{{ item }}"
+  with_items:
+    - "* - nproc 65535"
+    - "* - nofile 1048576"
+
 - name: check docker-compose file exists
   stat:
     path: "{{ nginx_root_dir }}/docker-compose.yml"

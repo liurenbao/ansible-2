@@ -1,0 +1,10 @@
+- name: install gaussdb monitor agent
+  gather_facts: false
+  hosts: gaussdb
+  vars:
+    gaussdb_monitor_agent_root_dir: /data01/gaussdb-monitor-agent
+    gaussdb_user: omm
+    gaussdb_user_group: dbgrp
+    gaussdb_agent_server_port: 9999
+  roles:
+    - install-db-monitor
