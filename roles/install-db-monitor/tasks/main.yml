@@ -19,6 +19,7 @@
     owner: '{{ gaussdb_user }}'
     group: '{{ gaussdb_user_group }}'
 
+# fixme 为啥启动不成功？
 - name: start agent
   become_user: '{{ gaussdb_user }}'
   shell: "nohup java -jar {{ gaussdb_monitor_agent_root_dir }}/{{ gaussdb_user }}/agent.jar > /dev/null 2>&1 &"
