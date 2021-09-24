@@ -24,11 +24,16 @@ services:
       KAFKA_ADVERTISED_HOST_NAME: "{{ ansible_ssh_host }}"
       KAFKA_ZOOKEEPER_CONNECT: "{{ groups['kafka'] | map('regex_replace', '^(.*)$','\\1:2181') | join(',') }}"
       KAFKA_HEAP_OPTS: '{{ kafka_heap_opts }}'
-      KAFKA_NUM_PARTITIONS: 9
+      #5个logstash消费者，3个broker 经验值3*5
+      KAFKA_NUM_PARTITIONS: 15
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://{{ ansible_ssh_host }}:9092
+      #cpu核数+1
       KAFKA_NUM_NETWORK_THREADS: 9
+      #cpu的两倍
       KAFKA_NUM_IO_THREADS: 16
-      KAFKA_LOG_RETENTION_BYTES: 10737418240
+      #partition*2=log文件个数30， 30/3=10每台broker文件夹个数，每个segament默认1G，每个文件夹大小为(当前值+1)G,总大小不超过磁盘80%，2000G盘
+      KAFKA_LOG_RETENTION_BYTES: 15000000000
+      KAFKA_DEFAULT_REPLICATION_FACTOR: 2
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock"
       - "{{ kafka_root_dir }}/kafka:/kafka"
