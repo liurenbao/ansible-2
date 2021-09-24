@@ -1,0 +1,3 @@
+[gaussdb]
+192.168.160.250 ansible_ssh_user=root   ansible_ssh_pass=Huawei11445@Huawei..
+192.168.160.251 ansible_ssh_user=root   ansible_ssh_pass=Huawei11445@Huawei..

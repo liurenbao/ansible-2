@@ -1,0 +1,24 @@
+- name: create agent root dir
+  file:
+    path: '{{ gaussdb_monitor_agent_root_dir }}/{{ gaussdb_user }}'
+    state: directory
+    owner: '{{ gaussdb_user }}'
+    group: '{{ gaussdb_user_group }}'
+
+- name: send agent application.yml
+  template:
+    src: agent/application.yml.j2
+    dest: '{{ gaussdb_monitor_agent_root_dir }}/{{ gaussdb_user }}/application.yml'
+    owner: '{{ gaussdb_user }}'
+    group: '{{ gaussdb_user_group }}'
+
+- name: send agent jar
+  copy:
+    src: agent/hisi-uoamp-monitor-agent-1.0-SNAPSHOT.jar
+    dest: '{{ gaussdb_monitor_agent_root_dir }}/{{ gaussdb_user }}/agent.jar'
+    owner: '{{ gaussdb_user }}'
+    group: '{{ gaussdb_user_group }}'
+
+- name: start agent
+  become_user: '{{ gaussdb_user }}'
+  shell: "nohup java -jar {{ gaussdb_monitor_agent_root_dir }}/{{ gaussdb_user }}/agent.jar > /dev/null 2>&1 &"

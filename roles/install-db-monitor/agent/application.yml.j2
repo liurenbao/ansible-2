@@ -1,5 +1,5 @@
 server:
-  port: 9998
+  port: {{ gaussdb_agent_server_port }}
   servlet:
     context-path: /guassdb-monitor-agent
   
@@ -10,4 +10,4 @@ spring:
 #自定义配置参数
 base:
   #monitor-server端访问地址
-  serverUrl: http://192.168.160.5/guassdb-monitor-server
+  serverUrl: 'http://{{ nginx_keepalived_vip }}/guassdb-monitor-server'
