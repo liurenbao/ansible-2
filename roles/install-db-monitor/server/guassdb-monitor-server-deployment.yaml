@@ -1,35 +1,150 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: gaussdb-monitor-server
+  namespace: monitoring
+data:
+  application.yml: |
+    server:
+      port: 9990
+      env: pro
+      servlet:
+        context-path: /gaussdb-monitor-server
+    spring:
+      application:
+        name: imonitor-server
+      profiles:
+        include: alarmdesc
+      redis:
+        cluster:
+          max-redirects: 3
+          nodes: 192.168.160.110:6379,192.168.160.114:6379,192.168.160.109:6379,192.168.160.112:6379,192.168.160.108:6379,192.168.160.113:6379
+        #password:
+        lettuce:
+          pool:
+            max-idle: 5
+            max-active: 8
+            min-idle: 2
+
+    #自定义配置参数
+    base:
+      #通信token，请和server端配置的hpcToken保持一致
+      hpcToken: hpcMonitor
+
+    elasticsearch:
+      schema: http
+      address: 192.168.161.200:9200,192.168.161.199:9200,192.168.161.242:9200,192.168.163.194:9200,192.168.163.69:9200,192.168.163.82:9200
+      connectTimeout: 5000
+      socketTimeout: 5000
+      connectionRequestTimeout: 5000
+      maxConnectNum: 100
+      maxConnectPerRoute: 100
+
+
+
+    gaussdbalarm:
+      periodMinutes: 5
+      taskCron: "0 */5 * * * ?"
+
+    #告警配置
+    mail:
+      #邮件服务设置
+      smtpHost: 192.168.160.1
+      smtpPort: 587
+      smtpSSL: false
+      #发件人邮箱地址
+      fromMailAddress: mouyongde@huawei.com
+      #邮件服务器用户名(发件人)
+      mailUser: mouyongde@huawei.com
+      #邮件服务器登录密码(发件人)
+      mailPassword: Nd/7Sui8Mnh+PqIMPMZHQA==
+      #收件人邮件地址，多个用分号隔开
+      toMailAddress: tangjizhou@huawei.com
+      #告警邮件总开关，yes开启，no关闭
+      allWarnMail: yes
+
+      gscheckWarnMail:
+        #按照检查项关闭告警，关闭后不发送告警通知, 多个项用逗号隔开, All表示关闭组内所有项
+        #例如： CheckDirPermissions, CheckClusterVer, CheckNodes
+        excludeItems:
+
+      #监控gaussDB数据库连接数使用率%报警值，超过此值即发送邮件报警
+      connectionUsageVal: 80
+
+
+    #默认定时任务
+    monitortask:
+      scheduledTasks:
+        - taskKey: gsOmStatus
+          taskDesc: gs_om巡检任务,Check数据库实例状态
+          taskCron: "0 */5 * * * ?"
+          enabled: true
+        - taskKey: gsCheckCluster
+          taskDesc: "gs_check巡检任务,Check Cluster"
+          taskCron: "0 */5 * * * ?"
+          enabled: true
+        - taskKey: gsCheckDbInst
+          taskDesc: "gs_check巡检任务,Check DB instances"
+          taskCron: "0 */5 * * * ?"
+          enabled: true
+        - taskKey: gsCheckDbStatus
+          taskDesc: "gs_check巡检任务,Check DB Status"
+          taskCron: "0 */5 * * * ?"
+          enabled: true
+        - taskKey: gsCheckInstStatus
+          taskDesc: "gs_check巡检任务,Check Inst Status"
+          taskCron: "0 */5 * * * ?"
+          enabled: true
+        - taskKey: gsCheckOs
+          taskDesc: "gs_check巡检任务,Check OS"
+          taskCron: "0 */5 * * * ?"
+          enabled: true
+        - taskKey: gsCheckPeriod
+          taskDesc: "gs_check巡检任务,Check Period"
+          taskCron: "0 */5 * * * ?"
+          enabled: true
+
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: guassdb-monitor-server
+  name: gaussdb-monitor-server
   namespace: monitoring
   labels:
-    app: guassdb-monitor-server
+    app: gaussdb-monitor-server
 spec:
   replicas: 1
   template:
     metadata:
-      name: guassdb-monitor-server
+      name: gaussdb-monitor-server
       labels:
-        app: guassdb-monitor-server
+        app: gaussdb-monitor-server
     spec:
       containers:
-        - name: guassdb-monitor-server
+        - name: gaussdb-monitor-server
           image: 192.168.160.47:8888/public/gaussdb-monitor-server:1.0.0
           imagePullPolicy: Always
+          volumeMounts:
+            - mountPath: /srv/application.yml
+              subPath: application.yml
+              name: application-yml
       restartPolicy: Always
+      volumes:
+        - name: application-yml
+          configMap:
+            name: gaussdb-monitor-server
   selector:
     matchLabels:
-      app: guassdb-monitor-server
+      app: gaussdb-monitor-server
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: guassdb-monitor-server
+  name: gaussdb-monitor-server
   namespace: monitoring
 spec:
   selector:
-    app: guassdb-monitor-server
+    app: gaussdb-monitor-server
   ports:
     - port: 9990
   type: ClusterIP
@@ -37,14 +152,14 @@ spec:
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
-  name: guassdb-monitor-server
+  name: gaussdb-monitor-server
   namespace: monitoring
 spec:
   entryPoints:
     - web
   routes:
     - kind: Rule
-      match: PathPrefix(`/guassdb-monitor-server/`)
+      match: PathPrefix(`/gaussdb-monitor-server/`)
       services:
-        - name: guassdb-monitor-server
+        - name: gaussdb-monitor-server
           port: 9990
