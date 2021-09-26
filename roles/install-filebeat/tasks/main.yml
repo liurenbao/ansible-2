@@ -1,0 +1,19 @@
+- name: create filebeat dir
+  file:
+    path: /data01/filebeat
+    state: directory
+
+- name: send docker-compose yaml
+  template:
+    src: docker-compose.yml.j2
+    dest: /data01/filebeat/docker-compose.yml
+
+- name: send filebeat conf
+  template:
+    src: filebeat.yml.j2
+    dest: /data01/filebeat/filebeat.yml
+
+- name: start filebeat
+  shell: docker-compose up -d
+  args:
+    chdir: /data01/filebeat
