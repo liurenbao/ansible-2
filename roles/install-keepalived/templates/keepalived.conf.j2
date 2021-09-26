@@ -4,9 +4,9 @@ global_defs {
    router_id LVS_DEVEL
 }
 
-vrrp_script check_haproxy {
+vrrp_script health_check {
     #判断haproxy进程是否存在，如果haproxy不存在，当前keepalived进程优先级降低
-    script "killall -0 haproxy"
+    script "{{ health_check_script }}"
     interval 3
     weight -2
     fall 10
@@ -30,6 +30,6 @@ vrrp_instance VI_1 {
        {{ keepalived_vip }}
     }
     track_script {
-       # check_haproxy
+       health_check
     }
 }
