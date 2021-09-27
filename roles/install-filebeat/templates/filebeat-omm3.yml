@@ -1,10 +1,7 @@
 filebeat.inputs:
   - type: log
     paths:
-      #日志采集路径
-      - /data01/gaussdb-monitor-agent/omm/logs/gscheck/*.log
       - /data01/gaussdb-monitor-agent/omm3/logs/gscheck/*.log
-    #匹配要采集的日志包含的头部
     include_lines: [ '^{','^Check' ]
     #合并多行数据
     multiline.pattern: '^Check'
@@ -16,10 +13,14 @@ filebeat.inputs:
     #如果字段存在是否覆盖
     json_overwrite_keys: true
     json.message_key: message_key
-output.console:
-  pretty: true
-#output.kafka:
-#  hosts: [ "192.168.161.194:9092", "192.168.161.193:9092", "192.168.161.195:9092" ]
-#  topic: "gaussdb-gs-check-result"
-#  worker: 8
-#  required_acks: 1
+  - type: log
+    paths:
+      - /data04/gaussdb3/data/log/omm3/alarm/*/*.log
+    multiline.pattern: '^\d{4}-\d{1,2}-\d{1,2}'
+    multiline.negate: true
+    multiline.match: after
+output.kafka:
+  hosts: [ "192.168.161.194:9092", "192.168.161.193:9092", "192.168.161.195:9092" ]
+  topic: "gaussdb-gs-check-result"
+  worker: 8
+  required_acks: 1

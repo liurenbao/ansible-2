@@ -1,39 +1,39 @@
-- name: create filebeat alarm dir
+- name: create filebeat omm dir
   file:
-    path: '/data01/filebeat/alarm'
+    path: '/data01/filebeat/omm'
     state: directory
 
-- name: create filebeat check dir
+- name: create filebeat omm3 dir
   file:
-    path: '/data01/filebeat/check'
+    path: '/data01/filebeat/omm3'
     state: directory
 
-- name: send alarm docker-compose yaml
+- name: send omm docker-compose yaml
   template:
-    src: 'docker-compose-alarm.yml.j2'
-    dest: /data01/filebeat/alarm/docker-compose.yml
+    src: 'docker-compose-omm.yml'
+    dest: /data01/filebeat/omm/docker-compose.yml
 
-- name: send check docker-compose yaml
+- name: send omm3 docker-compose yaml
   template:
-    src: 'docker-compose-check.yml.j2'
-    dest: /data01/filebeat/check/docker-compose.yml
+    src: 'docker-compose-omm3.yml'
+    dest: /data01/filebeat/omm3/docker-compose.yml
 
 - name: send filebeat conf
   template:
-    src: 'filebeat-alarm.yml.j2'
-    dest: /data01/filebeat/alarm/filebeat.yml
+    src: 'filebeat-omm.yml'
+    dest: /data01/filebeat/omm/filebeat.yml
 
 - name: send filebeat conf
   template:
-    src: 'filebeat-check.yml.j2'
-    dest: /data01/filebeat/check/filebeat.yml
+    src: 'filebeat-omm3.yml'
+    dest: /data01/filebeat/omm3/filebeat.yml
 
-- name: start alarm filebeat
+- name: start omm filebeat
   shell: docker-compose down && docker-compose up -d
   args:
-    chdir: /data01/filebeat/alarm
+    chdir: /data01/filebeat/omm
 
-- name: start check filebeat
+- name: start omm3 filebeat
   shell: docker-compose down && docker-compose up -d
   args:
-    chdir: /data01/filebeat/check
+    chdir: /data01/filebeat/omm3

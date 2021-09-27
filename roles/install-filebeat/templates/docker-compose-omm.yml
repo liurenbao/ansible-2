@@ -1,12 +1,13 @@
 version: '3'
 services:
   filebeat:
-    image: "{{ image_repository }}/public/elastic/filebeat:7.13.2"
+    image:  "192.168.160.47:8888/public/elastic/filebeat:7.13.2"
     restart: always
-    user: root
+    network_mode: host
+    user: 1000:1000
     volumes:
       - /home/gaussdb/data/log/omm/alarm:/home/gaussdb/data/log/omm/alarm
-      - /data04/gaussdb3/data/log/omm3/alarm:/data04/gaussdb3/data/log/omm3/alarm
+      - /data01/gaussdb-monitor-agent/omm/logs/gscheck:/data01/gaussdb-monitor-agent/omm/logs/gscheck
       - ./filebeat.yml:/usr/share/filebeat/filebeat.yml
       - ./data:/usr/share/filebeat/data
 
