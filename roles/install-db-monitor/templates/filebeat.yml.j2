@@ -1,7 +1,7 @@
 filebeat.inputs:
   - type: log
     paths:
-      - /data01/gaussdb-monitor-agent/omm/logs/gscheck/*.log
+      - /data01/gaussdb-monitor-agent/omm3/logs/gscheck/*.log
     include_lines: [ '^{','^Check' ]
     #合并多行数据
     multiline.pattern: '^Check'
@@ -17,7 +17,7 @@ filebeat.inputs:
       kafka_topic: 'gaussdb-gs-check-result'
   - type: log
     paths:
-      - /var/log/gaussdb/omm/alarm/*/*.log
+      - /data04/gaussdb3/data/log/omm3/alarm/*/*.log
     multiline.pattern: '^\d{4}-\d{1,2}-\d{1,2}'
     multiline.negate: true
     multiline.match: after
