@@ -23,6 +23,8 @@ filebeat.inputs:
     multiline.match: after
     fields:
       kafka_topic: 'gaussdb-alarm'
+#output.console:
+#  pretty: true
 output.kafka:
   hosts: [ "192.168.161.194:9092", "192.168.161.193:9092", "192.168.161.195:9092" ]
   topic: '%{[fields.kafka_topic]}'

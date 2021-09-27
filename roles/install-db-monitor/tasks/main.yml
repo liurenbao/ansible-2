@@ -1,9 +1,21 @@
+- name: set java env conf ~/.bashrc
+  lineinfile:
+    dest: '/home/{{ gaussdb_user }}/.bashrc'
+    state: present
+    line: "{{ item }}"
+  with_items:
+    - "export JAVA_HOME={{ jdk_dir }}"
+    - "export JRE_HOME=${JAVA_HOME}/jre"
+    - "export CLASSPATH=.:${JAVA_HOME}/lib:${JRE_HOME}/lib"
+    - "export PATH=${JAVA_HOME}/bin:$PATH"
+
+- name: source bashrc
+  shell: 'source /home/{{ gaussdb_user }}/.bashrc'
+
 - name: create agent root dir
   file:
     path: '{{ gaussdb_monitor_agent_root_dir }}/{{ gaussdb_user }}'
     state: directory
-    owner: '{{ gaussdb_user }}'
-    group: '{{ gaussdb_user_group }}'
 
 - name: create wsr dir
   file:
@@ -16,8 +28,6 @@
   template:
     src: agent/application.yml.j2
     dest: '{{ gaussdb_monitor_agent_root_dir }}/{{ gaussdb_user }}/application.yml'
-    owner: '{{ gaussdb_user }}'
-    group: '{{ gaussdb_user_group }}'
 
 - name: send agent jar
   copy:
@@ -26,6 +36,79 @@
     owner: '{{ gaussdb_user }}'
     group: '{{ gaussdb_user_group }}'
 
-# fixme 为啥启动不成功？
+- name: chmod agent dir
+  file:
+    path: '{{ gaussdb_monitor_agent_root_dir }}/{{ gaussdb_user }}'
+    state: directory
+    owner: '{{ gaussdb_user }}'
+    group: '{{ gaussdb_user_group }}'
+    recurse: yes
+
 - name: start agent
-  shell: "su {{ gaussdb_user }} &&  nohup java -jar {{ gaussdb_monitor_agent_root_dir }}/{{ gaussdb_user }}/agent.jar > /dev/null 2>&1 &"
+  become: yes
+  become_user: '{{ gaussdb_user }}'
+  shell: "java -jar agent.jar > /dev/null 2>&1 &"
+  args:
+    chdir: '{{ gaussdb_monitor_agent_root_dir }}/{{ gaussdb_user }}'
+
+#- name: create filebeat dir
+#  command: rm -rf /data01/filebeat/
+
+- name: create filebeat dir
+  file:
+    path: '/data01/filebeat/'
+    state: directory
+
+- name: install rsync
+  shell: yum install rsync -y
+
+- name: send filebeat package
+  synchronize:
+    src: '{{ package_dir }}/filebeat/'
+    dest: '/data01/filebeat/'
+
+- name: send filebeat.yml
+  template:
+    src: filebeat.yml.j2
+    dest: /data01/filebeat/filebeat-7.3.0-linux-x86_64/filebeat.yml
+
+- name: add execute permission
+  file:
+    dest: '{{ item }}'
+    mode: 0770
+  with_items:
+    - "/data01/filebeat/filebeat-7.3.0-linux-x86_64/filebeat"
+    - "/data01/filebeat/filebeat_monitor.sh"
+    - "/data01/filebeat/filebeat-7.3.0-linux-x86_64/start.sh"
+
+- name: chown dir
+  file:
+    path: '/data01/filebeat/'
+    state: directory
+    owner: '{{ gaussdb_user }}'
+    group: '{{ gaussdb_user_group }}'
+    recurse: yes
+
+- name: add cron job for filebeat
+  cron:
+    name: start filebeat
+    minute: "*/2"
+    job: "/data01/filebeat/filebeat_monitor.sh"
+    user: '{{ gaussdb_user }}'
+
+- name: start filebeat
+  become: yes
+  become_user: '{{ gaussdb_user }}'
+  command: "./filebeat_monitor.sh"
+  args:
+    chdir: /data01/filebeat
+
+- name: check if process started success
+  become: yes
+  become_user: '{{ gaussdb_user }}'
+  shell: ps -ef | grep -v grep | grep -E "filebeat|gaussdb-monitor-agent"
+  register: process
+
+- name: show process
+  debug:
+    msg: '{{ process.stdout_lines }}'
