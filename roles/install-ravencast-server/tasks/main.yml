@@ -21,11 +21,6 @@
 - name: yum install ksh -y
   shell: yum install ksh -y
 
-- name: scp jar
-  copy:
-    src: '{{ package_dir }}/ravencast/RavenCastMQ-installer-3.0-standard.jar'
-    dest: '{{ravencast_root_dir}}/RavenCastMQ-installer-3.0-standard.jar'
-
 - name: check if existed
   stat:
     path: "{{ ravencast_root_dir }}"
@@ -36,14 +31,20 @@
   args:
     chdir: "{{ ravencast_root_dir }}/bin"
   when: ravencast_dir.stat.exists == true
+  ignore_errors: true
 
 - name: rm ravencast
   shell: rm -rf "{{ ravencast_root_dir }}"
 
+- name: scp jar
+  copy:
+    src: '{{ package_dir }}/ravencast/RavenCastMQ-installer-3.0-standard.jar'
+    dest: 'RavenCastMQ-installer-3.0-standard.jar'
+
 #    java读 ~/.bashrc里面的环境变量
 - name: java -jar RavenCastMQ-installer-3.0-standard.jar -console
   expect:
-    command: java -jar {{ ravencast_root_dir }}/RavenCastMQ-installer-3.0-standard.jar -console
+    command: java -jar RavenCastMQ-installer-3.0-standard.jar -console
     responses:
       "press 1 to accept, 2 to reject, 3 to redisplay": "1"
       "press 1 to continue, 2 to quit, 3 to redisplay": "1"
@@ -100,21 +101,3 @@
 
 - name: refresh iptables
   shell: iptables -F
-
-# install agent
-- name: copy agent
-  copy:
-    src: '{{ package_dir }}/ravencast/Agent'
-    dest: "{{ ravencast_root_dir }}/"
-
-- name: change mode for plantu-agent
-  shell: chmod +x "{{  agent_path }}/Agent/plantu-agent"
-
-- name: install service
-  shell: "{{ ravencast_root_dir }}/Agent/plantu-agent /install"
-
-- name: enable seervice plantu-agent
-  shell: systemctl enable plantu-agent
-
-- name: start service plantu-agent
-  shell: systemctl start plantu-agent

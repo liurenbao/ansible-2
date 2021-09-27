@@ -1,0 +1,16 @@
+- name: copy agent
+  copy:
+    src: '{{ package_dir }}/ravencast/Agent'
+    dest: "{{  ravencast_agent_dir_path }}"
+
+- name: change mode for plantu-agent
+  shell: chmod +x "{{  ravencast_agent_dir_path }}/Agent/plantu-agent"
+  
+- name: install service
+  shell: "{{  ravencast_agent_dir_path }}/Agent/plantu-agent /install"
+
+- name: enable seervice plantu-agent
+  shell: systemctl enable plantu-agent
+
+- name: start service plantu-agent
+  shell: systemctl start plantu-agent

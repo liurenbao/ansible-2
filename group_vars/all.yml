@@ -4,7 +4,7 @@
 #---------------------
 
 # 离线文件安装包所在目录-----------------------------------------------------------------------
-package_dir: '/data01/package'
+package_dir: '/etc/ansible/package'
 ntp_server_addr: '192.168.160.59'
 yum_base_url: 'http://192.168.161.202/yum/'
 
@@ -66,6 +66,10 @@ rocketmq_user_pass: 'rocketmq123'
 # ravencast-----------------------------------------------------------------------------------
 ravencast_xms_xmx_args: '-Xms2G -Xmx8G'
 ravencast_root_dir: '/data01/ravencast'
+ravencast_agent_dir_path: '/data01'
+#xmx的一半，单位是MB
+ravencast_memory_limit_of_queues: '4000'
+
 
 # k8s-----------------------------------------------------------------------------------------
 k8s_keepalived_vip: 192.168.160.78

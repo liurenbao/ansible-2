@@ -1,5 +1,8 @@
 #!/bin/sh
 
+export JAVA_HOME={{ jdk_dir }}
+export PATH=$JAVA_HOME/bin:$PATH
+
 cd {{ ravencast_root_dir }}/bin
 ./messagequeue
 ./console

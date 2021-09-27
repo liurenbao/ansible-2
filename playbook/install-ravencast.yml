@@ -3,4 +3,5 @@
   gather_facts: false
   roles:
     - install-java
-    - install-ravencast
+    - install-ravencast-server
+    - install-ravencast-agent

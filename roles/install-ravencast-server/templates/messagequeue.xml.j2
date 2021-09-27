@@ -35,7 +35,7 @@
    <queue-manager name="Unicast Sequence File Queue Manager" class="com.ravencast.nest.mq.guaranteed.file.sequence.UnicastSequenceFileQueueManager" start-mode="Auto start" queue-tick-term="10" qindexible="true" base-storage="" />
   </service>
   <service name="Messaging Service" class="com.ravencast.nest.mq.nio.transport.IOIMessagingService" start-mode="Auto start" bound-warning="0" bound-tear-off="0" msg-monitoring="false" bind-address="0.0.0.0" bind-port="10101" ssl="false" backlog="1024" send-buffer="0" receive-buffer="0" connection-buffer="32768" max-connection="0" qos-limit="unlimit" enable-collector="false" collect-session="false" >
-   <inter-message bind-addr="{{ ansible_ssh_host }}" bind-port="7800" mcast-addr="228.8.8.8" groupname="DefaultGroup" usetcp="true" tcphosts="{{ ravencast_tcphosts }}" maxinactivequeue="86400" memoryLimitOfQueues="15360" >
+   <inter-message bind-addr="{{ ansible_ssh_host }}" bind-port="7800" mcast-addr="228.8.8.8" groupname="DefaultGroup" usetcp="true" tcphosts="{{ ravencast_tcphosts }}" maxinactivequeue="86400" memoryLimitOfQueues="{{ ravencast_memory_limit_of_queues }}" >
    </inter-message>
   </service>
   <service name="Process Management Supporter" class="com.ravencast.nest.framework.process.PMSupporter" start-mode="Auto start" process-name="messagequeue" ip="localhost" port="10104" retryInterval="10" >
