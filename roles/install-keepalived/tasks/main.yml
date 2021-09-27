@@ -11,7 +11,7 @@
   shell: systemctl stop firewalld &&  systemctl disable firewalld
 
 - name: rm -rf /tmp/keepalived
-  shell: rm -rf /tmp/keepalived 
+  shell: rm -rf /tmp/keepalived
 
 - name: mkdir /tmp/keepalived
   shell: mkdir -p /tmp/keepalived 
@@ -29,6 +29,22 @@
     src: keepalived.conf.j2
     dest:  /etc/keepalived/keepalived.conf
 
+- name: install health check script
+  copy:
+    src: '{{ health_check_local_script }}'
+    dest: '{{ health_check_script }}'
+    mode: 744
+
 - name: start Keepalived
   shell: systemctl restart keepalived && systemctl enable keepalived
 
+- name: install cron for keepalived
+  copy:
+    src: keepalived_cron.sh
+    dest: '{{ keepalived_root_dir }}/keepalived_cron.sh'
+    mode: 770
+
+#- name: add cron for keepalived
+#  cron:
+#    minute: "*"
+#    job: '{{ keepalived_root_dir }}/keepalived_cron.sh'

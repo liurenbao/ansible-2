@@ -1,0 +1,5 @@
+- name: install filebeat
+  hosts: gaussdb
+  gather_facts: false
+  roles:
+    - install-filebeat
