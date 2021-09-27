@@ -1,0 +1,170 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: gaussdb-alarm-mapping
+  namespace: elk
+data:
+  alarm_mapping.json: |
+    {
+      "index_patterns": "gaussdb-alarm-*",
+      "settings": {
+        "index.number_of_shards": "60",
+        "number_of_replicas": 1,
+        "index.refresh_interval": "30s"
+      },
+      "mappings": {
+          "properties" : {
+    	   "@timestamp" : {
+              "type" : "date"
+            },
+            "alarm_content" : {
+              "type" : "text",
+              "fields" : {
+                "keyword" : {
+                  "type" : "keyword",
+                  "ignore_above" : 256
+                }
+              }
+            },
+            "alarm_id" : {
+              "type" : "long"
+
+            },
+            "alarm_name" : {
+              "type" : "keyword"
+
+            },
+            "alarm_server" : {
+              "type" : "keyword"
+
+            },
+            "alarm_status" : {
+              "type" : "long"
+            },
+            "alarm_time" : {
+              "type" : "date"
+
+            },
+            "alarm_type" : {
+              "type" : "keyword"
+            }
+
+          }
+      }
+    }
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: gaussdb-alarm-logstash-config
+  namespace: elk
+data:
+  logstash.yml: |
+    pipeline.batch.size: 1000
+    pipeline.batch.delay: 5
+    pipeline.unsafe_shutdown: false
+    config.reload.automatic: true
+    config.reload.interval: 3s
+    queue.type: memory
+    http.host: 0.0.0.0
+    http.port: 9600
+    path.config: /usr/share/logstash/pipeline
+    path.data: /usr/share/logstash/data
+    pipeline.workers: 4
+    xpack.monitoring.enabled: true
+    xpack.monitoring.elasticsearch.hosts: ["192.168.163.82:9200","192.168.163.69:9200","192.168.163.194:9200","192.168.161.242:9200","192.168.161.199:9200","192.168.161.200:9200"]
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: gaussdb-alarm-logstash-pipeline
+  namespace: elk
+data:
+  input_main.conf: |-
+    input {
+        kafka {
+        bootstrap_servers => "192.168.161.194:9092,192.168.161.193:9092,192.168.161.195:9092"
+        group_id => "gaussdb-alarm_group"
+        topics => ["gaussdb-alarm"]
+        consumer_threads => 12
+        decorate_events => true
+        }
+    }
+  filter_main.conf: |-
+    filter {
+      grok {
+        match => {
+    	  "message" => "(?<alarm_time>(\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2}))\|(?<alarm_id>\d{1,})\|(?<alarm_name>\w{1,}.*)\|(?<alarm_type>\w{1,}.*)\|(?<alarm_server>\w{1,}.*)\|(?<alarm_content>[{A-Z].*)\|(?<alarm_status>\d{1,})"
+    	}
+       overwrite => ["message"]
+      }
+
+      date {
+        match => ["alarm_time", "yyyy-MM-dd HH:mm:ss"]
+        target => "alarm_time"
+      }
+    }
+  output_main.conf: |-
+    output {
+      stdout {  codec => rubydebug}
+      elasticsearch {
+           hosts => ["192.168.163.82:9200","192.168.163.69:9200","192.168.163.194:9200","192.168.161.242:9200","192.168.161.199:9200","192.168.161.200:9200"]
+           index => "gaussdb-alarm-%{+YYYY.MM}"
+           codec => "json"
+           manage_template => true
+           template_overwrite => true
+           template_name=> "gaussdb-alarm"
+           template => "/usr/share/logstash/mappings/alarm_mapping.json"
+      }
+    }
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gaussdb-alarm-logstash
+  namespace: elk
+spec:
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: gaussdb-alarm-logstash
+    spec:
+      containers:
+        - name: logstash
+          image: "192.168.160.47:8888/public/logstash:7.13.2"
+          imagePullPolicy: Always
+          resources:
+            limits:
+              memory: '4Gi'
+              cpu: '8'
+            requests:
+              memory: '500Mi'
+              cpu: '1'
+          volumeMounts:
+            - name: gaussdb-alarm-logstash-pipeline
+              mountPath: /usr/share/logstash/pipeline
+            - name: gaussdb-alarm-logstash-config
+              mountPath: /usr/share/logstash/config/logstash.yml
+              subPath: logstash.yml
+            - name: gaussdb-alarm-mapping
+              mountPath: /usr/share/logstash/mappings/alarm_mapping.json
+              subPath: alarm_mapping.json
+      volumes:
+        - name: gaussdb-alarm-logstash-config
+          configMap:
+            name: gaussdb-alarm-logstash-config
+        - name: gaussdb-alarm-logstash-pipeline
+          configMap:
+            name: gaussdb-alarm-logstash-pipeline
+        - name: gaussdb-alarm-mapping
+          configMap:
+            name: gaussdb-alarm-mapping
+      securityContext:
+        runAsUser: 0
+        fsGroup: 1000
+  selector:
+    matchLabels:
+      app: gaussdb-alarm-logstash

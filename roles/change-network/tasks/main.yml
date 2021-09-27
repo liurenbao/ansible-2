@@ -1,22 +1,30 @@
-- name: set https proxy
+- name: static netmask
   lineinfile:
     path: /etc/sysconfig/network-scripts/ifcfg-eth0
     state: present
     regexp: '^NETMASK'
-    line: NETMASK=255.255.255.192
+    line: NETMASK={{ netmask }}
 
-- name: set /etc/sysconfig/network
+- name: static bootproto
+  lineinfile:
+    path: /etc/sysconfig/network-scripts/ifcfg-eth0
+    state: present
+    regexp: '^BOOTPROTO'
+    line: BOOTPROTO=static
+
+- name: static gateway
   lineinfile:
     path: /etc/sysconfig/network-scripts/ifcfg-eth0
     state: present
     regexp: '^GATEWAY'
-    line: GATEWAY=192.168.161.254
+    line: GATEWAY={{ gateway }}
 
-- name: set /etc/sysconfig/network
+- name: static ip addr
   lineinfile:
     path: /etc/sysconfig/network-scripts/ifcfg-eth0
     state: present
     regexp: '^IPADDR'
     line: IPADDR={{ ansible_ssh_host }}
-#- name: restart
-#  shell: service restart network
+
+- name: restart network
+  shell: service restart network

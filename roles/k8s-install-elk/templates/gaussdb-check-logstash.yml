@@ -1,0 +1,195 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: gaussdb-check-logstash-config
+  namespace: elk
+data:
+  logstash.yml: |
+    pipeline.batch.size: 1000
+    pipeline.batch.delay: 5
+    pipeline.unsafe_shutdown: false
+    config.reload.automatic: true
+    config.reload.interval: 3s
+    queue.type: memory
+    http.host: 0.0.0.0
+    http.port: 9600
+    path.config: /usr/share/logstash/pipeline
+    path.data: /usr/share/logstash/data
+    pipeline.workers: 4
+    xpack.monitoring.enabled: true
+    xpack.monitoring.elasticsearch.hosts: ["192.168.163.82:9200","192.168.163.69:9200","192.168.163.194:9200","192.168.161.242:9200","192.168.161.199:9200","192.168.161.200:9200"]
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: gaussdb-check-logstash-pipeline
+  namespace: elk
+data:
+  input_main.conf: |-
+    input {
+      kafka {
+        bootstrap_servers => "192.168.161.194:9092,192.168.161.193:9092,192.168.161.195:9092"
+        group_id => "gaussdb-gs-check-result_group"
+        topics => ["gaussdb-gs-check-result"]
+        consumer_threads => 12
+        decorate_events => true
+      }
+    }
+  filter_main.conf: |-
+    filter {
+      grok {
+        match => {
+    		"message" => "(?<error_msg1>(\"error_msg\":\s{0,2}\[\w*\],))"
+    	}
+    	match => {
+    		"message" => "(?<error_msg2>(,\"error_msg\":\s{0,2}\[.*\]))"
+    	}
+      }
+
+      if [error_msg1] {
+    	  mutate {
+    		  add_field => {
+    		  "error_msg" => "%{error_msg1}"
+    		  }
+    		  remove_field => ["error_msg1"]
+    	  }
+      }
+
+      else if [error_msg2] {
+    	  mutate {
+    	  add_field => {
+    	  "error_msg" => "%{error_msg2}"
+    	  }
+          remove_field => ["error_msg2"]
+        }
+      }
+
+      mutate { gsub => ["message", "\"error_msg\":\s{0,2}\[.*],", ""] }
+      mutate { gsub => ["message", ",\"error_msg\":\s{0,2}\[.*\]", ""] }
+      mutate { gsub => ["message", "\[", ""] }
+      mutate { gsub => ["message", "\]", ""] }
+
+
+    json {
+    source => "message"
+    }
+
+    mutate {
+    gsub => ["[error_msg]","\].*",""]
+    gsub => ["[error_msg]",".*\[",""]
+    gsub =>["[error_msg]","\"",""]
+    gsub =>["[error_msg]",","," "]
+    }
+
+
+    mutate {
+    add_field => {
+    "[tmp_1]" => "%{[json][data][DB1_1]}"
+    }
+    add_field => {
+    "[tmp_2]" => "%{[json][data][DB1_2]}"
+    }
+    remove_field => ["[json][data][DB1_1]"]
+    remove_field => ["[json][data][DB1_2]"]
+    }
+
+    mutate {
+    add_field => {
+    "[json][data][DB1_1]" => "%{[tmp_1]}"
+    }
+    add_field => {
+    "[json][data][DB1_2]" => "%{[tmp_2]}"
+    }
+
+    remove_field => ["[tmp_1]"]
+    remove_field => ["[tmp_2]"]
+    }
+
+
+    mutate {
+    add_field => {
+    "[json][error_msg]" => "%{[error_msg]}"
+
+    }
+
+    remove_field => ["[error_msg]"]
+    remove_field => ["[message]"]
+    remove_field => ["[flags]"]
+    remove_field => ["[@version]"]
+    remove_field => ["[offset]"]
+    remove_field => ["[input]"]
+    remove_field => ["[log][flags]"]
+    remove_field => ["[log][offset]"]
+    remove_field => ["[agent]"]
+    remove_field => ["[ecs]"]
+
+    }
+
+    if [json][data][DB1_2] == "%{[json][data][DB1_2]}" {
+    mutate {
+    remove_field => ["[json][data][DB1_2]"]
+    }
+
+    }
+    if [json][data][DB1_1] == "%{[json][data][DB1_1]}" {
+    mutate {
+    remove_field => ["[json][data][DB1_1]"]
+    }
+
+    }
+
+
+     }
+  output_main.conf: |-
+    output {
+      stdout {  codec => rubydebug }
+      elasticsearch {
+        hosts => ["192.168.163.82:9200","192.168.163.69:9200","192.168.163.194:9200","192.168.161.242:9200","192.168.161.199:9200","192.168.161.200:9200"]
+        index => "gaussdb-gs-check-result-%{+YYYY.MM}"
+        document_type => "_doc"
+      }
+    }
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gaussdb-check-logstash
+  namespace: elk
+spec:
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: gaussdb-check-logstash
+    spec:
+      containers:
+        - name: logstash
+          image: "192.168.160.47:8888/public/logstash:7.13.2"
+          imagePullPolicy: Always
+          resources:
+            limits:
+              memory: '4Gi'
+              cpu: '8'
+            requests:
+              memory: '500Mi'
+              cpu: '1'
+          volumeMounts:
+            - name: gaussdb-check-logstash-pipeline
+              mountPath: /usr/share/logstash/pipeline
+            - name: gaussdb-check-logstash-config
+              mountPath: /usr/share/logstash/config/logstash.yml
+              subPath: logstash.yml
+      volumes:
+        - name: gaussdb-check-logstash-config
+          configMap:
+            name: gaussdb-check-logstash-config
+        - name: gaussdb-check-logstash-pipeline
+          configMap:
+            name: gaussdb-check-logstash-pipeline
+      securityContext:
+        runAsUser: 0
+        fsGroup: 1000
+  selector:
+    matchLabels:
+      app: gaussdb-check-logstash

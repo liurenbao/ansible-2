@@ -25,7 +25,10 @@ data:
             max-idle: 5
             max-active: 8
             min-idle: 2
-
+    wsr:
+      outDir: /wsr
+      time: 60
+      enabled: true
     #自定义配置参数
     base:
       #通信token，请和server端配置的hpcToken保持一致
