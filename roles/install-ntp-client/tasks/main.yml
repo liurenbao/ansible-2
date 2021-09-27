@@ -27,5 +27,5 @@
   cron:
     name: "ntpdate"
     special_time: "hourly"
-    job: "service ntpd stop && /usr/sbin/ntpdate {{ ntp_server }} && /sbin/hwclock -w && service ntpd start"
+    job: "/usr/sbin/service ntpd stop && /usr/sbin/ntpdate {{ ntp_server }} && /usr/sbin/hwclock -w && /usr/sbin/service ntpd start"
 
