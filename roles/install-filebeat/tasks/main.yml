@@ -1,39 +1,59 @@
-- name: create filebeat omm dir
+#- name: create filebeat dir
+#  command: rm -rf /data01/filebeat/
+
+- name: create filebeat dir
   file:
-    path: '/data01/filebeat/omm'
+    path: '/data01/filebeat/'
     state: directory
 
-- name: create filebeat omm3 dir
+- name: install rsync
+  shell: yum install rsync -y
+
+- name: send filebeat package
+  synchronize:
+    src: '{{ package_dir }}/filebeat/'
+    dest: '/data01/filebeat/'
+
+- name: send filebeat.yml
+  template:
+    src: filebeat.yml.j2
+    dest: /data01/filebeat/filebeat-7.3.0-linux-x86_64/filebeat.yml
+
+- name: add execute permission
   file:
-    path: '/data01/filebeat/omm3'
+    dest: '{{ item }}'
+    mode: 0770
+  with_items:
+    - "/data01/filebeat/filebeat-7.3.0-linux-x86_64/filebeat"
+    - "/data01/filebeat/filebeat_monitor.sh"
+
+- name: chown dir
+  file:
+    path: '/data01/filebeat/'
     state: directory
+    owner: omm
+    group: dbgrp
+    recurse: yes
 
-- name: send omm docker-compose yaml
-  template:
-    src: 'docker-compose-omm.yml'
-    dest: /data01/filebeat/omm/docker-compose.yml
+- name: add cron job for filebeat
+  cron:
+    name: start filebeat
+    minute: "*/2"
+    job: "/data01/filebeat/filebeat_monitor.sh"
+    user: omm
 
-- name: send omm3 docker-compose yaml
-  template:
-    src: 'docker-compose-omm3.yml'
-    dest: /data01/filebeat/omm3/docker-compose.yml
-
-- name: send filebeat conf
-  template:
-    src: 'filebeat-omm.yml'
-    dest: /data01/filebeat/omm/filebeat.yml
-
-- name: send filebeat conf
-  template:
-    src: 'filebeat-omm3.yml'
-    dest: /data01/filebeat/omm3/filebeat.yml
-
-- name: start omm filebeat
-  shell: docker-compose down && docker-compose up -d
+- name: start filebeat
+  become: yes
+  become_user: omm
+  command: "./filebeat_monitor.sh"
   args:
-    chdir: /data01/filebeat/omm
+    chdir: /data01/filebeat
 
-- name: start omm3 filebeat
-  shell: docker-compose down && docker-compose up -d
-  args:
-    chdir: /data01/filebeat/omm3
+
+- name: check if process started success
+  shell: ps -ef | grep -v grep | grep filebeat
+  register: process
+
+- name: show process
+  debug:
+    msg: '{{ process.stdout }}'

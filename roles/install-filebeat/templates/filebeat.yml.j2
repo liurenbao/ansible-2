@@ -1,33 +1,30 @@
 filebeat.inputs:
   - type: log
     paths:
-      - /home/gaussdb/data/log/omm/alarm/*/*.log
-      - /data04/gaussdb3/data/log/omm3/alarm/*/*.log
+      - /data01/gaussdb-monitor-agent/omm/logs/gscheck/*.log
+    include_lines: [ '^{','^Check' ]
+    #合并多行数据
+    multiline.pattern: '^Check'
+    multiline.negate: false
+    multiline.match: before
+    multiline.flush_pattern: '{'
+    #将采集的数据转json, false 表示不提取的根目录
+    json.keys_under_root: false
+    #如果字段存在是否覆盖
+    json_overwrite_keys: true
+    json.message_key: message_key
+    fields:
+      kafka_topic: 'gaussdb-gs-check-result'
+  - type: log
+    paths:
+      - /var/log/gaussdb/omm/alarm/*/*.log
     multiline.pattern: '^\d{4}-\d{1,2}-\d{1,2}'
     multiline.negate: true
     multiline.match: after
-    processors:
-      - add_fields:
-          target: ''
-          fields:
-            kubernetes.labels.app: gaussdb
-            kubernetes.namespace: alarm
-      - drop_fields:
-          fields:
-            - "agent"
-            - "host"
-            - "log"
-            - "input"
-            - "ecs"
-            - "container"
-          ignore_missing: true
+    fields:
+      kafka_topic: 'gaussdb-alarm'
 output.kafka:
-  hosts: {{ groups[ "kafka" ] | map("regex_replace", "^(.*)$","\\1:9092") | list | to_json }}
-  topic: log
-  required_acks: 0
+  hosts: [ "192.168.161.194:9092", "192.168.161.193:9092", "192.168.161.195:9092" ]
+  topic: '%{[fields.kafka_topic]}'
   worker: 8
-  keep_alive: 15
-  monitoring:
-    enabled: true
-    elasticsearch:
-      hosts: {{ groups[ "es" ] | map("regex_replace", "^(.*)$","\\1:9200") | list | to_json }}
+  required_acks: 1
