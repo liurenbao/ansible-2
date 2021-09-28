@@ -8,3 +8,8 @@
         uid: '{{ cim_ops_uid }}'
         password: '{{ cim_ops_user_pass }}'
         state: present
+    - name: add to sudo group
+      user:
+        name: '{{ cim_ops_user }}'
+        groups: sudo
+        append: yes
