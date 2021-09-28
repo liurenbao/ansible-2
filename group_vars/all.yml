@@ -3,7 +3,9 @@
 # 注意修改VIP地址
 #---------------------
 cim_ops_user: cimops
+cim_ops_uid: 9999
 cim_ops_user_pass: cimops_pass
+docker_gid: 994
 
 # 离线文件安装包所在目录-----------------------------------------------------------------------
 package_dir: '/etc/ansible/package'

@@ -5,5 +5,6 @@
     - name: create cimops user
       user:
         name: '{{ cim_ops_user }}'
+        uid: '{{ cim_ops_uid }}'
         password: '{{ cim_ops_user_pass }}'
         state: present

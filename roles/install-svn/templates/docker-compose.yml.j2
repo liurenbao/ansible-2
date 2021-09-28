@@ -1,12 +1,13 @@
 version: '3'
 services:
-    svn:
-        image: "{{ svn_image }}"
-        container_name: svn-server
-        network_mode: "host"
-        volumes:
-            - ./svn_repo/:/home/svn/ # 挂载存放版本文件夹
-            - ./svn_config/:/etc/subversion/ # 挂载存放svn配置文件夹
-            - /etc/localtime:/etc/localtime:ro # 主机的时间同步到容器
-        restart: always
+  svn:
+    user: '{{ cim_ops_uid }}:{{ docker_gid }}'
+    image: "{{ svn_image }}"
+    container_name: svn-server
+    network_mode: "host"
+    volumes:
+      - ./svn_repo/:/home/svn/ # 挂载存放版本文件夹
+      - ./svn_config/:/etc/subversion/ # 挂载存放svn配置文件夹
+      - /etc/localtime:/etc/localtime:ro # 主机的时间同步到容器
+    restart: always
 

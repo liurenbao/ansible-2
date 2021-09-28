@@ -1,6 +1,7 @@
 version: '3'
 services:
   nginx:
+    user: '{{ cim_ops_uid }}:{{ docker_gid }}'
     image: '{{ image_repository }}/public/nginx:1.21.1'
     restart: always
     network_mode: "host"
@@ -11,6 +12,7 @@ services:
       - ./www:/var/www
       - /etc/letsencrypt:/etc/letsencrypt
   filebeat:
+    user: '{{ cim_ops_uid }}:{{ docker_gid }}'
     image: "{{ image_repository }}/public/elastic/filebeat:7.13.2"
     restart: always
     volumes:

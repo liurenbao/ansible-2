@@ -1,6 +1,7 @@
 version: '3'
 services:
   rocketmq-console:
+    user: '{{ cim_ops_uid }}:{{ docker_gid }}'
     image: "{{ image_repository }}/public/rocketmq-console:2.0.0"
     restart: always
     network_mode: host
@@ -10,6 +11,7 @@ services:
     volumes:
       - "{{ rocketmq_root_dir }}/data:/var/lib/rocketmq-console/data"
   rocketmq-exporter:
+    user: '{{ cim_ops_uid }}:{{ docker_gid }}'
     image: '{{ image_repository }}/public/rocketmq-exporter:0.0.2'
     network_mode: host
     restart: always

@@ -1,6 +1,7 @@
 version: '3'    # 定义版本，不指定默认为版本 1，新版本功能更多
 services:       # 容器
   jenkins:
+    user: '{{ cim_ops_uid }}:{{ docker_gid }}'
     image: '{{ jenkins_image }}'    # 镜像
     container_name: jenkins         # 容器名称
     restart: always                 # 同 --restart 参数
