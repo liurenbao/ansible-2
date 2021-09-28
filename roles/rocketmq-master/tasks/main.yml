@@ -41,6 +41,7 @@
     chown -R {{ rocketmq_user }} {{rocketmq_root_dir}}
 
 - name: start mq
+  become: yes
   become_user: "{{ rocketmq_user }}"
   shell: "{{ rocketmq_root_dir }}/bin/rmq-tools.sh {{ broker_name }} restart"
 
@@ -52,5 +53,5 @@
 - name: add cron job
   cron:
     user: '{{ rocketmq_user }}'
-    minute: '*'
+    minute: '*/2'
     job: '{{ rocketmq_root_dir }}/bin/rmq-tools.sh {{ broker_name }} start'

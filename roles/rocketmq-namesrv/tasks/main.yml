@@ -10,8 +10,6 @@
   template:
     src: rmq-tools.sh.j2
     dest: "{{ rocketmq_root_dir }}/bin/rmq-tools.sh"
-    owner: "{{ rocketmq_user }}"
-    mode: '0755'
 
 - name: set mq env conf
   lineinfile:
@@ -26,21 +24,23 @@
   shell: source /etc/profile
 
 - name: mq-user permission
-  shell: |
-    chown -R {{ rocketmq_user }} {{ rocketmq_root_dir }}
-    chmod -R 760 {{ rocketmq_root_dir }}
-
-- name: start mq
-  become_user: "{{ rocketmq_user }}"
-  shell: "{{ rocketmq_root_dir }}/bin/rmq-tools.sh namesrv restart"
+  file:
+    path: '{{ rocketmq_root_dir }}'
+    owner: '{{ rocketmq_user }}'
+    recurse: yes
 
 - name: rotate rockemq logs
   template:
     src: rocketmq.j2
     dest: /etc/logrotate.d/rocketmq
 
+- name: start mq
+  become: yes
+  become_user: "{{ rocketmq_user }}"
+  shell: "{{ rocketmq_root_dir }}/bin/rmq-tools.sh namesrv restart"
+
 - name: add cron job
   cron:
     user: '{{ rocketmq_user }}'
-    minute: '*'
+    minute: '*/2'
     job: '{{ rocketmq_root_dir }}/bin/rmq-tools.sh namesrv start'
