@@ -55,6 +55,8 @@ data:
       smtpHost: 192.168.160.1
       smtpPort: 587
       smtpSSL: false
+      socketConnectionTimeout: 60000
+      socketTimeout: 200000
       #发件人邮箱地址
       fromMailAddress: mouyongde@huawei.com
       #邮件服务器用户名(发件人)
@@ -62,7 +64,7 @@ data:
       #邮件服务器登录密码(发件人)
       mailPassword: Nd/7Sui8Mnh+PqIMPMZHQA==
       #收件人邮件地址，多个用分号隔开
-      toMailAddress: tangjizhou@huawei.com
+      toMailAddress: tangjizhou@huawei.com;lujinzhu@huawei.com
       #告警邮件总开关，yes开启，no关闭
       allWarnMail: yes
 
@@ -125,7 +127,7 @@ spec:
     spec:
       containers:
         - name: gaussdb-monitor-server
-          image: 192.168.160.47:8888/public/gaussdb-monitor-server:1.0.0
+          image: 192.168.160.47:8888/public/gaussdb-monitor-server:1.0.1
           imagePullPolicy: Always
           volumeMounts:
             - mountPath: /srv/application.yml
