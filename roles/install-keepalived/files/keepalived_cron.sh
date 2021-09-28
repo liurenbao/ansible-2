@@ -5,5 +5,5 @@ then
     echo "$SERVICE is running"
 else
     echo "$SERVICE stopped"
-    systemctl start $SERVICE
+    systemctl --user {{ cim_ops_user }} start $SERVICE
 fi

@@ -43,7 +43,7 @@
   file:
     path: {{ rocketmq_root_dir }}
     owner: {{ rocketmq_user }}
-    mode: 0770
+    recurse: yes
 
 - name: start mq
   become: yes

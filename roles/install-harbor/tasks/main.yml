@@ -21,22 +21,34 @@
   template: src=install-me.sh.j2 dest={{ harbor_root_dir }}/install-me.sh
 
 - name: chmod +x install-me.sh
-  shell: systemctl restart docker
+  shell: systemctl --user {{ cim_ops_user }} restart docker
 
 - name: chmod +x install-me.sh
   shell: chmod +x install-me.sh
   args:
    chdir: '{{ harbor_root_dir }}'
 
+- name: chown harbor dir
+  file:
+    path: '{{ harbor_root_dir }}'
+    owner: '{{ cim_ops_user }}'
+    group: docker
+    recurse: yes
+
 - name: install
+  become_user: {{ cim_ops_user }}
   shell: "./install-me.sh"
   args:
    chdir: "{{ harbor_root_dir }}"
 
 - name: cp harbor service
-  template: src=harbor.service.j2 dest=/usr/lib/systemd/system/harbor.service
+  template:
+    src: harbor.service.j2
+    dest: /usr/lib/systemd/system/harbor.service
+    owner: '{{ cim_ops_user }}'
+    group: docker
 
 - name: enable harbor service
-  shell: systemctl enable harbor.service
+  shell: systemctl --user {{ cim_ops_user }} enable harbor.service
 
 

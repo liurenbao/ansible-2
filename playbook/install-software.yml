@@ -1,5 +1,5 @@
 - name: install necessary softwares
-  hosts: all
+  hosts: k8s
   gather_facts: false
   tasks:
     - name: install software

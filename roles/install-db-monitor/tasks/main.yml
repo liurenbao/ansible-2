@@ -44,10 +44,20 @@
     group: '{{ gaussdb_user_group }}'
     recurse: yes
 
+- name: stop agent
+  shell: |
+    pid=$(ps -ef | grep -v grep | grep {{ gaussdb_user }} | grep agent.jar | awk '{print $2}')
+    kill -9 $pid
+  ignore_errors: yes
+#启动不起来执行以下命令
+#ansible -i gaussdb-hosts gaussdb -m shell -a "cd /data01/gaussdb-monitor-agent/omm/ && nohup java -jar agent.jar > /dev/null 2>&1 &"
 - name: start agent
   become: yes
   become_user: '{{ gaussdb_user }}'
-  shell: "java -jar agent.jar > /dev/null 2>&1 &"
+  shell: |
+    rm -rf logs
+    nohup java -jar agent.jar > /dev/null 2>&1 &
+
   args:
     chdir: '{{ gaussdb_monitor_agent_root_dir }}/{{ gaussdb_user }}'
 
@@ -106,7 +116,7 @@
 - name: check if process started success
   become: yes
   become_user: '{{ gaussdb_user }}'
-  shell: ps -ef | grep -v grep | grep -E "filebeat|gaussdb-monitor-agent"
+  shell: ps -ef | grep -v grep | grep -E "filebeat|agent.jar"
   register: process
 
 - name: show process

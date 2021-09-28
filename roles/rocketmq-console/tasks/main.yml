@@ -4,8 +4,17 @@
 - name: send docker-compose.yml
   template: src=docker-compose.yml.j2 dest={{ rocketmq_root_dir }}/docker-compose.yml
 
+- name: chown process exporter dir
+  file:
+    path: '{{ rocketmq_root_dir }}'
+    owner: '{{ cim_ops_user }}'
+    group: docker
+    recurse: yes
+
 - name: stop rocketmq-console
+  become_user: '{{ cim_ops_user }}'
   command: docker-compose -f {{ rocketmq_root_dir }}/docker-compose.yml down
 
 - name: start up rocketmq-console
+  become_user: '{{ cim_ops_user }}'
   command: docker-compose -f {{ rocketmq_root_dir }}/docker-compose.yml up -d

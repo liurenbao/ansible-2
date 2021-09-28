@@ -1,5 +1,5 @@
 - name: change time
-  hosts: all
+  hosts: k8s
   gather_facts: false
   vars:
     ntp_server: '{{ ntp_server_addr }}'

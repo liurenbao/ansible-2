@@ -2,6 +2,7 @@
   file:
     path: "{{ jdk_dir }}"
     state: directory
+    mode: 0755
 
 - name: unzip java
   unarchive: 

@@ -7,4 +7,4 @@
 
 - name: show date
   debug:
-    msg: "{{ date_value }}"
+    msg: "{{ date_value.stdout }}"

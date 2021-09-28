@@ -9,6 +9,7 @@
   register: docker_compose_file
 
 - name: stop docker container
+  become_user: '{{ cim_ops_user }}'
   shell: docker-compose down
   args:
     chdir: '{{ node_exporter_root_dir }}'
@@ -19,7 +20,15 @@
     src: docker-compose.yaml.j2
     dest: '{{ node_exporter_root_dir }}/docker-compose.yaml'
 
+- name: chown node export dir
+  file:
+    path: '{{ node_exporter_root_dir }}'
+    owner: '{{ cim_ops_user }}'
+    group: docker
+    recurse: yes
+
 - name: docker-compose up
+  become_user: '{{ cim_ops_user }}'
   shell: docker-compose up -d
   args:
     chdir: '{{ node_exporter_root_dir }}'

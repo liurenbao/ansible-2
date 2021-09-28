@@ -1,18 +1,9 @@
-- name: change hostname
-  import_playbook: playbook/change-hostname.yml
-
-- name: install time
-  import_playbook: playbook/install-time.yml
-
-- name: change sys conf
-  import_playbook: playbook/change-sysconf.yml
-
-- name: install docker
-  import_playbook: playbook/install-docker.yml
-
-- name: install harbor
-  import_playbook: playbook/install-harbor.yml
-
+- import_playbook: playbook/change-hostname.yml
+- import_playbook: playbook/install-software.yml
+- import_playbook: playbook/install-time.yml
+- import_playbook: playbook/change-sysconf.yml
+- import_playbook: playbook/install-docker.yml
+- import_playbook: playbook/install-harbor.yml
 - import_playbook: playbook/install-nginx.yml
 - import_playbook: playbook/install-kubernetes.yml
 - import_playbook: playbook/install-kubernetes-component.yml
@@ -25,7 +16,6 @@
 - import_playbook: playbook/install-kubernetes-monitor.yml
 - import_playbook: playbook/install-rocketmq.yml
 - import_playbook: playbook/install-ravencast.yml
-#- import_playbook: playbook/install-app.yml
 - import_playbook: playbook/install-node-exporter.yml
 - import_playbook: playbook/install-process-exporter.yml
 - import_playbook: playbook/collect-install-result.yml
