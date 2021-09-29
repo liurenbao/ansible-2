@@ -1,30 +1,42 @@
 - name: static netmask
   lineinfile:
-    path: /etc/sysconfig/network-scripts/ifcfg-eth0
+    path: /etc/sysconfig/network-scripts/{{ netcard }}
     state: present
     regexp: '^NETMASK'
     line: NETMASK={{ netmask }}
 
 - name: static bootproto
   lineinfile:
-    path: /etc/sysconfig/network-scripts/ifcfg-eth0
+    path: /etc/sysconfig/network-scripts/{{ netcard }}
     state: present
     regexp: '^BOOTPROTO'
     line: BOOTPROTO=static
 
+- name: ONBOOT=yes
+  lineinfile:
+    path: /etc/sysconfig/network-scripts/{{ netcard }}
+    state: present
+    regexp: '^ONBOOT'
+    line: ONBOOT=yes
+
 - name: static gateway
   lineinfile:
-    path: /etc/sysconfig/network-scripts/ifcfg-eth0
+    path: /etc/sysconfig/network-scripts/{{ netcard }}
     state: present
     regexp: '^GATEWAY'
     line: GATEWAY={{ gateway }}
 
 - name: static ip addr
   lineinfile:
-    path: /etc/sysconfig/network-scripts/ifcfg-eth0
+    path: /etc/sysconfig/network-scripts/{{ netcard }}
     state: present
     regexp: '^IPADDR'
     line: IPADDR={{ ansible_ssh_host }}
 
-- name: restart network
-  shell: service restart network
+# - name: restart network
+#   shell: service restart network
+- name: ifconfig 设置临时ip
+  shell: "ifconfig {{ netcard.split('-')[-1] }} {{ ansible_ssh_host }} netmask {{ netmask }}"
+
+- name: route add default gw 设置网关
+  shell: "route add default gw {{ gateway }}"
