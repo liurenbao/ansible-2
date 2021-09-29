@@ -6,7 +6,7 @@ global_defs {
 
 vrrp_script health_check {
     #判断haproxy进程是否存在，如果haproxy不存在，当前keepalived进程优先级降低
-    script "{{ health_check_script }}"
+    script "{{ keepalived_root_dir }}/{{ health_check_local_script }}"
     interval 3
     weight -2
     fall 10

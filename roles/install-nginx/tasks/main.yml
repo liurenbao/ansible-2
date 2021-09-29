@@ -45,7 +45,6 @@
   register: dir
 
 - name: stop existed nginx
-  become_user: '{{ cim_ops_user }}'
   shell: docker-compose down
   when: dir.stat.exists == true
   args:
@@ -59,8 +58,6 @@
   file:
     path: "{{ nginx_root_dir }}"
     state: directory
-    owner: '{{ cim_ops_user }}'
-    recurse: yes
 
 - name: send docker-compose file to remote
   template:
@@ -87,15 +84,7 @@
     src: nginx.conf.j2
     dest: '{{ nginx_root_dir }}/nginx.conf'
 
-- name: chown nginx dir
-  file:
-    path: '{{ nginx_root_dir }}'
-    owner: '{{ cim_ops_user }}'
-    group: docker
-    recurse: yes
-
 - name: start nginx
-  become_user: '{{ cim_ops_user }}'
   shell: docker-compose up -d
   args:
     chdir: '{{ nginx_root_dir }}'

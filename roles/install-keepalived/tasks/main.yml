@@ -35,7 +35,7 @@
 - name: install health check script
   copy:
     src: '{{ health_check_local_script }}'
-    dest: '{{ health_check_script }}'
+    dest: '{{ keepalived_root_dir }}/{{ health_check_local_script }}'
     mode: 0744
 
 - name: install cron for keepalived
@@ -54,7 +54,7 @@
   shell: systemctl stop keepalived
 
 - name: start Keepalived
-  become_user: {{ cim_ops_user }}
+  become_user: '{{ cim_ops_user }}'
   shell: sudo systemctl restart keepalived && systemctl enable keepalived
 
 - name: add cron for keepalived
