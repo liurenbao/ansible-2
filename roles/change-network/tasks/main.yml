@@ -27,4 +27,4 @@
     line: IPADDR={{ ansible_ssh_host }}
 
 - name: restart network
-  shell: service restart network
+  shell: systemctl restart network

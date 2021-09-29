@@ -15,14 +15,14 @@ yum_base_url: 'http://192.168.161.202/yum/'
 keepalived_root_dir: /data01/keepalived/
 ## harbor----------------------------------------------------------------------------------
 # harbor主备vip
-harbor_keepalived_vip: 192.168.160.47
-harbor_port: '8888'
-harbor_keepalived_virtual_router_id: '47'
+harbor_keepalived_vip: 192.168.163.250
+harbor_port: '80'
+harbor_keepalived_virtual_router_id: '250'
 harbor_keepalived_vrrp_instance_interface: eth0
 harbor_root_dir: '/data01/harbor'
 # harbor压缩包
 harbor_tar: '{{ package_dir }}/harbor/harbor.tar.gz'
-harbor_password: 'admin123Admin'
+harbor_password: 'Huawei@777.com'
 # harbor安装数据目录
 harbor_data_volume: '{{ harbor_root_dir }}/harbor-data'
 
@@ -38,8 +38,8 @@ docker_data_root: '/data01/docker'
 # nginx---------------------------------------------------------------------------------------
 # Nginx 数据目录
 nginx_root_dir: '/data01/nginx'
-nginx_keepalived_vip: 192.168.160.5
-nginx_keepalived_virtual_router_id: '5'
+nginx_keepalived_vip: 192.168.163.251
+nginx_keepalived_virtual_router_id: '251'
 nginx_keepalived_vrrp_instance_interface: eth0
 
 # es----------------------------------------------------------------------------------------
@@ -75,8 +75,8 @@ ravencast_agent_dir_path: '/data01'
 ravencast_memory_limit_of_queues: '12000'
 
 # k8s-----------------------------------------------------------------------------------------
-k8s_keepalived_vip: 192.168.160.123
-k8s_keepalived_virtual_router_id: '123'
+k8s_keepalived_vip: 192.168.163.252
+k8s_keepalived_virtual_router_id: '252'
 k8s_keepalived_vrrp_instance_interface: eth0
 control_plane_endpoint: '{{ k8s_keepalived_vip }}:6443'
 pod_network_cidr: '10.244.0.0/16'

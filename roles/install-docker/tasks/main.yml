@@ -43,7 +43,7 @@
   shell: mkdir -p /local/docker-repo
 
 - name: copy docker files
-  copy:
+  synchronize:
     src: '{{ package_dir }}/docker/'
     dest: /local/docker-repo/
 

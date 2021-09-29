@@ -41,8 +41,8 @@
 
 - name: mq-user permission
   file:
-    path: {{ rocketmq_root_dir }}
-    owner: {{ rocketmq_user }}
+    path: '{{ rocketmq_root_dir }}'
+    owner: '{{ rocketmq_user }}'
     recurse: yes
 
 - name: start mq

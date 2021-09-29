@@ -18,7 +18,7 @@
 
 - name: chown es dir
   file:
-    path: {{ es_root_dir }}
+    path: '{{ es_root_dir }}'
     owner: '{{ cim_ops_user }}'
     group: 'docker'
     recurse: yes
