@@ -1,7 +1,6 @@
 version: '3'
 services:
   zookeeper:
-    user: '{{ cim_ops_uid }}:{{ docker_gid }}'
     image: '{{ image_repository }}/public/zookeeper-official:3.7'
     network_mode: host
     restart: always
@@ -13,7 +12,6 @@ services:
       - "{{ kafka_root_dir }}/zookeeper/datalog:/datalog"
       - "{{ kafka_root_dir }}/zookeeper/conf:/conf"
   kafka:
-    user: '{{ cim_ops_uid }}:{{ docker_gid }}'
     image: '{{ image_repository }}/public/kafka:2.13-2.7.0'
     network_mode: host
     restart: always
@@ -38,7 +36,6 @@ services:
       - "/var/run/docker.sock:/var/run/docker.sock"
       - "{{ kafka_root_dir }}/kafka:/kafka"
   kafka-exporter:
-    user: '{{ cim_ops_uid }}:{{ docker_gid }}'
     image: '{{ image_repository }}/public/kafka-exporter:1.3.1'
     restart: always
     network_mode: host

@@ -10,32 +10,21 @@
 - name: chmod dir
   command: chmod -R a+rwx {{ kafka_root_dir }}/zookeeper/conf {{ kafka_root_dir }}/zookeeper/data {{ kafka_root_dir }}/zookeeper/datalog
 
-- name: chown jenkins dir
-  file:
-    path: '{{ kafka_root_dir }}'
-    owner: '{{ cim_ops_user }}'
-    group: docker
-    recurse: yes
-
 - name: shutdown kafka
-  become_user: '{{ cim_ops_user }}'
   command: docker-compose -f {{ kafka_root_dir }}/docker-compose.yml down
 
 - name: start up kafka
-  become_user: '{{ cim_ops_user }}'
   command: docker-compose -f {{ kafka_root_dir }}/docker-compose.yml up -d
 
 - name: pause
   command: sleep 30
 
 - name: create topic
-  become_user: '{{ cim_ops_user }}'
   command: docker-compose exec -T kafka kafka-topics.sh --zookeeper localhost:2181 --create --topic test --partitions 5 --replication-factor 1
   args:
     chdir: "{{ kafka_root_dir }}"
   register: create_result
   when: ansible_ssh_host == groups['kafka'][0]
-  ignore_errors: yes
 
 - name: show result
   debug:
@@ -43,7 +32,6 @@
   when: ansible_ssh_host == groups['kafka'][0]
 
 - name: list topic
-  become_user: '{{ cim_ops_user }}'
   command: docker-compose exec -T kafka  kafka-topics.sh  --zookeeper localhost:2181 --list
   args:
     chdir: "{{ kafka_root_dir }}"

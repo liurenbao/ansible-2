@@ -16,7 +16,7 @@
     recurse: yes
 
 - name: enable service plantu-agent
-  shell: systemctl --user {{ cim_ops_user }} enable plantu-agent
+  shell: systemctl enable plantu-agent
 
 - name: start service plantu-agent
-  shell: systemctl --user {{ cim_ops_user }} start plantu-agent
+  shell: systemctl start plantu-agent

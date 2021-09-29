@@ -7,6 +7,8 @@
     keepalived_virtual_router_id: "{{ k8s_keepalived_virtual_router_id }}"
     keepalived_vrrp_instance_interface:
       - "{{ k8s_keepalived_vrrp_instance_interface }}"
+    health_check_local_script: apiserver_healthcheck.sh
+    health_check_script: '{{ keepalived_root_dir }}/{{ health_check_local_script }}'
   roles:
     - install-keepalived
 

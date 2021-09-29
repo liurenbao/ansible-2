@@ -12,7 +12,7 @@ package_dir: '/data01/package'
 ntp_server_addr: '192.168.160.59'
 yum_base_url: 'http://192.168.161.202/yum/'
 
-keepalived_root_dir: /data01/keepalived/
+keepalived_root_dir: /data01/keepalived
 ## harbor----------------------------------------------------------------------------------
 # harbor主备vip
 harbor_keepalived_vip: 192.168.163.250

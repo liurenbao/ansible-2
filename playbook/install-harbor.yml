@@ -18,7 +18,6 @@
   vars:
     harbor_hosts: "{{groups['harbor']|join(',')}}"
   tasks:
-
    - name: copy harbor
      shell: "scp -r {{ harbor_tar }} {{ item }}:{{ harbor_root_dir }}"
      with_items: '{{ harbor_hosts.split(",") }}'
@@ -30,6 +29,8 @@
     keepalived_virtual_router_id: '{{ harbor_keepalived_virtual_router_id }}'
     keepalived_vrrp_instance_interface:
       - '{{ harbor_keepalived_vrrp_instance_interface }}'
+    health_check_local_script: harbor_healthcheck.sh
+    health_check_script: '{{ keepalived_root_dir }}/{{ health_check_local_script }}'
   gather_facts: false
   roles:
     - install-keepalived
