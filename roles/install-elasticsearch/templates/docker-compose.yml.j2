@@ -1,7 +1,6 @@
 version: '3'
 services:
   elasticsearch:
-    user: '{{ cim_ops_uid }}:{{ docker_gid }}'
     image: '{{ image_repository }}/public/elasticsearch:7.13.2'
     network_mode: host
     restart: always
@@ -15,7 +14,6 @@ services:
       - "{{ es_root_dir }}/data:/usr/share/elasticsearch/data"
       - "{{ es_root_dir }}/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml"
   elasticsearch-exporter:
-    user: '{{ cim_ops_uid }}:{{ docker_gid }}'
     image: '{{ image_repository }}/public/elasticsearch-exporter:v1.2.1'
     command:
       - '--es.uri=http://localhost:9200'

@@ -5,7 +5,6 @@ Requires=docker.service
 
 [Service]
 Type=simple
-User={{ cim_ops_user }}
 Restart=on-failure
 RestartSec=5
 ExecStart=/usr/local/bin/docker-compose -f {{ harbor_root_dir }}/docker-compose.yml up

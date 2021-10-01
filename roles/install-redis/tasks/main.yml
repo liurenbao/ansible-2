@@ -34,27 +34,17 @@
 - name: chmod create-cluster shell
   command: chmod +x {{ redis_data_dir }}/create-cluster.sh
 
-- name: chown redis dir
-  file:
-    path: '{{ redis_data_dir }}'
-    owner: '{{ cim_ops_user }}'
-    group: docker
-    recurse: yes
-
 - name: stop redis
-  become_user: '{{ cim_ops_user }}'
   shell: docker-compose down
   args:
     chdir: "{{ redis_data_dir }}"
 
 - name: start redis
-  become_user: '{{ cim_ops_user }}'
   shell: docker-compose up -d
   args:
     chdir: "{{ redis_data_dir }}"
 
 - name: validate redis
-  become_user: '{{ cim_ops_user }}'
   shell: sleep 10 && docker-compose ps
   args:
     chdir: "{{ redis_data_dir }}"
@@ -70,7 +60,6 @@
   when: ansible_ssh_host == groups['redis'][0]
 
 - name: get cluster info
-  become_user: '{{ cim_ops_user }}'
   shell: docker exec -i redis-node01 /bin/sh -c 'redis-cli cluster info'
   register: redis_cluster_info
 
@@ -80,7 +69,6 @@
   when: ansible_ssh_host == groups['redis'][0]
 
 - name: redis cluster info
-  become_user: '{{ cim_ops_user }}'
   shell: docker-compose exec -T redis-cluster /bin/sh -c 'redis-cli cluster info' | grep cluster_state
   args:
     chdir: "{{ redis_data_dir }}"

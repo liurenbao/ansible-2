@@ -16,19 +16,10 @@
 - name: chmod data dir
   shell: "mkdir -p {{ es_root_dir }}/data && chmod 776 -R {{ es_root_dir }}/data"
 
-- name: chown es dir
-  file:
-    path: '{{ es_root_dir }}'
-    owner: '{{ cim_ops_user }}'
-    group: 'docker'
-    recurse: yes
-
 - name: docker-compose down
-  become_user: '{{ cim_ops_user }}'
   shell: docker-compose -f {{ es_root_dir }}/docker-compose.yml down
 
 - name: docker-compose up
-  become_user: '{{ cim_ops_user }}'
   shell: docker-compose -f {{ es_root_dir }}/docker-compose.yml up -d
 
 - name: add clear cron job
@@ -38,7 +29,6 @@
     hour: 0
     day: '{{ es_clear_at_day }}'
     job: 'curl -XDELETE http://localhost:9200/*-$(date -d "{{ es_clear_month_ago }} month ago" +%Y-%m)-*'
-    user: '{{ cim_ops_user }}'
 
 - name: check es state
   shell: sleep 30 && curl http://localhost:9200/_cat/health?v
@@ -54,8 +44,6 @@
   template:
     src: index-template.json.j2
     dest: '{{ es_root_dir }}/index-template.json'
-    owner: '{{ cim_ops_user }}'
-    group: docker
 
 - name: add index template
   shell: |
