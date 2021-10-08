@@ -1,3 +1,4 @@
+# 修改rocketmq  es  kafka配置参数
 - name: change sysconf
   hosts:
     - nginx

@@ -25,38 +25,20 @@
       when: rocketmq_tools.stat.exists == true
       shell: "{{ rocketmq_root_dir }}/bin/rmq-tools.sh namesrv stop"
 
-- name: uninstall rocketmq slave
+- name: uninstall rocketmq broker
   gather_facts: false
   hosts:
     - rocketmq-slave
     - rocketmq-master
   tasks:
-    - name: check docker container running
+    - name: check rmq tools exist
       stat:
         path: "{{ rocketmq_root_dir }}/bin/rmq-tools.sh"
       register: rocketmq_tools
-    - name: remove rocketmq slave
+    - name: remove rocketmq broker
       when: rocketmq_tools.stat.exists == true
       become_user: "{{ rocketmq_user }}"
       shell: "{{ rocketmq_root_dir }}/bin/rmq-tools.sh {{ broker_name }} stop"
-
-- name: remove rocketmq env
-  gather_facts: false
-  hosts:
-    - rocketmq-namesrv
-    - rocketmq-slave
-    - rocketmq-master
-    - rocketmq-console
-  tasks:
-    - name: remove rocketmq env
-      lineinfile:
-        dest: /etc/profile
-        line: "{{ item }}"
-        state: absent
-      with_items:
-        - "export RMQ_BIN={{ rocketmq_root_dir }}/bin"
-        - "export PATH=$RMQ_BIN:$PATH"
-        - "export ROCKETMQ_HOME={{ rocketmq_root_dir }}"
 
 - name: remove rocketmq user
   gather_facts: false
