@@ -12,7 +12,7 @@
   shell: rm -rf /tmp/keepalived
 
 - name: mkdir /tmp/keepalived
-  shell: mkdir -p /tmp/keepalived 
+  shell: mkdir -p /tmp/keepalived
   
 - name: cp keepalived
   copy:
@@ -27,7 +27,7 @@
     src: keepalived.conf.j2
     dest: /etc/keepalived/keepalived.conf
 
-- name: install health check script
+- name: create keepalived dir
   file:
     path: '{{ keepalived_root_dir }}'
     state: directory
