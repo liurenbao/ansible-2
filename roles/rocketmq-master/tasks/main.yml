@@ -51,6 +51,13 @@
   become_user: "{{ rocketmq_user }}"
   shell: "{{ rocketmq_root_dir }}/bin/rmq-tools.sh {{ broker_name }} restart"
 
+- name: add auto start rocketmq master when bootstrap
+  lineinfile:
+    line: "{{ rocketmq_root_dir }}/bin/rmq-tools.sh {{ broker_name }} start"
+    path: /etc/rc.d/rc.local
+    state: present
+    mode: 0774
+
 - name: add cron job
   cron:
     user: '{{ rocketmq_user }}'

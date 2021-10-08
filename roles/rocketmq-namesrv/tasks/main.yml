@@ -39,6 +39,13 @@
   become_user: "{{ rocketmq_user }}"
   shell: "{{ rocketmq_root_dir }}/bin/rmq-tools.sh namesrv restart"
 
+- name: add auto start rocketmq namesrv when bootstrap
+  lineinfile:
+    line: "{{ rocketmq_root_dir }}/bin/rmq-tools.sh namesrv start"
+    path: /etc/rc.d/rc.local
+    state: present
+    mode: 0774
+
 - name: add cron job
   cron:
     user: '{{ rocketmq_user }}'
