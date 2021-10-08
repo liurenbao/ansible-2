@@ -1,7 +1,6 @@
 version: '3'
 services:
   svn:
-    user: '{{ cim_ops_uid }}:{{ docker_gid }}'
     image: "{{ svn_image }}"
     container_name: svn-server
     network_mode: "host"

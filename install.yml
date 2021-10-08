@@ -1,7 +1,7 @@
 - import_playbook: playbook/change-hostname.yml
 - import_playbook: playbook/install-time.yml
 - import_playbook: playbook/install-software.yml
-- import_playbook: playbook/change-network.yml
+#- import_playbook: playbook/change-network.yml
 - import_playbook: playbook/change-sysconf.yml
 - import_playbook: playbook/install-docker.yml
 - import_playbook: playbook/install-harbor.yml

@@ -1,0 +1,10 @@
+- hosts: localhost
+  tasks:
+    - name: create id_rsa
+      openssh_keypair:
+        path: ~/.ssh/id_rsa
+
+- hosts: all
+  tasks:
+    - name: ssh-copy
+      authorized_key: user=root key="{{ lookup('file', '~/.ssh/id_rsa.pub') }}"

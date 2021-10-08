@@ -16,7 +16,9 @@
     - uninstall-kubernetes
 
 - name: remove kubernetes dirs
-  hosts: k8s
+  hosts:
+    - k8s-worker
+    - k8s-master
   tasks:
     - name: remove kubernetes dirs
       shell: |
