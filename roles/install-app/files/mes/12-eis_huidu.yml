@@ -1,0 +1,58 @@
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: plantu_eis_huidu
+  namespace: plantu
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: plantu_eis_huidu
+  template:
+    metadata:
+      labels:
+        app: plantu_eis_huidu
+    spec:
+      hostNetwork: false
+      tolerations:
+        - key: "node.kubernetes.io/unreachable"
+          operator: "Exists"
+          effect: "NoExecute"
+          tolerationSeconds: 2
+        - key: "node.kubernetes.io/not-ready"
+          operator: "Exists"
+          effect: "NoExecute"
+          tolerationSeconds: 2
+      containers:
+        - name: plantu_eis_huidu
+          image: 192.168.160.47:8888/plantu/plantu-mes-mesr:v1.0.5
+          env:
+          - name: PLANTU_MES_HOME
+            value: /mesdata/plantu_config/eis_huidu
+          # 当前服务器已经存在相同版本的镜像则不会重复拉取
+          imagePullPolicy: IfNotPresent
+          # 容器启动端口，没有可以删除
+          # 容器资源，request表示分配的最小资源，limit表示分配的资源上限
+          resources:
+            limits:
+              cpu: "32"
+              memory: 30720Mi
+            requests:
+              cpu: "1"
+              memory: 20480Mi
+          # 优雅关机，需要确保基础镜像要有/bin/bash命令
+          lifecycle:
+            preStop:
+              exec:
+                command: [ "/bin/bash", "-c", "sleep 30" ]
+          volumeMounts:
+          - name: mes-storage
+            mountPath: /mesdata
+      volumes:
+      - name: mes-storage
+        nfs:
+          path: /data01/nfs
+          server: 192.168.160.61
+      # k8s给程序发kill -9的时间，这时间需要大于preStop的时间
+      terminationGracePeriodSeconds: 60

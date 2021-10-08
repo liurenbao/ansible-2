@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  # 服务暴露的service名字
+  name: plantumes-admin-service
+  # 命名空间根据实际情况修改
+  namespace: plantu
+spec:
+  ports:
+    #   提供http服务的这么配置
+    - name: http
+      # 服务端口号，spring boot的应用可以直接用默认的8080
+      port: 8282
+      targetPort: 8282
+  selector:
+    app: plantumes-admin
+  type: NodePort

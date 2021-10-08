@@ -1,0 +1,149 @@
+# Default values for ruleengine.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  repository: 192.168.160.47:8888/full-auto/rtd/ruleengine
+  pullPolicy: Always
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: "1.0.10"
+
+imagePullSecrets: 
+  [name: myregistrykey]
+name: ruleengine
+nameOverride: "ruleengine"
+fullnameOverride: ""
+
+ports:
+  - hostPort: 8999
+    containerPort: 8999
+    protocol: TCP
+env:
+  - name: SPRING_PROFILES_ACTIVE
+    value: pro
+  - name: SERVER_PORT
+    value: '8999'
+  # Register method: 1 Self starting ; 2:Register ZK ; 3:Register etcd
+  - name: REGISTER_METHOD
+    value: '2'
+  - name: ZK_HOST
+    value: 'rtd-zookeeper'
+  - name: ZK_NODE
+    value: 'rtd'
+  # if use_shared_storage is true : use shared_path [SHARED_IMPORT_FILE_PATH,SHARED_LOG_FILE_PATH,SHARED_DATA_FILE_PATH]
+  #                          false: use origin_path [IMPORT_FILE_PATH,LOG_FILE_PATH,DATA_FILE_PATH]
+  - name: USING_SHARED_STORAGE
+    value: 'false'
+  - name: IMPORT_FILE_PATH
+    value: '/opt/ruleengine/resources'
+  - name: LOG_FILE_PATH
+    value: '/opt/ruleengine/logs'
+  - name: DATA_FILE_PATH
+    value: '/opt/ruleengine/data'
+  - name: SHARED_IMPORT_FILE_PATH
+    value: '/data/ruleengine/resources'
+  - name: SHARED_LOG_FILE_PATH
+    value: '/data/ruleengine/logs'
+  - name: SHARED_DATA_FILE_PATH
+    value: '/data/ruleengine/data'
+
+# mount volume config
+# if mountPath modify, Please also modify the file prefix of the env in [IMPORT_FILE_PATH,LOG_FILE_PATH,DATA_FILE_PATH]
+volumeMounts:
+      - name: grafana-data
+        mountPath: "/data"
+
+volumes:
+    - name: nfs-pvc
+      persistentVolumeClaim:
+        claimName: data-pvc
+    - name: grafana-conf
+      nfs:
+        path: /k8s-nfs/grafana/conf
+        server: 10.10.100.11 # NFS server host
+    - name: grafana-data
+      nfs:
+        path: /k8s-nfs/grafana/data
+        server: 10.10.100.11
+
+    
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+podAnnotations: {}
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: 8999
+
+ingress:
+  enabled: false
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  hosts:
+    - host: chart-example.local
+      paths:
+      - path: /
+        backend:
+          serviceName: chart-example.local
+          servicePort: 80
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+Host: rtd-dev.fullauto.inhuawei.com
+PathPrefix: /ruleengine/
+resources: 
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  limits:
+    cpu: 4
+    memory: 8Gi
+  requests:
+    cpu: 2
+    memory: 4Gi
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+# nodeSelector: 
+#   scope: rtd
+
+tolerations: []
+
+affinity:
+  nodeAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: cad-t2-notshare
+              operator: NotIn
+              values:
+                - 'true'

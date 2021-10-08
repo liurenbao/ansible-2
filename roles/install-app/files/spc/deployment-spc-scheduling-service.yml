@@ -1,0 +1,126 @@
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: spc-scheduling-service
+  namespace: spc
+  annotations:
+    # 使用http检测应用可用性，手动提供支持http检测的端口
+    prometheus.io/http-probe: "true"
+    prometheus.io/http-probe-port: "8080"
+    prometheus.io/http-probe-path: "/spc-scheduling-service/health/healthz"
+
+    # 抓取应用的监控指标,路径不填写则为：/metrics
+    prometheus.io/scrape: "true"
+    prometheus.io/port: '8080'
+    prometheus.io/scheme: "http"
+    prometheus.io/path: '/spc-scheduling-service/actuator/prometheus'
+spec:
+  entryPoints:
+    - web
+  routes:
+    - kind: Rule
+      match: PathPrefix(`/spc-scheduling-service`)
+      services:
+        - name: spc-scheduling-service
+          port: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: spc-scheduling-service
+  namespace: spc
+spec:
+  ports:
+    - name: http
+      port: 8080
+      targetPort: 8080
+      nodePort: 30136
+  selector:
+    app: spc-scheduling-service
+  type: NodePort
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spc-scheduling-service
+  namespace: spc
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: spc-scheduling-service
+  template:
+    metadata:
+      labels:
+        app: spc-scheduling-service
+    spec:
+      hostNetwork: false
+      tolerations:
+        - key: "node.kubernetes.io/unreachable"
+          operator: "Exists"
+          effect: "NoExecute"
+          tolerationSeconds: 2
+        - key: "node.kubernetes.io/not-ready"
+          operator: "Exists"
+          effect: "NoExecute"
+          tolerationSeconds: 2
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                topologyKey: "kubernetes.io/hostname"
+                labelSelector:
+                  matchExpressions:
+                    - key: app
+                      operator: In
+                      values:
+                        - spc-scheduling-service
+              weight: 100
+      containers:
+        - name: spc-scheduling-service
+          image: 192.168.160.47:8888/spc-sit/spc-scheduling-service:2.0.0-exercise
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: k8s
+            - name: SERVER_PORT
+              value: "8080"
+            - name: spring.datasource.url
+              value: "jdbc:zenith:@192.168.163.247:15400"
+            - name: spring.datasource.password
+              value: "Spcuser@123"
+          ports:
+            - containerPort: 8080
+          resources:
+            limits:
+              cpu: "2"
+              memory: 2048Mi
+            requests:
+              cpu: "0.2"
+              memory: 800Mi
+          # 存活性探针 和 准备就绪探针
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /spc-scheduling-service/health/healthz
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 60
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 20
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /spc-scheduling-service/health/healthz
+              port: 8080
+              scheme: HTTP
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 10
+          # 0宕机(zero-downtime)更新
+          lifecycle:
+            preStop:
+              exec:
+                command: [ "/bin/sh", "-c", "sleep 30" ]
