@@ -14,7 +14,6 @@
   register: docker_compose_file
 
 - name: stop docker container
-  become_user: '{{ cim_ops_user }}'
   shell: docker-compose down
   args:
     chdir: '{{ process_exporter_root_dir }}'
@@ -30,15 +29,14 @@
     src: config.yaml
     dest: '{{ process_exporter_root_dir }}/config/config.yaml'
 
-- name: chown process exporter dir
-  file:
-    path: '{{ process_exporter_root_dir }}'
-    owner: '{{ cim_ops_user }}'
-    group: docker
-    recurse: yes
-
 - name: docker-compose up
-  become_user: '{{ cim_ops_user }}'
   shell: docker-compose up -d
   args:
     chdir: '{{ process_exporter_root_dir }}'
+
+- name: wait process exporter ready
+  wait_for:
+    port: 9114
+    delay: 3
+    timeout: 30
+    msg: 'Timeout waiting for process-exporter respond'

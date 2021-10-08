@@ -93,3 +93,10 @@
   template:
     src: nginx.j2
     dest: /etc/logrotate.d/nginx
+
+- name: wait nginx ready
+  wait_for:
+    port: 80
+    delay: 10
+    timeout: 30
+    msg: 'Timeout waiting for nginx respond'

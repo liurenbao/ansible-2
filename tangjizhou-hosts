@@ -8,9 +8,9 @@
 192.168.163.233	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com	host_name=k8s-tangjizhou-master-2	MASTER_BACKUP=BACKUP    label="zone=dc2"
 192.168.163.234	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com	host_name=k8s-tangjizhou-master-3	MASTER_BACKUP=BACKUP    label="zone=dc2"
 [k8s-worker]
-192.168.163.186	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com	host_name=k8s-tangjizhou-worker-1	label="zone=dc1"
+#192.168.163.186	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com	host_name=k8s-tangjizhou-worker-1	label="zone=dc1"
 192.168.163.200	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com	host_name=k8s-tangjizhou-worker-2	label="zone=dc1"
-192.168.163.227	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com	host_name=k8s-tangjizhou-worker-3	label="zone=dc1"
+#192.168.163.227	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com	host_name=k8s-tangjizhou-worker-3	label="zone=dc1"
 192.168.163.193	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com	host_name=k8s-tangjizhou-worker-4	label="zone=dc2"
 192.168.163.198	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com	host_name=k8s-tangjizhou-worker-5	label="zone=dc2"
 192.168.163.223	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com	host_name=k8s-tangjizhou-worker-6	label="zone=dc2"

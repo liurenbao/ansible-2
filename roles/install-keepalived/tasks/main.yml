@@ -54,7 +54,6 @@
   shell: systemctl stop keepalived
 
 - name: start Keepalived
-  become_user: '{{ cim_ops_user }}'
   shell: sudo systemctl restart keepalived && systemctl enable keepalived
 
 - name: add cron for keepalived

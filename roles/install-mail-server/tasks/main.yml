@@ -2,11 +2,9 @@
   shell: yum -y remove postfix
 
 - name: rm postfix image
-  become_user: '{{ cim_ops_user }}'
   shell: docker stop mailserver && docker rm -f mailserver
 
 - name: start postfix
-  become_user: '{{ cim_ops_user }}'
   shell:  |
      docker run -d  -p 80:80 -p 443:443 -p 25:25 -p 110:110 -p 143:143 -p 465:465 \
      -p 587:587 -p 993:993 -p 995:995 -p 4190:4190 -e TZ=Asia/Shanghai -v /data01/mail-data:/data \

@@ -42,7 +42,6 @@
 - name: check es state
   uri:
     url: http://localhost:9200/_cat/health?v
-    status_code: 200
     return_content: yes
   register: this
   failed_when: "'You Know, for Search' not in this.content"

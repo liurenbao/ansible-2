@@ -61,14 +61,12 @@
   args:
     chdir: "{{ redis_data_dir }}"
 
-- name: validate redis
-  shell: sleep 10 && docker-compose ps
-  args:
-    chdir: "{{ redis_data_dir }}"
-  register: check
-
-- name: show
-  debug: var=check.stdout verbosity=0
+- name: wait redis ready
+  wait_for:
+    port: 6379
+    delay: 5
+    timeout: 30
+    msg: 'Timeout waiting for redis respond'
 
 - name: chmod
   command: sh create-cluster.sh

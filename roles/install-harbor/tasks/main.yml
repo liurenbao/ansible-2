@@ -42,4 +42,9 @@
 - name: enable harbor service
   shell: systemctl enable harbor.service
 
-
+- name: check harbor state
+  wait_for:
+    port: '{{ harbor_port }}'
+    delay: 20
+    timeout: 120
+    msg: 'Timeout waiting for harbor respond'
