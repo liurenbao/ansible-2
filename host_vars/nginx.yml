@@ -1,2 +1,0 @@
-health_check_local_script: nginx_healthcheck.sh
-health_check_script: '{{ keepalived_root_dir }}/{{ health_check_local_script }}'

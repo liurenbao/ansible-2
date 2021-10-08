@@ -1,40 +1,43 @@
-- name: check has installed
-  stat: path={{ harbor_root_dir }}
-  register: p
-
 - name: create harbor dir
-  shell: mkdir -p {{ harbor_root_dir }}
+  file:
+    path: '{{ harbor_root_dir }}'
+    state: directory
+
+- name: check if unarchived
+  stat:
+    path: '{{ harbor_data_volume }}'
+  register: harbor_data
 
 - name: unarchive harbor tar
   unarchive:
     src: "{{ harbor_root_dir }}/harbor.tar.gz"
     dest: "{{ harbor_root_dir }}"
     copy: no
+  when: harbor_data.stat.exists == false
 
 - name: remove harbor tar
   shell: rm -rf {{ harbor_root_dir }}/harbor.tar.gz
 
 - name: copy harbor.yml
   template: src=harbor.yml.j2 dest={{ harbor_root_dir }}/harbor.yml
- 
+
 - name: copy install-me.sh
   template: src=install-me.sh.j2 dest={{ harbor_root_dir }}/install-me.sh
 
 - name: chmod +x install-me.sh
-  shell: systemctl restart docker
-
-- name: chmod +x install-me.sh
   shell: chmod +x install-me.sh
   args:
-   chdir: '{{ harbor_root_dir }}'
+    chdir: '{{ harbor_root_dir }}'
 
 - name: install
   shell: "./install-me.sh"
   args:
-   chdir: "{{ harbor_root_dir }}"
+    chdir: "{{ harbor_root_dir }}"
 
 - name: cp harbor service
-  template: src=harbor.service.j2 dest=/usr/lib/systemd/system/harbor.service
+  template:
+    src: harbor.service.j2
+    dest: /usr/lib/systemd/system/harbor.service
 
 - name: enable harbor service
   shell: systemctl enable harbor.service

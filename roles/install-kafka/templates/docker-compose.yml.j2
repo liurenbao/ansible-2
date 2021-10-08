@@ -1,7 +1,6 @@
 version: '3'
 services:
   zookeeper:
-    user: root
     image: '{{ image_repository }}/public/zookeeper-official:3.7'
     network_mode: host
     restart: always
@@ -13,7 +12,6 @@ services:
       - "{{ kafka_root_dir }}/zookeeper/datalog:/datalog"
       - "{{ kafka_root_dir }}/zookeeper/conf:/conf"
   kafka:
-    user: root
     image: '{{ image_repository }}/public/kafka:2.13-2.7.0'
     network_mode: host
     restart: always

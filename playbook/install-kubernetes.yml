@@ -7,12 +7,15 @@
     keepalived_virtual_router_id: "{{ k8s_keepalived_virtual_router_id }}"
     keepalived_vrrp_instance_interface:
       - "{{ k8s_keepalived_vrrp_instance_interface }}"
+    health_check_local_script: apiserver_healthcheck.sh
   roles:
     - install-keepalived
 
 # 安装kubelet  kubeadm kubectl
 - name: install kubelet kubeadm kubectl
-  hosts: k8s
+  hosts:
+    - k8s-master
+    - k8s-worker
   gather_facts: false
   roles:
     - install-kubernetes

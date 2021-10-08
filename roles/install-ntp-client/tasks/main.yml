@@ -23,6 +23,13 @@
 - name: service ntpd start/stop/restart
   shell: service ntpd start
 
+- name: add auto start ntp when bootstrap
+  lineinfile:
+    line: "/usr/sbin/ntpdate {{ ntp_server }} && /usr/sbin/hwclock -w && /usr/sbin/service ntpd start"
+    path: /etc/rc.d/rc.local
+    state: present
+    mode: 0774
+
 - name: crontab ntp -d -u
   cron:
     name: "ntpdate"

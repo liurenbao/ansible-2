@@ -35,8 +35,9 @@
 
 # - name: restart network
 #   shell: service restart network
+
 - name: ifconfig 设置临时ip
   shell: "ifconfig {{ netcard.split('-')[-1] }} {{ ansible_ssh_host }} netmask {{ netmask }}"
 
-- name: route add default gw 设置网关
+- name: route add default gw
   shell: "route add default gw {{ gateway }}"

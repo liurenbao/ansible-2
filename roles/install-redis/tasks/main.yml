@@ -1,3 +1,20 @@
+- name: modify redis sysctl
+  lineinfile:
+    dest: /etc/sysctl.conf
+    line: "{{ item }}"
+  with_items:
+    - "fs.file-max = 1048576"
+    - "net.ipv6.conf.all.disable_ipv6 = 1"
+    - "net.ipv6.conf.default.disable_ipv6 = 1"
+    - "net.ipv6.conf.lo.disable_ipv6 = 1"
+    - "vm.overcommit_memory = 1"
+
+- name: sysctl enable
+  shell: sysctl -p /etc/sysctl.conf
+
+- name: refresh iptables
+  shell: iptables -F
+
 - name: clean old redis docker files
   file:
     path: '{{ redis_data_dir }}'
@@ -59,8 +76,6 @@
     chdir: "{{ redis_data_dir }}"
   when: ansible_ssh_host == groups['redis'][0]
 
-- name: sleep 10
-  shell: sleep 10
 - name: get cluster info
   shell: docker exec -i redis-node01 /bin/sh -c 'redis-cli cluster info'
   register: redis_cluster_info
@@ -76,6 +91,3 @@
     chdir: "{{ redis_data_dir }}"
   register: result
   failed_when: ' "cluster_state:ok" not in result.stdout'
-
-- name: sleep 5
-  shell: sleep 5

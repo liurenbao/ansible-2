@@ -1,6 +1,7 @@
 version: '3'
 services:
   redis-cluster:
+    user: '{{ cim_ops_uid }}:{{ docker_gid }}'
     image: '{{ image_repository }}/public/redis:6.2.4'
     container_name: redis-node01
     volumes:
@@ -11,6 +12,7 @@ services:
     restart: always
     command: redis-server /usr/local/etc/redis/redis.conf
   redis-exporter:
+    user: '{{ cim_ops_uid }}:{{ docker_gid }}'
     image: '{{ image_repository }}/public/redis_exporter:v1.27.0-alpine'
     network_mode: host
     environment:

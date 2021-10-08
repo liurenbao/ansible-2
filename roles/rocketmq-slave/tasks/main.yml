@@ -34,24 +34,31 @@
 - name: enable profile
   shell: source /etc/profile
 
-- name: mq-user permission
-  shell: |
-    chown -R {{ rocketmq_user }} {{ rocketmq_root_dir }}
-    chown -R {{ rocketmq_user }} {{ rocketmq_root_dir }}
-    chmod -R 770 {{ rocketmq_root_dir }}
-    chmod -R 770 {{ rocketmq_root_dir }}
-
-- name: start mq
-  become_user: "{{ rocketmq_user }}"
-  shell: "{{ rocketmq_root_dir }}/bin/rmq-tools.sh {{ broker_name }} restart"
-
 - name: rotate rockemq logs
   template:
     src: rocketmq.j2
     dest: /etc/logrotate.d/rocketmq
 
+- name: mq-user permission
+  file:
+    path: '{{ rocketmq_root_dir }}'
+    owner: '{{ rocketmq_user }}'
+    recurse: yes
+
+- name: start mq
+  become: yes
+  become_user: "{{ rocketmq_user }}"
+  shell: "{{ rocketmq_root_dir }}/bin/rmq-tools.sh {{ broker_name }} restart"
+
+- name: add auto start rocketmq slave when bootstrap
+  lineinfile:
+    line: "{{ rocketmq_root_dir }}/bin/rmq-tools.sh {{ broker_name }} start"
+    path: /etc/rc.d/rc.local
+    state: present
+    mode: 0774
+
 - name: add cron job
   cron:
     user: '{{ rocketmq_user }}'
-    minute: '*'
+    minute: '*/2'
     job: '{{ rocketmq_root_dir }}/bin/rmq-tools.sh {{ broker_name }} start'

@@ -1,7 +1,5 @@
 - name: install app
   hosts: all
   gather_facts: false
-  vars:
-    yum_base_url: '{{ yum_base_url }}'
   roles:
     - install-yum-client

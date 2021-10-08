@@ -2,23 +2,27 @@
 # 注意修改内存配置
 # 注意修改VIP地址
 #---------------------
+cim_ops_uid: 9999
+cim_ops_user: cimops
+cim_ops_user_pass: cimops_pass
+docker_gid: 994
 
 # 离线文件安装包所在目录-----------------------------------------------------------------------
-package_dir: '/etc/ansible/package'
+package_dir: '/data01/package'
 ntp_server_addr: '192.168.160.59'
 yum_base_url: 'http://192.168.161.202/yum/'
 
-keepalived_root_dir: /data01/keepalived/
+keepalived_root_dir: /data01/keepalived
 ## harbor----------------------------------------------------------------------------------
 # harbor主备vip
-harbor_keepalived_vip: 192.168.160.47
-harbor_port: '8888'
-harbor_keepalived_virtual_router_id: '47'
+harbor_keepalived_vip: 192.168.163.250
+harbor_port: '80'
+harbor_keepalived_virtual_router_id: '250'
 harbor_keepalived_vrrp_instance_interface: eth0
 harbor_root_dir: '/data01/harbor'
 # harbor压缩包
 harbor_tar: '{{ package_dir }}/harbor/harbor.tar.gz'
-harbor_password: 'admin123Admin'
+harbor_password: 'Huawei@777.com'
 # harbor安装数据目录
 harbor_data_volume: '{{ harbor_root_dir }}/harbor-data'
 
@@ -34,8 +38,8 @@ docker_data_root: '/data01/docker'
 # nginx---------------------------------------------------------------------------------------
 # Nginx 数据目录
 nginx_root_dir: '/data01/nginx'
-nginx_keepalived_vip: 192.168.160.5
-nginx_keepalived_virtual_router_id: '5'
+nginx_keepalived_vip: 192.168.163.251
+nginx_keepalived_virtual_router_id: '251'
 nginx_keepalived_vrrp_instance_interface: eth0
 
 # es----------------------------------------------------------------------------------------
@@ -44,7 +48,7 @@ es_root_dir: '/data01/es'
 # es集群名
 es_cluster_name: 'es-practice-cluster-7.3.2'
 # es jvm信息
-es_java_opts: '-Xms8G -Xmx8G'
+es_java_opts: '-Xms16G -Xmx16G'
 es_clear_at_day: 20
 es_clear_month_ago: 3
 es_log_replicas: 1
@@ -54,26 +58,25 @@ es_log_shards: 60
 # kafka数据目录
 kafka_root_dir: '/data01/kafka'
 # kafka jvm信息
-kafka_heap_opts: '-Xmx2G -Xms1G'
+kafka_heap_opts: '-Xmx16G -Xms16G'
 
 # roketmq------------------------------------------------------------------------------------
 jdk_dir: '/data01/jdk1.8.0_202'
 rocketmq_root_dir: '/data01/rocketmq'
 rocketmq_package_dir: '{{ package_dir }}/rocketmq'
-rocketmq_user: 'rocketmq'
-rocketmq_user_pass: 'rocketmq123'
+rocketmq_user: '{{ cim_ops_user }}'
+rocketmq_user_pass: '{{ cim_ops_user_pass }}'
 
 # ravencast-----------------------------------------------------------------------------------
-ravencast_xms_xmx_args: '-Xms2G -Xmx8G'
+ravencast_xms_xmx_args: '-Xms24G -Xmx24G'
 ravencast_root_dir: '/data01/ravencast'
 ravencast_agent_dir_path: '/data01'
 #xmx的一半，单位是MB
-ravencast_memory_limit_of_queues: '4000'
-
+ravencast_memory_limit_of_queues: '12000'
 
 # k8s-----------------------------------------------------------------------------------------
-k8s_keepalived_vip: 192.168.160.78
-k8s_keepalived_virtual_router_id: '78'
+k8s_keepalived_vip: 192.168.163.252
+k8s_keepalived_virtual_router_id: '252'
 k8s_keepalived_vrrp_instance_interface: eth0
 control_plane_endpoint: '{{ k8s_keepalived_vip }}:6443'
 pod_network_cidr: '10.244.0.0/16'
@@ -103,4 +106,4 @@ process_exporter_root_dir: /data01/process-exporter
 # redis---------------------------------------------------------------------------------------
 redis_data_dir: '/data01/redis'
 #32G大小的3/4
-redis_maxmemory: '{{ 10|int * 1024|int * 1024|int * 1024|int }}'
+redis_maxmemory: '{{ 24|int * 1024|int * 1024|int * 1024|int }}'

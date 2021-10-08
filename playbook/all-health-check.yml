@@ -1,0 +1,53 @@
+- name: check network
+  gather_facts: false
+  hosts: all
+  tasks:
+    - name: check network
+      shell: grep -E "BOOTPROTO|GATEWAY|NETMASK|IPADDR" /etc/sysconfig/network-scripts/ifcfg-eth0
+      register: network_conf
+    - name: show network
+      assert:
+        that:
+          - '{{ network_conf.stdout_lines | length == 4 }}'
+
+- name: check kubernetes status
+  gather_facts: false
+  hosts: all
+  tasks:
+    - name: check if pod ready
+      shell: kubectl get pod -A | grep -v Running
+      register: pod_ready
+    - name: show if pod ready
+      debug: msg={{ pod_ready.stdout_lines }}
+    - name: check if node ready
+      shell: kubectl get node | grep -v Ready
+      register: node_ready
+    - name: show if node ready
+      debug: msg={{ node_ready.stdout_lines }}
+    - name: assert kubernetes status
+      assert:
+        that:
+          - '{{ pod_ready.stdout_lines | length  == 1 }}'
+          - '{{ node_ready.stdout_lines | length  == 1 }}'
+
+- name: check elasticsearch status
+  hosts: es
+  gather_facts: false
+  tasks:
+    - name: check if es running
+      shell: docker ps | grep -E "elasticsearch|exporter"
+      register: es_health
+    - name: show es status
+      debug: msg={{ es_health.stdout_lines }}
+    - name: check es health
+      uri:
+        url: http://127.0.0.1:/_cat/health
+        validate_certs: no
+      register: es_health_result
+    - name: assert es health
+      assert:
+        that:
+          - '{{ es_health|length == 3 }}'
+          - es_health_result.status_code == 200
+
+

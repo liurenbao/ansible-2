@@ -14,12 +14,21 @@
     src: docker-compose.yml.j2
     dest: '{{ jenkins_dir }}/docker-compose.yml'
 
+- name: chown jenkins dir
+  file:
+    path: '{{ jenkins_dir }}'
+    owner: '{{ cim_ops_user }}'
+    group: docker
+    recurse: yes
+
 - name: start jenkins
+  become_user: '{{ cim_ops_user }}'
   shell: docker-compose up -d
   args:
    chdir: "{{ jenkins_dir }}"
 
 - name: cat data/secrets/initialAdminPassword
+  become_user: '{{ cim_ops_user }}'
   shell: cat {{ jenkins_dir }}/data/secrets/initialAdminPassword
   register: initialAdminPassword
 

@@ -14,7 +14,11 @@
     dest: "{{ es_root_dir }}/elasticsearch.yml"
 
 - name: chmod data dir
-  shell: "mkdir -p {{ es_root_dir }}/data && chmod 776 -R {{ es_root_dir }}/data"
+  file:
+    path: '{{ es_root_dir }}/data'
+    mode: 776
+    state: directory
+    recurse: yes
 
 - name: docker-compose down
   shell: docker-compose -f {{ es_root_dir }}/docker-compose.yml down
@@ -50,6 +54,3 @@
     curl -H 'Content-Type: application/json' -XPUT -d @index-template.json http://localhost:9200/_template/app-log
   args:
     chdir: '{{ es_root_dir }}'
-
-- name: pause
-  command: sleep 10

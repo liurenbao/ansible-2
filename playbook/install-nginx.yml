@@ -6,6 +6,7 @@
     keepalived_virtual_router_id: '{{ nginx_keepalived_virtual_router_id }}'
     keepalived_vrrp_instance_interface:
       - '{{ nginx_keepalived_vrrp_instance_interface }}'
+    health_check_local_script: nginx_healthcheck.sh
   roles:
     - install-keepalived
     - install-nginx

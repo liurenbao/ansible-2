@@ -4,6 +4,7 @@
   register: dir
 
 - name: stop existed svn
+  become_user: '{{ cim_ops_user }}'
   shell: docker-compose down
   when: dir.stat.exists == true
   args:
@@ -43,7 +44,15 @@
     state: touch
     mode: '0777'
 
+- name: chown redis dir
+  file:
+    path: '{{ svn_root_dir }}'
+    owner: '{{ cim_ops_user }}'
+    group: docker
+    recurse: yes
+
 - name: start svn
+  become_user: '{{ cim_ops_user }}'
   shell: docker-compose up -d
   args:
     chdir: "{{ svn_root_dir }}"

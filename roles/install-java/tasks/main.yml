@@ -2,8 +2,9 @@
   file:
     path: "{{ jdk_dir }}"
     state: directory
+    mode: 0755
 
-- name: unzip java
+- name: unzip jdk tar
   unarchive: 
     src: "{{ package_dir }}/jdk/jdk-8u202-linux-x64.tar.gz"
     dest: "{{ jdk_dir }}"

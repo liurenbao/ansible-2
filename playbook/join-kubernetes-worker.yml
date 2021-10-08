@@ -1,0 +1,7 @@
+- name: install kubernetes
+  hosts: k8s-worker
+  gather_facts: false
+  roles:
+    - change-hostname
+    - install-docker
+    - install-kubernetes

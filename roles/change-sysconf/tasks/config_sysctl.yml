@@ -5,16 +5,15 @@
     line: "{{ item }}"
   with_items:
     - "fs.file-max = 1048576"
-    - "net.ipv4.ip_local_port_range = 1024 65535"
+    - "net.core.somaxconn = 65535"
     - "vm.max_map_count = 655360"
     - "net.ipv6.conf.all.disable_ipv6 = 1"
     - "net.ipv6.conf.default.disable_ipv6 = 1"
     - "net.ipv6.conf.lo.disable_ipv6 = 1"
-    - "vm.overcommit_memory = 1"
-    - "net.core.somaxconn = 65535"
     - "net.ipv4.tcp_mem = 786432 2097152 3145728"
     - "net.ipv4.tcp_rmem = 4096 4096 16777216"
     - "net.ipv4.tcp_wmem = 4096 4096 16777216"
+
     - "vm.drop_caches = 1"
     - "vm.zone_reclaim_mode = 0"
     - "vm.dirty_background_ratio = 50"

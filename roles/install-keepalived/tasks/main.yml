@@ -1,5 +1,3 @@
----
-# centos 源
 - name: close selinux
   shell: /sbin/setenforce 0
   ignore_errors: True
@@ -14,12 +12,12 @@
   shell: rm -rf /tmp/keepalived
 
 - name: mkdir /tmp/keepalived
-  shell: mkdir -p /tmp/keepalived 
+  shell: mkdir -p /tmp/keepalived
   
 - name: cp keepalived
   copy:
     src: '{{ package_dir }}/keepalived/'
-    dest:  /tmp/keepalived/
+    dest: /tmp/keepalived/
 
 - name: install keepalived 
   shell: yum localinstall -y /tmp/keepalived/*.rpm
@@ -27,24 +25,40 @@
 - name: replace keepalived.conf
   template:
     src: keepalived.conf.j2
-    dest:  /etc/keepalived/keepalived.conf
+    dest: /etc/keepalived/keepalived.conf
+
+- name: create keepalived dir
+  file:
+    path: '{{ keepalived_root_dir }}'
+    state: directory
 
 - name: install health check script
   copy:
     src: '{{ health_check_local_script }}'
-    dest: '{{ health_check_script }}'
-    mode: 744
-
-- name: start Keepalived
-  shell: systemctl restart keepalived && systemctl enable keepalived
+    dest: '{{ keepalived_root_dir }}/{{ health_check_local_script }}'
+    mode: 0744
 
 - name: install cron for keepalived
   copy:
     src: keepalived_cron.sh
     dest: '{{ keepalived_root_dir }}/keepalived_cron.sh'
-    mode: 770
+    mode: 0770
 
-#- name: add cron for keepalived
-#  cron:
-#    minute: "*"
-#    job: '{{ keepalived_root_dir }}/keepalived_cron.sh'
+- name: chown keepalived dir
+  file:
+    path: '{{ keepalived_root_dir }}'
+    owner: '{{ cim_ops_user }}'
+    recurse: yes
+
+- name: stop keepalived
+  shell: systemctl stop keepalived
+
+- name: start Keepalived
+  become_user: '{{ cim_ops_user }}'
+  shell: sudo systemctl restart keepalived && systemctl enable keepalived
+
+- name: add cron for keepalived
+  cron:
+    minute: "*/1"
+    job: '{{ keepalived_root_dir }}/keepalived_cron.sh'
+    user: '{{ cim_ops_user }}'

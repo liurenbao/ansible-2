@@ -13,7 +13,12 @@
   template:
     src: backup_etcd.sh.j2
     dest: "{{ etcd_backup_root_dir }}/backup_etcd.sh"
-    mode: 740
+    mode: 0740
+
+- name: create backup dir
+  file:
+    path: '{{ etcd_backup_root_dir }}'
+    mode: 0755
 
 - name: add etcd backup cron
   cron:
