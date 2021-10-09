@@ -20,7 +20,7 @@ spec:
   volumes:
     - name: timezone
       hostPath:
-        path: /usr/share/zoneinfo/Asia/Shanghai
+        path: /etc/localtime
 ---
 apiVersion: v1
 kind: ServiceAccount
