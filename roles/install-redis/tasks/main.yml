@@ -61,14 +61,14 @@
   args:
     chdir: "{{ redis_data_dir }}"
 
-- name: wait redis ready
+- name: wait redis port
   wait_for:
     port: 6379
-    delay: 5
+    delay: 15
     timeout: 30
     msg: 'Timeout waiting for redis respond'
 
-- name: chmod
+- name: chmod create-cluster.sh
   command: sh create-cluster.sh
   args:
     chdir: "{{ redis_data_dir }}"
@@ -78,12 +78,7 @@
   shell: docker exec -i redis-node01 /bin/sh -c 'redis-cli cluster info'
   register: redis_cluster_info
 
-- name: show cluster info
-  debug:
-    msg: "{{ redis_cluster_info }}"
-  when: ansible_ssh_host == groups['redis'][0]
-
-- name: redis cluster info
+- name: redis cluster health check
   shell: docker-compose exec -T redis-cluster /bin/sh -c 'redis-cli cluster info' | grep cluster_state
   args:
     chdir: "{{ redis_data_dir }}"

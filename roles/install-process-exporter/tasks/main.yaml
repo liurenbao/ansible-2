@@ -36,7 +36,7 @@
 
 - name: wait process exporter ready
   wait_for:
-    port: 9114
+    port: 9256
     delay: 3
     timeout: 30
     msg: 'Timeout waiting for process-exporter respond'
