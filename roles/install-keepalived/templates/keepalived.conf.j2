@@ -8,17 +8,17 @@ vrrp_script health_check {
     #判断haproxy进程是否存在，如果haproxy不存在，当前keepalived进程优先级降低
     script "{{ keepalived_root_dir }}/{{ health_check_local_script }}"
     interval 1
-    weight -2
-    fall 10
+    fall 2
     rise 2
 }
 
 vrrp_instance VI_1 {
     state {{ MASTER_BACKUP }}
 {% for ip in keepalived_vrrp_instance_interface %}
-    interface {{ ip }}   
+    interface {{ ip }}
 {% endfor %}
     virtual_router_id {{ keepalived_virtual_router_id }}
+    # {{ ansible_ssh_host.split('.')[3] }}
     priority 250
     nopreempt
     advert_int 1

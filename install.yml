@@ -1,3 +1,4 @@
+- import_playbook: playbook/copy-ssh-id.yml
 - import_playbook: playbook/change-hostname.yml
 - import_playbook: playbook/install-time.yml
 - import_playbook: playbook/install-software.yml
