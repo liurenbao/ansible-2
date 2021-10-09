@@ -1,5 +1,5 @@
 - name: install ravencast
-  hosts: ravencast
+  hosts: '{{ groups | select("match","ravencast-.*") | list }}'
   gather_facts: false
   roles:
     - install-java

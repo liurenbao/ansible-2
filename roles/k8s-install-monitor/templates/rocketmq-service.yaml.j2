@@ -30,7 +30,13 @@ metadata:
   namespace: monitoring
 subsets:
   - addresses:
-{% for host in groups['rocketmq'] %}
+{% for host in groups['rocketmq-namesrv'] %}
+    - ip: {{ host }}
+{% endfor %}
+{% for host in groups['rocketmq-master'] %}
+    - ip: {{ host }}
+{% endfor %}
+{% for host in groups['rocketmq-slave'] %}
     - ip: {{ host }}
 {% endfor %}
     ports:

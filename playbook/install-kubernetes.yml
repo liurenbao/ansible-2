@@ -1,6 +1,8 @@
 # k8s master 创建vip
 - name: k8s control plane vip
-  hosts: k8s-master
+  hosts:
+    - k8s-master-init
+    - k8s-master-join
   gather_facts: false
   vars:
     keepalived_vip: "{{ k8s_keepalived_vip }}"
@@ -35,7 +37,9 @@
     - k8s-master-join
 
 - name: install pod presets
-  hosts: k8s-master
+  hosts:
+    - k8s-master-init
+    - k8s-master-join
   gather_facts: false
   roles:
     - k8s-change-config
@@ -49,14 +53,18 @@
 
 # 更新K8S证书
 - name: k8s cert update
-  hosts: k8s-master
+  hosts:
+    - k8s-master-init
+    - k8s-master-join
   gather_facts: false
   roles:
     - k8s-cert-update
 
 # 备份etcd集群信息
 - name: etcd backup
-  hosts: k8s-master
+  hosts:
+    - k8s-master-init
+    - k8s-master-join
   gather_facts: false
   roles:
     - install-etcd-backup-cron
