@@ -33,11 +33,7 @@
     regexp: '^IPADDR'
     line: IPADDR={{ ansible_ssh_host }}
 
-# - name: restart network
-#   shell: service restart network
+# 可以执行成功
+- name: restart network
+  shell: service restart network
 
-- name: ifconfig 设置临时ip
-  shell: "ifconfig {{ netcard.split('-')[-1] }} {{ ansible_ssh_host }} netmask {{ netmask }}"
-
-- name: route add default gw
-  shell: "route add default gw {{ gateway }}"
