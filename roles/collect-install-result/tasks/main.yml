@@ -89,10 +89,13 @@
     echo "|rocketmq-console | $rocketmq_console | admin/admin |" >> {{ kube_component_file }}
 
 - name: ravencast dashboard
+  vars:
+    ravencast_groups: '{{ groups | select("match","ravencast-.*") | list }}'
   shell: |
-    ravencast_dashboard="{{ groups['ravencast'] | map('regex_replace', '^(.*)$','http://\1:10103') | join(' ') }}"
-    echo "|ravencast | $ravencast_dashboard | ravencast/integration |" >> {{ kube_component_file }}
-
+    {% for group_name in ravencast_groups %}
+      ravencast_dashboard="{{ groups[group_name] | map('regex_replace', '^(.*)$','http://\1:10103') | join(' ') }}"
+      echo "|{{ group_name }} | $ravencast_dashboard | ravencast/integration |" >> {{ kube_component_file }}
+    {% endfor %}
 
 - name: fetch result to ansible node
   fetch:

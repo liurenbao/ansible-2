@@ -114,3 +114,13 @@
 
 - name: refresh iptables
   shell: iptables -F
+
+- name: check ravencast dashboard url
+  uri:
+    url_username: ravencast
+    url_password: integration
+    url: 'http://{{ ansible_ssh_host }}:10103'
+    return_content: yes
+    force_basic_auth: yes
+  register: this
+  failed_when: this.status != 200

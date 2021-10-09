@@ -16,7 +16,8 @@
 # 安装kubelet  kubeadm kubectl
 - name: install kubelet kubeadm kubectl
   hosts:
-    - k8s-master
+    - k8s-master-init
+    - k8s-master-join
     - k8s-worker
   gather_facts: false
   roles:
