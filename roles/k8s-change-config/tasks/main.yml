@@ -25,9 +25,7 @@
     state: present
 
 - name: wait api server restart
-  shell: sleep 20
-
-- name: wait api server ready
   wait_for:
     port: 6443
-    state: present
+    delay: 5
+    timeout: 40

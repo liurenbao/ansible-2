@@ -1,9 +1,9 @@
 - name: change network to static
   gather_facts: false
-  hosts: host160-pirun
+  hosts: all
   vars:
-    netmask: 255.255.255.128
-    gateway: 192.168.160.254
+    netmask: 255.255.255.0
+    gateway: 192.168.163.254
     netcard: 'ifcfg-eth0'
   roles:
     - change-network

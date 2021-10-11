@@ -4,7 +4,6 @@
   register: file_status
 
 - name: clear data
-  become_user: '{{ cim_ops_user }}'
   shell: docker-compose down
   args:
     chdir: "{{ redis_data_dir }}"

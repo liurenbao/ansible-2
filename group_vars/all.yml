@@ -2,6 +2,11 @@
 # 注意修改内存配置
 # 注意修改VIP地址
 #---------------------
+# fixme 修改此处配置
+harbor_keepalived_vip: 192.168.163.250
+nginx_keepalived_vip: 192.168.163.251
+k8s_keepalived_vip: 192.168.163.252
+
 cim_ops_uid: 9999
 cim_ops_user: cimops
 cim_ops_user_pass: cimops_pass
@@ -15,9 +20,8 @@ yum_base_url: 'http://192.168.161.202/yum/'
 keepalived_root_dir: /data01/keepalived
 ## harbor----------------------------------------------------------------------------------
 # harbor主备vip
-harbor_keepalived_vip: 192.168.163.250
 harbor_port: '80'
-harbor_keepalived_virtual_router_id: '250'
+harbor_keepalived_virtual_router_id: '{{ harbor_keepalived_vip.split(".")[3] }}'
 harbor_keepalived_vrrp_instance_interface: eth0
 harbor_root_dir: '/data01/harbor'
 # harbor压缩包
@@ -38,8 +42,7 @@ docker_data_root: '/data01/docker'
 # nginx---------------------------------------------------------------------------------------
 # Nginx 数据目录
 nginx_root_dir: '/data01/nginx'
-nginx_keepalived_vip: 192.168.163.251
-nginx_keepalived_virtual_router_id: '251'
+nginx_keepalived_virtual_router_id: '{{ nginx_keepalived_vip.split(".")[3] }}'
 nginx_keepalived_vrrp_instance_interface: eth0
 
 # es----------------------------------------------------------------------------------------
@@ -67,6 +70,7 @@ rocketmq_root_dir: '/data01/rocketmq'
 rocketmq_package_dir: '{{ package_dir }}/rocketmq'
 rocketmq_user: '{{ cim_ops_user }}'
 rocketmq_user_pass: '{{ cim_ops_user_pass }}'
+rocket_topic_list: test
 
 # ravencast-----------------------------------------------------------------------------------
 ravencast_xms_xmx_args: '-Xms24G -Xmx24G'
@@ -76,8 +80,7 @@ ravencast_agent_dir_path: '/data01'
 ravencast_memory_limit_of_queues: '12000'
 
 # k8s-----------------------------------------------------------------------------------------
-k8s_keepalived_vip: 192.168.163.252
-k8s_keepalived_virtual_router_id: '252'
+k8s_keepalived_virtual_router_id: '{{ k8s_keepalived_vip.split(".")[3] }}'
 k8s_keepalived_vrrp_instance_interface: eth0
 control_plane_endpoint: '{{ k8s_keepalived_vip }}:6443'
 pod_network_cidr: '10.244.0.0/16'

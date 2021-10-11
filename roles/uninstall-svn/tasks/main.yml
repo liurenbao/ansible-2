@@ -4,7 +4,6 @@
   register: dir
 
 - name: stop existed svn
-  become_user: '{{ cim_ops_user }}'
   shell: docker-compose down
   when: dir.stat.exists == true
   args:

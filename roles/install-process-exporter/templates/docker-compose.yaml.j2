@@ -1,7 +1,6 @@
 version: '3'
 services:
   process-exporter:
-    user: '{{ cim_ops_uid }}:{{ docker_gid }}'
     image: '{{ image_repository }}/public/process-exporter:0.7.5'
     restart: always
     network_mode: host

@@ -10,6 +10,7 @@
   template:
     src: rmq-tools.sh.j2
     dest: "{{ rocketmq_root_dir }}/bin/rmq-tools.sh"
+    mode: 0755
 
 - name: set mq env conf
   lineinfile:

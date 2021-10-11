@@ -6,14 +6,14 @@
 - name: change mode for plantu-agent
   shell: chmod +x "{{ ravencast_agent_dir_path }}/Agent/plantu-agent"
 
-- name: install service
-  shell: "{{ ravencast_agent_dir_path }}/Agent/plantu-agent /install"
+- name: check ravencast service exists
+  stat:
+    path: /usr/lib/systemd/system/plantu-agent.service
+  register: ravencast_service
 
-- name: chown ravencast
-  file:
-    path: '{{ ravencast_agent_dir_path }}'
-    owner: '{{ cim_ops_user }}'
-    recurse: yes
+- name: install ravencast service
+  shell: "{{ ravencast_agent_dir_path }}/Agent/plantu-agent /install"
+  when: ravencast_service.stat.exists == false
 
 - name: enable service plantu-agent
   shell: systemctl enable plantu-agent

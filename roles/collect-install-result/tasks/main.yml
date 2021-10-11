@@ -9,32 +9,64 @@
     echo "| component | url | auth |" >> {{ kube_component_file }}
     echo "| --- | --- | --- |" >> {{ kube_component_file }}
 
+- name: check dashboard url
+  uri:
+    url: 'http://{{ k8s_keepalived_vip }}:30000'
+    return_content: yes
+  register: this
+  failed_when: "'Client sent an HTTP request to an HTTPS server' not in this.content"
 - name: k8s dashboard url
   shell: 'echo "https://{{ k8s_keepalived_vip }}:30000"'
   register: k8s_dashboard_url
-
 - name: k8s dashboard token
   shell: |
     secret_name=$(kubectl -n kube-system get secret | grep admin-user-token | awk '{print $1}')
     kubectl -n kube-system describe secret  $secret_name | grep "token:"
   register: k8s_dashboard_token
-
 - name: k8s dashboard
   shell: echo "|k8s-dashbaord | {{ k8s_dashboard_url.stdout }} | {{ k8s_dashboard_token.stdout }} |">> {{ kube_component_file }}
 
-
+- name: check traefik dashboard url
+  uri:
+    url: 'http://{{ k8s_keepalived_vip }}:31000'
+    return_content: yes
+  register: this
+  failed_when: this.status != 200
 - name: traefik dashboard
   shell: 'echo "|traefik | http://{{ k8s_keepalived_vip }}:31000 | - |" >> {{ kube_component_file }}'
 
+- name: check grafana dashboard url
+  uri:
+    url: 'http://{{ k8s_keepalived_vip }}:30004'
+    return_content: yes
+  register: this
+  failed_when: this.status != 200
 - name: grafana dashboard
   shell: 'echo "| grafana | http://{{ k8s_keepalived_vip }}:30004 | - |" >> {{ kube_component_file }}'
 
+- name: check prometheus dashboard url
+  uri:
+    url: 'http://{{ k8s_keepalived_vip }}:30002'
+    return_content: yes
+  register: this
+  failed_when: this.status != 200
 - name: prometheus dashboard
   shell: 'echo "| prometheus | http://{{ k8s_keepalived_vip }}:30002 | - |" >> {{ kube_component_file }}'
 
+- name: check kibana dashboard url
+  uri:
+    url: 'http://{{ k8s_keepalived_vip }}:30001'
+    return_content: yes
+  register: this
+  failed_when: this.status != 200
 - name: kibana dashboard
   shell: 'echo "|kibana | http://{{ k8s_keepalived_vip }}:30001 | - |" >> {{ kube_component_file }}'
-
+- name: check traefik dashboard url
+  uri:
+    url: 'http://{{ nginx_keepalived_vip }}'
+    return_content: yes
+  register: this
+  failed_when: this.status != 404
 - name: nginx web port
   shell: 'echo "|nginx | http://{{ nginx_keepalived_vip }} | - |" >> {{ kube_component_file }}'
 
@@ -57,10 +89,13 @@
     echo "|rocketmq-console | $rocketmq_console | admin/admin |" >> {{ kube_component_file }}
 
 - name: ravencast dashboard
+  vars:
+    ravencast_groups: '{{ groups | select("match","ravencast-.*") | list }}'
   shell: |
-    ravencast_dashboard="{{ groups['ravencast'] | map('regex_replace', '^(.*)$','http://\1:10103') | join(' ') }}"
-    echo "|ravencast | $ravencast_dashboard | ravencast/integration |" >> {{ kube_component_file }}
-
+    {% for group_name in ravencast_groups %}
+      ravencast_dashboard="{{ groups[group_name] | map('regex_replace', '^(.*)$','http://\1:10103') | join(' ') }}"
+      echo "|{{ group_name }} | $ravencast_dashboard | ravencast/integration |" >> {{ kube_component_file }}
+    {% endfor %}
 
 - name: fetch result to ansible node
   fetch:

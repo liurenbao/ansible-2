@@ -1,4 +1,4 @@
-- name: create dir
+- name: create es dir
   file:
     path: "{{ es_root_dir }}"
     state: directory
@@ -13,10 +13,10 @@
     src: elasticsearch.yml.j2
     dest: "{{ es_root_dir }}/elasticsearch.yml"
 
-- name: chmod data dir
+- name: chmod es data dir
   file:
     path: '{{ es_root_dir }}/data'
-    mode: 776
+    mode: 0776
     state: directory
     recurse: yes
 
@@ -34,15 +34,17 @@
     day: '{{ es_clear_at_day }}'
     job: 'curl -XDELETE http://localhost:9200/*-$(date -d "{{ es_clear_month_ago }} month ago" +%Y-%m)-*'
 
-- name: check es state
-  shell: sleep 30 && curl http://localhost:9200/_cat/health?v
-  register: result
-  when: ansible_ssh_host == groups['es'][0]
+- name: wait es start complete
+  wait_for:
+    port: 9200
+    delay: 5
 
-- name: show result
-  debug:
-    msg: "{{ result.stdout_lines }}"
-  when: ansible_ssh_host == groups['es'][0]
+- name: check es state
+  uri:
+    url: http://localhost:9200/_cat/health?v
+    return_content: yes
+  register: this
+  failed_when: "'green' not in this.content"
 
 - name: send index template conf
   template:

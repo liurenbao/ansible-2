@@ -44,21 +44,14 @@
     dest: '{{ keepalived_root_dir }}/keepalived_cron.sh'
     mode: 0770
 
-- name: chown keepalived dir
-  file:
-    path: '{{ keepalived_root_dir }}'
-    owner: '{{ cim_ops_user }}'
-    recurse: yes
-
 - name: stop keepalived
   shell: systemctl stop keepalived
 
 - name: start Keepalived
-  become_user: '{{ cim_ops_user }}'
-  shell: sudo systemctl restart keepalived && systemctl enable keepalived
+  shell: systemctl restart keepalived && systemctl enable keepalived
 
 - name: add cron for keepalived
   cron:
+    name: keepalived
     minute: "*/1"
     job: '{{ keepalived_root_dir }}/keepalived_cron.sh'
-    user: '{{ cim_ops_user }}'

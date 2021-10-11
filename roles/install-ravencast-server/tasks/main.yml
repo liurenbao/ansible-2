@@ -41,9 +41,19 @@
     src: '{{ package_dir }}/ravencast/RavenCastMQ-installer-3.0-standard.jar'
     dest: 'RavenCastMQ-installer-3.0-standard.jar'
 
+- name: set java env conf ~/.bashrc for ravencast
+  lineinfile:
+    dest: '~/.bashrc'
+    state: present
+    line: "{{ item }}"
+  with_items:
+    - "export JAVA_HOME={{ jdk_dir }}"
+    - "export JRE_HOME=${JAVA_HOME}/jre"
+    - "export CLASSPATH=.:${JAVA_HOME}/lib:${JRE_HOME}/lib"
+    - "export PATH=${JAVA_HOME}/bin:$PATH"
+
 - name: start ravencast server
   become: yes
-  become_user: '{{ cim_ops_user }}'
   expect:
     command: java -jar RavenCastMQ-installer-3.0-standard.jar -console
     responses:
@@ -78,22 +88,14 @@
     dest: "{{ ravencast_root_dir }}/bin/start.sh"
     mode: "0755"
 
-- name: chown ravencast dir
-  file:
-    path: '{{ ravencast_root_dir }}'
-    owner: '{{ cim_ops_user }}'
-    recurse: yes
-
 - name: start messagequeue
   become: yes
-  become_user: '{{ cim_ops_user }}'
   shell: ./messagequeue
   args:
     chdir: "{{ ravencast_root_dir }}/bin"
 
 - name: start console
   become: yes
-  become_user: '{{ cim_ops_user }}'
   shell: ./console
   args:
     chdir: "{{ ravencast_root_dir }}/bin"
@@ -112,3 +114,13 @@
 
 - name: refresh iptables
   shell: iptables -F
+
+- name: check ravencast dashboard url
+  uri:
+    url_username: ravencast
+    url_password: integration
+    url: 'http://{{ ansible_ssh_host }}:10103'
+    return_content: yes
+    force_basic_auth: yes
+  register: this
+  failed_when: this.status != 200

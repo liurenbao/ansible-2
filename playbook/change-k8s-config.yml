@@ -1,5 +1,7 @@
 - name: install k8s podprests
   gather_facts: false
-  hosts: k8s-master
+  hosts:
+    - k8s-master-init
+    - k8s-master-join
   roles:
     - k8s-change-config
