@@ -1,13 +1,13 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: plantumes
+  name: plantu
 ---
 apiVersion: settings.k8s.io/v1alpha1
 kind: PodPreset
 metadata:
   name: change-timezone
-  namespace: plantumes
+  namespace: plantu
 spec:
   selector:
     matchLabels:
@@ -25,54 +25,54 @@ spec:
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: plantumes-admin
-  namespace: plantumes
+  name: plantu-admin
+  namespace: plantu
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: plantumes-admin-rolebinding
-  namespace: plantumes
+  name: plantu-admin-rolebinding
+  namespace: plantu
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
   name: admin
 subjects:
   - kind: ServiceAccount
-    name: plantumes-admin
-    namespace: plantumes
+    name: plantu-admin
+    namespace: plantu
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: plantumes-admin-view-namespace
+  name: plantu-admin-view-namespace
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
   name: view-namespaces
 subjects:
   - kind: ServiceAccount
-    name: plantumes-admin
-    namespace: plantumes
+    name: plantu-admin
+    namespace: plantu
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: plantumes-admin-view-crd-resources
+  name: plantu-admin-view-crd-resources
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
   name: view-crd-resources
 subjects:
   - kind: ServiceAccount
-    name: plantumes-admin
-    namespace: plantumes
+    name: plantu-admin
+    namespace: plantu
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
   name: crd-object-admin
-  namespace: plantumes
+  namespace: plantu
 rules:
   - verbs:
       - create
@@ -95,13 +95,13 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: plantumes-crd-object-admin
-  namespace: plantumes
+  name: plantu-crd-object-admin
+  namespace: plantu
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
   name: crd-object-admin
 subjects:
   - kind: ServiceAccount
-    name: plantumes-admin
-    namespace: plantumes
+    name: plantu-admin
+    namespace: plantu
