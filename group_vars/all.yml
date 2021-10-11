@@ -47,6 +47,7 @@ nginx_keepalived_vrrp_instance_interface: eth0
 es_root_dir: '/data01/es'
 # es集群名
 es_cluster_name: 'es-practice-cluster-7.3.2'
+es_initial_master_nodes: '["192.168.163.82", "192.168.163.69", "192.168.163.194", "192.168.161.242", "192.168.161.199", "192.168.161.200"]'
 # es jvm信息
 es_java_opts: '-Xms16G -Xmx16G'
 es_clear_at_day: 20

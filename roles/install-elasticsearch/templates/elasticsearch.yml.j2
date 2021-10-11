@@ -3,9 +3,9 @@ cluster.max_shards_per_node: 10000
 node.name: {{ host_name }}
 network.host: 0.0.0.0
 network.publish_host: {{ ansible_ssh_host }}
-discovery.seed_hosts: {{ groups['es'] | to_json }}
+discovery.seed_hosts: {{ es_initial_master_nodes }}
 bootstrap.memory_lock: true
 xpack.monitoring.collection.enabled: true
-cluster.initial_master_nodes: {{ groups['es'] | to_json }}
+cluster.initial_master_nodes: {{ es_initial_master_nodes }}
 xpack.license.self_generated.type: basic
 xpack.security.enabled: false

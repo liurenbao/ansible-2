@@ -35,5 +35,13 @@
 
 # 可以执行成功
 - name: restart network
-  shell: service restart network
+  shell: systemctl restart network
+
+- name: show network
+  shell: ip addr | grep inet
+  register: ips
+
+- name: show ips
+  debug:
+    msg: "{{ ips.stdout }}"
 
