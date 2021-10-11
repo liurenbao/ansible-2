@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ams-api
+  namespace: ams
+  labels:
+    app: ams-api
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: ams-api
+      labels:
+        app: ams-api
+    spec:
+      containers:
+        - name: ams-api
+          image: 192.168.160.47:8888/ams/amsapi:v2
+          imagePullPolicy: IfNotPresent
+      restartPolicy: Always
+  selector:
+    matchLabels:
+      app: ams-api
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ams-api
+  namespace: ams
+spec:
+  selector:
+    app: ams-api
+  ports:
+    - port: 8100
+      nodePort: 30377
+  type: NodePort

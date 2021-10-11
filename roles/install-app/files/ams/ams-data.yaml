@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ams-data
+  namespace: ams
+  labels:
+    app: ams-data
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: ams-data
+      labels:
+        app: ams-data
+    spec:
+      containers:
+        - name: ams-data
+          image: 192.168.160.47:8888/ams/amsdata:v1
+          imagePullPolicy: IfNotPresent
+      restartPolicy: Always
+  selector:
+    matchLabels:
+      app: ams-data
