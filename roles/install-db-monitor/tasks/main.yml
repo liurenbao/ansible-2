@@ -57,7 +57,6 @@
   shell: |
     rm -rf logs
     nohup java -jar agent.jar > /dev/null 2>&1 &
-
   args:
     chdir: '{{ gaussdb_monitor_agent_root_dir }}/{{ gaussdb_user }}'
 
