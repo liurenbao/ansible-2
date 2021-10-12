@@ -9,7 +9,7 @@ spec:
   replicas: 1
   template:
     metadata:
-      name: rms-ui
+      name: rms-ui-dc1
       labels:
         app: rms-ui
         zone: dc1

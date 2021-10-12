@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: rms-server-dc1
-  namespace: rms
+  name: ams-data-dc1
+  namespace: ams
   labels:
-    app: rms-server
     zone: dc1
+    app: ams-data
 spec:
   replicas: 1
   template:
     metadata:
-      name: rms-server-dc1
+      name: ams-data-dc1
       labels:
-        app: rms-server
         zone: dc1
+        app: ams-data
     spec:
       affinity:
         podAntiAffinity:
@@ -24,11 +24,9 @@ spec:
                   - key: app
                     operator: In
                     values:
-                      - rms-server
+                      - ams-data
       nodeSelector:
         zone: dc1
-      securityContext:
-        runAsUser: 0
       initContainers:
         - name: setsysctl
           command:
@@ -42,12 +40,9 @@ spec:
           securityContext:
             privileged: true
       containers:
-        - name: rms-server
-          image: 192.168.160.47:8888/rms/rms-server:1.9
-          imagePullPolicy: Always
-          env:
-            - name: RMS_MODE
-              value: "drill"
+        - name: ams-data
+          image: 192.168.160.47:8888/ams/amsdata:v1
+          imagePullPolicy: IfNotPresent
           startupProbe:
             httpGet:
               port: 8080
@@ -80,13 +75,6 @@ spec:
             preStop:
               exec:
                 command: [ "sleep" ,"40" ]
-          volumeMounts:
-            - name: config-volume
-              mountPath: /opt/RMSServer_linux/Config
-      volumes:
-        - name: config-volume
-          configMap:
-            name: rms-server-configs
       terminationGracePeriodSeconds: 120
       restartPolicy: Always
       tolerations:
@@ -101,4 +89,4 @@ spec:
   selector:
     matchLabels:
       zone: dc1
-      app: rms-server
+      app: ams-data
