@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: ams-api
-          image: 192.168.160.47:8888/ams/amsapi:v2
+          image: 192.168.160.47:8888/ams/amsapi:v4
           imagePullPolicy: IfNotPresent
       restartPolicy: Always
   selector:

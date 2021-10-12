@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rms-ui-dc1
+  namespace: rms
+  labels:
+    app: rms-ui
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: rms-ui
+      labels:
+        app: rms-ui
+        zone: dc1
+    spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - topologyKey: kubernetes.io/hostname
+              labelSelector:
+                matchExpressions:
+                  - key: app
+                    operator: In
+                    values:
+                      - rms-ui
+      nodeSelector:
+        zone: dc1
+      containers:
+        - name: rms-ui
+          image: 192.168.160.47:8888/rms/rms-ui:1.1
+          imagePullPolicy: Always
+          env:
+            - name: ASPNETCORE_ENVIRONMENT
+              value: Testing
+          startupProbe:
+            httpGet:
+              port: 80
+              path: /
+            initialDelaySeconds: 15
+            successThreshold: 1
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              port: 80
+              path: /
+            periodSeconds: 5
+            timeoutSeconds: 2
+            successThreshold: 1
+            failureThreshold: 3
+          livenessProbe:
+            httpGet:
+              port: 80
+              path: /
+            periodSeconds: 5
+            timeoutSeconds: 2
+            successThreshold: 1
+            failureThreshold: 3
+      restartPolicy: Always
+  selector:
+    matchLabels:
+      zone: dc1
+      app: rms-ui
