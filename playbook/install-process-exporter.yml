@@ -1,9 +1,14 @@
-- name: install process exporter
+- name: install process exporter for rocketmq
   gather_facts: false
   hosts:
-    - ravencast
     - rocketmq-namesrv
     - rocketmq-master
     - rocketmq-slave
+  roles:
+    - install-process-exporter
+
+- name: install process exporter for ravencast
+  gather_facts: false
+  hosts: '{{ groups | select("match","ravencast-.*") | list }}'
   roles:
     - install-process-exporter

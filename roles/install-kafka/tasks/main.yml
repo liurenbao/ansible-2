@@ -62,5 +62,5 @@
 - name: assert list result
   assert:
     that:
-      - "{{ list_result.stdout == 'test' }}"
+      - "'test' in list_result.stdout_lines"
   when: ansible_ssh_host == groups['kafka'][0]

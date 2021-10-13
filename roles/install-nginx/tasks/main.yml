@@ -74,10 +74,15 @@
     path: '{{ nginx_root_dir }}/conf.d'
     state: directory
 
-- name: send nginx conf to remote
+- name: send traefik conf to remote
   template:
     src: 'traefik.conf.j2'
     dest: "{{ nginx_root_dir }}/conf.d/traefik.conf"
+
+- name: send component conf to remote
+  template:
+    src: 'component.conf.j2'
+    dest: "{{ nginx_root_dir }}/conf.d/component.conf"
 
 - name: send nginx.conf
   template:
