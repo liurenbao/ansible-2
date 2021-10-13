@@ -11,12 +11,12 @@
 
 - name: check dashboard url
   uri:
-    url: 'http://{{ k8s_keepalived_vip }}:30000'
+    url: 'http://{{ nginx_keepalived_vip }}:30000'
     return_content: yes
   register: this
   failed_when: "'Client sent an HTTP request to an HTTPS server' not in this.content"
 - name: k8s dashboard url
-  shell: 'echo "https://{{ k8s_keepalived_vip }}:30000"'
+  shell: 'echo "https://{{ nginx_keepalived_vip }}:30000"'
   register: k8s_dashboard_url
 - name: k8s dashboard token
   shell: |
@@ -28,39 +28,39 @@
 
 - name: check traefik dashboard url
   uri:
-    url: 'http://{{ k8s_keepalived_vip }}:31000'
+    url: 'http://{{ nginx_keepalived_vip }}:31000/dashboard'
     return_content: yes
   register: this
   failed_when: this.status != 200
 - name: traefik dashboard
-  shell: 'echo "|traefik | http://{{ k8s_keepalived_vip }}:31000 | - |" >> {{ kube_component_file }}'
+  shell: 'echo "|traefik | http://{{ nginx_keepalived_vip }}:31000/dashboard | - |" >> {{ kube_component_file }}'
 
 - name: check grafana dashboard url
   uri:
-    url: 'http://{{ k8s_keepalived_vip }}:30004'
+    url: 'http://{{ nginx_keepalived_vip }}:30004'
     return_content: yes
   register: this
   failed_when: this.status != 200
 - name: grafana dashboard
-  shell: 'echo "| grafana | http://{{ k8s_keepalived_vip }}:30004 | - |" >> {{ kube_component_file }}'
+  shell: 'echo "| grafana | http://{{ nginx_keepalived_vip }}:30004 | - |" >> {{ kube_component_file }}'
 
 - name: check prometheus dashboard url
   uri:
-    url: 'http://{{ k8s_keepalived_vip }}:30002'
+    url: 'http://{{ nginx_keepalived_vip }}:30002'
     return_content: yes
   register: this
   failed_when: this.status != 200
 - name: prometheus dashboard
-  shell: 'echo "| prometheus | http://{{ k8s_keepalived_vip }}:30002 | - |" >> {{ kube_component_file }}'
+  shell: 'echo "| prometheus | http://{{ nginx_keepalived_vip }}:30002 | - |" >> {{ kube_component_file }}'
 
 - name: check kibana dashboard url
   uri:
-    url: 'http://{{ k8s_keepalived_vip }}:30001'
+    url: 'http://{{ nginx_keepalived_vip }}:30001'
     return_content: yes
   register: this
   failed_when: this.status != 200
 - name: kibana dashboard
-  shell: 'echo "|kibana | http://{{ k8s_keepalived_vip }}:30001 | - |" >> {{ kube_component_file }}'
+  shell: 'echo "|kibana | http://{{ nginx_keepalived_vip }}:30001 | - |" >> {{ kube_component_file }}'
 - name: check traefik dashboard url
   uri:
     url: 'http://{{ nginx_keepalived_vip }}'

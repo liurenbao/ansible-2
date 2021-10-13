@@ -1,85 +1,31 @@
-upstream kibana {
-    server {{ k8s_keepalived_vip }}:30001  max_fails=0;
-}
-upstream prometheus {
-    server {{ k8s_keepalived_vip }}:30002  max_fails=0;
-}
-upstream blackbox {
-    server {{ k8s_keepalived_vip }}:30003  max_fails=0;
-}
-upstream grafana {
-    server {{ k8s_keepalived_vip }}:30004  max_fails=0;
-}
-upstream alertmanager {
-    server {{ k8s_keepalived_vip }}:30005  max_fails=0;
-}
 server {
   listen       30001 backlog=65534;
   listen  [::]:30001 backlog=65534;
-  server_name  localhost;
 
-  location / {
-    proxy_read_timeout  60s;
-    proxy_next_upstream_timeout 1s;
-    proxy_pass http://kibana;
-    proxy_set_header X-Real-IP $remote_addr;
-    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-    proxy_set_header Host $host;
-  }
-}
-server {
   listen       30002 backlog=65534;
   listen  [::]:30002 backlog=65534;
-  server_name  localhost;
 
-  location / {
-    proxy_read_timeout  60s;
-    proxy_next_upstream_timeout 1s;
-    proxy_pass http://prometheus;
-    proxy_set_header X-Real-IP $remote_addr;
-    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-    proxy_set_header Host $host;
-  }
-}
-server {
   listen       30003 backlog=65534;
   listen  [::]:30003 backlog=65534;
-  server_name  localhost;
 
-  location / {
-    proxy_read_timeout  60s;
-    proxy_next_upstream_timeout 1s;
-    proxy_pass http://blackbox;
-    proxy_set_header X-Real-IP $remote_addr;
-    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-    proxy_set_header Host $host;
-  }
-}
-server {
   listen       30004 backlog=65534;
   listen  [::]:30004 backlog=65534;
-  server_name  localhost;
 
-  location / {
-    proxy_read_timeout  60s;
-    proxy_next_upstream_timeout 1s;
-    proxy_pass http://grafana;
-    proxy_set_header X-Real-IP $remote_addr;
-    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-    proxy_set_header Host $host;
-  }
-}
-server {
   listen       30005 backlog=65534;
   listen  [::]:30005 backlog=65534;
+
+  listen       31000 backlog=65534;
+  listen  [::]:31000 backlog=65534;
+
   server_name  localhost;
 
   location / {
     proxy_read_timeout  60s;
     proxy_next_upstream_timeout 1s;
-    proxy_pass http://alertmanager;
+    proxy_pass $scheme://{{ k8s_keepalived_vip }}:$server_port;
     proxy_set_header X-Real-IP $remote_addr;
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-    proxy_set_header Host $host;
+    proxy_set_header Host $host:$server_port;
   }
+
 }
