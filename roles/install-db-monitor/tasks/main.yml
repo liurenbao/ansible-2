@@ -1,6 +1,8 @@
 - name: set java env conf ~/.bashrc
+  become: yes
+  become_user: '{{ gaussdb_user }}'
   lineinfile:
-    dest: '/home/{{ gaussdb_user }}/.bashrc'
+    dest: '~/.bashrc'
     state: present
     line: "{{ item }}"
   with_items:
@@ -10,7 +12,9 @@
     - "export PATH=${JAVA_HOME}/bin:$PATH"
 
 - name: source bashrc
-  shell: 'source /home/{{ gaussdb_user }}/.bashrc'
+  become: yes
+  become_user: '{{ gaussdb_user }}'
+  shell: 'source ~/.bashrc'
 
 - name: create agent root dir
   file:
@@ -44,19 +48,38 @@
     group: '{{ gaussdb_user_group }}'
     recurse: yes
 
-- name: stop agent
-  shell: |
-    pid=$(ps -ef | grep -v grep | grep {{ gaussdb_user }} | grep agent.jar | awk '{print $2}')
-    kill -9 $pid
-  ignore_errors: yes
+- name: get agent pid
+  shell: ps -ef | grep -v grep | grep agent.jar | awk '{print $2}'
+  register: pid
+
+- name: kill agent pid
+  shell: kill -9 {{ pid.stdout }}
+  when: pid.stdout != ""
+
 #启动不起来执行以下命令
-#ansible -i gaussdb-hosts gaussdb -m shell -a "cd /data01/gaussdb-monitor-agent/omm/ && nohup java -jar agent.jar > /dev/null 2>&1 &"
+#ansible -i gaussdb-hosts gaussdb --become-user omm -m shell -a "cd /data01/gaussdb-monitor-agent/omm/ && nohup java -jar agent.jar > /dev/null 2>&1 &"
+
+- name: check java command exists
+  shell: java -version
+  register: java
+
+- name: show java command exists
+  debug:
+    msg: '{{ java }}'
+
+- name: copy startup.sh
+  copy:
+    src: startup.sh
+    dest: '{{ gaussdb_monitor_agent_root_dir }}/{{ gaussdb_user }}/startup.sh'
+    mode: 0755
+    owner: '{{ gaussdb_user }}'
+    group: '{{ gaussdb_user_group }}'
+
 - name: start agent
   become: yes
   become_user: '{{ gaussdb_user }}'
-  shell: |
-    rm -rf logs
-    nohup java -jar agent.jar > /dev/null 2>&1 &
+  shell: ./startup.sh
+  register: result
   args:
     chdir: '{{ gaussdb_monitor_agent_root_dir }}/{{ gaussdb_user }}'
 
