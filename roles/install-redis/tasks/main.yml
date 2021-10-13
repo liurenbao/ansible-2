@@ -1,14 +1,3 @@
-- name: modify redis sysctl
-  lineinfile:
-    dest: /etc/sysctl.conf
-    line: "{{ item }}"
-  with_items:
-    - "fs.file-max = 1048576"
-    - "net.ipv6.conf.all.disable_ipv6 = 1"
-    - "net.ipv6.conf.default.disable_ipv6 = 1"
-    - "net.ipv6.conf.lo.disable_ipv6 = 1"
-    - "vm.overcommit_memory = 1"
-
 - name: sysctl enable
   shell: sysctl -p /etc/sysctl.conf
 
@@ -19,9 +8,6 @@
   file:
     path: '{{ redis_data_dir }}'
     state: absent
-
-- name: somaxconneconn
-  shell: echo 511 > /proc/sys/net/core/somaxconn
 
 - name: copy docker compose
   shell: mkdir -p {{ redis_data_dir }}/data

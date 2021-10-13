@@ -1,3 +1,4 @@
+# 全局刷新文件句柄 关闭tcp6
 - name: change sysconf
   hosts: all
   gather_facts: false

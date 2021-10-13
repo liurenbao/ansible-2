@@ -1,3 +1,13 @@
+- name: modify sysctl
+  lineinfile:
+    dest: /etc/sysctl.conf
+    line: "{{ item }}"
+  with_items:
+    - "vm.overcommit_memory = 1"
+
+- name: sysctl enable
+  shell: sysctl -p /etc/sysctl.conf
+
 - name: create root dir
   file:
     path: '{{ kafka_root_dir }}'
