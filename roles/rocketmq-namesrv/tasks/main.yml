@@ -28,6 +28,7 @@
   file:
     path: '{{ rocketmq_root_dir }}'
     owner: '{{ rocketmq_user }}'
+    group: '{{ docker_gid }}'
     recurse: yes
 
 - name: rotate rockemq logs

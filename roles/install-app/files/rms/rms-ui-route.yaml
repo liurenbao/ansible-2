@@ -1,14 +1,14 @@
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
-  name: rms-server
+  name: rms-ui
   namespace: rms
 spec:
   entryPoints:
     - web
   routes:
-    - kind: Rule
-      match: PathPrefix(`/rms/`)
+    - match: PathPrefix(`/rms/`)
+      kind: Rule
       services:
-        - name: rms-ui
-          port: 8080
+        - name: rms
+          port: 80

@@ -43,6 +43,7 @@
   file:
     path: '{{ rocketmq_root_dir }}'
     owner: '{{ rocketmq_user }}'
+    group: '{{ docker_gid }}'
     mode: 0760
     recurse: yes
 

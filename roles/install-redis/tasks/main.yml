@@ -64,7 +64,7 @@
 - name: wait redis port
   wait_for:
     port: 6379
-    delay: 15
+    delay: 5
     timeout: 30
     msg: 'Timeout waiting for redis respond'
 
@@ -75,7 +75,7 @@
   when: ansible_ssh_host == groups['redis'][0]
 
 - name: get cluster info
-  shell: docker exec -i redis-node01 /bin/sh -c 'redis-cli cluster info'
+  shell: sleep 10 && docker exec -i redis-node01 /bin/sh -c 'redis-cli cluster info'
   register: redis_cluster_info
 
 - name: redis cluster health check

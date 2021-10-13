@@ -1,4 +1,23 @@
----
+- name: change sys conf
+  gather_facts: false
+  hosts:
+    - rocketmq-namesrv
+    - rocketmq-master
+    - rocketmq-slave
+  tasks:
+    - name: change sys conf
+      lineinfile:
+        dest: /etc/sysctl.conf
+        line: "{{ item }}"
+      with_items:
+        - "vm.drop_caches = 1"
+        - "vm.zone_reclaim_mode = 0"
+        - "vm.dirty_background_ratio = 50"
+        - "vm.dirty_ratio = 50"
+        - "vm.page-cluster = 3"
+        - "vm.dirty_writeback_centisecs = 360000"
+        - "vm.swappiness = 10"
+
 - name: install jdk
   gather_facts: false
   hosts:

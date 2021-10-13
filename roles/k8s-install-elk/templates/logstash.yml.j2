@@ -39,12 +39,27 @@ data:
         patterns_dir => ["/usr/share/logstash/patterns"]
         match => { "message" => "%{TIMESTAMP:timestamp}(:)?%{SPACE}\[%{PROG:program}\|%{LOGLEVEL:level}\]" }
         match => { "message" => "%{TIMESTAMP:timestamp}%{SPACE}%{LOGLEVEL:level}" }
-        match => { "message" => "\[%{IDENTIFIER:source}\]%{SPACE}(HOST=\[%{HOSTNAME:host}\])?%{SPACE}(RID=\[%{BASE10NUM:rid}\])?%{SPACE}(TIME=\[%{TIMESTAMP:timestamp}\])?%{SPACE}(CLIENT=\[%{IDENTIFIER:client}\])?%{SPACE}(Type=\[%{WORD:level}\])?%{SPACE}(SVC=\[%{IDENTIFIER:svc}\])?%{SPACE}(DurTime=\[%{BASE10NUM:DurTime}\])?" }
+        match => { "message" => "\[%{MES_SOURCE:SOURCE}\]%{SPACE}%{DATA:kv_message}\n%{GREEDYDATA:content}" }
+      }
+
+      kv {
+        source => "kv_message"
+        allow_duplicate_values => false
+        include_brackets => false
+        recursive => false
+        trim_value => "\[\]"
+        trim_key => "\s+"
+        field_split_pattern => "\]"
       }
 
       date {
-        match => [ "timestamp", "yyyy-MM-dd HH:mm:ss.SSS" ]
+        match => [ "TIME", "yyyy-MM-dd HH:mm:ss.SSS" ]
         target => "@timestamp"
+      }
+
+      mutate {
+        remove_field => [ "kv_message", "content", "[kubernetes][node][uid]", "[kubernetes][labels][pod-template-hash]",
+            "[kubernetes][pod][uid]", "[kubernetes][pod][ip]", "[kubernetes][namespace_uid]","[kubernetes][node][labels]", "stream"  ]
       }
 
     }
@@ -86,7 +101,7 @@ data:
   main: |-
     FULLYEAR (?>\d\d){2}
     TIMESTAMP %{FULLYEAR}-%{MONTHNUM}-%{MONTHDAY}[T ]%{HOUR}:?%{MINUTE}(?::?%{SECOND})?%{ISO8601_TIMEZONE}?
-    IDENTIFIER [0-9a-zA-Z\.\-_]*
+    MES_SOURCE (SQL|SYSTEM|SERVICE)
 ---
 apiVersion: apps/v1
 kind: Deployment

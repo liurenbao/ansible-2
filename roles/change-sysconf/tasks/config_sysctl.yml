@@ -14,14 +14,6 @@
     - "net.ipv4.tcp_rmem = 4096 4096 16777216"
     - "net.ipv4.tcp_wmem = 4096 4096 16777216"
 
-    - "vm.drop_caches = 1"
-    - "vm.zone_reclaim_mode = 0"
-    - "vm.dirty_background_ratio = 50"
-    - "vm.dirty_ratio = 50"
-    - "vm.page-cluster = 3"
-    - "vm.dirty_writeback_centisecs = 360000"
-    - "vm.swappiness = 10"
-
 - name: sysctl enable
   shell: sysctl -p /etc/sysctl.conf
 

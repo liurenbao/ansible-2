@@ -46,7 +46,7 @@
 
 - name: stop existed nginx
   shell: docker-compose down
-  when: dir.stat.exists == true
+  when: dir.stat.exists == true and down == true
   args:
     chdir: "{{ nginx_root_dir }}"
 
@@ -89,6 +89,11 @@
   args:
     chdir: '{{ nginx_root_dir }}'
 
+- name: reload nginx conf
+  shell: docker-compose exec -T nginx nginx -s reload
+  args:
+    chdir: '{{ nginx_root_dir }}'
+
 - name: rotate nginx logs
   template:
     src: nginx.j2
@@ -97,6 +102,6 @@
 - name: wait nginx ready
   wait_for:
     port: 80
-    delay: 10
+    delay: 2
     timeout: 30
     msg: 'Timeout waiting for nginx respond'

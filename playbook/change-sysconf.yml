@@ -1,11 +1,5 @@
-# 修改rocketmq  es  kafka配置参数
 - name: change sysconf
-  hosts:
-    - rocketmq-namesrv
-    - rocketmq-master
-    - rocketmq-slave
-    - es
-    - kafka
+  hosts: all
   gather_facts: false
   roles:
     - change-sysconf
