@@ -3,9 +3,9 @@
 # 注意修改VIP地址
 #---------------------
 # fixme 修改此处配置
-harbor_keepalived_vip: 192.168.163.250
-nginx_keepalived_vip: 192.168.163.251
-k8s_keepalived_vip: 192.168.163.252
+harbor_keepalived_vip: 192.168.160.47
+nginx_keepalived_vip: 192.168.160.5
+k8s_keepalived_vip: 192.168.160.78
 
 cim_ops_uid: '9999'
 cim_ops_user: 'cimops'
@@ -20,7 +20,7 @@ yum_base_url: 'http://192.168.161.202/yum/'
 keepalived_root_dir: /data01/keepalived
 ## harbor----------------------------------------------------------------------------------
 # harbor主备vip
-harbor_port: '80'
+harbor_port: '8888'
 harbor_keepalived_virtual_router_id: '{{ harbor_keepalived_vip.split(".")[3] }}'
 harbor_keepalived_vrrp_instance_interface: eth0
 harbor_root_dir: '/data01/harbor'

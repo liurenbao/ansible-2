@@ -1,4 +1,5 @@
 - name: change sys conf
+  gather_facts: false
   hosts:
     - rocketmq-namesrv
     - rocketmq-master
