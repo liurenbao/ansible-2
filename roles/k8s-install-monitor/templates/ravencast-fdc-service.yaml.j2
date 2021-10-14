@@ -36,6 +36,9 @@ subsets:
   - addresses:
 {% for host in groups['ravencast-fdc'] %}
     - ip: {{ host }}
+      targetRef:
+        kind: Node
+        name: {{ hostvars[host].host_name }}
 {% endfor %}
     ports:
       - port: 9100

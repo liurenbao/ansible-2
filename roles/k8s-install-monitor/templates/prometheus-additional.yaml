@@ -36,6 +36,10 @@ stringData:
         - source_labels: [ __meta_kubernetes_service_name ]
           action: replace
           target_label: service
+        - source_labels: [ __address__, __meta_kubernetes_endpoint_address_target_name]
+          action: replace
+          replacement: $1_$2
+          target_label: nodeName
       metric_relabel_configs:
         - action: labeldrop
           regex: __meta_kubernetes_.+
