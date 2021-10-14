@@ -7,7 +7,7 @@
     keepalived_vrrp_instance_interface:
       - '{{ nginx_keepalived_vrrp_instance_interface }}'
     health_check_local_script: nginx_healthcheck.sh
-    down: false
+    down: true
   roles:
     - install-keepalived
     - install-nginx

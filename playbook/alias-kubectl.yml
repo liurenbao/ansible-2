@@ -1,0 +1,24 @@
+- name: create alais for kubectl
+  gather_facts: false
+  hosts:
+    - k8s-master-init
+    - k8s-master-join
+  tasks:
+    - name: remove alais for kubectl
+      lineinfile:
+        path: /etc/profile
+        regexp: '^alias'
+        state: absent
+    - name: create alais for kubectl
+      lineinfile:
+        path: /etc/profile
+        line: '{{ item }}'
+        state: present
+      with_items:
+        - 'alias k="kubectl"'
+        - 'alias km="kubectl -n monitoring"'
+        - 'alias ke="kubectl -n elk"'
+        - 'alias kd="kubectl -n kubernetes-dashboard"'
+        - 'alias ks="kubectl -n kube-system"'
+    - name: source conf
+      shell: source /etc/profile

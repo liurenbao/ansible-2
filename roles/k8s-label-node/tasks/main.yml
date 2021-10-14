@@ -1,3 +1,9 @@
-- name: label k8s node
+- name: label k8s master init
   shell: kubectl label node {{ hostvars[item].host_name }} {{ hostvars[item].label }} --overwrite
-  loop: "{{ query('inventory_hostnames', 'k8s') }}"
+  loop: "{{ query('inventory_hostnames', 'k8s-master-init') }}"
+- name: label k8s master join
+  shell: kubectl label node {{ hostvars[item].host_name }} {{ hostvars[item].label }} --overwrite
+  loop: "{{ query('inventory_hostnames', 'k8s-master-join') }}"
+- name: label k8s worker
+  shell: kubectl label node {{ hostvars[item].host_name }} {{ hostvars[item].label }} --overwrite
+  loop: "{{ query('inventory_hostnames', 'k8s-worker') }}"
