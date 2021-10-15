@@ -38,8 +38,9 @@ data:
         break_on_match => true
         patterns_dir => ["/usr/share/logstash/patterns"]
         match => { "message" => "%{TIMESTAMP:timestamp}(:)?%{SPACE}\[%{PROG:program}\|%{LOGLEVEL:level}\]" }
-        match => { "message" => "%{TIMESTAMP:timestamp}%{SPACE}%{LOGLEVEL:level}" }
+        match => { "message" => "%{TIMESTAMP:timestamp}%{SPACE}%{LOGLEVEL:level}%{SPACE}-%{SPACE}\[%{DATA:trace_id}\]%{SPACE}\[%{DATA:thread_id}\]" }
         match => { "message" => "\[%{MES_SOURCE:SOURCE}\]%{SPACE}%{DATA:kv_message}\n%{GREEDYDATA:content}" }
+        match => { "message" => "%{TIMESTAMP:timestamp}%{SPACE}%{LOGLEVEL:level}" }
       }
 
       kv {
