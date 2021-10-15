@@ -7,6 +7,7 @@ subsets:
   - addresses:
 {% for host in groups['ravencast-apc'] %}
       - ip: {{ host }}
+        nodeName: {{ hostvars[host].host_name }}
 {% endfor %}
     ports:
       - port: 10103
@@ -64,6 +65,7 @@ subsets:
   - addresses:
 {% for host in groups['ravencast-apc'] %}
     - ip: {{ host }}
+      nodeName: {{ hostvars[host].host_name }}
 {% endfor %}
     ports:
       - port: 9256

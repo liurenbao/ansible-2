@@ -7,6 +7,7 @@ subsets:
   - addresses:
 {% for host in groups['es'] %}
       - ip: {{ host }}
+        nodeName: {{ hostvars[host].host_name }}
 {% endfor %}
     ports:
       - port: 9114
@@ -42,6 +43,7 @@ subsets:
   - addresses:
 {% for host in groups['es'] %}
     - ip: {{ host }}
+      nodeName: {{ hostvars[host].host_name }}
 {% endfor %}
     ports:
       - port: 9100
