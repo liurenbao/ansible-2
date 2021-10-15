@@ -1,0 +1,98 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: rms-ui-dc2
+  namespace: rms
+  labels:
+    app: rms-ui
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      zone: dc2
+      app: rms-ui
+  template:
+    metadata:
+      name: rms-ui-dc2
+      labels:
+        app: rms-ui
+        zone: dc2
+    spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - topologyKey: kubernetes.io/hostname
+              labelSelector:
+                matchExpressions:
+                  - key: app
+                    operator: In
+                    values:
+                      - rms-ui
+      nodeSelector:
+        zone: dc2
+      volumes:
+        - name: appsettings
+          configMap:
+            name: rmsui-configs
+            defaultMode: 420
+      containers:
+        - name: rms-ui
+          image: 192.168.160.47:8888/rms/rms-ui:1.5
+          env:
+            - name: ASPNETCORE_ENVIRONMENT
+              value: Drill
+          ports:
+            - containerPort: 80
+              protocol: TCP
+          resources: { }
+          volumeMounts:
+            - name: appsettings
+              mountPath: /app/appsettings.Drill.json
+              subPath: appsettings.Drill.json
+          startupProbe:
+            httpGet:
+              port: 80
+              path: /
+            initialDelaySeconds: 15
+            successThreshold: 1
+            failureThreshold: 3
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 80
+              scheme: HTTP
+            timeoutSeconds: 2
+            periodSeconds: 5
+            successThreshold: 1
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 80
+              scheme: HTTP
+            timeoutSeconds: 2
+            periodSeconds: 5
+            successThreshold: 1
+            failureThreshold: 3
+          lifecycle:
+            preStop:
+              exec:
+                command:
+                  - sleep
+                  - '60'
+          imagePullPolicy: Always
+      initContainers:
+        - command:
+            - sysctl
+            - -w
+            - net.ipv4.tcp_keepalive_time=10
+            - net.ipv4.tcp_keepalive_probes=2
+            - net.ipv4.tcp_keepalive_intvl=5
+          image: 192.168.160.47:8888/public/busybox:1.34
+          imagePullPolicy: Always
+          name: setsysctl
+          resources: { }
+          securityContext:
+            privileged: true
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 120

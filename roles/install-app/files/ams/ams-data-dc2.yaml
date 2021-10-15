@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: ams-api-dc1
+  name: ams-data-dc2
   namespace: ams
   labels:
-    zone: dc1
-    app: ams-api
+    zone: dc2
+    app: ams-data
 spec:
   replicas: 1
   template:
     metadata:
-      name: ams-api
+      name: ams-data-dc2
       labels:
-        app: ams-api
-        zone: dc1
+        zone: dc2
+        app: ams-data
     spec:
       affinity:
         podAntiAffinity:
@@ -24,9 +24,9 @@ spec:
                   - key: app
                     operator: In
                     values:
-                      - ams-api
+                      - ams-data
       nodeSelector:
-        zone: dc1
+        zone: dc2
       initContainers:
         - name: setsysctl
           command:
@@ -40,36 +40,36 @@ spec:
           securityContext:
             privileged: true
       containers:
-        - name: ams-api
-          image: 192.168.160.47:8888/ams/amsapi:v0
+        - name: ams-data
+          image: 192.168.160.47:8888/ams/amsdata:v0
           imagePullPolicy: IfNotPresent
           startupProbe:
             httpGet:
-              port: 8100
-              path: /ams/health/get
-            initialDelaySeconds: 15
+              port: 8105
+              path: /amsdata/
+            initialDelaySeconds: 30
             timeoutSeconds: 1
             periodSeconds: 3
             successThreshold: 1
             failureThreshold: 3
           readinessProbe:
             httpGet:
-              port: 8100
-              path: /ams/health/get
+              port: 8105
+              path: /amsdata/
             timeoutSeconds: 1
             periodSeconds: 3
             successThreshold: 1
             failureThreshold: 3
           livenessProbe:
             httpGet:
-              port: 8100
-              path: /ams/health/get
+              port: 8105
+              path: /amsdata/
           resources:
             limits:
               cpu: '4'
               memory: 8Gi
             requests:
-              cpu: '0.5'
+              cpu: '0.2'
               memory: 1Gi
           lifecycle:
             preStop:
@@ -88,18 +88,5 @@ spec:
           tolerationSeconds: 2
   selector:
     matchLabels:
-      zone: dc1
-      app: ams-api
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: ams-api
-  namespace: ams
-spec:
-  selector:
-    app: ams-api
-  ports:
-    - port: 8100
-      nodePort: 30377
-  type: NodePort
+      zone: dc2
+      app: ams-data

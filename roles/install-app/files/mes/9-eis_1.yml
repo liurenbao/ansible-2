@@ -1,18 +1,22 @@
-
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: plantu_eis_1
+  name: plantu-eis-1
   namespace: plantu
+  labels:
+    app: plantu-eis-1
+    zone: dc1
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: plantu_eis_1
+      app: plantu-eis-1
+      zone: dc1
   template:
     metadata:
       labels:
-        app: plantu_eis_1
+        app: plantu-eis-1
+        zone: dc1
     spec:
       hostNetwork: false
       tolerations:
@@ -25,11 +29,11 @@ spec:
           effect: "NoExecute"
           tolerationSeconds: 2
       containers:
-        - name: plantu_eis_1
-          image: 192.168.160.47:8888/plantu/plantu-mes-mesr:v1.0.5
+        - name: plantu-eis-1
+          image: 192.168.160.47:8888/plantu/plantu-mes-prod:v1.0.5
           env:
-          - name: PLANTU_MES_HOME
-            value: /mesdata/plantu_config/eis_1
+            - name: PLANTU_MES_HOME
+              value: /mesdata/plantu_config/eis_1
           # 当前服务器已经存在相同版本的镜像则不会重复拉取
           imagePullPolicy: IfNotPresent
           # 容器启动端口，没有可以删除
@@ -39,20 +43,32 @@ spec:
               cpu: "32"
               memory: 30720Mi
             requests:
-              cpu: "16"
-              memory: 20480Mi
+              cpu: "2"
+              memory: 4096Mi
           # 优雅关机，需要确保基础镜像要有/bin/bash命令
           lifecycle:
             preStop:
               exec:
                 command: [ "/bin/bash", "-c", "sleep 30" ]
           volumeMounts:
-          - name: mes-storage
-            mountPath: /mesdata
+            - name: mes-storage
+              mountPath: /mesdata
+      initContainers:
+        - command:
+            - sysctl
+            - -w
+            - net.ipv4.tcp_keepalive_time=10
+            - net.ipv4.tcp_keepalive_probes=2
+            - net.ipv4.tcp_keepalive_intvl=5
+          image: 192.168.160.47:8888/public/busybox:1.34
+          imagePullPolicy: Always
+          name: setsysctl
+          securityContext:
+            privileged: true
       volumes:
-      - name: mes-storage
-        nfs:
-          path: /data01/nfs
-          server: 192.168.160.61
+        - name: mes-storage
+          nfs:
+            path: /data01/nfs
+            server: 192.168.160.61
       # k8s给程序发kill -9的时间，这时间需要大于preStop的时间
       terminationGracePeriodSeconds: 60

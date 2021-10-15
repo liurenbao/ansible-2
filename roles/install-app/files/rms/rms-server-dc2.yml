@@ -1,0 +1,115 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: rms-server-dc2
+  namespace: rms
+  labels:
+    app: rms-server
+    zone: dc2
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      zone: dc2
+      app: rms-server
+  template:
+    metadata:
+      name: rms-server-dc2
+      labels:
+        app: rms-server
+        zone: dc2
+    spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - topologyKey: kubernetes.io/hostname
+              labelSelector:
+                matchExpressions:
+                  - key: app
+                    operator: In
+                    values:
+                      - rms-server
+      nodeSelector:
+        zone: dc2
+      securityContext:
+        runAsUser: 0
+      volumes:
+        - name: config-volume
+          configMap:
+            name: rms-server-configs
+            defaultMode: 420
+      containers:
+        - name: rms-server
+          image: 192.168.160.47:8888/rms/rms-server:2.1
+          imagePullPolicy: Always
+          env:
+            - name: RMS_MODE
+              value: drill
+          resources:
+            limits:
+              cpu: '4'
+              memory: 8Gi
+            requests:
+              cpu: 200m
+              memory: 1Gi
+          volumeMounts:
+            - name: config-volume
+              mountPath: /opt/RMSServer_linux/Config
+          livenessProbe:
+            httpGet:
+              path: /metrics
+              port: 8080
+              scheme: HTTP
+            timeoutSeconds: 1
+            periodSeconds: 10
+            successThreshold: 1
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /metrics
+              port: 8080
+              scheme: HTTP
+            timeoutSeconds: 1
+            periodSeconds: 3
+            successThreshold: 1
+            failureThreshold: 3
+          startupProbe:
+            httpGet:
+              path: /metrics
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 30
+            timeoutSeconds: 1
+            periodSeconds: 3
+            successThreshold: 1
+            failureThreshold: 3
+          lifecycle:
+            preStop:
+              exec:
+                command:
+                  - sleep
+                  - '40'
+      terminationGracePeriodSeconds: 120
+      restartPolicy: Always
+      tolerations:
+        - key: node.kubernetes.io/not-ready
+          operator: Exists
+          effect: NoExecute
+          tolerationSeconds: 2
+        - key: node.kubernetes.io/unreachable
+          operator: Exists
+          effect: NoExecute
+          tolerationSeconds: 2
+      initContainers:
+        - command:
+            - sysctl
+            - -w
+            - net.ipv4.tcp_keepalive_time=10
+            - net.ipv4.tcp_keepalive_probes=2
+            - net.ipv4.tcp_keepalive_intvl=5
+          image: 192.168.160.47:8888/public/busybox:1.34
+          imagePullPolicy: IfNotPresent
+          name: setsysctl
+          resources: { }
+          securityContext:
+            privileged: true

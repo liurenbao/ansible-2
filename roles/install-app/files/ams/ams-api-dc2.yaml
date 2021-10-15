@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: rms-server-dc1
-  namespace: rms
+  name: ams-api-dc2
+  namespace: ams
   labels:
-    app: rms-server
-    zone: dc1
+    zone: dc2
+    app: ams-api
 spec:
   replicas: 1
   template:
     metadata:
-      name: rms-server-dc1
+      name: ams-api
       labels:
-        app: rms-server
-        zone: dc1
+        app: ams-api
+        zone: dc2
     spec:
       affinity:
         podAntiAffinity:
@@ -24,11 +24,9 @@ spec:
                   - key: app
                     operator: In
                     values:
-                      - rms-server
+                      - ams-api
       nodeSelector:
-        zone: dc1
-      securityContext:
-        runAsUser: 0
+        zone: dc2
       initContainers:
         - name: setsysctl
           command:
@@ -42,51 +40,41 @@ spec:
           securityContext:
             privileged: true
       containers:
-        - name: rms-server
-          image: 192.168.160.47:8888/rms/rms-server:1.9
-          imagePullPolicy: Always
-          env:
-            - name: RMS_MODE
-              value: "drill"
+        - name: ams-api
+          image: 192.168.160.47:8888/ams/amsapi:v0
+          imagePullPolicy: IfNotPresent
           startupProbe:
             httpGet:
-              port: 8080
-              path: /metrics
-            initialDelaySeconds: 30
+              port: 8100
+              path: /ams/health/get
+            initialDelaySeconds: 15
             timeoutSeconds: 1
             periodSeconds: 3
             successThreshold: 1
             failureThreshold: 3
           readinessProbe:
             httpGet:
-              port: 8080
-              path: /metrics
+              port: 8100
+              path: /ams/health/get
             timeoutSeconds: 1
             periodSeconds: 3
             successThreshold: 1
             failureThreshold: 3
           livenessProbe:
             httpGet:
-              port: 8080
-              path: /metrics
+              port: 8100
+              path: /ams/health/get
           resources:
             limits:
               cpu: '4'
               memory: 8Gi
             requests:
-              cpu: '0.2'
+              cpu: '0.5'
               memory: 1Gi
           lifecycle:
             preStop:
               exec:
                 command: [ "sleep" ,"40" ]
-          volumeMounts:
-            - name: config-volume
-              mountPath: /opt/RMSServer_linux/Config
-      volumes:
-        - name: config-volume
-          configMap:
-            name: rms-server-configs
       terminationGracePeriodSeconds: 120
       restartPolicy: Always
       tolerations:
@@ -100,5 +88,7 @@ spec:
           tolerationSeconds: 2
   selector:
     matchLabels:
-      zone: dc1
-      app: rms-server
+      zone: dc2
+      app: ams-api
+---
+

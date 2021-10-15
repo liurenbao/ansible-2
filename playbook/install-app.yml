@@ -1,15 +1,5 @@
 - name: install app on dc1
   hosts: k8s-master-init
   gather_facts: false
-  vars:
-    zone: dc1
-  roles:
-    - install-app
-
-- name: install app on dc2
-  hosts: k8s-master-init
-  gather_facts: false
-  vars:
-    zone: dc2
   roles:
     - install-app

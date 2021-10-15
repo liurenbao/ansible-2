@@ -1,12 +1,12 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: rms-ui
-  namespace: rms
+  name: ams-ui
+  namespace: ams
 spec:
   selector:
-    app: rms-ui
+    app: ams-ui
   ports:
     - port: 80
-      nodePort: 30895
+      nodePort: 32630
   type: NodePort
