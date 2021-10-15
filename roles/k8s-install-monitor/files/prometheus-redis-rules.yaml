@@ -25,7 +25,7 @@ spec:
             severity: critical
           annotations:
             summary: Redis missing master (instance {{ $labels.instance }})
-            description: "Redis cluster has no node marked as master.  VALUE = {{ $value }}"
+            description: "Redis cluster has too few master nodes.  VALUE = {{ $value }}"
         - alert: RedisTooManyMasters
           expr: count(redis_instance_info{role="master"}) > 3
           for: 0m

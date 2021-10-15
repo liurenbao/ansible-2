@@ -26,22 +26,6 @@ spec:
           annotations:
             summary: Host memory under memory pressure (instance {{ $labels.instance }})
             description: "The node is under heavy memory pressure. High rate of major page faults.  VALUE = {{ $value }}"
-        - alert: HostUnusualNetworkThroughputIn
-          expr: sum by (instance) (rate(node_network_receive_bytes_total[2m])) / 1024 / 1024 > 1000
-          for: 5m
-          labels:
-            severity: warning
-          annotations:
-            summary: Host unusual network throughput in (instance {{ $labels.instance }})
-            description: "Host network interfaces are probably receiving too much data (> 1000 MB/s).  VALUE = {{ $value }}"
-        - alert: HostUnusualNetworkThroughputOut
-          expr: sum by (instance) (rate(node_network_transmit_bytes_total[2m])) / 1024 / 1024 > 1000
-          for: 5m
-          labels:
-            severity: warning
-          annotations:
-            summary: Host unusual network throughput out (instance {{ $labels.instance }})
-            description: "Host network interfaces are probably sending too much data (> 1000 MB/s).  VALUE = {{ $value }}"
         - alert: HostOutOfDiskSpace
           expr: (node_filesystem_avail_bytes * 100) / node_filesystem_size_bytes < 10 and ON (instance, device, mountpoint) node_filesystem_readonly == 0
           for: 2m
@@ -77,22 +61,6 @@ spec:
           annotations:
             summary: Host inodes will fill in 24 hours (instance {{ $labels.instance }})
             description: "Filesystem is predicted to run out of inodes within the next 24 hours at current write rate.  VALUE = {{ $value }}"
-        - alert: HostUnusualDiskReadLatency
-          expr: rate(node_disk_read_time_seconds_total[1m]) / rate(node_disk_reads_completed_total[1m]) > 0.1 and rate(node_disk_reads_completed_total[1m]) > 0
-          for: 2m
-          labels:
-            severity: warning
-          annotations:
-            summary: Host unusual disk read latency (instance {{ $labels.instance }})
-            description: "Disk latency is growing (read operations > 100ms).  VALUE = {{ $value }}"
-        - alert: HostUnusualDiskWriteLatency
-          expr: rate(node_disk_write_time_seconds_total[1m]) / rate(node_disk_writes_completed_total[1m]) > 0.1 and rate(node_disk_writes_completed_total[1m]) > 0
-          for: 10m
-          labels:
-            severity: warning
-          annotations:
-            summary: Host unusual disk write latency (instance {{ $labels.instance }})
-            description: "Disk latency is growing (write operations > 100ms).  VALUE = {{ $value }}"
         - alert: HostHighCpuLoad
           expr: 100 - (avg by(instance) (rate(node_cpu_seconds_total{mode="idle"}[2m])) * 100) > 80
           for: 5m
