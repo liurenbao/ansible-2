@@ -18,5 +18,8 @@
 - name: enable service plantu-agent
   shell: systemctl enable plantu-agent
 
+- name: stop service plantu-agent
+  shell: systemctl stop plantu-agent
+
 - name: start service plantu-agent
   shell: systemctl start plantu-agent
