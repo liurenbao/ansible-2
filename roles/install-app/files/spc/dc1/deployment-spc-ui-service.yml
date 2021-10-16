@@ -32,7 +32,7 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: spc-ui-service
+  name: spc-ui-service-dc1
   namespace: spc
 spec:
   replicas: 2
@@ -66,9 +66,11 @@ spec:
                       values:
                         - spc-ui-service
               weight: 100
+      nodeSelector:
+        zone: dc1
       containers:
         - name: spc-ui-service
-          image: 192.168.160.47:8888/spc-sit/spc-ui-service:2.0.0-exercise
+          image: 192.168.160.47:8888/spc-sit/spc-ui-service:1.0.0
           imagePullPolicy: Always
           ports:
             - containerPort: 80
@@ -80,6 +82,15 @@ spec:
             requests:
               cpu: 20m
               memory: 200Mi
+          startupProbe:
+            httpGet:
+              port: 80
+              path: /
+            initialDelaySeconds: 30
+            timeoutSeconds: 5
+            periodSeconds: 3
+            successThreshold: 1
+            failureThreshold: 3
           livenessProbe:
             failureThreshold: 3
             httpGet:

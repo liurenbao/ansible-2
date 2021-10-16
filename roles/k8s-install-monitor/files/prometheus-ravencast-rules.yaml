@@ -19,7 +19,7 @@ spec:
             summary: Ravencast down (instance {{ $labels.instance }})
             description: "Ravencast service down"
         - alert: RavencastLicenseExpiring
-          expr: ravencast_expire_days_total{} < 30
+          expr: ravencast_expire_days_total{} < 60
           for: 0m
           labels:
             severity: warning

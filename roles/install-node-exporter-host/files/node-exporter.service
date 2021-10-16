@@ -1,0 +1,9 @@
+[Unit]
+Description=Node Exporter
+
+[Service]
+EnvironmentFile=/data01/node-exporter/config/node_exporter
+ExecStart=/data01/node-exporter/node_exporter $NODE_EXPORTER_OPTIONS
+
+[Install]
+WantedBy=multi-user.target
