@@ -6,7 +6,9 @@ metadata:
 subsets:
   - addresses:
       - ip: 192.168.160.12
+        nodeName: gaussdb-test-1
       - ip: 192.168.160.30
+        nodeName: gaussdb-test-2
     ports:
       - port: 9999
 ---

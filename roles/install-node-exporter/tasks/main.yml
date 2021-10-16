@@ -1,0 +1,21 @@
+- name: esure node exporter dir exists
+  file:
+    path: '{{ node_exporter_root_dir }}'
+    state: directory
+
+- name: copy node exporter host package
+  copy:
+    src: '/etc/ansible/tools/node_exporter'
+    dest: '{{ node_exporter_root_dir }}/'
+    mode: 0755
+
+- name: copy node exporter unit service
+  template:
+    src: node-exporter.service.j2
+    dest: /usr/lib/systemd/system/node-exporter.service
+
+- name: start node exporter unit service
+  systemd:
+    name: node-exporter
+    daemon_reload: yes
+    state: restarted
