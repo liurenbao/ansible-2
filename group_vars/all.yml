@@ -4,8 +4,8 @@
 #---------------------
 # fixme 修改此处配置
 harbor_keepalived_vip: 192.168.160.47
-nginx_keepalived_vip: 192.168.160.36
-k8s_keepalived_vip: 192.168.163.249
+nginx_keepalived_vip: 192.168.160.5
+k8s_keepalived_vip: 192.168.160.78
 
 cim_ops_uid: '9999'
 cim_ops_user: 'cimops'
