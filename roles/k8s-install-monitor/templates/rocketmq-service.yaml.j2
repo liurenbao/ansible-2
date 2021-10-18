@@ -32,12 +32,15 @@ subsets:
   - addresses:
 {% for host in groups['rocketmq-namesrv'] %}
     - ip: {{ host }}
+      nodeName: {{ hostvars[host].host_name }}
 {% endfor %}
 {% for host in groups['rocketmq-master'] %}
     - ip: {{ host }}
+      nodeName: {{ hostvars[host].host_name }}
 {% endfor %}
 {% for host in groups['rocketmq-slave'] %}
     - ip: {{ host }}
+      nodeName: {{ hostvars[host].host_name }}
 {% endfor %}
     ports:
       - port: 9256
@@ -65,12 +68,15 @@ subsets:
   - addresses:
 {% for host in groups['rocketmq-namesrv'] %}
     - ip: {{ host }}
+      nodeName: {{ hostvars[host].host_name }}
 {% endfor %}
 {% for host in groups['rocketmq-master'] %}
     - ip: {{ host }}
+      nodeName: {{ hostvars[host].host_name }}
 {% endfor %}
 {% for host in groups['rocketmq-slave'] %}
     - ip: {{ host }}
+      nodeName: {{ hostvars[host].host_name }}
 {% endfor %}
     ports:
       - port: 9100
@@ -98,6 +104,7 @@ subsets:
   - addresses:
 {% for host in groups['rocketmq-namesrv'] %}
       - ip: {{ host }}
+        nodeName: {{ hostvars[host].host_name }}
 {% endfor %}
     ports:
       - port: 9876
@@ -123,9 +130,11 @@ subsets:
   - addresses:
 {% for host in groups['rocketmq-master'] %}
       - ip: {{ host }}
+        nodeName: {{ hostvars[host].host_name }}
 {% endfor %}
 {% for host in groups['rocketmq-slave'] %}
       - ip: {{ host }}
+        nodeName: {{ hostvars[host].host_name }}
 {% endfor %}
     ports:
       - port: 10911

@@ -1,5 +1,4 @@
-﻿
-apiVersion: apps/v1
+﻿apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: plantumes-admin
@@ -26,7 +25,7 @@ spec:
           tolerationSeconds: 2
       containers:
         - name: plantumes-admin
-          image: 192.168.160.47:8888/plantu/plantu-mes-admin:v1.0.1
+          image: 192.168.160.47:8888/plantu/plantu-mes-admin-h:v1.0.4
           # 当前服务器已经存在相同版本的镜像则不会重复拉取
           imagePullPolicy: IfNotPresent
           # 容器启动端口，没有可以删除

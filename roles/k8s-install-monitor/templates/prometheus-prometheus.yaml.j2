@@ -21,7 +21,7 @@ spec:
         namespace: monitoring
         port: web
   image: "{{ image_repository }}/public/prometheus:v2.15.2"
-  externalUrl: 'http://{{ k8s_keepalived_vip }}:30002'
+  externalUrl: 'http://{{ nginx_keepalived_vip }}:30002'
   logLevel: debug
   nodeSelector:
     kubernetes.io/os: linux

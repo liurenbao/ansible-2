@@ -1,0 +1,162 @@
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: wat-service
+  namespace: spc
+  annotations:
+    # 使用http检测应用可用性，手动提供支持http检测的端口
+    prometheus.io/http-probe: "true"
+    prometheus.io/http-probe-port: "8080"
+    prometheus.io/http-probe-path: "/ wat-service/health/healthz"
+
+    # 抓取应用的监控指标,路径不填写则为：/metrics
+    prometheus.io/scrape: "true"
+    prometheus.io/port: '8080'
+    prometheus.io/scheme: "http"
+    prometheus.io/path: '/ wat-service/actuator/prometheus'
+spec:
+  entryPoints:
+    - web
+  routes:
+    - kind: Rule
+      match: PathPrefix(`/wat-service/`)
+      services:
+        - name: wat-service
+          port: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: wat-service
+  namespace: spc
+spec:
+  ports:
+    - name: http
+      port: 8080
+      targetPort: 8080
+    - name: grpc
+      port: 9090
+      targetPort: 9090
+  selector:
+    app: wat-service
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wat-service-dc2
+  namespace: spc
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: wat-service
+  template:
+    metadata:
+      labels:
+        app: wat-service
+    spec:
+      imagePullSecrets:
+        - name: harbor
+      hostNetwork: false
+      tolerations:
+        - key: "node.kubernetes.io/unreachable"
+          operator: "Exists"
+          effect: "NoExecute"
+          tolerationSeconds: 2
+        - key: "node.kubernetes.io/not-ready"
+          operator: "Exists"
+          effect: "NoExecute"
+          tolerationSeconds: 2
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                topologyKey: "kubernetes.io/hostname"
+                labelSelector:
+                  matchExpressions:
+                    - key: app
+                      operator: In
+                      values:
+                        - wat-service
+              weight: 100
+      nodeSelector:
+        zone: dc2
+      initContainers:
+        - command:
+          - sysctl
+          - -w
+          - net.ipv4.tcp_keepalive_time=10
+          - net.ipv4.tcp_keepalive_probes=2
+          - net.ipv4.tcp_keepalive_intvl=5
+          image: 192.168.160.47:8888/public/busybox:1.34
+          imagePullPolicy: Always
+          name: setsysctl
+          securityContext:
+            privileged: true
+      containers:
+        - name: wat-service
+          image: 192.168.160.47:8888/spc-sit/wat-service:1.0.0
+          imagePullPolicy: Always
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: k8s
+            - name: SERVER_PORT
+              value: "8080"
+            - name: JAVA_TOOL_OPTIONS
+              value: "-XX:+UseG1GC -XX:MaxRAMPercentage=75.0"
+            - name: spring.redis.cluster.nodes
+              value: "192.168.163.212:6379,192.168.163.232:6379,192.168.163.190:6379,192.168.163.208:6379,192.168.163.231:6379,192.168.163.193:6379"
+            - name: spring.datasource.druid.url
+              value: "jdbc:zenith:@192.168.163.243:15400"
+            - name: spring.datasource.druid.password
+              value: "duYEzDss7AceLaknaneaSdV1Do5rxK8/2NeFEYflRDcxhWKx3DEpg7O9fk47Ftu4pRqEhXEOM8YG7ErGNyoNKg=="
+            - name: spring.datasource.druid.public-key
+              value: "MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAI12BE5GG0+M/nxJh23cjDAeYlw+9e9vijw+YhnIKGbsVJkzcOj2sYcn+d7GasKXcL6jmtFnl2eBxVYtUXvl3UUCAwEAAQ=="
+            - name: rocket.name-server
+              value: "192.168.163.192:9876;192.168.163.214:9876"
+            - name: ravencast.address
+              value: "192.168.163.206:10101;192.168.163.215:10101"
+          ports:
+            - containerPort: 8080
+          resources:
+            limits:
+              cpu: "2"
+              memory: 3Gi
+            requests:
+              cpu: "1"
+              memory: 2Gi
+          # 存活性探针 和 准备就绪探针
+          startupProbe:
+            httpGet:
+              port: 8080
+              path: /wat-service/health/
+            initialDelaySeconds: 30
+            timeoutSeconds: 5
+            periodSeconds: 3
+            successThreshold: 1
+            failureThreshold: 3
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /wat-service/health/
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 120
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 20
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /wat-service/health/
+              port: 8080
+              scheme: HTTP
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 10
+          # 0宕机(zero-downtime)更新
+          lifecycle:
+            preStop:
+              exec:
+                command: [ "/bin/sh", "-c", "sleep 30" ]

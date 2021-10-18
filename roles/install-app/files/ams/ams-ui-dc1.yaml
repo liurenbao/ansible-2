@@ -45,36 +45,36 @@ spec:
           imagePullPolicy: IfNotPresent
           startupProbe:
             httpGet:
-              port: 8080
-              path: /metrics
-            initialDelaySeconds: 30
+              port: 80
+              path: /
+            initialDelaySeconds: 15
             timeoutSeconds: 1
             periodSeconds: 3
             successThreshold: 1
             failureThreshold: 3
           readinessProbe:
             httpGet:
-              port: 8080
-              path: /metrics
+              port: 80
+              path: /
             timeoutSeconds: 1
             periodSeconds: 3
             successThreshold: 1
             failureThreshold: 3
           livenessProbe:
             httpGet:
-              port: 8080
-              path: /metrics
+              port: 80
+              path: /
           resources:
             limits:
-              cpu: '4'
-              memory: 8Gi
+              cpu: '1'
+              memory: 300Mi
             requests:
               cpu: '0.2'
-              memory: 1Gi
+              memory: 50Mi
           lifecycle:
             preStop:
               exec:
-                command: [ "sleep" ,"40" ]
+                command: [ "sleep" ,"15" ]
       terminationGracePeriodSeconds: 120
       restartPolicy: Always
       tolerations:
@@ -90,16 +90,3 @@ spec:
     matchLabels:
       app: ams-ui
       zone: dc1
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: ams-ui
-  namespace: ams
-spec:
-  selector:
-    app: ams-ui
-  ports:
-    - port: 80
-      nodePort: 32630
-  type: NodePort

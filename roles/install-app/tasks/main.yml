@@ -1,47 +1,49 @@
 - name: create dir
   file:
-    path: "{{ component_manifest_dir }}/app/{{ zone }}"
+    path: "{{ component_manifest_dir }}/app"
     state: directory
 
 - name: copy app manifest template
   template:
     src: '{{ item.src }}'
-    dest: "{{ component_manifest_dir }}/app/{{ zone }}/{{ item.path | regex_replace('\\.j2$', '') }}"
+    dest: "{{ component_manifest_dir }}/app/{{ item.path | regex_replace('\\.j2$', '') }}"
   with_filetree: templates/
   when: item.state == 'file'
 
 - name: copy app manifest file
-  copy:
+  synchronize:
     src: files/
-    dest: "{{ component_manifest_dir }}/app/{{ zone }}/"
+    dest: "{{ component_manifest_dir }}/app/"
 
-# 用循环
-- name: apply mes manifest
-  shell: "kubectl apply -f {{ component_manifest_dir }}/app/{{ zone }}/mes"
 
-- name: apply rms manifest
-  shell: "kubectl apply -f {{ component_manifest_dir }}/app/{{ zone }}/rms"
-
-- name: apply spc manifest
-  shell: "kubectl apply -f {{ component_manifest_dir }}/app/{{ zone }}/spc"
-
-# rtd
-- name: apply rtd zookeeper
-  shell: "helm upgrade --install rtd-zookeeper -n rtd ."
-  args:
-    chdir: "{{ component_manifest_dir }}/app/{{ zone }}/rtd/zookeeper"
-
-- name: apply rtd rtd-web
-  shell: "helm upgrade --install rtd-web -n rtd ."
-  args:
-    chdir: "{{ component_manifest_dir }}/app/{{ zone }}/rtd/rtd-web"
-
-- name: apply rtd ruleengine
-  shell: "helm upgrade --install rtd-ruleengine -n rtd ."
-  args:
-    chdir: "{{ component_manifest_dir }}/app/{{ zone }}/rtd/ruleengine"
-
-- name: apply rtd workflow
-  shell: "helm upgrade --install workflow -n rtd ."
-  args:
-    chdir: "{{ component_manifest_dir }}/app/{{ zone }}/rtd/workflow"
+#- name: apply mes manifest
+#  shell: "kubectl apply -f {{ component_manifest_dir }}/app/mes"
+#
+#- name: apply rms manifest
+#  shell: "kubectl apply -f {{ component_manifest_dir }}/app/rms"
+#
+#- name: apply spc manifest
+#  shell: "kubectl apply -f {{ component_manifest_dir }}/app/spc"
+#
+#- name: apply ams manifest
+#  shell: "kubectl apply -f {{ component_manifest_dir }}/app/ams"
+#
+#- name: apply rtd zookeeper
+#  shell: "helm upgrade --install rtd-zookeeper -n rtd ."
+#  args:
+#    chdir: "{{ component_manifest_dir }}/app/rtd/zookeeper"
+#
+#- name: apply rtd rtd-web
+#  shell: "helm upgrade --install rtd-web -n rtd ."
+#  args:
+#    chdir: "{{ component_manifest_dir }}/app/rtd/rtd-web"
+#
+#- name: apply rtd ruleengine
+#  shell: "helm upgrade --install rtd-ruleengine -n rtd ."
+#  args:
+#    chdir: "{{ component_manifest_dir }}/app/rtd/ruleengine"
+#
+#- name: apply rtd workflow
+#  shell: "helm upgrade --install workflow -n rtd ."
+#  args:
+#    chdir: "{{ component_manifest_dir }}/app/rtd/workflow"

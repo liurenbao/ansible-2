@@ -41,12 +41,12 @@ spec:
             privileged: true
       containers:
         - name: ams-data
-          image: 192.168.160.47:8888/ams/amsdata:v1
+          image: 192.168.160.47:8888/ams/amsdata:v0
           imagePullPolicy: IfNotPresent
           startupProbe:
             httpGet:
-              port: 8080
-              path: /metrics
+              port: 8105
+              path: /amsdata/
             initialDelaySeconds: 30
             timeoutSeconds: 1
             periodSeconds: 3
@@ -54,16 +54,16 @@ spec:
             failureThreshold: 3
           readinessProbe:
             httpGet:
-              port: 8080
-              path: /metrics
+              port: 8105
+              path: /amsdata/
             timeoutSeconds: 1
             periodSeconds: 3
             successThreshold: 1
             failureThreshold: 3
           livenessProbe:
             httpGet:
-              port: 8080
-              path: /metrics
+              port: 8105
+              path: /amsdata/
           resources:
             limits:
               cpu: '4'

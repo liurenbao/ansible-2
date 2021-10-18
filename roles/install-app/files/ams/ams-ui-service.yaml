@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: ams-ui
+  namespace: ams
+spec:
+  selector:
+    app: ams-ui
+  ports:
+    - port: 80
+      nodePort: 32630
+  type: NodePort

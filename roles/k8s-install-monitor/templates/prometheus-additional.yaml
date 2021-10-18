@@ -36,13 +36,17 @@ stringData:
         - source_labels: [ __meta_kubernetes_service_name ]
           action: replace
           target_label: service
-        - source_labels: [ __address__, __meta_kubernetes_endpoint_address_target_name]
-          action: replace
-          replacement: $1_$2
-          target_label: nodeName
+        - action: replace
+          source_labels: [ __meta_kubernetes_endpoint_node_name ]
+          target_label: nodename
       metric_relabel_configs:
+        - action: replace
+          source_labels: [ nodename ]
+          target_label: instance
         - action: labeldrop
           regex: __meta_kubernetes_.+
+        - action: labeldrop
+          regex: nodename
 
     - job_name: 'kubernetes-http-services'
       scrape_interval: 15s

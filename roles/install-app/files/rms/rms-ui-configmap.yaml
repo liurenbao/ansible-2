@@ -1,0 +1,337 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: rmsui-configs
+  namespace: rms
+data:
+  appsettings.Drill.json: |
+    {
+      "Logging": {
+        "LogLevel": {
+          "Default": "Information",
+          "Microsoft": "Warning",
+          "Microsoft.Hosting.Lifetime": "Information"
+        }
+      },
+      "AllowedHosts": "*",
+
+      "APICrossOrigins": "*", //跨域
+
+      "Session": {
+        "Mode": 0, //InProc = 0, Redis = 1
+        "TimeOut": 60
+      },
+
+      "ConnectionStrings": {
+        "ConnectionString": "Driver=Gauss100_x64;Servername=192.168.163.245;Port=15400;Uid=rmsprod;Pwd=prodrms_123;Charset=GBK;" //Charset=GBK; Charset=UTF8;
+      },
+
+      "AppSettings": {
+        "EnvironmentFlag": "(Drill2)",
+        "LoginPageMessage": "", //(PgSql)  (MySql) (GaussDB)
+        "DebugMode": "", //OABPM|CUSTOM|MES|EAP|HSMS|IP|SQL|PPC
+
+        "IsDisplayServerTime": false,
+
+        //IP-White-List
+        "IsUseWhiteListLogin": false,
+        "WhiteListFileName": "IP_White_List.txt",
+
+        "IsCheckPasswordComplexity": false,
+        "IsSupportVerifyCode": false,
+
+        //LDAP
+        "IsLoginWithLDAP": false,
+        "LDAPServer": "192.168.1.1",
+
+        //OA-BPM
+        "IsNeedIntegrateOA": false,
+        "RMSDeployURL": "http://localhost:5000/",
+        "FlagIntegrateOA": "ICRD",
+        "OAIntegrateURL": "http://localhost:6081/WFFormWebService.asmx",
+        "OAIntegrateURL1": "http://localhost:6081/WFFormWebService.asmx",
+        "ViewFormStatusURL": "http://localhost:6081/RequestDetail?ID=",
+        "IsNeedSignOffWhenDeletingActiveRecipe": false,
+
+        "IsSupportMultilingual": true,
+
+        "STD_Default_IsCheck": "Control",
+        "SEQ_Default_IsCheck": "Control",
+        "SEQ_PARAM_Default_IsCheck": "Control",
+        "Notify_ByEmail_Default": false,
+        "NeedCompareBeforeSignOff": true,
+        "IsAllowSelfSignOffSelf": true,
+        "TakeUpperLowerRecipeNameAsSame": true,
+        "MaxToleranceLimit": "50",
+
+        "IsAllowUpdateTargetValue": true,
+        "IsSupportRecipeGroup": true,
+        "IsNeedPerformAutoShareRecipe": true,
+        "IsSupportCheckGoldenRecipe": true,
+        "IsSupportBaselineEQP": false,
+        "IsSupportValidateStrictMode": true,
+        "IsCheckExistingBeforeRecipeDownload": false,
+        "IsAllowChangeRecipeNameBeforeRecipeDownload": true,
+
+        "IsShowRecipeAlias": false,
+        "IsNeedUploadRecipeDocument": false,
+        "IsShowValidateParamListInValidationLog": false,
+
+        //Clean Log
+        "NeedCleanLog": false,
+        "CleanLogTime": "00:00:00",
+        "KeepDBLogMonths": 12,
+        "KeepFileLogMonths": 12,
+        "FileLogLocation": "/root/RMS/RMS_Log",
+        "KeepRcpOperateLogMonths": 12,
+        "KeepRcpValidateLogMonths": 12,
+
+        //SMTP
+        "SMTPServer": "smtp.qiye.163.com",
+        "SMTPPort": "25",
+        "FromUserName": "tester@semi-integration.com.cn",
+        "FromPassword": "Password$0",
+        "FromDisplayName": "RMS Server",
+
+        "RMSServerCommunicationFormat": "JSON", //JSON SML
+        "IsRMSServerMessageEncrypted": false,
+
+        "TcpServerList": [
+          {
+            "IPAddress": "rms-server.rms",
+            "PortNumber": 8100,
+            "TimeoutConnect": 10,
+            "TimeoutSend": 60,
+            "TimeoutReceive": 60
+          },
+          {
+            "IPAddress": "rms-server.rms",
+            "PortNumber": 8200,
+            "TimeoutConnect": 10,
+            "TimeoutSend": 60,
+            "TimeoutReceive": 60
+          }
+        ]
+      }
+    }
+  appsettings.SIT.json: |
+    {      
+      "Logging": {
+        "LogLevel": {
+          "Default": "Information",
+          "Microsoft": "Warning",
+          "Microsoft.Hosting.Lifetime": "Information"
+        }
+      },
+      "AllowedHosts": "*",
+
+      "APICrossOrigins": "*", //跨域
+
+      "Session": {
+        "Mode": 0, //InProc = 0, Redis = 1
+        "TimeOut": 60
+      },
+
+      "ConnectionStrings": {
+        "ConnectionString": "Driver=Gauss100_x64;Servername=192.168.160.248;Port=35400;Uid=rms;Pwd=Gauss_123;Charset=GBK;" //Charset=GBK; Charset=UTF8;
+      },
+
+      "AppSettings": {
+        "EnvironmentFlag": "(SIT)",
+        "LoginPageMessage": "", //(PgSql)  (MySql) (GaussDB)
+        "DebugMode": "", //OABPM|CUSTOM|MES|EAP|HSMS|IP|SQL|PPC
+
+        "IsDisplayServerTime": false,
+
+        //IP-White-List
+        "IsUseWhiteListLogin": false,
+        "WhiteListFileName": "IP_White_List.txt",
+
+        "IsCheckPasswordComplexity": false,
+        "IsSupportVerifyCode": false,
+
+        //LDAP
+        "IsLoginWithLDAP": false,
+        "LDAPServer": "192.168.1.1",
+
+        //OA-BPM
+        "IsNeedIntegrateOA": false,
+        "RMSDeployURL": "http://localhost:5000/",
+        "FlagIntegrateOA": "ICRD",
+        "OAIntegrateURL": "http://localhost:6081/WFFormWebService.asmx",
+        "OAIntegrateURL1": "http://localhost:6081/WFFormWebService.asmx",
+        "ViewFormStatusURL": "http://localhost:6081/RequestDetail?ID=",
+        "IsNeedSignOffWhenDeletingActiveRecipe": false,
+
+        "IsSupportMultilingual": true,
+
+        "STD_Default_IsCheck": "Control",
+        "SEQ_Default_IsCheck": "Control",
+        "SEQ_PARAM_Default_IsCheck": "Control",
+        "Notify_ByEmail_Default": false,
+        "NeedCompareBeforeSignOff": true,
+        "IsAllowSelfSignOffSelf": true,
+        "TakeUpperLowerRecipeNameAsSame": true,
+        "MaxToleranceLimit": "50",
+
+        "IsAllowUpdateTargetValue": true,
+        "IsSupportRecipeGroup": true,
+        "IsNeedPerformAutoShareRecipe": true,
+        "IsSupportCheckGoldenRecipe": true,
+        "IsSupportBaselineEQP": false,
+        "IsSupportValidateStrictMode": true,
+        "IsCheckExistingBeforeRecipeDownload": false,
+        "IsAllowChangeRecipeNameBeforeRecipeDownload": true,
+
+        "IsShowRecipeAlias": false,
+        "IsNeedUploadRecipeDocument": false,
+        "IsShowValidateParamListInValidationLog": false,
+
+        //Clean Log
+        "NeedCleanLog": false,
+        "CleanLogTime": "00:00:00",
+        "KeepDBLogMonths": 12,
+        "KeepFileLogMonths": 12,
+        "FileLogLocation": "/root/RMS/RMS_Log",
+        "KeepRcpOperateLogMonths": 12,
+        "KeepRcpValidateLogMonths": 12,
+
+        //SMTP
+        "SMTPServer": "smtp.qiye.163.com",
+        "SMTPPort": "25",
+        "FromUserName": "tester@semi-integration.com.cn",
+        "FromPassword": "Password$0",
+        "FromDisplayName": "RMS Server",
+
+        "RMSServerCommunicationFormat": "JSON", //JSON SML
+        "IsRMSServerMessageEncrypted": false,
+
+        "TcpServerList": [
+          {
+            "IPAddress": "rms-server.rms",
+            "PortNumber": 8100,
+            "TimeoutConnect": 10,
+            "TimeoutSend": 60,
+            "TimeoutReceive": 60
+          },
+          {
+            "IPAddress": "rms-server.rms",
+            "PortNumber": 8200,
+            "TimeoutConnect": 10,
+            "TimeoutSend": 60,
+            "TimeoutReceive": 60
+          }
+        ]
+      }
+    }
+  appsettings.Pilot.json: |
+    {      
+      "Logging": {
+        "LogLevel": {
+          "Default": "Information",
+          "Microsoft": "Warning",
+          "Microsoft.Hosting.Lifetime": "Information"
+        }
+      },
+      "AllowedHosts": "*",
+
+      "APICrossOrigins": "*", //跨域
+
+      "Session": {
+        "Mode": 0, //InProc = 0, Redis = 1
+        "TimeOut": 60
+      },
+
+      "ConnectionStrings": {
+        "ConnectionString": "Driver=Gauss100_x64;Servername=192.168.160.24;Port=15400;Uid=omm;Pwd=Gauss_123;Charset=GBK;" //Charset=GBK; Charset=UTF8;
+      },
+
+      "AppSettings": {
+        "EnvironmentFlag": "(Pilot)",
+        "LoginPageMessage": "", //(PgSql)  (MySql) (GaussDB)
+        "DebugMode": "", //OABPM|CUSTOM|MES|EAP|HSMS|IP|SQL|PPC
+
+        "IsDisplayServerTime": false,
+
+        //IP-White-List
+        "IsUseWhiteListLogin": false,
+        "WhiteListFileName": "IP_White_List.txt",
+
+        "IsCheckPasswordComplexity": false,
+        "IsSupportVerifyCode": false,
+
+        //LDAP
+        "IsLoginWithLDAP": false,
+        "LDAPServer": "192.168.1.1",
+
+        //OA-BPM
+        "IsNeedIntegrateOA": false,
+        "RMSDeployURL": "http://localhost:5000/",
+        "FlagIntegrateOA": "ICRD",
+        "OAIntegrateURL": "http://localhost:6081/WFFormWebService.asmx",
+        "OAIntegrateURL1": "http://localhost:6081/WFFormWebService.asmx",
+        "ViewFormStatusURL": "http://localhost:6081/RequestDetail?ID=",
+        "IsNeedSignOffWhenDeletingActiveRecipe": false,
+
+        "IsSupportMultilingual": true,
+
+        "STD_Default_IsCheck": "Control",
+        "SEQ_Default_IsCheck": "Control",
+        "SEQ_PARAM_Default_IsCheck": "Control",
+        "Notify_ByEmail_Default": false,
+        "NeedCompareBeforeSignOff": true,
+        "IsAllowSelfSignOffSelf": true,
+        "TakeUpperLowerRecipeNameAsSame": true,
+        "MaxToleranceLimit": "50",
+
+        "IsAllowUpdateTargetValue": true,
+        "IsSupportRecipeGroup": true,
+        "IsNeedPerformAutoShareRecipe": true,
+        "IsSupportCheckGoldenRecipe": true,
+        "IsSupportBaselineEQP": false,
+        "IsSupportValidateStrictMode": true,
+        "IsCheckExistingBeforeRecipeDownload": false,
+        "IsAllowChangeRecipeNameBeforeRecipeDownload": true,
+
+        "IsShowRecipeAlias": false,
+        "IsNeedUploadRecipeDocument": false,
+        "IsShowValidateParamListInValidationLog": false,
+
+        //Clean Log
+        "NeedCleanLog": false,
+        "CleanLogTime": "00:00:00",
+        "KeepDBLogMonths": 12,
+        "KeepFileLogMonths": 12,
+        "FileLogLocation": "/root/RMS/RMS_Log",
+        "KeepRcpOperateLogMonths": 12,
+        "KeepRcpValidateLogMonths": 12,
+
+        //SMTP
+        "SMTPServer": "smtp.qiye.163.com",
+        "SMTPPort": "25",
+        "FromUserName": "tester@semi-integration.com.cn",
+        "FromPassword": "Password$0",
+        "FromDisplayName": "RMS Server",
+
+        "RMSServerCommunicationFormat": "JSON", //JSON SML
+        "IsRMSServerMessageEncrypted": false,
+
+        "TcpServerList": [
+          {
+            "IPAddress": "rms-server.rms",
+            "PortNumber": 8100,
+            "TimeoutConnect": 10,
+            "TimeoutSend": 60,
+            "TimeoutReceive": 60
+          },
+          {
+            "IPAddress": "rms-server.rms",
+            "PortNumber": 8200,
+            "TimeoutConnect": 10,
+            "TimeoutSend": 60,
+            "TimeoutReceive": 60
+          }
+        ]
+      }
+    }
+  
