@@ -47,7 +47,7 @@ spec:
               path: /demo-monitoring
             successThreshold: 1
             failureThreshold: 3
-            initialDelaySeconds: 20
+            initialDelaySeconds: 10
           livenessProbe:
             httpGet:
               port: 8080
