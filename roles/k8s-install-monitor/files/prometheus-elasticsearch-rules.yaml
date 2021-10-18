@@ -20,7 +20,7 @@ spec:
             description: "The heap usage is over 90%.  VALUE = {{ $value }}"
         - alert: ElasticsearchDiskOutOfSpace
           expr: elasticsearch_filesystem_data_available_bytes / elasticsearch_filesystem_data_size_bytes * 100 < 10
-          for: 0m
+          for: 1m
           labels:
             severity: critical
           annotations:
@@ -36,7 +36,7 @@ spec:
             description: "The disk usage is over 80%.  VALUE = {{ $value }}"
         - alert: ElasticsearchClusterRed
           expr: elasticsearch_cluster_health_status{color="red"} == 1
-          for: 0m
+          for: 5m
           labels:
             severity: critical
           annotations:
@@ -44,7 +44,7 @@ spec:
             description: "Elastic Cluster Red status.  VALUE = {{ $value }}"
         - alert: ElasticsearchClusterYellow
           expr: elasticsearch_cluster_health_status{color="yellow"} == 1
-          for: 0m
+          for: 10m
           labels:
             severity: warning
           annotations:
@@ -60,7 +60,7 @@ spec:
             description: "Elasticsearch has been initializing shards for 15 min.  VALUE = {{ $value }}"
         - alert: ElasticsearchUnassignedShards
           expr: elasticsearch_cluster_health_unassigned_shards > 0
-          for: 0m
+          for: 10m
           labels:
             severity: critical
           annotations:

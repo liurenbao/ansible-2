@@ -12,7 +12,7 @@ spec:
       rules:
         - alert: RedisDown
           expr: redis_up == 0
-          for: 0m
+          for: 1m
           labels:
             severity: critical
           annotations:
@@ -20,7 +20,7 @@ spec:
             description: "Redis instance is down,  VALUE = {{ $value }}"
         - alert: RedisMissingMaster
           expr: (count(redis_instance_info{role="master"}) or vector(0)) < 3
-          for: 0m
+          for: 1m
           labels:
             severity: critical
           annotations:
@@ -28,7 +28,7 @@ spec:
             description: "Redis cluster has too few master nodes.  VALUE = {{ $value }}"
         - alert: RedisTooManyMasters
           expr: count(redis_instance_info{role="master"}) > 3
-          for: 0m
+          for: 1m
           labels:
             severity: critical
           annotations:
@@ -36,7 +36,7 @@ spec:
             description: "Redis cluster has too many nodes marked as master.  VALUE = {{ $value }}"
         - alert: RedisDisconnectedSlaves
           expr: count without (instance, job) (redis_connected_slaves) - sum without (instance, job) (redis_connected_slaves) > 3
-          for: 0m
+          for: 1m
           labels:
             severity: critical
           annotations:
@@ -44,7 +44,7 @@ spec:
             description: "Redis not replicating for all slaves. Consider reviewing the redis replication status.  VALUE = {{ $value }}"
         - alert: RedisReplicationBroken
           expr: delta(redis_connected_slaves[1m]) < 0
-          for: 0m
+          for: 1m
           labels:
             severity: critical
           annotations:
@@ -60,7 +60,7 @@ spec:
             description: "Changes have been detected in Redis replica connection. This can occur when replica nodes lose connection to the master and reconnect (a.k.a flapping).  VALUE = {{ $value }}"
         - alert: RedisMissingBackup
           expr: time() - redis_rdb_last_save_timestamp_seconds > 60 * 60 * 24
-          for: 0m
+          for: 30m
           labels:
             severity: critical
           annotations:

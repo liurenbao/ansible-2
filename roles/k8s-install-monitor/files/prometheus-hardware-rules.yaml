@@ -71,7 +71,7 @@ spec:
             description: "CPU load is > 80%.  VALUE = {{ $value }}"
         - alert: HostSystemdServiceCrashed
           expr: node_systemd_unit_state{state="failed"} == 1
-          for: 0m
+          for: 1m
           labels:
             severity: warning
           annotations:
@@ -87,7 +87,7 @@ spec:
             description: "Physical hardware component too hot.  VALUE = {{ $value }}"
         - alert: HostNodeOvertemperatureAlarm
           expr: node_hwmon_temp_crit_alarm_celsius == 1
-          for: 0m
+          for: 30s
           labels:
             severity: critical
           annotations:

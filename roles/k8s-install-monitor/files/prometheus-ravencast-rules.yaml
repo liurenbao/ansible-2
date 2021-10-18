@@ -11,20 +11,20 @@ spec:
     - name: ravencast
       rules:
         - alert: RavencastAgentDown
-          expr: up{service="ravencast"} == 0
-          for: 0m
+          expr: up{service=~"ravencast.*"} == 0
+          for: 30s
           labels:
-            severity: warning
+            severity: critical
           annotations:
             summary: Ravencast down (instance {{ $labels.instance }})
-            description: "Ravencast service down"
+            description: "Ravencast down"
         - alert: RavencastLicenseExpiring
           expr: ravencast_expire_days_total{} < 60
           for: 0m
           labels:
             severity: warning
           annotations:
-            summary: Ravencast license will expire in 30 days (instance {{ $labels.instance }})
+            summary: Ravencast license will expire after {{ $value }} days. (instance {{ $labels.instance }})
             description: "Ravencast license will expire"
         - alert: RavencastQueueWait
           expr: ravencast_queue_wait_count_total{} > 2000
@@ -32,5 +32,5 @@ spec:
           labels:
             severity: warning
           annotations:
-            summary: Ravencast queue has too many waiting messages (instance {{ $labels.instance }})
-            description: "Ravencast queue has too many waiting messages, count = {{ $value }}"
+            summary: Ravencast queue has too many waiting messages,current {{ $value }}  (service {{ $labels.service }})
+            description: "Ravencast queue has too many waiting messages, current = {{ $value }}"
