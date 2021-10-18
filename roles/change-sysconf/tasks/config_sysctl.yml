@@ -13,6 +13,7 @@
     - "net.ipv4.tcp_mem = 786432 2097152 3145728"
     - "net.ipv4.tcp_rmem = 4096 4096 16777216"
     - "net.ipv4.tcp_wmem = 4096 4096 16777216"
+    - "vm.min_free_kbytes = 61440"
 
 - name: sysctl enable
   shell: sysctl -p /etc/sysctl.conf
