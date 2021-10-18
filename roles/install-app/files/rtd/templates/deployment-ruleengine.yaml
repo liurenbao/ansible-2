@@ -1,0 +1,78 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "rtd.fullname" . }}-ruleengine
+  labels:
+    {{- include "rtd.ruleengine.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.ruleengine.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "rtd.ruleengine.labels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "rtd.ruleengine.labels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "rtd.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ include "rtd.fullname" . }}-ruleengine
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.ruleengine.image.repository }}:{{ .Values.ruleengine.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.ruleengine.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+
+          {{- with .Values.ruleengine.env }}
+          env:
+            {{- toYaml . | nindent 12}}
+          {{- end }}
+
+          {{- with .Values.ruleengine.livenessProbe }}
+          livenessProbe:
+            {{- toYaml . | nindent 12}}
+          {{- end }}
+          {{- with .Values.ruleengine.readinessProbe }}
+          readinessProbe:
+            {{- toYaml . | nindent 12}}
+          {{- end }}
+
+          resources:
+            {{- toYaml .Values.ruleengine.resources | nindent 12 }}
+
+          {{- with .Values.volumeMounts}}
+          volumeMounts:
+            {{- toYaml . | nindent 12}}
+          {{- end }}
+
+      {{- with .Values.volumes}}
+      volumes:
+        {{- toYaml . | nindent 12}}
+      {{- end }}
+
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.ruleengine.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+

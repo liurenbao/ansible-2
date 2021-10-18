@@ -1,0 +1,15 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  annotations:
+  generation: 1
+  name: {{ include "rtd.fullname" . }}-ruleengine
+spec:
+  entryPoints:
+    - web
+  routes:
+    - kind: Rule
+      match: Host(`{{ .Values.rtd_common.Host}}`)&&PathPrefix(`{{ .Values.ruleengine.PathPrefix}}`)
+      services:
+        - name: {{ include "rtd.fullname" . }}-ruleengine
+          port: 80

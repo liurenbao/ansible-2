@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "rtd.fullname" . }}-web
+  labels:
+    {{- include "rtd.common.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.web.service.port }}
+      targetPort: {{ .Values.web.service.targetPort }}
+      protocol: {{ .Values.web.service.protocol }}
+      name: {{ .Values.web.service.name }}
+  selector:
+    {{- include "rtd.web.labels" . | nindent 4 }}

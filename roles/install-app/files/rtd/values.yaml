@@ -1,0 +1,301 @@
+# Default values for rtd.
+# # This is a YAML-formatted file.
+# # Declare variables to be passed into your templates.
+rtd_common:
+  Host: rtd-test.fanli.inhuawei.com 
+
+web:
+  replicaCount: 2
+  image:
+    repository: 192.168.160.47:8888/full-auto/rtd/rtd-web
+    pullPolicy: Always
+    tag: "10.14"
+  PathPrefix: /
+
+  env:
+    - name: SERVER_PORT
+      value: '80'
+
+  livenessProbe:
+    httpGet:
+      path: /
+      port: 80
+    initialDelaySeconds: 200
+    timeoutSeconds: 10
+    periodSeconds: 10
+    successThreshold: 1
+    failureThreshold: 3
+  readinessProbe:
+    httpGet:
+      path: /
+      port: 80
+    timeoutSeconds: 10
+    periodSeconds: 10
+    successThreshold: 1
+    failureThreshold: 3
+
+  resources: 
+    limits:
+      cpu: "1"
+      memory: 1024Mi
+    requests:
+      cpu: "0.1"
+      memory: 100Mi
+  service:
+    type: ClusterIP
+    port: 80
+    targetPort: 80
+    protocol: TCP
+    name: http
+
+  affinity:
+    podAntiAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+      - weight: 100
+        podAffinityTerm:
+          labelSelector:
+            matchExpressions:
+            - key: app.kubernetes.io/name
+              operator: In
+              values:
+              - rtd-web
+          topologyKey: zone
+
+workflow:
+  replicaCount: 2
+  image:
+    repository: 192.168.160.47:8888/full-auto/rtd/rtd-workflow
+    pullPolicy: Always
+    tag: "10.14"
+  PathPrefix: /workflow/
+
+  env:
+    - name: SPRING_PROFILES_ACTIVE
+      value: test
+    - name: SERVER_PORT
+      value: '8080'
+    - name: DB_IP
+      value: 192.168.163.244
+    - name: DB_PORT
+      value: '15400'
+    - name: DB_USER_NAME
+      value: RTD
+    - name: DB_USER_PWD
+      value: Rtdrtd@123
+    - name: DB_USER_NAME_QUARTZ
+      value: RTD_QUARZ
+    - name: WORKFLOW_ENGINE_ENDPOINT
+      value: ruleengine.rtd-test:80
+    - name: DATASOURCE_AGENT_ENDPOINT
+      value: rtd-datasource.rtd:80
+    - name: FILE_SERVER_TYPE
+      value: NAS
+    - name: FILE_PATH
+      value: /usr/importFile
+    - name: ZK_TIME_OUT
+      value: '40000'
+    - name: ZK_HOST
+      value: rtd-zookeeper
+    - name: ZK_PORT
+      value: '2181'
+    - name: RTD_NODE_PATH
+      value: "rtd"
+    - name: GRPC_ENDPOINT
+      value: rtd-ruleengine
+    - name: GRPC_ENDPOINT_PORT
+      value: '8999'
+    - name: ZOOKEEPER_ENABLE
+      value: 'true'
+    - name: RAVENCAST_ENABLE
+      value: 'false'
+    # TODO: modify this HOST.
+    - name: RAVENCAST_HOSTS
+      value: 192.168.163.206:10103;192.168.163.215:10103
+    # different session name for different env.
+    - name: RAVENCAST_SESSION
+      value: rtd_server
+    - name: RAVENCAST_CHANNEL
+      value: /Rtd/NextDispatchRequest/v3
+  livenessProbe:
+    httpGet:
+      path: /workflow/v1/health
+      port: 8080
+      scheme: HTTP
+    initialDelaySeconds: 400
+    timeoutSeconds: 10
+    periodSeconds: 10
+    successThreshold: 1
+    failureThreshold: 3
+
+  readinessProbe:
+    httpGet:
+      path: /workflow/v1/health
+      port: 8080
+      scheme: HTTP
+    timeoutSeconds: 10
+    periodSeconds: 10
+    successThreshold: 1
+    failureThreshold: 3
+
+  resources: 
+    limits:
+      cpu: '2'
+      memory: 2Gi
+    requests:
+      cpu: 10m
+      memory: 50Mi
+  service:
+    type: ClusterIP
+    port: 80
+    targetPort: 8080
+    protocol: TCP
+    name: http
+     
+  affinity:
+    podAntiAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+      - weight: 100
+        podAffinityTerm:
+          labelSelector:
+            matchExpressions:
+            - key: app.kubernetes.io/name
+              operator: In
+              values:
+              - rtd-workflow
+          topologyKey: zone
+ 
+ruleengine:
+  replicaCount: 2
+  image:
+    repository: 192.168.160.47:8888/full-auto/rtd/ruleengine
+    pullPolicy: Always
+    tag: "10.14-4"
+  PathPrefix: /ruleengine/
+  env:
+    - name: SPRING_PROFILES_ACTIVE
+      value: pro
+    - name: SERVER_PORT
+      value: '8999'
+    - name: REGISTER_METHOD
+      value: '2'
+    - name: ZK_HOST
+      value: 'rtd-zookeeper'
+    - name: ZK_NODE
+      value: 'rtd'
+   # if use_shared_storage is true : use shared_path [SHARED_IMPORT_FILE_PATH,SHARED_LOG_FILE_PATH,SHARED_DATA_FILE_PATH]
+   #                          false: use origin_path [IMPORT_FILE_PATH,LOG_FILE_PATH,DATA_FILE_PATH]
+    - name: USING_SHARED_STORAGE
+      value: 'false'
+    - name: IMPORT_FILE_PATH
+      value: '/opt/ruleengine/resources'
+    - name: LOG_FILE_PATH
+      value: '/opt/ruleengine/logs'
+    - name: DATA_FILE_PATH
+      value: '/opt/ruleengine/data'
+    - name: SHARED_IMPORT_FILE_PATH
+      value: '/data/ruleengine/resources'
+    - name: SHARED_LOG_FILE_PATH
+      value: '/data/ruleengine/logs'
+    - name: SHARED_DATA_FILE_PATH
+      value: '/data/ruleengine/data'
+  resources: 
+    limits:
+      cpu: '2'
+      memory: 2Gi
+    requests:
+      cpu: 10m
+      memory: 50Mi
+
+  volumeMounts:
+    - name: rtd-data
+      mountPath: "/data"
+  
+  volumes:
+     - name: rtd-data
+       nfs:
+         # TODO: modify path and nfs server IP
+         path: /data01/rtd
+         server: 192.168.163.158
+  service:
+    type: ClusterIP
+    port: 80
+    targetPort: 80
+    protocol: TCP
+    name: http
+
+  affinity:
+    podAntiAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+      - weight: 100
+        podAffinityTerm:
+          labelSelector:
+            matchExpressions:
+            - key: app.kubernetes.io/name
+              operator: In
+              values:
+              - rtd-ruleengine
+          topologyKey: zone
+
+zookeeper:
+  image:
+    repository: 192.168.160.47:8888/full-auto/rtd/zk
+    tag: 3.7.0
+    pullPolicy: IfNotPresent
+    pullSecrets: []
+  persistence:
+    # TODO: modify storageClass name for zk applying storage.
+    storageClass: "nfs-storage"
+    accessModes:
+      - ReadWriteMany
+    size: 8Gi
+    dataLogDir:
+      size: 8Gi
+
+  affinity:
+    podAntiAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+      - weight: 100
+        podAffinityTerm:
+          labelSelector:
+            matchExpressions:
+            - key: app.kubernetes.io/name
+              operator: In
+              values:
+              - zookeeper
+          topologyKey: zone
+ 
+imagePullSecrets: [name: myregistrykey]
+ 
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+podAnnotations: {}
+
+podSecurityContext: {}
+
+securityContext: {}
+
+service:
+  type: ClusterIP
+  port: 80
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+
+ingress:
+  enabled: false
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}

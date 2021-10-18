@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "rtd.fullname" . }}-workflow
+  labels:
+    {{- include "rtd.common.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.workflow.service.port }}
+      targetPort: {{ .Values.workflow.service.targetPort }}
+      protocol: {{ .Values.workflow.service.protocol }}
+      name: {{ .Values.workflow.service.name }}
+  selector:
+    {{- include "rtd.workflow.labels" . | nindent 4 }}

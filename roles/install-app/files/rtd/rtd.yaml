@@ -1,0 +1,1069 @@
+NAME: rtd
+LAST DEPLOYED: Fri Oct  8 15:29:31 2021
+NAMESPACE: rtd-test
+STATUS: pending-install
+REVISION: 1
+TEST SUITE: None
+USER-SUPPLIED VALUES:
+{}
+
+COMPUTED VALUES:
+affinity: {}
+autoscaling:
+  enabled: false
+  maxReplicas: 100
+  minReplicas: 1
+  targetCPUUtilizationPercentage: 80
+imagePullSecrets:
+- name: myregistrykey
+ingress:
+  enabled: false
+nodeSelector: {}
+podAnnotations: {}
+podSecurityContext: {}
+rtd_common:
+  Host: rtd-test.fanli.inhuawei.com
+ruleengine:
+  PathPrefix: /ruleengine/
+  env:
+  - name: SPRING_PROFILES_ACTIVE
+    value: pro
+  - name: SERVER_PORT
+    value: "8999"
+  - name: REGISTER_METHOD
+    value: "2"
+  - name: ZK_HOST
+    value: rtd-zookeeper
+  - name: ZK_NODE
+    value: rtd
+  - name: USING_SHARED_STORAGE
+    value: "false"
+  - name: IMPORT_FILE_PATH
+    value: /opt/ruleengine/resources
+  - name: LOG_FILE_PATH
+    value: /opt/ruleengine/logs
+  - name: DATA_FILE_PATH
+    value: /opt/ruleengine/data
+  - name: SHARED_IMPORT_FILE_PATH
+    value: /data/ruleengine/resources
+  - name: SHARED_LOG_FILE_PATH
+    value: /data/ruleengine/logs
+  - name: SHARED_DATA_FILE_PATH
+    value: /data/ruleengine/data
+  image:
+    pullPolicy: Always
+    repository: 10.243.36.7:80/rtd/ruleengine
+    tag: 1.0.306
+  replicaCount: 1
+  resources:
+    limits:
+      cpu: "2"
+      memory: 2Gi
+    requests:
+      cpu: 10m
+      memory: 50Mi
+  volumeMounts:
+  - mountPath: /data
+    name: rtd-data
+  volumes:
+  - name: rtd-data
+    nfs:
+      path: /k8s-nfs/grafana/data
+      server: 10.10.100.11
+securityContext: {}
+service:
+  port: 80
+  type: ClusterIP
+serviceAccount:
+  annotations: {}
+  create: true
+  name: ""
+tolerations: []
+web:
+  PathPrefix: /
+  env:
+  - name: SERVER_PORT
+    value: "80"
+  image:
+    pullPolicy: Always
+    repository: 10.243.36.7:80/rtd/rtd-web
+    tag: 1.0.241
+  livenessProbe:
+    failureThreshold: 3
+    httpGet:
+      path: /
+      port: 80
+    initialDelaySeconds: 200
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 10
+  readinessProbe:
+    failureThreshold: 3
+    httpGet:
+      path: /
+      port: 80
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 10
+  replicaCount: 1
+  resources:
+    limits:
+      cpu: "1"
+      memory: 1024Mi
+    requests:
+      cpu: "0.1"
+      memory: 100Mi
+workflow:
+  PathPrefix: /workflow/
+  env:
+  - name: SPRING_PROFILES_ACTIVE
+    value: test
+  - name: SERVER_PORT
+    value: "8080"
+  - name: DB_IP
+    value: 10.247.139.143
+  - name: DB_PORT
+    value: "15400"
+  - name: DB_USER_NAME
+    value: RTD_DEV
+  - name: DB_USER_PWD
+    value: Huawei@123
+  - name: DB_USER_NAME_QUARTZ
+    value: RTD_QUARZ
+  - name: WORKFLOW_ENGINE_ENDPOINT
+    value: ruleengine.rtd-test:80
+  - name: DATASOURCE_AGENT_ENDPOINT
+    value: rtd-datasource.rtd:80
+  - name: FILE_SERVER_TYPE
+    value: NAS
+  - name: FILE_PATH
+    value: /usr/importFile
+  - name: ZK_TIME_OUT
+    value: "40000"
+  - name: ZK_HOST
+    value: rtd-zookeeper
+  - name: ZK_PORT
+    value: "2181"
+  - name: RTD_NODE_PATH
+    value: /rtd-dev
+  - name: GRPC_ENDPOINT
+    value: rtd-ruleengine
+  - name: GRPC_ENDPOINT_PORT
+    value: "8999"
+  - name: ZOOKEEPER_ENABLE
+    value: "true"
+  - name: RAVENCAST_ENABLE
+    value: "true"
+  - name: RAVENCAST_IP
+    value: 10.247.4.8
+  - name: RAVENCAST_PORT
+    value: "10101"
+  - name: RAVENCAST_SESSION
+    value: rtd_server
+  - name: RAVENCAST_CHANNEL
+    value: /Rtd/NextDispatchRequest/v3
+  image:
+    pullPolicy: Always
+    repository: 10.243.36.7:80/rtd/rtd-workflow
+    tag: 1.0.398
+  livenessProbe:
+    failureThreshold: 3
+    httpGet:
+      path: /workflow/v1/health
+      port: 8080
+      scheme: HTTP
+    initialDelaySeconds: 400
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 10
+  readinessProbe:
+    failureThreshold: 3
+    httpGet:
+      path: /workflow/v1/health
+      port: 8080
+      scheme: HTTP
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 10
+  replicaCount: 1
+  resources:
+    limits:
+      cpu: "2"
+      memory: 2Gi
+    requests:
+      cpu: 10m
+      memory: 50Mi
+zookeeper:
+  affinity: {}
+  allowAnonymousLogin: true
+  auth:
+    clientPassword: ""
+    clientUser: ""
+    enabled: false
+    existingSecret: ""
+    serverPasswords: ""
+    serverUsers: ""
+  autopurge:
+    purgeInterval: 0
+    snapRetainCount: 3
+  clusterDomain: cluster.local
+  common:
+    exampleValue: common-chart
+    global:
+      imagePullSecrets: []
+      imageRegistry: ""
+      storageClass: ""
+  commonAnnotations: {}
+  commonLabels: {}
+  config: ""
+  containerPort: 2181
+  customLivenessProbe: {}
+  customReadinessProbe: {}
+  dataLogDir: ""
+  diagnosticMode:
+    args:
+    - infinity
+    command:
+    - sleep
+    enabled: false
+  electionContainerPort: 3888
+  extraDeploy: []
+  extraVolumeMounts: []
+  extraVolumes: []
+  followerContainerPort: 2888
+  fourlwCommandsWhitelist: srvr, mntr, ruok
+  fullnameOverride: ""
+  global:
+    imagePullSecrets: []
+    imageRegistry: ""
+    storageClass: ""
+  heapSize: 1024
+  hostAliases: []
+  image:
+    debug: false
+    pullPolicy: IfNotPresent
+    pullSecrets: []
+    repository: 10.243.36.7:80/rtd/zookeeper
+    tag: 3.7.0-debian-10-r127
+  initContainers: []
+  initLimit: 10
+  jvmFlags: ""
+  listenOnAllIPs: false
+  livenessProbe:
+    enabled: true
+    failureThreshold: 6
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    probeCommandTimeout: 2
+    successThreshold: 1
+    timeoutSeconds: 5
+  logLevel: ERROR
+  maxClientCnxns: 60
+  maxSessionTimeout: 40000
+  metrics:
+    containerPort: 9141
+    enabled: false
+    prometheusRule:
+      enabled: false
+      namespace: ""
+      rules: []
+      selector: {}
+    service:
+      annotations:
+        prometheus.io/path: /metrics
+        prometheus.io/port: '{{ .Values.metrics.service.port }}'
+        prometheus.io/scrape: "true"
+      port: 9141
+      type: ClusterIP
+    serviceMonitor:
+      enabled: false
+      interval: ""
+      namespace: ""
+      scrapeTimeout: ""
+      selector: {}
+  minServerId: 1
+  nameOverride: ""
+  namespaceOverride: ""
+  networkPolicy:
+    allowExternal: true
+    enabled: false
+  nodeAffinityPreset:
+    key: ""
+    type: ""
+    values: []
+  nodeSelector: {}
+  persistence:
+    accessModes:
+    - ReadWriteMany
+    annotations: {}
+    dataLogDir:
+      existingClaim: ""
+      selector: {}
+      size: 8Gi
+    enabled: true
+    existingClaim: ""
+    selector: {}
+    size: 8Gi
+    storageClass: nfs-client
+  podAffinityPreset: ""
+  podAnnotations: {}
+  podAntiAffinityPreset: soft
+  podDisruptionBudget:
+    maxUnavailable: 1
+  podLabels: {}
+  podManagementPolicy: Parallel
+  preAllocSize: 65536
+  priorityClassName: ""
+  readinessProbe:
+    enabled: true
+    failureThreshold: 6
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    probeCommandTimeout: 2
+    successThreshold: 1
+    timeoutSeconds: 5
+  replicaCount: 3
+  resources:
+    requests:
+      cpu: 250m
+      memory: 256Mi
+  rollingUpdatePartition: ""
+  schedulerName: ""
+  securityContext:
+    enabled: true
+    fsGroup: 1001
+    runAsUser: 1001
+  service:
+    annotations: {}
+    disableBaseClientPort: false
+    electionPort: 3888
+    followerPort: 2888
+    headless:
+      annotations: {}
+    loadBalancerIP: ""
+    nodePorts:
+      client: ""
+      clientTls: ""
+    port: 2181
+    publishNotReadyAddresses: true
+    tlsClientPort: 3181
+    type: ClusterIP
+  serviceAccount:
+    automountServiceAccountToken: true
+    create: false
+    name: ""
+  snapCount: 100000
+  syncLimit: 5
+  tickTime: 2000
+  tls:
+    client:
+      autoGenerated: false
+      enabled: false
+      existingSecret: ""
+      keystorePassword: ""
+      keystorePath: /opt/bitnami/zookeeper/config/certs/client/zookeeper.keystore.jks
+      passwordsSecretName: ""
+      truststorePassword: ""
+      truststorePath: /opt/bitnami/zookeeper/config/certs/client/zookeeper.truststore.jks
+    quorum:
+      autoGenerated: false
+      enabled: false
+      existingSecret: ""
+      keystorePassword: ""
+      keystorePath: /opt/bitnami/zookeeper/config/certs/quorum/zookeeper.keystore.jks
+      passwordsSecretName: ""
+      truststorePassword: ""
+      truststorePath: /opt/bitnami/zookeeper/config/certs/quorum/zookeeper.truststore.jks
+    resources:
+      limits: {}
+      requests: {}
+  tlsContainerPort: 3181
+  tolerations: []
+  topologySpreadConstraints: {}
+  updateStrategy: RollingUpdate
+  volumePermissions:
+    enabled: false
+    image:
+      pullPolicy: Always
+      pullSecrets: []
+      repository: bitnami/bitnami-shell
+      tag: 10-debian-10-r172
+    resources: {}
+
+HOOKS:
+MANIFEST:
+---
+# Source: rtd/charts/zookeeper/templates/poddisruptionbudget.yaml
+apiVersion: policy/v1beta1
+kind: PodDisruptionBudget
+metadata:
+  name: rtd-zookeeper
+  namespace: rtd-test
+  labels:
+    app.kubernetes.io/name: zookeeper
+    helm.sh/chart: zookeeper-7.4.3
+    app.kubernetes.io/instance: rtd
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: zookeeper
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: zookeeper
+      app.kubernetes.io/instance: rtd
+      app.kubernetes.io/component: zookeeper
+  maxUnavailable: 1
+---
+# Source: rtd/templates/serviceaccount.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: rtd
+  labels:
+    helm.sh/chart: rtd-0.1.0
+    app.kubernetes.io/instance: rtd
+    app.kubernetes.io/version: "1.16.0"
+    app.kubernetes.io/managed-by: Helm
+---
+# Source: rtd/charts/zookeeper/templates/svc-headless.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: rtd-zookeeper-headless
+  namespace: rtd-test
+  labels:
+    app.kubernetes.io/name: zookeeper
+    helm.sh/chart: zookeeper-7.4.3
+    app.kubernetes.io/instance: rtd
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: zookeeper
+spec:
+  type: ClusterIP
+  clusterIP: None
+  publishNotReadyAddresses: true
+  ports:
+    
+    - name: tcp-client
+      port: 2181
+      targetPort: client
+    
+    
+    - name: follower
+      port: 2888
+      targetPort: follower
+    - name: tcp-election
+      port: 3888
+      targetPort: election
+  selector:
+    app.kubernetes.io/name: zookeeper
+    app.kubernetes.io/instance: rtd
+    app.kubernetes.io/component: zookeeper
+---
+# Source: rtd/charts/zookeeper/templates/svc.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: rtd-zookeeper
+  namespace: rtd-test
+  labels:
+    app.kubernetes.io/name: zookeeper
+    helm.sh/chart: zookeeper-7.4.3
+    app.kubernetes.io/instance: rtd
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: zookeeper
+spec:
+  type: ClusterIP
+  ports:
+    
+    - name: tcp-client
+      port: 2181
+      targetPort: client
+      nodePort: null
+    
+    
+    - name: follower
+      port: 2888
+      targetPort: follower
+    - name: tcp-election
+      port: 3888
+      targetPort: election
+  selector:
+    app.kubernetes.io/name: zookeeper
+    app.kubernetes.io/instance: rtd
+    app.kubernetes.io/component: zookeeper
+---
+# Source: rtd/templates/service-ruleengine.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: rtd-ruleengine
+  labels:
+    helm.sh/chart: rtd-0.1.0
+    app.kubernetes.io/instance: rtd
+    app.kubernetes.io/version: "1.16.0"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app.kubernetes.io/name: rtd-ruleengine
+    app.kubernetes.io/component: rtd-ruleengine
+    helm.sh/chart: rtd-0.1.0
+    app.kubernetes.io/instance: rtd
+    app.kubernetes.io/version: "1.16.0"
+    app.kubernetes.io/managed-by: Helm
+---
+# Source: rtd/templates/service-web.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: rtd-web
+  labels:
+    helm.sh/chart: rtd-0.1.0
+    app.kubernetes.io/instance: rtd
+    app.kubernetes.io/version: "1.16.0"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app.kubernetes.io/name: rtd-web
+    app.kubernetes.io/component: rtd-web
+    helm.sh/chart: rtd-0.1.0
+    app.kubernetes.io/instance: rtd
+    app.kubernetes.io/version: "1.16.0"
+    app.kubernetes.io/managed-by: Helm
+---
+# Source: rtd/templates/service-workflow.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: rtd-workflow
+  labels:
+    helm.sh/chart: rtd-0.1.0
+    app.kubernetes.io/instance: rtd
+    app.kubernetes.io/version: "1.16.0"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app.kubernetes.io/name: rtd-workflow
+    app.kubernetes.io/component: rtd-workflow
+    helm.sh/chart: rtd-0.1.0
+    app.kubernetes.io/instance: rtd
+    app.kubernetes.io/version: "1.16.0"
+    app.kubernetes.io/managed-by: Helm
+---
+# Source: rtd/templates/deployment-ruleengine.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rtd-ruleengine
+  labels:
+    app.kubernetes.io/name: rtd-ruleengine
+    app.kubernetes.io/component: rtd-ruleengine
+    helm.sh/chart: rtd-0.1.0
+    app.kubernetes.io/instance: rtd
+    app.kubernetes.io/version: "1.16.0"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: rtd-ruleengine
+      app.kubernetes.io/component: rtd-ruleengine
+      helm.sh/chart: rtd-0.1.0
+      app.kubernetes.io/instance: rtd
+      app.kubernetes.io/version: "1.16.0"
+      app.kubernetes.io/managed-by: Helm
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: rtd-ruleengine
+        app.kubernetes.io/component: rtd-ruleengine
+        helm.sh/chart: rtd-0.1.0
+        app.kubernetes.io/instance: rtd
+        app.kubernetes.io/version: "1.16.0"
+        app.kubernetes.io/managed-by: Helm
+    spec:
+      imagePullSecrets:
+        - name: myregistrykey
+      serviceAccountName: rtd
+      securityContext:
+        {}
+      containers:
+        - name: rtd-ruleengine
+          securityContext:
+            {}
+          image: "10.243.36.7:80/rtd/ruleengine:1.0.306"
+          imagePullPolicy: Always
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: pro
+            - name: SERVER_PORT
+              value: "8999"
+            - name: REGISTER_METHOD
+              value: "2"
+            - name: ZK_HOST
+              value: rtd-zookeeper
+            - name: ZK_NODE
+              value: rtd
+            - name: USING_SHARED_STORAGE
+              value: "false"
+            - name: IMPORT_FILE_PATH
+              value: /opt/ruleengine/resources
+            - name: LOG_FILE_PATH
+              value: /opt/ruleengine/logs
+            - name: DATA_FILE_PATH
+              value: /opt/ruleengine/data
+            - name: SHARED_IMPORT_FILE_PATH
+              value: /data/ruleengine/resources
+            - name: SHARED_LOG_FILE_PATH
+              value: /data/ruleengine/logs
+            - name: SHARED_DATA_FILE_PATH
+              value: /data/ruleengine/data
+
+          resources:
+            limits:
+              cpu: "2"
+              memory: 2Gi
+            requests:
+              cpu: 10m
+              memory: 50Mi
+---
+# Source: rtd/templates/deployment-web.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rtd-web
+  labels:
+    app.kubernetes.io/name: rtd-web
+    app.kubernetes.io/component: rtd-web
+    helm.sh/chart: rtd-0.1.0
+    app.kubernetes.io/instance: rtd
+    app.kubernetes.io/version: "1.16.0"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: rtd-web
+      app.kubernetes.io/component: rtd-web
+      helm.sh/chart: rtd-0.1.0
+      app.kubernetes.io/instance: rtd
+      app.kubernetes.io/version: "1.16.0"
+      app.kubernetes.io/managed-by: Helm
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: rtd-web
+        app.kubernetes.io/component: rtd-web
+        helm.sh/chart: rtd-0.1.0
+        app.kubernetes.io/instance: rtd
+        app.kubernetes.io/version: "1.16.0"
+        app.kubernetes.io/managed-by: Helm
+    spec:
+      imagePullSecrets:
+        - name: myregistrykey
+      serviceAccountName: rtd
+      securityContext:
+        {}
+      containers:
+        - name: rtd-web
+          securityContext:
+            {}
+          image: "10.243.36.7:80/rtd/rtd-web:1.0.241"
+          imagePullPolicy: Always
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 200
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 10
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /
+              port: 80
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 10
+
+          resources:
+            limits:
+              cpu: "1"
+              memory: 1024Mi
+            requests:
+              cpu: "0.1"
+              memory: 100Mi
+---
+# Source: rtd/templates/deployment-workflow.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rtd-workflow
+  labels:
+    app.kubernetes.io/name: rtd-workflow
+    app.kubernetes.io/component: rtd-workflow
+    helm.sh/chart: rtd-0.1.0
+    app.kubernetes.io/instance: rtd
+    app.kubernetes.io/version: "1.16.0"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: rtd-workflow
+      app.kubernetes.io/component: rtd-workflow
+      helm.sh/chart: rtd-0.1.0
+      app.kubernetes.io/instance: rtd
+      app.kubernetes.io/version: "1.16.0"
+      app.kubernetes.io/managed-by: Helm
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: rtd-workflow
+        app.kubernetes.io/component: rtd-workflow
+        helm.sh/chart: rtd-0.1.0
+        app.kubernetes.io/instance: rtd
+        app.kubernetes.io/version: "1.16.0"
+        app.kubernetes.io/managed-by: Helm
+    spec:
+      imagePullSecrets:
+        - name: myregistrykey
+      serviceAccountName: rtd
+      securityContext:
+        {}
+      containers:
+        - name: rtd-workflow
+          securityContext:
+            {}
+          image: "10.243.36.7:80/rtd/rtd-workflow:1.0.398"
+          imagePullPolicy: Always
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: test
+            - name: SERVER_PORT
+              value: "8080"
+            - name: DB_IP
+              value: 10.247.139.143
+            - name: DB_PORT
+              value: "15400"
+            - name: DB_USER_NAME
+              value: RTD_DEV
+            - name: DB_USER_PWD
+              value: Huawei@123
+            - name: DB_USER_NAME_QUARTZ
+              value: RTD_QUARZ
+            - name: WORKFLOW_ENGINE_ENDPOINT
+              value: ruleengine.rtd-test:80
+            - name: DATASOURCE_AGENT_ENDPOINT
+              value: rtd-datasource.rtd:80
+            - name: FILE_SERVER_TYPE
+              value: NAS
+            - name: FILE_PATH
+              value: /usr/importFile
+            - name: ZK_TIME_OUT
+              value: "40000"
+            - name: ZK_HOST
+              value: rtd-zookeeper
+            - name: ZK_PORT
+              value: "2181"
+            - name: RTD_NODE_PATH
+              value: /rtd-dev
+            - name: GRPC_ENDPOINT
+              value: rtd-ruleengine
+            - name: GRPC_ENDPOINT_PORT
+              value: "8999"
+            - name: ZOOKEEPER_ENABLE
+              value: "true"
+            - name: RAVENCAST_ENABLE
+              value: "true"
+            - name: RAVENCAST_IP
+              value: 10.247.4.8
+            - name: RAVENCAST_PORT
+              value: "10101"
+            - name: RAVENCAST_SESSION
+              value: rtd_server
+            - name: RAVENCAST_CHANNEL
+              value: /Rtd/NextDispatchRequest/v3
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /workflow/v1/health
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 400
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 10
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /workflow/v1/health
+              port: 8080
+              scheme: HTTP
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 10
+
+          resources:
+            limits:
+              cpu: "2"
+              memory: 2Gi
+            requests:
+              cpu: 10m
+              memory: 50Mi
+---
+# Source: rtd/charts/zookeeper/templates/statefulset.yaml
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: rtd-zookeeper
+  namespace: rtd-test
+  labels:
+    app.kubernetes.io/name: zookeeper
+    helm.sh/chart: zookeeper-7.4.3
+    app.kubernetes.io/instance: rtd
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: zookeeper
+    role: zookeeper
+spec:
+  serviceName: rtd-zookeeper-headless
+  replicas: 3
+  podManagementPolicy: Parallel
+  updateStrategy:
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: zookeeper
+      app.kubernetes.io/instance: rtd
+      app.kubernetes.io/component: zookeeper
+  template:
+    metadata:
+      name: rtd-zookeeper
+      labels:
+        app.kubernetes.io/name: zookeeper
+        helm.sh/chart: zookeeper-7.4.3
+        app.kubernetes.io/instance: rtd
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/component: zookeeper
+    spec:
+      
+      serviceAccountName: default
+      securityContext:
+        fsGroup: 1001
+      affinity:
+        podAffinity:
+          
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    app.kubernetes.io/name: zookeeper
+                    app.kubernetes.io/instance: rtd
+                    app.kubernetes.io/component: zookeeper
+                namespaces:
+                  - "rtd-test"
+                topologyKey: kubernetes.io/hostname
+              weight: 1
+        nodeAffinity:
+          
+      containers:
+        - name: zookeeper
+          image: 10.243.36.7:80/rtd/zookeeper:3.7.0-debian-10-r127
+          imagePullPolicy: "IfNotPresent"
+          securityContext:
+            runAsUser: 1001
+          command:
+            - bash
+            - -ec
+            - |
+                # Execute entrypoint as usual after obtaining ZOO_SERVER_ID
+                # check ZOO_SERVER_ID in persistent volume via myid
+                # if not present, set based on POD hostname
+                if [[ -f "/bitnami/zookeeper/data/myid" ]]; then
+                  export ZOO_SERVER_ID="$(cat /bitnami/zookeeper/data/myid)"
+                else
+                  HOSTNAME=`hostname -s`
+                  if [[ $HOSTNAME =~ (.*)-([0-9]+)$ ]]; then
+                    ORD=${BASH_REMATCH[2]}
+                    export ZOO_SERVER_ID=$((ORD + 1 ))
+                  else
+                    echo "Failed to get index from hostname $HOST"
+                    exit 1
+                  fi
+                fi
+                exec /entrypoint.sh /run.sh
+          resources:
+            requests:
+              cpu: 250m
+              memory: 256Mi
+          env:
+            - name: BITNAMI_DEBUG
+              value: "false"
+            - name: ZOO_DATA_LOG_DIR
+              value: ""
+            - name: ZOO_PORT_NUMBER
+              value: "2181"
+            - name: ZOO_TICK_TIME
+              value: "2000"
+            - name: ZOO_INIT_LIMIT
+              value: "10"
+            - name: ZOO_SYNC_LIMIT
+              value: "5"
+            - name: ZOO_PRE_ALLOC_SIZE
+              value: "65536"
+            - name: ZOO_SNAPCOUNT
+              value: "100000"
+            - name: ZOO_MAX_CLIENT_CNXNS
+              value: "60"
+            - name: ZOO_4LW_COMMANDS_WHITELIST
+              value: "srvr, mntr, ruok"
+            - name: ZOO_LISTEN_ALLIPS_ENABLED
+              value: "no"
+            - name: ZOO_AUTOPURGE_INTERVAL
+              value: "0"
+            - name: ZOO_AUTOPURGE_RETAIN_COUNT
+              value: "3"
+            - name: ZOO_MAX_SESSION_TIMEOUT
+              value: "40000"
+            - name: ZOO_SERVERS
+              value: rtd-zookeeper-0.rtd-zookeeper-headless.rtd-test.svc.cluster.local:2888:3888::1 rtd-zookeeper-1.rtd-zookeeper-headless.rtd-test.svc.cluster.local:2888:3888::2 rtd-zookeeper-2.rtd-zookeeper-headless.rtd-test.svc.cluster.local:2888:3888::3 
+            - name: ZOO_ENABLE_AUTH
+              value: "no"
+            - name: ZOO_HEAP_SIZE
+              value: "1024"
+            - name: ZOO_LOG_LEVEL
+              value: "ERROR"
+            - name: ALLOW_ANONYMOUS_LOGIN
+              value: "yes"
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: metadata.name
+          ports:
+            - name: client
+              containerPort: 2181
+            - name: follower
+              containerPort: 2888
+            - name: election
+              containerPort: 3888
+          livenessProbe:
+            exec:
+              command: ['/bin/bash', '-c', 'echo "ruok" | timeout 2 nc -w 2 localhost 2181 | grep imok']
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 6
+          readinessProbe:
+            exec:
+              command: ['/bin/bash', '-c', 'echo "ruok" | timeout 2 nc -w 2 localhost 2181 | grep imok']
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 6
+          volumeMounts:
+            - name: data
+              mountPath: /bitnami/zookeeper
+      volumes:
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+        annotations:
+      spec:
+        accessModes:
+          - "ReadWriteMany"
+        resources:
+          requests:
+            storage: "8Gi"
+        storageClassName: nfs-client
+---
+# Source: rtd/templates/ingressRouter-ruleengine.yaml
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  annotations:
+  generation: 1
+  name: rtd-ruleengine
+spec:
+  entryPoints:
+    - web
+  routes:
+    - kind: Rule
+      match: Host(`rtd-test.fanli.inhuawei.com`)&&PathPrefix(`/ruleengine/`)
+      services:
+        - name: rtd-ruleengine
+          port: 80
+---
+# Source: rtd/templates/ingressRouter-web.yaml
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  annotations:
+  generation: 1
+  name: rtd-web
+spec:
+  entryPoints:
+    - web
+  routes:
+    - kind: Rule
+      match: Host(`rtd-test.fanli.inhuawei.com`)&&PathPrefix(`/`)
+      services:
+        - name: rtd-web
+          port: 80
+---
+# Source: rtd/templates/ingressRouter-workflow.yaml
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  annotations:
+  generation: 1
+  name: rtd-workflow
+spec:
+  entryPoints:
+    - web
+  routes:
+    - kind: Rule
+      match: Host(`rtd-test.fanli.inhuawei.com`)&&PathPrefix(`/workflow/`)
+      services:
+        - name: rtd-workflow
+          port: 80
+
+NOTES:
+1. Get the application URL by running these commands:
+  export POD_NAME=$(kubectl get pods --namespace rtd-test -l "app.kubernetes.io/name=rtd,app.kubernetes.io/instance=rtd" -o jsonpath="{.items[0].metadata.name}")
+  export CONTAINER_PORT=$(kubectl get pod --namespace rtd-test $POD_NAME -o jsonpath="{.spec.containers[0].ports[0].containerPort}")
+  echo "Visit http://127.0.0.1:8080 to use your application"
+  kubectl --namespace rtd-test port-forward $POD_NAME 8080:$CONTAINER_PORT

@@ -1,0 +1,6 @@
+dependencies:
+- name: zookeeper
+  repository: file://../zookeeper/
+  version: 7.4.3
+digest: sha256:d5e0097d786557c18eecf2e0c8e4c105de43db9589a075542dafdbba82957f10
+generated: "2021-10-07T16:23:07.197356392+08:00"
