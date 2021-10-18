@@ -12,7 +12,7 @@ spec:
       rules:
         - alert: KafkaTopicsReplicas
           expr: sum(kafka_topic_partition_in_sync_replica) by (topic, instance) < 3
-          for: 0m
+          for: 3m
           labels:
             severity: critical
           annotations:

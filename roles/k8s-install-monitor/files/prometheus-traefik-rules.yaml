@@ -12,7 +12,7 @@ spec:
       rules:
         - alert: TraefikServiceDown
           expr: absent(up{service="traefik"} == 1) OR up{service="traefik"} == 0
-          for: 0m
+          for: 1m
           labels:
             severity: critical
           annotations:
