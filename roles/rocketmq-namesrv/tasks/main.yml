@@ -1,5 +1,7 @@
 - name: create dirs
-  shell: mkdir -p {{ rocketmq_root_dir }}/logs
+  file:
+    path: '{{ rocketmq_root_dir }}/logs'
+    state: directory
 
 - name: send rocketmq to remote
   unarchive:
@@ -50,6 +52,7 @@
 
 - name: add cron job
   cron:
+    name: 'rocketmq-namesrv'
     user: '{{ rocketmq_user }}'
     minute: '*/2'
     job: '{{ rocketmq_root_dir }}/bin/rmq-tools.sh namesrv start'

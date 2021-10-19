@@ -97,7 +97,7 @@ port 6379
 # will silently truncate it to the value of /proc/sys/net/core/somaxconn so
 # make sure to raise both the value of somaxconn and tcp_max_syn_backlog
 # in order to get the desired effect.
-tcp-backlog 511
+tcp-backlog 2048
 
 # Unix socket.
 #
@@ -830,7 +830,7 @@ acllog-max-len 128
 # connections, one incoming and another outgoing. It is important to size the
 # limit accordingly in case of very large clusters.
 #
-# maxclients 10000
+maxclients 50000
 
 ############################## MEMORY MANAGEMENT ################################
 

@@ -4,18 +4,15 @@
 - name: refresh iptables
   shell: iptables -F
 
-- name: clean old redis docker files
+- name: create redis data dir
   file:
-    path: '{{ redis_data_dir }}'
-    state: absent
-
-- name: copy docker compose
-  shell: mkdir -p {{ redis_data_dir }}/data
+    path: '{{ redis_data_dir }}/data'
+    state: directory
 
 - name: copy docker compose
   template: src=docker-compose.yml.j2 dest={{ redis_data_dir }}/docker-compose.yml
 
-- name: copy redis
+- name: copy redis.conf
   template: src=redis.conf.j2 dest={{ redis_data_dir }}/redis.conf
 
 - name: hugepage never
@@ -29,13 +26,11 @@
 - name: sysctl redis-conn.conf
   shell: sysctl --system
 
-- name: copy join command
+- name: copy create cluster shell
   template:
     src: create-cluster.sh.j2
     dest: "{{ redis_data_dir }}/create-cluster.sh"
-
-- name: chmod create-cluster shell
-  command: chmod +x {{ redis_data_dir }}/create-cluster.sh
+    mode: 0755
 
 - name: stop redis
   shell: docker-compose down
@@ -54,11 +49,16 @@
     timeout: 30
     msg: 'Timeout waiting for redis respond'
 
+- name: check if redis cluster linked
+  stat:
+    path: '{{ redis_data_dir }}/data/nodes.conf'
+  register: redis_nodes_file
+
 - name: chmod create-cluster.sh
   command: sh create-cluster.sh
   args:
     chdir: "{{ redis_data_dir }}"
-  when: ansible_ssh_host == groups['redis'][0]
+  when: ansible_ssh_host == groups['redis'][0] and redis_nodes_file.stat.exists == false
 
 - name: get cluster info
   shell: sleep 10 && docker exec -i redis-node01 /bin/sh -c 'redis-cli cluster info'

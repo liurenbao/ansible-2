@@ -84,7 +84,8 @@ spec:
             summary: Redis out of configured maxmemory (instance {{ $labels.instance }})
             description: "Redis is running out of configured maxmemory (> 90%),  VALUE = {{ $value }}"
         - alert: RedisTooManyConnections
-          expr: redis_connected_clients > 2500
+          # maxclients 50000
+          expr: redis_connected_clients > 45000
           for: 2m
           labels:
             severity: warning

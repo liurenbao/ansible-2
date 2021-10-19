@@ -25,7 +25,6 @@
     - rocketmq-master
     - rocketmq-slave
   roles:
-    - change-sysconf
     - install-java
   tasks:
     - name: create rocketmq user
