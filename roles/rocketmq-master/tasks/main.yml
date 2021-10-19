@@ -61,6 +61,7 @@
 
 - name: add cron job
   cron:
+    name: 'rocketmq-master'
     user: '{{ rocketmq_user }}'
     minute: '*/2'
     job: '{{ rocketmq_root_dir }}/bin/rmq-tools.sh {{ broker_name }} start'
