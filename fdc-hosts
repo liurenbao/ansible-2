@@ -1,0 +1,19 @@
+[es]
+192.168.161.200
+192.168.161.199
+192.168.161.242
+192.168.163.194
+192.168.163.69
+192.168.163.82
+
+[kafka]
+192.168.161.194
+192.168.161.193
+192.168.161.195
+
+[server]
+192.168.160.27	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name=apc-uat
+
+[web]
+192.168.160.134	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name=apc-web1
+192.168.160.135	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name=apc-web2
