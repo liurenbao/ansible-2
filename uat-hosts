@@ -23,12 +23,11 @@
 [rocketmq-namesrv]
 192.168.160.46	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name=rocketmq-namesrv-uat-1
 192.168.160.72	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name=rocketmq-namesrv-uat-2
-[rocketmq-master]
-192.168.160.87	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name=rocketmq-master-uat-1	broker_name=broker-b
-192.168.160.219	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name=rocketmq-master-uat-2	broker_name=broker-a
-[rocketmq-slave]
-192.168.160.32	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name=rocketmq-slave-uat-2	broker_name=broker-b
-192.168.160.124	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name=rocketmq-slave-uat-1	broker_name=broker-a
+[rocketmq-broker]
+192.168.160.87	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name=rocketmq-master-uat-1	broker_name=broker-b role=master
+192.168.160.76	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name=rocketmq-master-uat-2	broker_name=broker-a role=master
+192.168.160.32	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name=rocketmq-slave-uat-2	broker_name=broker-b role=slave
+192.168.160.124	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name=rocketmq-slave-uat-1	broker_name=broker-a role=slave
 [nginx]
 192.168.160.54	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name=nginx-uat-2   MASTER_BACKUP=MASTER
 192.168.160.11	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name=nginx-uat-1   MASTER_BACKUP=BACKUP
