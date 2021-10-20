@@ -2,8 +2,7 @@
   gather_facts: false
   hosts:
     - rocketmq-namesrv
-    - rocketmq-master
-    - rocketmq-slave
+    - rocketmq-broker
   tasks:
     - name: change sys conf
       lineinfile:
@@ -22,8 +21,7 @@
   gather_facts: false
   hosts:
     - rocketmq-namesrv
-    - rocketmq-master
-    - rocketmq-slave
+    - rocketmq-broker
   roles:
     - install-java
   tasks:
@@ -33,25 +31,19 @@
         password: "{{ rocketmq_user_pass }}"
         state: present
 
-- name: install-rocketmq-namesrv
+- name: install rocketmq namesrv
   gather_facts: false
   hosts: rocketmq-namesrv
   roles:
     - rocketmq-namesrv
 
-- name: install-rocketmq-master
+- name: install rocketmq broker
   gather_facts: false
-  hosts: rocketmq-master
+  hosts: rocketmq-broker
   roles:
-    - rocketmq-master
+    - rocketmq-broker
 
-- name: install rocketmq slave
-  gather_facts: false
-  hosts: rocketmq-slave
-  roles:
-    - rocketmq-slave
-
-- name: start rocketmq-console
+- name: install rocketmq console
   gather_facts: false
   hosts: rocketmq-console
   roles:
@@ -73,26 +65,9 @@
         - "export PATH=${JAVA_HOME}/bin:$PATH"
     - name: create topic
       shell: |
-        ./mqadmin updateTopic -n localhost:9876 -b {{ groups["rocketmq-master"][0] }}:10911 -t {{ item }} -p 6 -r 16 -w 16
-        ./mqadmin updateTopic -n localhost:9876 -b {{ groups["rocketmq-master"][1] }}:10911 -t {{ item }} -p 6 -r 16 -w 16
+        ./mqadmin updateTopic -n localhost:9876 -c {{ rocket_cluster_name }} -t {{ item }} -p 6 -r 16 -w 16
       when: groups['rocketmq-namesrv'][0] == ansible_ssh_host
       args:
         chdir: "{{ rocketmq_root_dir }}/bin"
       with_items:
         - "{{ rocket_topic_list }}"
-
-#     查看rocketmq topic，先暂时不做。。直接进页面看
-#     - name: show rocketmq topic topic list
-#       shell: ./mqadmin topicRoute -t {{ item }} -n localhost:9876
-#       when: groups['rocketmq-namesrv'][0] == ansible_ssh_host
-#       args:
-#         chdir: "{{ rocketmq_root_dir }}/bin"
-#       register: result
-#       with_items:
-#         - "{{ rocket_topic_list }}"
-#
-#     - name: show result
-#       debug:
-#          msg: "{{ item }}"
-#       with_items:
-#         - "{{ result }}"

@@ -1,4 +1,4 @@
-brokerClusterName=CIMCluster
+brokerClusterName={{ rocket_cluster_name }}
 brokerName={{ broker_name }}
 brokerId=1
 deleteWhen=04
@@ -21,6 +21,7 @@ defaultTopicQueueNums = 4
 #brokerIP1
 brokerIP1 = {{ ansible_ssh_host }}
 brokerIP2 = {{ ansible_ssh_host }}
+
 #storePathRootDir-storePathCommitLog
 storePathRootDir = {{ rocketmq_root_dir }}/store
 storePathCommitLog = {{ rocketmq_root_dir }}/store/commitlog

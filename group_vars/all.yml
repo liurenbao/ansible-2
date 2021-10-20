@@ -68,6 +68,7 @@ kafka_heap_opts: '-Xmx16G -Xms16G'
 
 # roketmq------------------------------------------------------------------------------------
 jdk_dir: '/data01/jdk1.8.0_202'
+rocket_cluster_name: CIMCluster
 rocketmq_root_dir: '/data01/rocketmq'
 rocketmq_package_dir: '{{ package_dir }}/rocketmq'
 rocketmq_user: '{{ cim_ops_user }}'

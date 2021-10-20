@@ -3,16 +3,18 @@
     mkdir -p {{ rocketmq_root_dir }}
     mkdir -p {{ rocketmq_root_dir }}/logs
     mkdir -p {{ rocketmq_root_dir }}/conf/2m-2s-sync
-    rm -rf {{ rocketmq_root_dir }}/conf/2m-2s-sync/*.properties
 
 - name: send rocketmq to remote
   unarchive:
     src: "{{ rocketmq_package_dir }}/rocketmq-all-4.7.1-bin-release.tar.gz"
     dest: "{{ rocketmq_root_dir }}"
 
+- name: remove rocketmq old conf
+  shell: rm -rf {{ rocketmq_root_dir }}/conf/2m-2s-sync/*.properties
+
 - name: send rocketmq master conf
   template:
-    src: broker-s.properties.j2
+    src: broker-{{ role }}.properties.j2
     dest: "{{ rocketmq_root_dir }}/conf/2m-2s-sync/{{ broker_name }}.properties"
 
 - name: replace rocketmq manager script
@@ -39,6 +41,25 @@
     src: rocketmq.j2
     dest: /etc/logrotate.d/rocketmq
 
+- name: remove rocketmq logs
+  shell: rm -rf {{ rocketmq_root_dir }}/logs
+
+- name: create rocketmq log dir
+  file:
+    path: '{{ rocketmq_root_dir }}/logs'
+    state: directory
+
+- name: create rocketmq log file
+  file:
+    path: '{{ rocketmq_root_dir }}/logs/{{ broker_name }}.log'
+    state: touch
+
+- name: copy auto start shell
+  template:
+    src: rocketmq-cron.sh.j2
+    dest: '{{ rocketmq_root_dir }}/bin/rocketmq-cron.sh'
+    mode: 0755
+
 - name: mq-user permission
   file:
     path: '{{ rocketmq_root_dir }}'
@@ -49,18 +70,19 @@
 - name: start mq
   become: yes
   become_user: "{{ rocketmq_user }}"
-  shell: "{{ rocketmq_root_dir }}/bin/rmq-tools.sh {{ broker_name }} restart"
+  shell: "./rmq-tools.sh {{ broker_name }} restart"
+  args:
+    chdir: '{{ rocketmq_root_dir }}/bin'
 
-- name: add auto start rocketmq slave when bootstrap
+- name: add auto start rocketmq when bootstrap
   lineinfile:
     line: "{{ rocketmq_root_dir }}/bin/rmq-tools.sh {{ broker_name }} start"
     path: /etc/rc.d/rc.local
-    state: present
-    mode: 0774
+    state: absent
 
 - name: add cron job
   cron:
-    name: 'rocketmq-slave'
+    name: 'rocketmq'
     user: '{{ rocketmq_user }}'
-    minute: '*/2'
-    job: '{{ rocketmq_root_dir }}/bin/rmq-tools.sh {{ broker_name }} start'
+    minute: '*/1'
+    job: '{{ rocketmq_root_dir }}/bin/rocketmq-cron.sh'

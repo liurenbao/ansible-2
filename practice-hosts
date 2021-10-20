@@ -2,15 +2,14 @@
 
 [rocketmq-console]
 192.168.163.192	host_name=rocketmq-namesrv-drill-2	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com
-[rocketmq-slave]
-192.168.163.220	host_name=rocketmq-slave-drill-2	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com	broker_name=broker-a
-192.168.163.229	host_name=rocketmq-slave-drill-1	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com	broker_name=broker-b
 [rocketmq-namesrv]
 192.168.163.192	host_name=rocketmq-namesrv-drill-2	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com
 192.168.163.214	host_name=rocketmq-namesrv-drill-1	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com
-[rocketmq-master]
-192.168.163.227	host_name=rocketmq-master-drill-2	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com	broker_name=broker-a
-192.168.163.207	host_name=rocketmq-master-drill-1	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com	broker_name=broker-b
+[rocketmq-broker]
+192.168.163.227	host_name=rocketmq-master-drill-2	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com	broker_name=broker-a role=master
+192.168.163.207	host_name=rocketmq-master-drill-1	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com	broker_name=broker-b role=master
+192.168.163.220	host_name=rocketmq-slave-drill-2	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com	broker_name=broker-a role=slave
+192.168.163.229	host_name=rocketmq-slave-drill-1	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com	broker_name=broker-b role=slave
 [redis]
 192.168.163.212	host_name=redis-drill-6	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com
 192.168.163.232	host_name=redis-drill-5	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com

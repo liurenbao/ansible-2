@@ -26,6 +26,12 @@
 - name: enable profile
   shell: source /etc/profile
 
+- name: copy auto start shell
+  template:
+    src: rocketmq-cron.sh.j2
+    dest: '{{ rocketmq_root_dir }}/bin/rocketmq-cron.sh'
+    mode: 0755
+
 - name: mq-user permission
   file:
     path: '{{ rocketmq_root_dir }}'
@@ -54,5 +60,5 @@
   cron:
     name: 'rocketmq-namesrv'
     user: '{{ rocketmq_user }}'
-    minute: '*/2'
-    job: '{{ rocketmq_root_dir }}/bin/rmq-tools.sh namesrv start'
+    minute: '*/1'
+    job: '{{ rocketmq_root_dir }}/bin/rocketmq-cron.sh'
