@@ -31,11 +31,11 @@ spec:
   replicas: 2
   resources:
     limits:
-      memory: 2Gi
-      cpu: '2'
+      memory: 8Gi
+      cpu: '4'
     requests:
-      memory: 400Mi
-      cpu: '500m'
+      memory: 500Mi
+      cpu: '800m'
   ruleSelector:
     matchLabels:
       prometheus: k8s

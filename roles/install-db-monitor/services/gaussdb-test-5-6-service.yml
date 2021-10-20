@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Endpoints
 metadata:
-  name: gaussdbagaussdb-test-5-6
+  name: gaussdb-test-5-6
   namespace: monitoring
 subsets:
   - addresses:
@@ -15,7 +15,7 @@ subsets:
 apiVersion: v1
 kind: Service
 metadata:
-  name: gaussdbagaussdb-test-5-6
+  name: gaussdb-test-5-6
   namespace: monitoring
   annotations:
     prometheus.io/scrape: "true"
