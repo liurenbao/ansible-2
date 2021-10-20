@@ -66,3 +66,4 @@
 192.168.161.241     ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"
 192.168.160.82      ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"
 192.168.160.40      ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"
+192.168.161.211      ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"

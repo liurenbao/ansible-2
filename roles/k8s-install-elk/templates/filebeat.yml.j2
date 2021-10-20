@@ -21,18 +21,6 @@ data:
               fields:
                 kubernetes.labels.app: rms-server
                 kubernetes.namespace: rms
-      - type: log
-        paths:
-          - "/var/lib/docker/overlay2/*/diff/PlantUMes/Server/log/meslog*.log"
-        multiline.pattern: '(^\[SERVICE\]|^\[SYSTEM\]|^\[SQL\])'
-        multiline.negate: true
-        multiline.match: after
-        processors:
-          - add_fields:
-              target: ''
-              fields:
-                kubernetes.labels.app: mes-server
-                kubernetes.namespace: mes
       - type: container
         paths:
           - "/var/lib/docker/containers/*/*.log"
