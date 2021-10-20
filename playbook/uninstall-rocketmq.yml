@@ -28,8 +28,7 @@
 - name: uninstall rocketmq broker
   gather_facts: false
   hosts:
-    - rocketmq-slave
-    - rocketmq-master
+    - rocketmq-broker
   tasks:
     - name: check rmq tools exist
       stat:
@@ -44,8 +43,7 @@
   gather_facts: false
   hosts:
     - rocketmq-namesrv
-    - rocketmq-slave
-    - rocketmq-master
+    - rocketmq-broker
   tasks:
     - name: wait for rocketmq process down
       shell: sleep 10
@@ -58,8 +56,7 @@
   gather_facts: false
   hosts:
     - rocketmq-namesrv
-    - rocketmq-slave
-    - rocketmq-master
+    - rocketmq-broker
     - rocketmq-console
   tasks:
     - name: remove rocketmq dirs

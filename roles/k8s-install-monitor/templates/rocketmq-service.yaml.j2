@@ -34,11 +34,7 @@ subsets:
     - ip: {{ host }}
       nodeName: {{ hostvars[host].host_name }}
 {% endfor %}
-{% for host in groups['rocketmq-master'] %}
-    - ip: {{ host }}
-      nodeName: {{ hostvars[host].host_name }}
-{% endfor %}
-{% for host in groups['rocketmq-slave'] %}
+{% for host in groups['rocketmq-broker'] %}
     - ip: {{ host }}
       nodeName: {{ hostvars[host].host_name }}
 {% endfor %}
@@ -70,11 +66,7 @@ subsets:
     - ip: {{ host }}
       nodeName: {{ hostvars[host].host_name }}
 {% endfor %}
-{% for host in groups['rocketmq-master'] %}
-    - ip: {{ host }}
-      nodeName: {{ hostvars[host].host_name }}
-{% endfor %}
-{% for host in groups['rocketmq-slave'] %}
+{% for host in groups['rocketmq-broker'] %}
     - ip: {{ host }}
       nodeName: {{ hostvars[host].host_name }}
 {% endfor %}
@@ -128,11 +120,7 @@ metadata:
   namespace: monitoring
 subsets:
   - addresses:
-{% for host in groups['rocketmq-master'] %}
-      - ip: {{ host }}
-        nodeName: {{ hostvars[host].host_name }}
-{% endfor %}
-{% for host in groups['rocketmq-slave'] %}
+{% for host in groups['rocketmq-broker'] %}
       - ip: {{ host }}
         nodeName: {{ hostvars[host].host_name }}
 {% endfor %}

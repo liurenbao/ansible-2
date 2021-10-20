@@ -2,8 +2,7 @@
   gather_facts: false
   hosts:
     - rocketmq-namesrv
-    - rocketmq-master
-    - rocketmq-slave
+    - rocketmq-broker
   roles:
     - install-process-exporter
 

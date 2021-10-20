@@ -1663,13 +1663,11 @@ spec:
     rules:
     - alert: TargetDown
       annotations:
-        message: '{{ printf "%.4g" $value }}% of the {{ $labels.job }}/{{ $labels.service
-          }} targets in {{ $labels.namespace }} namespace are down.'
-      expr: 100 * (count(up == 0) BY (job, namespace, service) / count(up) BY (job,
-        namespace, service)) > 10
-      for: 10m
+        message: Targets scraped by prometheus are down.
+      expr: up == 0
+      for: 1m
       labels:
-        severity: warning
+        severity: critical
     - alert: Watchdog
       annotations:
         message: |
