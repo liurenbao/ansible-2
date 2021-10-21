@@ -58,7 +58,7 @@
   command: sh create-cluster.sh
   args:
     chdir: "{{ redis_data_dir }}"
-  when: ansible_ssh_host == groups['redis'][0] and redis_nodes_file.stat.exists == false
+  when: ansible_ssh_host == groups['redis'][0]
 
 - name: get cluster info
   shell: sleep 10 && docker exec -i redis-node01 /bin/sh -c 'redis-cli cluster info'

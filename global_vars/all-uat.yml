@@ -111,5 +111,5 @@ process_exporter_root_dir: /data01/process-exporter
 # redis---------------------------------------------------------------------------------------
 redis_data_dir: '/data01/redis'
 #32G大小的3/4
-redis_maxmemory: '{{ 24|int * 1024|int * 1024|int * 1024|int }}'
+redis_maxmemory: '{{ 48|int * 1024|int * 1024|int * 1024|int }}'
 redis_maxmemory_policy: allkeys-lru
