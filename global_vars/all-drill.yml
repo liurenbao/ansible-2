@@ -2,12 +2,9 @@
 # 注意修改内存配置
 # 注意修改VIP地址
 #---------------------
-# fixme 修改此处配置
 harbor_keepalived_vip: 192.168.160.47
-#nginx_keepalived_vip: 192.168.160.36
-#k8s_keepalived_vip: 192.168.163.249
-nginx_keepalived_vip: 192.168.160.5
-k8s_keepalived_vip: 192.168.160.78
+nginx_keepalived_vip: 192.168.160.36
+k8s_keepalived_vip: 192.168.163.249
 
 cim_ops_uid: '9999'
 cim_ops_user: 'cimops'
@@ -115,3 +112,4 @@ process_exporter_root_dir: /data01/process-exporter
 redis_data_dir: '/data01/redis'
 #32G大小的3/4
 redis_maxmemory: '{{ 24|int * 1024|int * 1024|int * 1024|int }}'
+redis_maxmemory_policy: allkeys-lru
