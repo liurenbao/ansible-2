@@ -1,8 +1,0 @@
-[test]
-192.168.161.211 ansible_ssh_user=root   ansible_ssh_pass=Huawei@777.com
-192.168.161.232 ansible_ssh_user=root   ansible_ssh_pass=Huawei@777.com
-192.168.161.233 ansible_ssh_user=root   ansible_ssh_pass=Huawei@777.com
-192.168.161.234 ansible_ssh_user=root   ansible_ssh_pass=Huawei@777.com
-192.168.161.235 ansible_ssh_user=root   ansible_ssh_pass=Huawei@777.com
-192.168.161.236 ansible_ssh_user=root   ansible_ssh_pass=Huawei@777.com
-192.168.161.242 ansible_ssh_user=root   ansible_ssh_pass=Huawei@777.com

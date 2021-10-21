@@ -54,7 +54,7 @@
     path: '{{ redis_data_dir }}/data/nodes.conf'
   register: redis_nodes_file
 
-- name: chmod create-cluster.sh
+- name: execute create-cluster.sh
   command: sh create-cluster.sh
   args:
     chdir: "{{ redis_data_dir }}"
@@ -65,7 +65,7 @@
   register: redis_cluster_info
 
 - name: redis cluster health check
-  shell: docker-compose exec -T redis-cluster /bin/sh -c 'redis-cli cluster info' | grep cluster_state
+  shell: sleep 30 && docker-compose exec -T redis-cluster /bin/sh -c 'redis-cli cluster info' | grep cluster_state
   args:
     chdir: "{{ redis_data_dir }}"
   register: result

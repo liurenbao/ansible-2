@@ -888,7 +888,7 @@ maxmemory {{ redis_maxmemory }}
 #
 # The default is:
 #
-maxmemory-policy volatile-lru
+maxmemory-policy {{ redis_maxmemory_policy }}
 
 # LRU, LFU and minimal TTL algorithms are not precise algorithms but approximated
 # algorithms (in order to save memory), so you can tune it for speed or
