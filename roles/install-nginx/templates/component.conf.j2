@@ -47,3 +47,22 @@ server {
     proxy_set_header Host $host:$server_port;
   }
 }
+upstream elasticsearch {
+{% for host in groups['es'] %}
+  server {{ host }}:9200  max_fails=0;
+{% endfor %}
+}
+server {
+  listen       9200 backlog=65534;
+  listen  [::]:9200 backlog=65534;
+  server_name  localhost;
+
+  location / {
+    proxy_read_timeout  60s;
+    proxy_next_upstream_timeout 1s;
+    proxy_pass $scheme://elasticsearch;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header Host $host:$server_port;
+  }
+}
