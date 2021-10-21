@@ -4,18 +4,18 @@ metadata:
   name: plantu-mes-1
   namespace: plantu
   labels:
-    app: plantu-mes-1
+    app: plantu-mes
     zone: dc1
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: plantu-mes-1
+      app: plantu-mes
       zone: dc1
   template:
     metadata:
       labels:
-        app: plantu-mes-1
+        app: plantu-mes
         zone: dc1
     spec:
       hostNetwork: false
