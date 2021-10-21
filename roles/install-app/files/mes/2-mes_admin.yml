@@ -25,7 +25,7 @@ spec:
           tolerationSeconds: 2
       containers:
         - name: plantumes-admin
-          image: 192.168.160.47:8888/plantu/plantu-mes-admin-h:v1.0.4
+          image: 192.168.160.47:8888/plantu/plantu-mes-admin-h:v1.0.5
           # 当前服务器已经存在相同版本的镜像则不会重复拉取
           imagePullPolicy: IfNotPresent
           # 容器启动端口，没有可以删除
@@ -42,5 +42,15 @@ spec:
             preStop:
               exec:
                 command: [ "/bin/bash", "-c", "sleep 30" ]
+        - name: plantu-agent
+          image: 192.168.160.47:8888/plantu/plantu-mes-agent:v1.0.2
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+            - name: prod-agent-mes
+              mountPath: /PlantUMes/Agent/config
       # k8s给程序发kill -9的时间，这时间需要大于preStop的时间
       terminationGracePeriodSeconds: 60
+      volumes:
+        - name: prod-agent-mes
+          configMap:
+            name: prod-agent-mes

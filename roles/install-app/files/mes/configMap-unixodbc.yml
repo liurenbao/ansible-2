@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: prod-unixodbc
+  namespace: plantu
+data:
+  odbc.ini: |
+    [zenith]
+    Driver=GaussDB
+    Servername=192.168.163.246
+    port=15400
