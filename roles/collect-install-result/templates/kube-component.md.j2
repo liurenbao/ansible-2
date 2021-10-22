@@ -10,4 +10,4 @@
 | traefik          | http://{{ nginx_keepalived_vip }}:31000/dashboard |                                  |
 | redis            | {{ redis_connect_string.stdout }}                 |                                  |
 | rocketmq-namesrv | {{ rocketmq_namesrv.stdout }}                     |                                  |
-| rocketmq-console | {{ rocketmq_console.stdout }}                     | admin/admin                      |
+| rocketmq-console | http://{{ nginx_keepalived_vip }}:8080            | admin/admin                      |

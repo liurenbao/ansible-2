@@ -1,0 +1,165 @@
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: spc-calc-service
+  namespace: spc
+spec:
+  entryPoints:
+    - web
+  routes:
+    - kind: Rule
+      match: PathPrefix(`/spc-calc-service/`)
+      services:
+        - name: spc-calc-service
+          port: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: spc-calc-service
+  namespace: spc
+  annotations:
+    # 使用http检测应用可用性，手动提供支持http检测的端口
+    prometheus.io/http-probe: "true"
+    prometheus.io/http-probe-port: "8080"
+    prometheus.io/http-probe-path: "/spc-calc-service/health/healthz"
+
+    # 抓取应用的监控指标,路径不填写则为：/metrics
+    prometheus.io/scrape: "true"
+    prometheus.io/port: '8080'
+    prometheus.io/scheme: "http"
+    prometheus.io/path: '/spc-calc-service/actuator/prometheus'
+spec:
+  ports:
+    - name: http
+      port: 8080
+      targetPort: 8080
+    - name: grpc
+      port: 9090
+      targetPort: 9090
+  selector:
+    app: spc-calc-service
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spc-calc-service-dc1
+  namespace: spc
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: spc-calc-service
+  template:
+    metadata:
+      labels:
+        app: spc-calc-service
+    spec:
+      imagePullSecrets:
+        - name: harbor
+      hostNetwork: false
+      tolerations:
+        - key: "node.kubernetes.io/unreachable"
+          operator: "Exists"
+          effect: "NoExecute"
+          tolerationSeconds: 2
+        - key: "node.kubernetes.io/not-ready"
+          operator: "Exists"
+          effect: "NoExecute"
+          tolerationSeconds: 2
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                topologyKey: "kubernetes.io/hostname"
+                labelSelector:
+                  matchExpressions:
+                    - key: app
+                      operator: In
+                      values:
+                        - spc-calc-service
+              weight: 100
+      nodeSelector:
+        zone: dc1
+      initContainers:
+        - command:
+          - sysctl
+          - -w
+          - net.ipv4.tcp_keepalive_time=10
+          - net.ipv4.tcp_keepalive_probes=2
+          - net.ipv4.tcp_keepalive_intvl=5
+          image: 10.12.107.150:80/public/busybox:1.34
+          imagePullPolicy: Always
+          name: setsysctl
+          securityContext:
+            privileged: true
+      containers:
+        - name: spc-calc-service
+          image: 10.12.107.150:80/spc-release/spc-calc-service:1.0.0
+          imagePullPolicy: Always
+          env:
+            - name: management.metrics.tags.application
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: SPRING_PROFILES_ACTIVE
+              value: k8s
+            - name: SERVER_PORT
+              value: "8080"
+            - name: JAVA_TOOL_OPTIONS
+              value: "-XX:+UseG1GC -XX:MaxRAMPercentage=75.0"
+            - name: spring.redis.cluster.nodes
+              value: "10.12.107.211:6379,10.12.107.212:6379,10.12.107.213:6379,10.12.107.214:6379,10.12.107.215:6379,10.12.107.216:6379"
+            - name: spring.datasource.druid.url
+              value: "jdbc:zenith:@10.12.114.10:15400"
+            - name: rocketmq.name-server
+              value: "10.12.107.231:9876;10.12.107.232:9876"
+            - name: spring.datasource.druid.password
+              value: "duYEzDss7AceLaknaneaSdV1Do5rxK8/2NeFEYflRDcxhWKx3DEpg7O9fk47Ftu4pRqEhXEOM8YG7ErGNyoNKg=="
+            - name: spring.datasource.druid.public-key
+              value: "MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAI12BE5GG0+M/nxJh23cjDAeYlw+9e9vijw+YhnIKGbsVJkzcOj2sYcn+d7GasKXcL6jmtFnl2eBxVYtUXvl3UUCAwEAAQ=="
+          ports:
+            - containerPort: 8080
+          resources:
+            limits:
+              cpu: "2"
+              memory: 3Gi
+            requests:
+              cpu: "1"
+              memory: 2Gi
+          # 存活性探针 和 准备就绪探针
+          startupProbe:
+            httpGet:
+              port: 8080
+              path: /spc-calc-service/health/
+            initialDelaySeconds: 30
+            timeoutSeconds: 5
+            periodSeconds: 3
+            successThreshold: 1
+            failureThreshold: 3
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /spc-calc-service/health/
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 120
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 20
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /spc-calc-service/health/
+              port: 8080
+              scheme: HTTP
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 10
+          # 0宕机(zero-downtime)更新
+          lifecycle:
+            preStop:
+              exec:
+                command: [ "/bin/sh", "-c", "sleep 30" ]
+

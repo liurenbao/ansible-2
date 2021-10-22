@@ -1,0 +1,15 @@
+{
+  "index_pattern": {
+    "title": "log-spc-scheduling-service-spc-2022-*",
+    "timeFieldName": "@timestamp",
+    "sourceFilters": [],
+    "typeMeta": {},
+    "fieldFormats": {},
+    "fieldAttrs": {
+      "message": {
+        "count": 1
+      }
+    },
+    "allowNoIndex": false
+  }
+}

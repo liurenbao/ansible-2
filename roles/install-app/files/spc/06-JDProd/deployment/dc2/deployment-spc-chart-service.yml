@@ -1,0 +1,115 @@
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: spc-chart-service
+  namespace: spc
+spec:
+  entryPoints:
+    - web
+  routes:
+    - match: PathPrefix(`/spc-chart-service/`)
+      kind: Rule
+      services:
+        - name: spc-chart-service
+          port: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: spc-chart-service
+  namespace: spc
+spec:
+  ports:
+    - name: http
+      port: 80
+      targetPort: 80
+  selector:
+    app: spc-chart-service
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spc-chart-service-dc2
+  namespace: spc
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: spc-chart-service
+  template:
+    metadata:
+      labels:
+        app: spc-chart-service
+    spec:
+      hostNetwork: false
+      tolerations:
+        - key: "node.kubernetes.io/unreachable"
+          operator: "Exists"
+          effect: "NoExecute"
+          tolerationSeconds: 2
+        - key: "node.kubernetes.io/not-ready"
+          operator: "Exists"
+          effect: "NoExecute"
+          tolerationSeconds: 2
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                topologyKey: "kubernetes.io/hostname"
+                labelSelector:
+                  matchExpressions:
+                    - key: app
+                      operator: In
+                      values:
+                        - spc-chart-service
+              weight: 100
+      nodeSelector:
+        zone: dc2
+      containers:
+        - name: spc-chart-service
+          image: 10.12.107.150:80/spc-release/spc-chart-service:1.0.0
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 80
+          # 存活性探针 和 准备就绪探针
+          resources:
+            limits:
+              cpu: "2"
+              memory: 2048Mi
+            requests:
+              cpu: 20m
+              memory: 200Mi
+          startupProbe:
+            httpGet:
+              port: 80
+              path: /
+            initialDelaySeconds: 30
+            timeoutSeconds: 5
+            periodSeconds: 3
+            successThreshold: 1
+            failureThreshold: 3
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /
+              port: 80
+              scheme: HTTP
+            initialDelaySeconds: 60
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 10
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /
+              port: 80
+              scheme: HTTP
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 10
+          # 0宕机(zero-downtime)更新
+          lifecycle:
+            preStop:
+              exec:
+                command: [ "/bin/sh", "-c", "sleep 30" ]
