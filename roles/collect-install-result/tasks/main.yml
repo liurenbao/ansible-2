@@ -68,9 +68,9 @@
   vars:
     dashboard_url: 'https://{{ nginx_keepalived_vip }}:30000'
   shell: |
-    namespaces=$(kubectl get secret -A | grep admin-token | awk '{print $1}')
+    namespaces=$(kubectl get secret -A | grep admin | awk '{print $1}')
     for namespace in ${namespaces[@]} ; do
-        token=$(kubectl -n $namespace describe secret $(kubectl -n $namespace get secret | grep admin-token | awk '{print $1}') | grep "token:")
+        token=$(kubectl -n $namespace describe secret $(kubectl -n $namespace get secret | grep admin | awk '{print $1}') | grep "token:")
         echo "| k8s-dashboard-$namespace | {{ dashboard_url }} | $token |" >> {{ kube_component_file }}
     done
 
