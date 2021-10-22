@@ -60,10 +60,6 @@ data:
       required_acks: 0
       worker: 8
       keep_alive: 15
-    monitoring:
-      enabled: true
-      elasticsearch:
-        hosts: {{ groups['es'] | map('regex_replace', '^(.*)$','\\1:9200') | list | to_json }}
 ---
 apiVersion: apps/v1
 kind: DaemonSet

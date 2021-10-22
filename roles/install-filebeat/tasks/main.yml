@@ -8,22 +8,12 @@
     src: '{{ package_dir }}/filebeat/filebeat-7.13.2-x86_64.rpm'
     dest: /tmp/filebeat
 
-- name: stop filebeat
-  systemd:
-    name: filebeat
-    state: stopped
-
 - name: install filebeat
   shell: rpm -ivh filebeat-7.13.2-x86_64.rpm --replacepkgs --nodeps --force
   args:
     chdir: /tmp/filebeat
 
-- name: copy filebeat conf
-  template:
-    src: filebeat.yml.j2
-    dest: /etc/filebeat/filebeat.yml
-
-- name: start filebeat
+- name: stop filebeat
   systemd:
     name: filebeat
-    state: started
+    state: stopped

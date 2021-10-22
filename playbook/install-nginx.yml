@@ -10,4 +10,5 @@
     down: true
   roles:
     - install-keepalived
+    - install-filebeat
     - install-nginx
