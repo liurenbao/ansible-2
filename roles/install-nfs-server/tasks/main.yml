@@ -26,5 +26,17 @@
     line: "{{ nfs_root_dir }} 192.168.0.0/16(insecure,rw,sync,no_root_squash,no_all_squash)"
     state: present
 
+- name: config nfs permission
+  lineinfile:
+    path: /etc/exports
+    line: "{{ nfs_root_dir }} 10.12.117.0/24(insecure,rw,sync,no_root_squash,no_all_squash)"
+    state: present
+
+- name: config nfs permission
+  lineinfile:
+    path: /etc/exports
+    line: "{{ nfs_root_dir }} 10.12.118.0/24(insecure,rw,sync,no_root_squash,no_all_squash)"
+    state: present
+
 - name: re-export nfs dir
   shell: exportfs -r
