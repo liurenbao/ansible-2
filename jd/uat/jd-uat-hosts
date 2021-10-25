@@ -1,6 +1,6 @@
 [harbor]
-10.12.107.146 host_name=jdfau-harb01 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" MASTER_BACKUP=MASTER
-10.12.107.147 host_name=jdfau-harb02 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" MASTER_BACKUP=BACKUP
+10.12.107.146 host_name=jdfap-harb01 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" MASTER_BACKUP=MASTER
+10.12.107.147 host_name=jdfap-harb02 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" MASTER_BACKUP=BACKUP
 
 [rocketmq-console]
 10.12.117.141 host_name=jdfau-rocketmq01 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
