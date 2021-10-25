@@ -17,7 +17,7 @@ package_dir: '/data01/package'
 # 10.13.253.12/10.13.253.13
 ntp_server_addr: '10.13.253.13'
 # fixme 现在只知道ip是187，yum源地址需要确认
-yum_base_url: 'http://10.12.107.187/yum/'
+yum_base_url: 'ftp://10.12.107.187/pub/centos/7/'
 
 keepalived_root_dir: /data01/keepalived
 ## harbor----------------------------------------------------------------------------------
@@ -51,7 +51,7 @@ nginx_keepalived_vrrp_instance_interface: eth0
 # es数据盘
 es_root_dir: '/data01/es'
 # es集群名
-es_cluster_name: 'es-uat-cluster-7.3.2'
+es_cluster_name: 'es-uat-cluster'
 es_initial_master_nodes: '["10.12.117.121", "10.12.117.122", "10.12.117.123"]'
 # es jvm信息
 es_java_opts: '-Xms16G -Xmx16G'
