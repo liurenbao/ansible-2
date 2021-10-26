@@ -1,27 +1,26 @@
 apiVersion: v1
 kind: Endpoints
 metadata:
-  name: kafka
+  name: eap-node-exporter
   namespace: monitoring
 subsets:
   - addresses:
-{% for host in groups['kafka'] %}
+{% for host in groups['eap'] %}
       - ip: {{ host }}
         nodeName: {{ hostvars[host].host_name }}-{{ host }}
 {% endfor %}
     ports:
-      - port: 9092
+      - port: 9100
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: kafka
+  name: eap-node-exporter
   namespace: monitoring
   annotations:
-    prometheus.io/tcp-probe: "true"
     prometheus.io/scrape: "true"
-    prometheus.io/port: '9308'
+    prometheus.io/port: '9100'
     prometheus.io/scheme: "http"
 spec:
   ports:
-    - port: 9092
+    - port: 9100
