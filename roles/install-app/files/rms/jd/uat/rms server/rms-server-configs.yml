@@ -1,0 +1,80 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: rms-server-configs
+  namespace: rms
+data:
+  config_uat.yml: |
+    app_config:
+      # is_enable: 1
+      app_workers: 32
+      app_group: /TST1/RMS
+      log_path: /opt/RMSServer_linux/Logs
+      log_file_name: app.log
+      db_log_file_name: app_db.log
+      log_keep: 30
+      log_encrypted: 0
+    ui_service:
+      # is_enable: 1
+      ui_srv_list: "{'/TST1/RMS1':'8100', '/TST1/RMS2':'8200'}"
+      ui_max_workers: 3
+      tcp_max_conns: 20
+      tcp_t3: 45
+      log_path: /opt/RMSServer_linux/Logs
+      log_file_name: ui.log
+      db_log_file_name: ui_db.log
+      log_keep: 30
+    mq:
+      mq_host: 10.12.117.164:10101;10.12.117.165:10101?fallbackToPrimary=true&pingTimeout=20000
+      mq_port: 10104
+      mq_t3: 45
+      channel_rule: '/TST1/EAP/RMS/$EqpId'
+    smtp_setting:
+      smtp_server: xxxx
+      smtp_port: 25
+      mail_user_name: RMSServer@xxx.com
+      mail_password: xxx
+      mail_display_name: RMS Server
+    db_setting:
+      host: '10.12.109.10'
+      user: 'rmsprod'
+      password: 'prodrms_123'
+      port: '15400'
+      db_log_level: NONE
+  config_prod.yml: |
+    app_config:
+      # is_enable: 1
+      app_workers: 32
+      app_group: /PRD1/RMS
+      log_path: /opt/RMSServer_linux/Logs
+      log_file_name: app.log
+      db_log_file_name: app_db.log
+      log_keep: 30
+      log_encrypted: 0
+    ui_service:
+      # is_enable: 1
+      ui_srv_list: "{'/PRD1/RMS1':'8100', '/PRD1/RMS2':'8200'}"
+      ui_max_workers: 3
+      tcp_max_conns: 20
+      tcp_t3: 45
+      log_path: /opt/RMSServer_linux/Logs
+      log_file_name: ui.log
+      db_log_file_name: ui_db.log
+      log_keep: 30
+    mq:
+      mq_host: 10.12.107.201:10101;10.12.107.202:10101?fallbackToPrimary=true&pingTimeout=20000
+      mq_port: 10104
+      mq_t3: 45
+      channel_rule: '/PRD1/EAP/RMS/$EqpId'
+    smtp_setting:
+      smtp_server: xxxx
+      smtp_port: 25
+      mail_user_name: RMSServer@xxx.com
+      mail_password: xxx
+      mail_display_name: RMS Server
+    db_setting:
+      host: '10.12.114.30'
+      user: 'rmsprod'
+      password: 'prodrms_123'
+      port: '15400'
+      db_log_level: NONE             
