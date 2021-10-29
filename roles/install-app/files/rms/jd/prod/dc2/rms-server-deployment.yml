@@ -1,24 +1,24 @@
 kind: Deployment
 apiVersion: apps/v1
 metadata:
-  name: rms-server-dc1
+  name: rms-server-dc2
   namespace: rms
   labels:
     app: rms-server
-    zone: dc1
+    zone: dc2
 spec:
   replicas: 1
   selector:
     matchLabels:
-      zone: dc1
+      zone: dc2
       app: rms-server
   template:
     metadata:
-      name: rms-server-dc1
+      name: rms-server-dc2
       creationTimestamp: null
       labels:
         app: rms-server
-        zone: dc1
+        zone: dc2
     spec:
       affinity:
         podAntiAffinity:
@@ -31,7 +31,7 @@ spec:
                     values:
                       - rms-server
       nodeSelector:
-        zone: dc1
+        zone: dc2
       securityContext:
         runAsUser: 0
       volumes:
@@ -41,7 +41,7 @@ spec:
             defaultMode: 420
       containers:
         - name: rms-server
-          image: 10.12.107.150:80/rms/rms-server:2.1
+          image: 10.12.107.150:80/rms-prod/rms-server:2.1.1
           imagePullPolicy: Always
           env:
             - name: RMS_MODE

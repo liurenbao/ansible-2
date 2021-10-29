@@ -1,7 +1,7 @@
 kind: Deployment
 apiVersion: apps/v1
 metadata:
-  name: rms-ui-dc1
+  name: rms-ui-uat
   namespace: rms
   labels:
     app: rms-ui
@@ -9,14 +9,14 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      zone: dc1
+      zone: uat
       app: rms-ui
   template:
     metadata:
-      name: rms-ui-dc1
+      name: rms-ui-uat
       labels:
         app: rms-ui
-        zone: dc1
+        zone: uat
     spec:
       affinity:
         podAntiAffinity:
@@ -29,7 +29,7 @@ spec:
                     values:
                       - rms-ui
       nodeSelector:
-        zone: dc1
+        zone: uat
       volumes:
         - name: appsettings
           configMap:
@@ -37,18 +37,18 @@ spec:
             defaultMode: 420
       containers:
         - name: rms-ui
-          image: 10.12.107.150:80/rms/rms-ui:1.6
+          image: 10.12.107.150:80/rms-test/rms-ui:1.6
           env:
             - name: ASPNETCORE_ENVIRONMENT
-              value: Prod
+              value: UAT
           ports:
             - containerPort: 80
               protocol: TCP
           resources: {}
           volumeMounts:
             - name: appsettings
-              mountPath: /app/appsettings.Prod.json
-              subPath: appsettings.Prod.json
+              mountPath: /app/appsettings.UAT.json
+              subPath: appsettings.UAT.json
           startupProbe:
             httpGet:
               port: 80
