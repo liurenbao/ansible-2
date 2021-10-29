@@ -20,6 +20,9 @@ spec:
         app: rms-server
         zone: dc1
     spec:
+      imagePullSecrets:
+        - name: harbor
+      hostNetwork:false
       affinity:
         podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
