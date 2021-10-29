@@ -1,0 +1,167 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: uat-mes-config
+  namespace: plantu
+data:
+  mes.properties: |
+    SUPPORT_HTTP_REQUEST = NO
+    
+    BIZ_DATASOURCES = 
+    #if want to sync data, must set DB_USE_TRANSACTION = YES
+    SYNC_DATASOURCES =
+    #only one server can start schedule job
+    START_SCHEDULE_JOB_FLAG=NO
+    #JOB_SCAN_FREQUENCY UNIT(second)
+    JOB_SCAN_FREQUENCY=300
+    #JAR_SCAN_FREQUENCY used for upgrade UNIT(second)
+    JAR_SCAN_FREQUENCY = 2147483
+    SKIP_JAR_SCAN = YES
+    
+    LOCAL_JMX_SERVER_URL=localhost:29098
+    
+    #mes admin server
+    MES_CHECK_ADMIN_SERVER_URL=plantumes-admin-service.plantu:8282
+    
+    #mes path confingure
+    MES_SHARE_STORAGE_ID = MES
+    MES_HOME_PATH = /PlantUMes/Server
+    MES_TEMP_DIR=/PlantUMes/Server/temp
+    MES_MSG_BACKUP_DIR=/PlantUMes/Server/msg
+    
+    #mes service pool size
+    SERVICE_CORE_POOL_SIZE = 100
+    
+    USE_NETCORE_RPT_SERVER = YES
+    SERVICE_RPT_CORE_POOL_SIZE  = 50
+    
+    #mes middleware configure
+    #supported middleware
+    MIDDLEWARE_TYPE = RAVENCAST
+    ADDRESS = 192.168.160.63:10101;192.168.160.65:10101?fallbackToPrimary=true
+    SITE_ID = EAP1
+    CHANNEL = /EAP1/MESServer
+    ADMIN_CHANNEL = /ADMIN/MESServer
+    INTER_MODE = YES
+    TTL = 3000
+    
+    #server auto upgrade
+    CUST_CLASSLOADER_BASE_PACKAGE=cust,plantu.custdb,tmesis.cust,tmesis.eism
+    
+    WIPM_RULE_BASED_PROCESS_CLASS = tmesis.wipm.WipmRuleBasedProcessAction
+    WIPM_CUST_RULE_CHECK_CONDITION_CLASS = tmesis.cust.wipm.UWipmRuleCheckCustomCondition
+    
+    #FILE_DOWNLOAD_SPLIT_SIZE unit(KB)
+    FILE_DOWNLOAD_SPLIT_SIZE=5120
+    
+    DB_USE_TRANSACTION = NO
+    DB_MAX_ROW_COUNT = 1000
+    DB_KEEP_HISTORY_DATA = NO
+    DB_KEEP_HISTORY_RECOVER_FLAG = NO
+    
+    #SHUTDOWN_WAIT_TIME unit(second)
+    SHUTDOWN_WAIT_TIME = 30
+    
+    #MES mail
+    MAIL_SMTP_SERVER=smtp.sina.com
+    MAIL_SMTP_AUTH_FLAG=YES
+    MAIL_SMTP_USER=1@sina.cn
+    MAIL_SMTP_PASSWORD=1
+    MAIL_FROM_ADDRESS=1@sina.cn
+    #admin mial recive error messsage mail
+    MES_ADMIN_MAIL_ADDRESS=test@tmesis.com.cn
+    
+    #MES log to file
+    #LOG_SYSTEM_FLAG(YES,NO)
+    LOG_SYSTEM_FLAG = YES
+    LOG_SQL_FLAG = YES
+    LOG_REQUEST_PARAMETER = NO
+    LOG_IN_PARAMETER = YES
+    
+    #SVC_ASPECT_CLASS, must extend abstract class SvcAspectBaseImp
+    SVC_ASPECT_CLASS = 
+    
+    #Collect system and mes performance and error info
+    COLLECT_SERVICE_INFO = YES
+    #COLLECT_SERVICE_MODE(ALL,LONG_OR_ERROR,ERROR)
+    COLLECT_SERVICE_MODE = ALL
+    #used by LONGTIME mode, unit is second
+    COLLECT_SERVICE_LONGTIME = 10
+    COLLECT_SYSTEM_INFO = NO
+    #COLLECT_SYSTEM_INFO_INTERVAL unit(second)
+    COLLECT_INTERVAL = 10
+    COLLECT_SYSTEM_INFO_INTERVAL = 2
+    #Only collect long time sql,COLLECT_SQL_LONGTIME unit(second)
+    COLLECT_SQL_INFO = YES
+    COLLECT_SQL_LONGTIME = 1
+    
+    #Upgrade
+    #depend on MES_SHARE_STORAGE_ID, and create directory "UpgradeFile"
+    #MES_UPGRADE_VERSION:version of mes upgrade program
+    MES_UPGRADE_VERSION = 0.0.0.1
+    MES_UPGRADE_METHOD = ALARM_MSG
+    
+    #storage url example
+    #local file:  LOCAL
+    #ftp:  FTP://192.168.233.132:21?username=ftpuser&password=123456
+    #SFTP:  SFTP://192.168.233.132:22?username=ftpuser&password=123456
+    #share folder:  SAMBA://192.168.233.132?username=ftpuser&password=123456&folder=testfolder
+    
+    PRCM_WORK_PROC_STATUS_ATTACH_STORAGE_URL=LOCAL
+    PRCM_WORK_PROC_STATUS_ATTACH_STORAGE_PATH=/PlantUMes/Server/data
+    
+    #SEC
+    MES_USE_ASC=YES
+    MES_PASSWORD_MIN_LENGTH=6
+    MES_PASSWORD_EXPIRE_NOTICE=3
+    MES_PASSWORD_CHAR_NUMBER=2
+    MES_PASSWORD_LOCK_COUNT=5
+    
+    #MES Cast Channel for External Systems
+    customer.MES2EAP.RC_CHANNEL = /UAT1/EAP
+    customer.MES2APC.RC_CHANNEL = /UAT1/APC
+    customer.MES2FDC.RC_CHANNEL = /UAT1/FDC
+    customer.MES2SPC.RC_CHANNEL = /UAT1/SPC
+    customer.MES2RTD.RC_CHANNEL = /UAT1/RTD
+    customer.MES2MES.RC_CHANNEL = /TST1/MESServer
+    customer.MES2MESR.RC_CHANNEL = /MESR/MESServer
+    
+  quartz.properties: |
+    org.quartz.scheduler.instanceName = MesJobScheduler
+    org.quartz.scheduler.instanceId = AUTO
+    org.quartz.threadPool.class = org.quartz.simpl.SimpleThreadPool
+    org.quartz.threadPool.threadCount = 25
+    org.quartz.threadPool.threadPriority = 5
+    org.quartz.jobStore.misfireThreshold = 60000
+    org.quartz.jobStore.class = org.quartz.impl.jdbcjobstore.JobStoreTX
+    org.quartz.jobStore.tablePrefix = QRTZ_
+    org.quartz.jobStore.dataSource = myDS
+    org.quartz.jobStore.isClustered = true
+    org.quartz.dataSource.myDS.driver = com.huawei.gauss.jdbc.ZenithDriver
+    org.quartz.dataSource.myDS.URL = jdbc:zenith:@10.12.109.10:15400
+    org.quartz.dataSource.myDS.user = mesmgr
+    org.quartz.dataSource.myDS.password = Gauss_123
+    org.quartz.dataSource.myDS.maxConnections = 5
+    org.quartz.dataSource.myDS.validationQuery: select 1
+    org.quartz.dataSource.myDS.provider=hikaricp
+    
+  application.properties: |
+    server.port=8383
+    
+  logback.xml: |
+    <configuration>
+      <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+          <pattern>%msg%n</pattern>
+        </encoder>
+      </appender>  
+        <appender name="ASYNC_STDOUT" class="ch.qos.logback.classic.AsyncAppender">
+        <appender-ref ref="STDOUT" />
+      </appender>
+      <logger name="MESSERVER" additivity="false">
+        <appender-ref ref="ASYNC_STDOUT" />
+      </logger>
+      <root level="INFO">
+        <appender-ref ref="ASYNC_STDOUT" />
+      </root>
+    </configuration>

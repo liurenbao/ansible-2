@@ -5,13 +5,13 @@ metadata:
   namespace: plantu
 data:
   master.properties: |
-    jdbcUrl=jdbc:zenith:@192.168.163.246:15400
+    jdbcUrl=jdbc:zenith:@10.12.114.20:15400
     username=mesmgr
     password=Gauss_123
     maximumPoolSize=320
     minimumIdle=50
     autoCommit=false
-    connectionTimeout=30000
+    connectionTimeout=7000
     poolName=hikariDbPool
     connectionTestQuery=select 1
     idleTimeout=180000

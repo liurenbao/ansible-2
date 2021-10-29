@@ -7,5 +7,5 @@ data:
   odbc.ini: |
     [zenith]
     Driver=GaussDB
-    Servername=192.168.163.246
+    Servername=10.12.114.20
     port=15400

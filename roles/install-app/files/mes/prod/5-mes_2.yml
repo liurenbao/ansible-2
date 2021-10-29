@@ -1,22 +1,23 @@
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: plantu-eis-1
+  name: plantu-mes-2
   namespace: plantu
   labels:
-    app: plantu-eis
-    zone: dc1
+    app: plantu-mes
+    zone: dc2
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
-      app: plantu-eis-1
-      zone: dc1
+      app: plantu-mes
+      zone: dc2
   template:
     metadata:
       labels:
-        app: plantu-eis
-        zone: dc1
+        app: plantu-mes
+        zone: dc2
     spec:
       hostNetwork: false
       tolerations:
@@ -29,23 +30,23 @@ spec:
           effect: "NoExecute"
           tolerationSeconds: 2
       containers:
-        - name: plantu-eis-1
-          image: 192.168.160.47:8888/plantu/plantu-mes-prod:v1.0.7
+        - name: plantu-mes-2
+          image: 10.12.107.150:80/plantu-prod/plantu-mes:v1.0.0
           env:
             - name: SUPPORT_HTTP_REQUEST
-              value: "NO"
+              value: "YES"
             - name: START_SCHEDULE_JOB_FLAG
               value: "NO"
             - name: PLANTU_MSG_BACKUP
-              value: "/mesdata/msg/eis_1"
+              value: "/mesdata/prod/msg/mes_2"
             - name: ADDRESS
-              value: "192.168.163.174:10101;192.168.163.182:10101?fallbackToPrimary=true"
+              value: "10.12.107.202:10101;10.12.107.201:10101?fallbackToPrimary=true&pingTimeout=20000"
             - name: SITE_ID
-              value: "PRD1"
+              value: "PROD"
             - name: CHANNEL
-              value: "/PRD1/EIS"
+              value: "/PROD/MESServer"
             - name: ADMIN_CHANNEL
-              value: "/PRD1/ADMIN"
+              value: "/PROD/ADMIN/MESServer"
             - name: USE_NETCORE_RPT_SERVER
               value: "NO"
           # 当前服务器已经存在相同版本的镜像则不会重复拉取
@@ -57,8 +58,8 @@ spec:
               cpu: "32"
               memory: 30720Mi
             requests:
-              cpu: "2"
-              memory: 4096Mi
+              cpu: "1"
+              memory: 20480Mi
           # 优雅关机，需要确保基础镜像要有/bin/bash命令
           lifecycle:
             preStop:
@@ -67,6 +68,9 @@ spec:
           volumeMounts:
           - name: mes-storage
             mountPath: /mesdata
+          - name: prod-mes-jvm
+            mountPath: /PlantUMes/Server/plantu-mes-console.config
+            subPath: plantu-mes-console.config
           - name: prod-mes-config
             mountPath: /PlantUMes/Server/config
           - name: prod-datasource
@@ -77,7 +81,7 @@ spec:
             mountPath: /etc/odbc.ini
             subPath: odbc.ini
         - name: plantu-agent
-          image: 192.168.160.47:8888/plantu/plantu-mes-agent:v1.0.3
+          image: 10.12.107.150:80/plantu-prod/plantu-mes-agent:v1.0.3
           imagePullPolicy: IfNotPresent
           volumeMounts:
             - name: prod-agent-mes
@@ -95,6 +99,9 @@ spec:
         securityContext:
           privileged: true
       volumes:
+        - name: prod-mes-jvm
+          configMap:
+            name: prod-mes-jvm
         - name: prod-mes-config
           configMap:
             name: prod-mes-config
@@ -112,7 +119,7 @@ spec:
             name: prod-agent-mes
         - name: mes-storage
           nfs:
-            path: /data01/nfs
-            server: 192.168.160.61
+            path: /FS-Prod-CIM-MES
+            server: 10.12.115.10
       # k8s给程序发kill -9的时间，这时间需要大于preStop的时间
       terminationGracePeriodSeconds: 60

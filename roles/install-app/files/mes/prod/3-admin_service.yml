@@ -1,24 +1,27 @@
 apiVersion: v1
 kind: Service
 metadata:
+  # 服务暴露的service名字
   name: plantumes-admin-service
+  # 命名空间根据实际情况修改
   namespace: plantu
   annotations:
     # 此服务支持http，则采用http的方式进行存活性探测
     prometheus.io/http-probe: "true"
     prometheus.io/http-probe-port: "8282"
     # 此处需要一个能返回 http_2xx的接口进行存活性探测
-    prometheus.io/http-probe-path: "/viability"
+    prometheus.io/http-probe-path: "/heartbeat"
     prometheus.io/scrape: "true"
     prometheus.io/port: '9998'
     prometheus.io/scheme: "http"
     prometheus.io/path: '/'
 spec:
   ports:
+    #   提供http服务的这么配置
     - name: http
+      # 服务端口号，spring boot的应用可以直接用默认的8080
       port: 8282
       targetPort: 8282
-      nodePort: 31061
   selector:
     app: plantumes-admin
   type: NodePort

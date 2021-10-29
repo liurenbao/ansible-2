@@ -105,3 +105,14 @@ subjects:
   - kind: ServiceAccount
     name: spc-admin
     namespace: spc
+
+---
+apiVersion: v1
+data:
+  .dockerconfigjson: eyJhdXRocyI6eyIxMC4xMi4xMDcuMTUwOjgwIjp7InVzZXJuYW1lIjoiazhzcHVsbGFjY291bnQiLCJwYXNzd29yZCI6Ims4c3B1bGxhY2NvdW50QWRtaW4iLCJhdXRoIjoiYXpoemNIVnNiR0ZqWTI5MWJuUTZhemh6Y0hWc2JHRmpZMjkxYm5SQlpHMXBiZz09In19fQ==
+kind: Secret
+metadata:
+  name: harbor
+  namespace: spc
+type: kubernetes.io/dockerconfigjson
+# {"auths":{"10.12.107.150:80":{"username":"k8spullaccount","password":"k8spullaccountAdmin","auth":"azhzcHVsbGFjY291bnQ6azhzcHVsbGFjY291bnRBZG1pbg=="}}}

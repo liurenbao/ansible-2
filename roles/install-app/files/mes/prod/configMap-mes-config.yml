@@ -117,16 +117,6 @@ data:
     MES_PASSWORD_CHAR_NUMBER=2
     MES_PASSWORD_LOCK_COUNT=5
     
-    customer.sms.url=http://27.221.101.37:81/sms.aspx
-    customer.sms.user=
-    customer.sms.password=
-    
-    customer.sns.url=http://tmesis.com.cn/wechat/push
-    customer.sns.templateid= 	ukBTI39xLoZIrJV3OyltcttmQvggr6MnyTmtasNU6Do
-    
-    #BPM_WEBSERVICE_URL
-    customer.bpm.url = http://10.10.9.153:8086/MES2BPM_Demo1/DemoBean
-    
     #MES Cast Channel for External Systems
     customer.MES2EAP.RC_CHANNEL = /DEV1/EAP
     customer.MES2APC.RC_CHANNEL = /DEV1/APC
@@ -148,9 +138,9 @@ data:
     org.quartz.jobStore.dataSource = myDS
     org.quartz.jobStore.isClustered = true
     org.quartz.dataSource.myDS.driver = com.huawei.gauss.jdbc.ZenithDriver
-    org.quartz.dataSource.myDS.URL = jdbc:zenith:db:@192.168.163.246:15400
+    org.quartz.dataSource.myDS.URL = jdbc:zenith:@10.12.114.20:15400
     org.quartz.dataSource.myDS.user = mesmgr
-    org.quartz.dataSource.myDS.password = Gauss_234
+    org.quartz.dataSource.myDS.password = Gauss_123
     org.quartz.dataSource.myDS.maxConnections = 5
     org.quartz.dataSource.myDS.validationQuery: select 1
     org.quartz.dataSource.myDS.provider=hikaricp

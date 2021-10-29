@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: prod-mes-jvm
+  namespace: plantu
+data:
+  plantu-mes-console.config: |
+    option -Xmx28672m
+    option -Xms28672m
+    option -Dfile.encoding=utf-8
+    option -Dcom.sun.management.jmxremote=true
+    option -Dcom.sun.management.jmxremote.port=29096
+    option -Dcom.sun.management.jmxremote.ssl=false
+    option -Dcom.sun.management.jmxremote.authenticate=false
+    option -DPLANTU_CONFIG_PATH=/PlantUMes/Server/config
+    
+    libs lib
+    
+    forcecwd .
+    
+    jvmdll /opt/soft/Server/jdk-10.0.2/lib/server/libjvm.so
