@@ -1,0 +1,89 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: autocreate-kibana-pattern
+  namespace: elk
+  labels:
+    app: autocreate-kibana-pattern
+data:
+  autocreate-kibana-pattern.sh: |
+    #!/bin/bash
+    kibana_host=${KIBANA_HOST}
+    es_host=${ES_HOST}
+
+    if [ -z $kibana_host ]; then
+        echo "env KIBANA_HOST is required"
+        exit 1
+    fi
+    if [ -z $es_host ]; then
+        echo "env ES_HOST is required"
+        exit 1
+    fi
+
+    current_month=$(date '+%Y-%m')
+    last_month=$(date '+%Y-%m' -d '1 month ago')
+    # 查询es的index,创建kibana的pattern
+    indices=$(curl http://$es_host/_cat/indices/log-*-$current_month-* | cut -d ' ' -f3)
+    for index in $indices;do
+    index_prefix=${index%${current_month}*}
+    pattern=$index_prefix$current_month-*
+
+    curl -X POST -H "Content-Type: application/json" -H "kbn-version: 7.13.2" -d@- --url http://$kibana_host/api/index_patterns/index_pattern << EOF
+    {
+      "index_pattern": {
+        "title": "$pattern",
+        "timeFieldName": "@timestamp",
+        "sourceFilters": [],
+        "typeMeta": {},
+        "fieldFormats": {},
+        "fieldAttrs": {
+          "message": {
+            "count": 1
+          }
+        },
+        "allowNoIndex": false
+      }
+    }
+    EOF
+    done
+
+    # 删除上一个月的pattern
+    index_pattern_ids=$(curl -XGET http://192.168.160.36:30001/api/saved_objects/_find?type=index-pattern | jq  -r --arg last_month $last_month '.saved_objects | .[] | select(.attributes.title | contains($last_month)) | .id')
+    for index_pattern_id in $index_pattern_ids ; do
+    curl -X DELETE -H "kbn-version: 7.13.2" http://$kibana_host/api/index_patterns/index_pattern/$index_pattern_id
+    done
+---
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  namespace: elk
+  name: autocreate-kibana-pattern
+spec:
+  failedJobsHistoryLimit: 3
+  successfulJobsHistoryLimit: 1
+  concurrencyPolicy: Replace
+  startingDeadlineSeconds: 20
+  schedule: "*/1 * 1-5 * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: OnFailure
+          containers:
+            - name: alpine-curl-jq
+              image: 192.168.160.47:8888/public/curl-jq:debian
+              command: [ "/bin/bash", "-c", "/kibana/autocreate-kibana-pattern.sh" ]
+              env:
+                - name: KIBANA_HOST
+                  value: "kibana.elk:5601"
+                - name: ES_HOST
+                  value: "elasticsearch.monitoring:9200"
+              volumeMounts:
+                - mountPath: /kibana/autocreate-kibana-pattern.sh
+                  subPath: autocreate-kibana-pattern.sh
+                  name: autocreate-kibana-pattern
+          volumes:
+            - name: autocreate-kibana-pattern
+              configMap:
+                name: autocreate-kibana-pattern
+                defaultMode: 0770
