@@ -23,7 +23,7 @@ data:
       },
       
       "ConnectionStrings": {
-        "ConnectionString": "Driver=Gauss100_x64;Servername=10.12.109.10;Port=15400;Uid=rmsprod;Pwd=prodrms_123;Charset=GBK;" //Charset=GBK; Charset=UTF8;
+        "ConnectionString": "Driver=Gauss100_x64;Servername=10.12.109.10;Port=15400;Uid=rmstest;Pwd=testrms_123;Charset=GBK;" //Charset=GBK; Charset=UTF8;
       },
       
       "AppSettings": {

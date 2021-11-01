@@ -37,8 +37,8 @@ data:
       mail_display_name: RMS Server
     db_setting:
       host: '10.12.109.10'
-      user: 'rmsprod'
-      password: 'prodrms_123'
+      user: 'rmstest'
+      password: 'testrms_123'
       port: '15400'
       db_log_level: NONE
   config_prod.yml: |
