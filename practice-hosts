@@ -66,3 +66,10 @@ ravencast_tcphosts=192.168.163.152[7800],192.168.163.153[7800]
 192.168.163.164	host_name=es-drill-3	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com
 192.168.163.145	host_name=es-drill-2	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com
 192.168.163.166	host_name=es-drill-1	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com
+
+[eap]
+192.168.163.61  ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name=eap-drill-5
+192.168.163.163 ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name=eap-drill-4
+192.168.163.180 ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name=eap-drill-3
+192.168.163.160 ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name=eap-drill-2
+192.168.163.156 ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name=eap-drill-1
