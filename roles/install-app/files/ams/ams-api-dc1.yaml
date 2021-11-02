@@ -46,7 +46,7 @@ spec:
           startupProbe:
             httpGet:
               port: 8100
-              path: /ams/health/get
+              path: /metrics
             initialDelaySeconds: 15
             timeoutSeconds: 1
             periodSeconds: 3
@@ -55,7 +55,7 @@ spec:
           readinessProbe:
             httpGet:
               port: 8100
-              path: /ams/health/get
+              path: /metrics
             timeoutSeconds: 1
             periodSeconds: 3
             successThreshold: 1
@@ -63,7 +63,7 @@ spec:
           livenessProbe:
             httpGet:
               port: 8100
-              path: /ams/health/get
+              path: /metrics
           resources:
             limits:
               cpu: '4'
@@ -90,16 +90,3 @@ spec:
     matchLabels:
       zone: dc1
       app: ams-api
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: ams-api
-  namespace: ams
-spec:
-  selector:
-    app: ams-api
-  ports:
-    - port: 8100
-      nodePort: 30377
-  type: NodePort

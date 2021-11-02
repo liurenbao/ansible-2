@@ -46,7 +46,7 @@ spec:
           startupProbe:
             httpGet:
               port: 8105
-              path: /amsdata/
+              path: /metrics
             initialDelaySeconds: 30
             timeoutSeconds: 1
             periodSeconds: 3
@@ -55,7 +55,7 @@ spec:
           readinessProbe:
             httpGet:
               port: 8105
-              path: /amsdata/
+              path: /metrics
             timeoutSeconds: 1
             periodSeconds: 3
             successThreshold: 1
@@ -63,7 +63,7 @@ spec:
           livenessProbe:
             httpGet:
               port: 8105
-              path: /amsdata/
+              path: /metrics
           resources:
             limits:
               cpu: '4'

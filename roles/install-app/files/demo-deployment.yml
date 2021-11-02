@@ -10,7 +10,7 @@ metadata:
   namespace: test
 spec:
   selector:
-    matchLabels:
+    matchLabels: {}
   env:
     - name: TZ
       value: "Asia/Shanghai"
