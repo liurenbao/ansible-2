@@ -16,24 +16,24 @@ spec:
           labels:
             severity: warning
           annotations:
-            summary: 主机内存占用过高
-            description: "主机{{ $labels.instance }}内存占用超过90%，当前值{{ $value }}"
+            summary: Host out of memory (instance {{ $labels.instance }})
+            description: "Node memory is filling up (< 10% left).  VALUE = {{ $value }}"
         - alert: HostMemoryUnderMemoryPressure
           expr: rate(node_vmstat_pgmajfault[1m]) > 1000
           for: 2m
           labels:
             severity: warning
           annotations:
-            summary: 主机存在内存压力
-            description: "主机{{ $labels.instance }}存在内存压力，major page faults几率过高，当前值{{ $value }}"
+            summary: Host memory under memory pressure (instance {{ $labels.instance }})
+            description: "The node is under heavy memory pressure. High rate of major page faults.  VALUE = {{ $value }}"
         - alert: HostOutOfDiskSpace
           expr: (node_filesystem_avail_bytes * 100) / node_filesystem_size_bytes < 10 and ON (instance, device, mountpoint) node_filesystem_readonly == 0
           for: 2m
           labels:
             severity: warning
           annotations:
-            summary: 主机磁盘占用过高
-            description: "主机{{ $labels.instance }}磁盘占用超过90%，当前值{{ $value }}"
+            summary: Host out of disk space (instance {{ $labels.instance }})
+            description: "Disk is almost full (< 10% left).  VALUE = {{ $value }}"
         # Please add ignored mountpoints in node_exporter parameters like
         # "--collector.filesystem.ignored-mount-points=^/(sys|proc|dev|run)($|/)".
         # Same rule using "node_filesystem_free_bytes" will fire when disk fills for non-root users.
@@ -43,110 +43,110 @@ spec:
           labels:
             severity: warning
           annotations:
-            summary: 主机磁盘将在未来24小时内空间不足
-            description: "主机{{ $labels.instance }}磁盘空间在当前写入速率下将在未来24小时无法写入，当前值{{ $value }}"
+            summary: Host disk will fill in 24 hours (instance {{ $labels.instance }})
+            description: "Filesystem is predicted to run out of space within the next 24 hours at current write rate.  VALUE = {{ $value }}"
         - alert: HostOutOfInodes
           expr: node_filesystem_files_free{mountpoint ="/rootfs"} / node_filesystem_files{mountpoint="/rootfs"} * 100 < 10 and ON (instance, device, mountpoint) node_filesystem_readonly{mountpoint="/rootfs"} == 0
           for: 2m
           labels:
             severity: warning
           annotations:
-            summary: 主机inodes占用过高
-            description: "主机{{ $labels.instance }}磁盘inodes使用已超过90%，当前值{{ $value }}"
+            summary: Host out of inodes (instance {{ $labels.instance }})
+            description: "Disk is almost running out of available inodes (< 10% left).  VALUE = {{ $value }}"
         - alert: HostInodesWillFillIn24Hours
           expr: node_filesystem_files_free{mountpoint ="/rootfs"} / node_filesystem_files{mountpoint="/rootfs"} * 100 < 10 and predict_linear(node_filesystem_files_free{mountpoint="/rootfs"}[1h], 24 * 3600) < 0 and ON (instance, device, mountpoint) node_filesystem_readonly{mountpoint="/rootfs"} == 0
           for: 2m
           labels:
             severity: warning
           annotations:
-            summary: 主机inodes将在未来24小时用完
-            description: "主机{{ $labels.instance }}的inodes在当前使用速率下将在未来24小时用完，当前值{{ $value }}"
+            summary: Host inodes will fill in 24 hours (instance {{ $labels.instance }})
+            description: "Filesystem is predicted to run out of inodes within the next 24 hours at current write rate.  VALUE = {{ $value }}"
         - alert: HostHighCpuLoad
           expr: 100 - (avg by(instance) (rate(node_cpu_seconds_total{mode="idle"}[2m])) * 100) > 80
           for: 5m
           labels:
             severity: warning
           annotations:
-            summary: 主机CPU占用高
-            description: "主机{{ $labels.instance }}的CPU占用已超过80%，当前{{ $value }}"
+            summary: Host high CPU load (instance {{ $labels.instance }})
+            description: "CPU load is > 80%.  VALUE = {{ $value }}"
         - alert: HostSystemdServiceCrashed
           expr: node_systemd_unit_state{state="failed"} == 1
           for: 1m
           labels:
             severity: warning
           annotations:
-            summary: 主机systemd服务异常停止
-            description: "主机{{ $labels.instance }}systemd服务{{ $labels.name }}异常停止"
+            summary: Host systemd service crashed (instance {{ $labels.instance }})
+            description: "systemd service crashed.  VALUE = {{ $value }}"
         - alert: HostPhysicalComponentTooHot
           expr: node_hwmon_temp_celsius > 75
           for: 5m
           labels:
             severity: warning
           annotations:
-            summary: 主机物理组件过热
-            description: "主机{{ $labels.instance }}物理组件过热，当前温度{{ $value }}"
+            summary: Host physical component too hot (instance {{ $labels.instance }})
+            description: "Physical hardware component too hot.  VALUE = {{ $value }}"
         - alert: HostNodeOvertemperatureAlarm
           expr: node_hwmon_temp_crit_alarm_celsius == 1
           for: 30s
           labels:
             severity: critical
           annotations:
-            summary: 主机温度过高，已触发系统告警
-            description: "主机{{ $labels.instance }}温度过高已触发系统告警"
+            summary: Host node overtemperature alarm (instance {{ $labels.instance }})
+            description: "Physical node temperature alarm triggered.  VALUE = {{ $value }}"
         - alert: HostOomKillDetected
           expr: increase(node_vmstat_oom_kill[1m]) > 0
           for: 0m
           labels:
             severity: warning
           annotations:
-            summary: 主机系统检测到服务OOM kill
-            description: "主机{{ $labels.instance }}系统检测到OOM kill"
+            summary: Host OOM kill detected (instance {{ $labels.instance }})
+            description: "OOM kill detected.  VALUE = {{ $value }}"
         - alert: HostEdacUncorrectableErrorsDetected
           expr: node_edac_uncorrectable_errors_total > 0
           for: 0m
           labels:
             severity: warning
           annotations:
-            summary: 主机出现无法纠正的EDAC错误 (instance {{ $labels.instance }})
-            description: "主机{{ $labels.instance }} EDAC报告在过去5分钟内存在{{ printf \"%.0f\" $value }}无法修复的内存错误"
+            summary: Host EDAC Uncorrectable Errors detected (instance {{ $labels.instance }})
+            description: "Host {{ $labels.instance }} has had {{ printf \"%.0f\" $value }} uncorrectable memory errors reported by EDAC in the last 5 minutes..  VALUE = {{ $value }}"
         - alert: HostNetworkReceiveErrors
           expr: rate(node_network_receive_errs_total[2m]) / rate(node_network_receive_packets_total[2m]) > 0.01
           for: 2m
           labels:
             severity: warning
           annotations:
-            summary: 主机网络Receive流量出现错误
-            description: "主机{{ $labels.instance }}接口{{ $labels.device }}过去5分钟内已出现{{ printf \"%.0f\" $value }} Receive Errors"
+            summary: Host Network Receive Errors (instance {{ $labels.instance }})
+            description: "Host {{ $labels.instance }} interface {{ $labels.device }} has encountered {{ printf \"%.0f\" $value }} receive errors in the last five minutes..  VALUE = {{ $value }}"
         - alert: HostNetworkTransmitErrors
           expr: rate(node_network_transmit_errs_total[2m]) / rate(node_network_transmit_packets_total[2m]) > 0.01
           for: 2m
           labels:
             severity: warning
           annotations:
-            summary: 主机网络Transmit流量出现错误
-            description: "主机 {{ $labels.instance }}接口{{ $labels.device }}过去5分钟内已出现{{ printf \"%.0f\" $value }} Transmit Errors"
+            summary: Host Network Transmit Errors (instance {{ $labels.instance }})
+            description: "Host {{ $labels.instance }} interface {{ $labels.device }} has encountered {{ printf \"%.0f\" $value }} transmit errors in the last five minutes..  VALUE = {{ $value }}"
         - alert: HostNetworkInterfaceSaturated
           expr: (rate(node_network_receive_bytes_total{device!~"^tap.*"}[1m]) + rate(node_network_transmit_bytes_total{device!~"^tap.*"}[1m])) / node_network_speed_bytes{device!~"^tap.*"} > 0.8 < 10000
           for: 1m
           labels:
             severity: warning
           annotations:
-            summary: 主机网络接口负载过高
-            description: "主机{{ $labels.instance }}接口{{ $labels.device }}负载过高，当前值{{ $value }}"
-        - alert: 主机连接数过高
+            summary: Host Network Interface Saturated (instance {{ $labels.instance }})
+            description: "The network interface \"{{ $labels.device }}\" on \"{{ $labels.instance }}\" is getting overloaded..  VALUE = {{ $value }}"
+        - alert: HostConntrackLimit
           expr: node_nf_conntrack_entries / node_nf_conntrack_entries_limit > 0.8
           for: 5m
           labels:
             severity: warning
           annotations:
-            summary: 主机连接数过高
-            description: "主机{{ $labels.instance }}连接数已超过最大值的80%，当前占用比例{{ $value }}"
+            summary: Host conntrack limit (instance {{ $labels.instance }})
+            description: "The number of conntrack is approching limit.  VALUE = {{ $value }}"
         - alert: HostClockSkew
           expr: (node_timex_offset_seconds > 0.05 and deriv(node_timex_offset_seconds[5m]) >= 0) or (node_timex_offset_seconds < -0.05 and deriv(node_timex_offset_seconds[5m]) <= 0)
           for: 2m
           labels:
             severity: warning
           annotations:
-            summary: 主机时钟未同步
-            description: "主机{{ $labels.instance }}时钟未同步"
+            summary: Host clock skew (instance {{ $labels.instance }})
+            description: "Clock skew detected. Clock is out of sync..  VALUE = {{ $value }}"
 
