@@ -19,6 +19,16 @@ spec:
         app: plantu-mes
         zone: dc1
     spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - topologyKey: kubernetes.io/hostname
+              labelSelector:
+                matchExpressions:
+                  - key: app
+                    operator: In
+                    values:
+                      - plantu-mes
       hostNetwork: false
       tolerations:
         - key: "node.kubernetes.io/unreachable"
@@ -51,6 +61,28 @@ spec:
               value: "YES"
           # 当前服务器已经存在相同版本的镜像则不会重复拉取
           imagePullPolicy: IfNotPresent
+          startupProbe:
+            tcpSocket:
+              port: 29096
+            successThreshold: 1
+            failureThreshold: 10
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 3
+          readinessProbe:
+            tcpSocket:
+              port: 29096
+            successThreshold: 1
+            failureThreshold: 3
+            timeoutSeconds: 3
+            periodSeconds: 5
+          livenessProbe:
+            tcpSocket:
+              port: 29096
+            successThreshold: 1
+            failureThreshold: 3
+            timeoutSeconds: 3
+            periodSeconds: 5
           # 容器启动端口，没有可以删除
           # 容器资源，request表示分配的最小资源，limit表示分配的资源上限
           resources:
