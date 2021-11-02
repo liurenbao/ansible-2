@@ -81,8 +81,8 @@
 
 - name: copy app nginx conf to remote
   template:
-    src: '{{ item.src }}'
-    dest: "{{ nginx_root_dir }}/{{ item.path | regex_replace('.j2$', '') }}"
+    src: '{{ item }}'
+    dest: "{{ nginx_root_dir }}/{{ item | regex_replace('.j2$', '') }}"
   with_items:
     - conf.d/plantu.conf.j2
     - conf.d/rms.conf.j2
