@@ -16,21 +16,21 @@ spec:
           labels:
             severity: critical
           annotations:
-            summary: Ravencast down (instance {{ $labels.instance }})
-            description: "Ravencast down"
+            summary: Ravencast服务不可用
+            description: "服务{{ $labels.service }}的ravencast {{ $labels.instance }}服务不可用"
         - alert: RavencastLicenseExpiring
           expr: ravencast_expire_days_total{} < 60
           for: 0m
           labels:
             severity: warning
           annotations:
-            summary: Ravencast license will expire after {{ $value }} days. (instance {{ $labels.instance }})
-            description: "Ravencast license will expire"
+            summary: Ravencast证书即将过期
+            description: "服务{{ $labels.service }}的ravencast {{ $labels.instance }}证书即将在{{ $value }}天后过期"
         - alert: RavencastQueueWait
           expr: ravencast_queue_wait_count_total{} > 2000
           for: 3m
           labels:
             severity: warning
           annotations:
-            summary: Ravencast queue has too many waiting messages,current {{ $value }}  (service {{ $labels.service }})
-            description: "Ravencast queue has too many waiting messages, current = {{ $value }}"
+            summary: Ravencast消息积压,current {{ $value }}  (service {{ $labels.service }})
+            description: "服务{{ $labels.service }}的ravencast {{ $labels.instance }}消息积压过多，当前积压数{{ $value }}"

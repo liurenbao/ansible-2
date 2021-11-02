@@ -16,61 +16,61 @@ spec:
           labels:
             severity: critical
           annotations:
-            summary: Elasticsearch Heap Usage Too High (instance {{ $labels.instance }})
-            description: "The heap usage is over 90%.  VALUE = {{ $value }}"
+            summary: Elasticsearch堆内存占用过高
+            description: "{{ $labels.instance }}堆内存占用超过90%，当前值{{ $value }}"
         - alert: ElasticsearchDiskOutOfSpace
           expr: elasticsearch_filesystem_data_available_bytes / elasticsearch_filesystem_data_size_bytes * 100 < 10
           for: 1m
           labels:
             severity: critical
           annotations:
-            summary: Elasticsearch disk out of space (instance {{ $labels.instance }})
-            description: "The disk usage is over 90%.  VALUE = {{ $value }}"
+            summary: Elasticsearch磁盘占用过高
+            description: "{{ $labels.instance }}磁盘占用已超过90%，当前值{{ $value }}"
         - alert: ElasticsearchDiskSpaceLow
           expr: elasticsearch_filesystem_data_available_bytes / elasticsearch_filesystem_data_size_bytes * 100 < 20
           for: 2m
           labels:
             severity: warning
           annotations:
-            summary: Elasticsearch disk space low (instance {{ $labels.instance }})
-            description: "The disk usage is over 80%.  VALUE = {{ $value }}"
+            summary: Elasticsearch磁盘占用过高
+            description: "{{ $labels.instance }}磁盘占用已超过80%，当前值{{ $value }}"
         - alert: ElasticsearchClusterRed
           expr: elasticsearch_cluster_health_status{color="red"} == 1
           for: 5m
           labels:
             severity: critical
           annotations:
-            summary: Elasticsearch Cluster Red (instance {{ $labels.instance }})
-            description: "Elastic Cluster Red status.  VALUE = {{ $value }}"
+            summary: Elasticsearch集群状态Red
+            description: "Elasticsearch集群{{ $labels.instance }}状态Red"
         - alert: ElasticsearchClusterYellow
           expr: elasticsearch_cluster_health_status{color="yellow"} == 1
           for: 10m
           labels:
             severity: warning
           annotations:
-            summary: Elasticsearch Cluster Yellow (instance {{ $labels.instance }})
-            description: "Elastic Cluster Yellow status.  VALUE = {{ $value }}"
+            summary: Elasticsearch集群状态Yellow
+            description: "Elasticsearch集群{{ $labels.instance }}状态Yellow"
         - alert: ElasticsearchInitializingShardsTooLong
           expr: elasticsearch_cluster_health_initializing_shards > 0
           for: 15m
           labels:
             severity: warning
           annotations:
-            summary: Elasticsearch initializing shards too long (instance {{ $labels.instance }})
-            description: "Elasticsearch has been initializing shards for 15 min.  VALUE = {{ $value }}"
+            summary: Elasticsearch初始化分片耗时过长
+            description: "Elasticsearch初始化分片{{ $labels.instance }}耗时超过15分钟，当前值{{ $value }}"
         - alert: ElasticsearchUnassignedShards
           expr: elasticsearch_cluster_health_unassigned_shards > 0
           for: 10m
           labels:
             severity: critical
           annotations:
-            summary: Elasticsearch unassigned shards (instance {{ $labels.instance }})
-            description: "Elasticsearch has unassigned shards.  VALUE = {{ $value }}"
+            summary: Elasticsearch存在未分配的分片
+            description: "Elasticsearch {{ $labels.instance }}存在未分配的分片，数量{{ $value }}"
         - alert: ElasticsearchPendingTasks
           expr: elasticsearch_cluster_health_number_of_pending_tasks > 0
           for: 15m
           labels:
             severity: warning
           annotations:
-            summary: Elasticsearch pending tasks (instance {{ $labels.instance }})
-            description: "Elasticsearch has pending tasks. Cluster works slowly..  VALUE = {{ $value }}"
+            summary: Elasticsearch存在尚未执行的集群级别的更改
+            description: "Elasticsearch {{ $labels.instance }}存在尚未执行的集群级别的更改，集群响应过慢， {{ $value }}"

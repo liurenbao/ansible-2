@@ -665,9 +665,7 @@ spec:
     rules:
     - alert: KubeStateMetricsListErrors
       annotations:
-        message: kube-state-metrics is experiencing errors at an elevated rate in
-          list operations. This is likely causing it to not be able to expose metrics
-          about Kubernetes objects correctly or at all.
+        message: kube-state-metrics组件指标查询接口错误率升高，将会导致无法正确暴露或无法暴露kubernetes集群指标
         runbook_url: https://github.com/kubernetes-monitoring/kubernetes-mixin/tree/master/runbook.md#alert-name-kubestatemetricslisterrors
       expr: |
         (sum(rate(kube_state_metrics_list_total{job="kube-state-metrics",result="error"}[5m]))
@@ -679,9 +677,7 @@ spec:
         severity: critical
     - alert: KubeStateMetricsWatchErrors
       annotations:
-        message: kube-state-metrics is experiencing errors at an elevated rate in
-          watch operations. This is likely causing it to not be able to expose metrics
-          about Kubernetes objects correctly or at all.
+        message: kube-state-metrics组件指标监控接口错误率升高，将会导致无法正确暴露或无法暴露kubernetes集群指标
         runbook_url: https://github.com/kubernetes-monitoring/kubernetes-mixin/tree/master/runbook.md#alert-name-kubestatemetricswatcherrors
       expr: |
         (sum(rate(kube_state_metrics_watch_total{job="kube-state-metrics",result="error"}[5m]))
@@ -695,11 +691,9 @@ spec:
     rules:
     - alert: NodeFilesystemSpaceFillingUp
       annotations:
-        description: Filesystem on {{ $labels.device }} at {{ $labels.instance }}
-          has only {{ printf "%.2f" $value }}% available space left and is filling
-          up.
+        description: 节点{{ $labels.instance }}的{{ $labels.device }}空间剩余{{ printf "%.2f" $value }}%
         runbook_url: https://github.com/kubernetes-monitoring/kubernetes-mixin/tree/master/runbook.md#alert-name-nodefilesystemspacefillingup
-        summary: Filesystem is predicted to run out of space within the next 24 hours.
+        summary: 文件系统空间将在未来24小时写满
       expr: |
         (
           node_filesystem_avail_bytes{job="node-exporter",fstype!=""} / node_filesystem_size_bytes{job="node-exporter",fstype!=""} * 100 < 40
@@ -713,11 +707,9 @@ spec:
         severity: warning
     - alert: NodeFilesystemSpaceFillingUp
       annotations:
-        description: Filesystem on {{ $labels.device }} at {{ $labels.instance }}
-          has only {{ printf "%.2f" $value }}% available space left and is filling
-          up fast.
+        description: 节点{{ $labels.instance }}的{{ $labels.device }}空间剩余{{ printf "%.2f" $value }}%
         runbook_url: https://github.com/kubernetes-monitoring/kubernetes-mixin/tree/master/runbook.md#alert-name-nodefilesystemspacefillingup
-        summary: Filesystem is predicted to run out of space within the next 4 hours.
+        summary: 文件系统空间将在未来4小时写满
       expr: |
         (
           node_filesystem_avail_bytes{job="node-exporter",fstype!=""} / node_filesystem_size_bytes{job="node-exporter",fstype!=""} * 100 < 15
@@ -731,10 +723,9 @@ spec:
         severity: critical
     - alert: NodeFilesystemAlmostOutOfSpace
       annotations:
-        description: Filesystem on {{ $labels.device }} at {{ $labels.instance }}
-          has only {{ printf "%.2f" $value }}% available space left.
+        description: 节点{{ $labels.instance }}的{{ $labels.device }}空间剩余{{ printf "%.2f" $value }}%
         runbook_url: https://github.com/kubernetes-monitoring/kubernetes-mixin/tree/master/runbook.md#alert-name-nodefilesystemalmostoutofspace
-        summary: Filesystem has less than 5% space left.
+        summary: 文件系统空间剩余小于5%
       expr: |
         (
           node_filesystem_avail_bytes{job="node-exporter",fstype!=""} / node_filesystem_size_bytes{job="node-exporter",fstype!=""} * 100 < 5
@@ -746,10 +737,9 @@ spec:
         severity: warning
     - alert: NodeFilesystemAlmostOutOfSpace
       annotations:
-        description: Filesystem on {{ $labels.device }} at {{ $labels.instance }}
-          has only {{ printf "%.2f" $value }}% available space left.
+        description: 节点{{ $labels.instance }}的{{ $labels.device }}空间剩余{{ printf "%.2f" $value }}%
         runbook_url: https://github.com/kubernetes-monitoring/kubernetes-mixin/tree/master/runbook.md#alert-name-nodefilesystemalmostoutofspace
-        summary: Filesystem has less than 3% space left.
+        summary: 文件系统空间剩余小于3%
       expr: |
         (
           node_filesystem_avail_bytes{job="node-exporter",fstype!=""} / node_filesystem_size_bytes{job="node-exporter",fstype!=""} * 100 < 3
@@ -761,11 +751,9 @@ spec:
         severity: critical
     - alert: NodeFilesystemFilesFillingUp
       annotations:
-        description: Filesystem on {{ $labels.device }} at {{ $labels.instance }}
-          has only {{ printf "%.2f" $value }}% available inodes left and is filling
-          up.
+        description: 文件系统{{ $labels.instance }} {{ $labels.device }}的inodes剩余{{ printf "%.2f" $value }}%
         runbook_url: https://github.com/kubernetes-monitoring/kubernetes-mixin/tree/master/runbook.md#alert-name-nodefilesystemfilesfillingup
-        summary: Filesystem is predicted to run out of inodes within the next 24 hours.
+        summary: 文件系统的inodes将在未来24小时耗尽
       expr: |
         (
           node_filesystem_files_free{job="node-exporter",fstype!=""} / node_filesystem_files{job="node-exporter",fstype!=""} * 100 < 40
@@ -779,11 +767,9 @@ spec:
         severity: warning
     - alert: NodeFilesystemFilesFillingUp
       annotations:
-        description: Filesystem on {{ $labels.device }} at {{ $labels.instance }}
-          has only {{ printf "%.2f" $value }}% available inodes left and is filling
-          up fast.
+        description: 文件系统{{ $labels.instance }} {{ $labels.device }}的inodes剩余{{ printf "%.2f" $value }}%
         runbook_url: https://github.com/kubernetes-monitoring/kubernetes-mixin/tree/master/runbook.md#alert-name-nodefilesystemfilesfillingup
-        summary: Filesystem is predicted to run out of inodes within the next 4 hours.
+        summary: 文件系统的inodes将在未来4小时耗尽
       expr: |
         (
           node_filesystem_files_free{job="node-exporter",fstype!=""} / node_filesystem_files{job="node-exporter",fstype!=""} * 100 < 20
@@ -797,10 +783,9 @@ spec:
         severity: critical
     - alert: NodeFilesystemAlmostOutOfFiles
       annotations:
-        description: Filesystem on {{ $labels.device }} at {{ $labels.instance }}
-          has only {{ printf "%.2f" $value }}% available inodes left.
+        description: 文件系统{{ $labels.instance }} {{ $labels.device }}的inodes剩余{{ printf "%.2f" $value }}%
         runbook_url: https://github.com/kubernetes-monitoring/kubernetes-mixin/tree/master/runbook.md#alert-name-nodefilesystemalmostoutoffiles
-        summary: Filesystem has less than 5% inodes left.
+        summary: 文件系统的inodes剩余数量少于5%
       expr: |
         (
           node_filesystem_files_free{job="node-exporter",fstype!=""} / node_filesystem_files{job="node-exporter",fstype!=""} * 100 < 5
@@ -812,10 +797,9 @@ spec:
         severity: warning
     - alert: NodeFilesystemAlmostOutOfFiles
       annotations:
-        description: Filesystem on {{ $labels.device }} at {{ $labels.instance }}
-          has only {{ printf "%.2f" $value }}% available inodes left.
+        description: 文件系统{{ $labels.instance }} {{ $labels.device }}的inodes剩余{{ printf "%.2f" $value }}%
         runbook_url: https://github.com/kubernetes-monitoring/kubernetes-mixin/tree/master/runbook.md#alert-name-nodefilesystemalmostoutoffiles
-        summary: Filesystem has less than 3% inodes left.
+        summary: 文件系统的inodes剩余数量少于3%
       expr: |
         (
           node_filesystem_files_free{job="node-exporter",fstype!=""} / node_filesystem_files{job="node-exporter",fstype!=""} * 100 < 3
@@ -827,10 +811,9 @@ spec:
         severity: critical
     - alert: NodeNetworkReceiveErrs
       annotations:
-        description: '{{ $labels.instance }} interface {{ $labels.device }} has encountered
-          {{ printf "%.0f" $value }} receive errors in the last two minutes.'
+        description: '节点{{ $labels.instance }} 的设备 {{ $labels.device }} 在过去2分钟出现{{ printf "%.0f" $value }} Receive Errors'
         runbook_url: https://github.com/kubernetes-monitoring/kubernetes-mixin/tree/master/runbook.md#alert-name-nodenetworkreceiveerrs
-        summary: Network interface is reporting many receive errors.
+        summary: 网络设备出现Receive Errors
       expr: |
         increase(node_network_receive_errs_total[2m]) > 10
       for: 1h
@@ -838,10 +821,9 @@ spec:
         severity: warning
     - alert: NodeNetworkTransmitErrs
       annotations:
-        description: '{{ $labels.instance }} interface {{ $labels.device }} has encountered
-          {{ printf "%.0f" $value }} transmit errors in the last two minutes.'
+        description: '节点{{ $labels.instance }} 的设备 {{ $labels.device }} 在过去2分钟出现{{ printf "%.0f" $value }} Transmit Errors'
         runbook_url: https://github.com/kubernetes-monitoring/kubernetes-mixin/tree/master/runbook.md#alert-name-nodenetworktransmiterrs
-        summary: Network interface is reporting many transmit errors.
+        summary: 网络设备出现Transmit Errors
       expr: |
         increase(node_network_transmit_errs_total[2m]) > 10
       for: 1h
@@ -849,19 +831,18 @@ spec:
         severity: warning
     - alert: NodeHighNumberConntrackEntriesUsed
       annotations:
-        description: '{{ $value | humanizePercentage }} of conntrack entries are used'
+        description: '连接跟踪表占用超过{{ $value | humanizePercentage }}'
         runbook_url: https://github.com/kubernetes-monitoring/kubernetes-mixin/tree/master/runbook.md#alert-name-nodehighnumberconntrackentriesused
-        summary: Number of conntrack are getting close to the limit
+        summary: 连接跟踪表占用过高
       expr: |
         (node_nf_conntrack_entries / node_nf_conntrack_entries_limit) > 0.75
       labels:
         severity: warning
     - alert: NodeClockSkewDetected
       annotations:
-        message: Clock on {{ $labels.instance }} is out of sync by more than 300s.
-          Ensure NTP is configured correctly on this host.
+        message: 节点{{ $labels.instance }}时钟处于未同步状态已超过300s，请查看NTP服务是否正常运行
         runbook_url: https://github.com/kubernetes-monitoring/kubernetes-mixin/tree/master/runbook.md#alert-name-nodeclockskewdetected
-        summary: Clock skew detected.
+        summary: 节点时钟偏移
       expr: |
         (
           node_timex_offset_seconds > 0.05
@@ -879,10 +860,9 @@ spec:
         severity: warning
     - alert: NodeClockNotSynchronising
       annotations:
-        message: Clock on {{ $labels.instance }} is not synchronising. Ensure NTP
-          is configured on this host.
+        message: 节点{{ $labels.instance }}时钟未同步，请查看NTP服务是否正常运行
         runbook_url: https://github.com/kubernetes-monitoring/kubernetes-mixin/tree/master/runbook.md#alert-name-nodeclocknotsynchronising
-        summary: Clock not synchronising.
+        summary: 节点时钟未同步
       expr: |
         min_over_time(node_timex_sync_status[5m]) == 0
       for: 10m
@@ -892,8 +872,8 @@ spec:
     rules:
     - alert: KubePodCrashLooping
       annotations:
-        message: Pod {{ $labels.namespace }}/{{ $labels.pod }} ({{ $labels.container
-          }}) is restarting {{ printf "%.2f" $value }} times / 5 minutes.
+        message: Pod {{ $labels.namespace }}/{{ $labels.pod }}中的容器({{ $labels.container
+          }})每5分钟重启了{{ printf "%.2f" $value }}次
         runbook_url: https://github.com/kubernetes-monitoring/kubernetes-mixin/tree/master/runbook.md#alert-name-kubepodcrashlooping
       expr: |
         rate(kube_pod_container_status_restarts_total{job="kube-state-metrics"}[15m]) * 60 * 5 > 0
@@ -902,8 +882,7 @@ spec:
         severity: critical
     - alert: KubePodNotReady
       annotations:
-        message: Pod {{ $labels.namespace }}/{{ $labels.pod }} has been in a non-ready
-          state for longer than 15 minutes.
+        message: Pod {{ $labels.namespace }}/{{ $labels.pod }}未就绪
         runbook_url: https://github.com/kubernetes-monitoring/kubernetes-mixin/tree/master/runbook.md#alert-name-kubepodnotready
       expr: |
         sum by (namespace, pod) (max by(namespace, pod) (kube_pod_status_phase{job="kube-state-metrics", phase=~"Pending|Unknown"}) * on(namespace, pod) group_left(owner_kind) max by(namespace, pod, owner_kind) (kube_pod_owner{owner_kind!="Job"})) > 0
@@ -912,9 +891,7 @@ spec:
         severity: critical
     - alert: KubeDeploymentGenerationMismatch
       annotations:
-        message: Deployment generation for {{ $labels.namespace }}/{{ $labels.deployment
-          }} does not match, this indicates that the Deployment has failed but has
-          not been rolled back.
+        message: Deployment {{ $labels.namespace }}/{{ $labels.deployment }}的deployment版本不匹配，此错误表示deployment发布失败且没有进行回滚
         runbook_url: https://github.com/kubernetes-monitoring/kubernetes-mixin/tree/master/runbook.md#alert-name-kubedeploymentgenerationmismatch
       expr: |
         kube_deployment_status_observed_generation{job="kube-state-metrics"}
@@ -925,8 +902,7 @@ spec:
         severity: critical
     - alert: KubeDeploymentReplicasMismatch
       annotations:
-        message: Deployment {{ $labels.namespace }}/{{ $labels.deployment }} has not
-          matched the expected number of replicas for longer than 15 minutes.
+        message: Deployment {{ $labels.namespace }}/{{ $labels.deployment }}的实例个数与deployment中设置的值不匹配
         runbook_url: https://github.com/kubernetes-monitoring/kubernetes-mixin/tree/master/runbook.md#alert-name-kubedeploymentreplicasmismatch
       expr: |
         (
@@ -943,8 +919,7 @@ spec:
         severity: critical
     - alert: KubeStatefulSetReplicasMismatch
       annotations:
-        message: StatefulSet {{ $labels.namespace }}/{{ $labels.statefulset }} has
-          not matched the expected number of replicas for longer than 15 minutes.
+        message: StatefulSet {{ $labels.namespace }}/{{ $labels.statefulset }}与预期数量不一致
         runbook_url: https://github.com/kubernetes-monitoring/kubernetes-mixin/tree/master/runbook.md#alert-name-kubestatefulsetreplicasmismatch
       expr: |
         (
@@ -961,9 +936,7 @@ spec:
         severity: critical
     - alert: KubeStatefulSetGenerationMismatch
       annotations:
-        message: StatefulSet generation for {{ $labels.namespace }}/{{ $labels.statefulset
-          }} does not match, this indicates that the StatefulSet has failed but has
-          not been rolled back.
+        message: 服务{{ $labels.namespace }}/{{ $labels.statefulset }}版本不匹配，此错误表示statefulset发布失败且没有进行回滚
         runbook_url: https://github.com/kubernetes-monitoring/kubernetes-mixin/tree/master/runbook.md#alert-name-kubestatefulsetgenerationmismatch
       expr: |
         kube_statefulset_status_observed_generation{job="kube-state-metrics"}
@@ -974,8 +947,7 @@ spec:
         severity: critical
     - alert: KubeStatefulSetUpdateNotRolledOut
       annotations:
-        message: StatefulSet {{ $labels.namespace }}/{{ $labels.statefulset }} update
-          has not been rolled out.
+        message: StatefulSet {{ $labels.namespace }}/{{ $labels.statefulset }}没有更新成功
         runbook_url: https://github.com/kubernetes-monitoring/kubernetes-mixin/tree/master/runbook.md#alert-name-kubestatefulsetupdatenotrolledout
       expr: |
         max without (revision) (
@@ -994,8 +966,7 @@ spec:
         severity: critical
     - alert: KubeDaemonSetRolloutStuck
       annotations:
-        message: Only {{ $value | humanizePercentage }} of the desired Pods of DaemonSet
-          {{ $labels.namespace }}/{{ $labels.daemonset }} are scheduled and ready.
+        message: DaemonSet {{ $labels.namespace }}/{{ $labels.daemonset }}的Pod与预期不一致
         runbook_url: https://github.com/kubernetes-monitoring/kubernetes-mixin/tree/master/runbook.md#alert-name-kubedaemonsetrolloutstuck
       expr: |
         kube_daemonset_status_number_ready{job="kube-state-metrics"}
@@ -1006,8 +977,7 @@ spec:
         severity: critical
     - alert: KubeContainerWaiting
       annotations:
-        message: Pod {{ $labels.namespace }}/{{ $labels.pod }} container {{ $labels.container}}
-          has been in waiting state for longer than 1 hour.
+        message: Pod {{ $labels.namespace }}/{{ $labels.pod }}的容器{{ $labels.container}}处于Waiting状态已超过1小时
         runbook_url: https://github.com/kubernetes-monitoring/kubernetes-mixin/tree/master/runbook.md#alert-name-kubecontainerwaiting
       expr: |
         sum by (namespace, pod, container) (kube_pod_container_status_waiting_reason{job="kube-state-metrics"}) > 0
@@ -1016,8 +986,7 @@ spec:
         severity: warning
     - alert: KubeDaemonSetNotScheduled
       annotations:
-        message: '{{ $value }} Pods of DaemonSet {{ $labels.namespace }}/{{ $labels.daemonset
-          }} are not scheduled.'
+        message: 'DaemonSet {{ $labels.namespace }}/{{ $labels.daemonset }}存在{{ $value }}个Pod没有被调度'
         runbook_url: https://github.com/kubernetes-monitoring/kubernetes-mixin/tree/master/runbook.md#alert-name-kubedaemonsetnotscheduled
       expr: |
         kube_daemonset_status_desired_number_scheduled{job="kube-state-metrics"}
@@ -1028,8 +997,7 @@ spec:
         severity: warning
     - alert: KubeDaemonSetMisScheduled
       annotations:
-        message: '{{ $value }} Pods of DaemonSet {{ $labels.namespace }}/{{ $labels.daemonset
-          }} are running where they are not supposed to run.'
+        message: 'DaemonSet {{ $labels.namespace }}/{{ $labels.daemonset }}存在{{ $value }}个pod未运行在正确的节点上'
         runbook_url: https://github.com/kubernetes-monitoring/kubernetes-mixin/tree/master/runbook.md#alert-name-kubedaemonsetmisscheduled
       expr: |
         kube_daemonset_status_number_misscheduled{job="kube-state-metrics"} > 0
@@ -1038,8 +1006,7 @@ spec:
         severity: warning
     - alert: KubeCronJobRunning
       annotations:
-        message: CronJob {{ $labels.namespace }}/{{ $labels.cronjob }} is taking more
-          than 1h to complete.
+        message: CronJob {{ $labels.namespace }}/{{ $labels.cronjob }} 长达1小时还未运行完成
         runbook_url: https://github.com/kubernetes-monitoring/kubernetes-mixin/tree/master/runbook.md#alert-name-kubecronjobrunning
       expr: |
         time() - kube_cronjob_next_schedule_time{job="kube-state-metrics"} > 3600
@@ -1048,8 +1015,7 @@ spec:
         severity: warning
     - alert: KubeJobCompletion
       annotations:
-        message: Job {{ $labels.namespace }}/{{ $labels.job_name }} is taking more
-          than one hour to complete.
+        message: Job {{ $labels.namespace }}/{{ $labels.job_name }}超过1小时才运行完成
         runbook_url: https://github.com/kubernetes-monitoring/kubernetes-mixin/tree/master/runbook.md#alert-name-kubejobcompletion
       expr: |
         kube_job_spec_completions{job="kube-state-metrics"} - kube_job_status_succeeded{job="kube-state-metrics"}  > 0
@@ -1058,17 +1024,16 @@ spec:
         severity: warning
     - alert: KubeJobFailed
       annotations:
-        message: Job {{ $labels.namespace }}/{{ $labels.job_name }} failed to complete.
+        message: Job {{ $labels.namespace }}/{{ $labels.job_name }}运行失败
         runbook_url: https://github.com/kubernetes-monitoring/kubernetes-mixin/tree/master/runbook.md#alert-name-kubejobfailed
       expr: |
-        kube_job_failed{job="kube-state-metrics"}  > 0
+        kube_job_failed{job="kube-state-metrics"} > 0
       for: 15m
       labels:
         severity: warning
     - alert: KubeHpaReplicasMismatch
       annotations:
-        message: HPA {{ $labels.namespace }}/{{ $labels.hpa }} has not matched the
-          desired number of replicas for longer than 15 minutes.
+        message: HPA {{ $labels.namespace }}/{{ $labels.hpa }}未成功控制服务伸缩在期望的副本数
         runbook_url: https://github.com/kubernetes-monitoring/kubernetes-mixin/tree/master/runbook.md#alert-name-kubehpareplicasmismatch
       expr: |
         (kube_hpa_status_desired_replicas{job="kube-state-metrics"}
@@ -1081,8 +1046,7 @@ spec:
         severity: warning
     - alert: KubeHpaMaxedOut
       annotations:
-        message: HPA {{ $labels.namespace }}/{{ $labels.hpa }} has been running at
-          max replicas for longer than 15 minutes.
+        message: HPA {{ $labels.namespace }}/{{ $labels.hpa }}控制的服务副本数已处于最大值状态超过15分钟，请考虑提升副本数以应对负载
         runbook_url: https://github.com/kubernetes-monitoring/kubernetes-mixin/tree/master/runbook.md#alert-name-kubehpamaxedout
       expr: |
         kube_hpa_status_current_replicas{job="kube-state-metrics"}
@@ -1095,8 +1059,7 @@ spec:
     rules:
     - alert: KubeCPUOvercommit
       annotations:
-        message: Cluster has overcommitted CPU resource requests for Pods and cannot
-          tolerate node failure.
+        message: 集群Pod的CPU Request的已超过集群CPU总和，无法容忍节点异常
         runbook_url: https://github.com/kubernetes-monitoring/kubernetes-mixin/tree/master/runbook.md#alert-name-kubecpuovercommit
       expr: |
         sum(namespace:kube_pod_container_resource_requests_cpu_cores:sum{})
@@ -1109,8 +1072,7 @@ spec:
         severity: warning
     - alert: KubeMemoryOvercommit
       annotations:
-        message: Cluster has overcommitted memory resource requests for Pods and cannot
-          tolerate node failure.
+        message: 集群Pod的内存Request的已超过集群内存总和，无法容忍节点异常
         runbook_url: https://github.com/kubernetes-monitoring/kubernetes-mixin/tree/master/runbook.md#alert-name-kubememoryovercommit
       expr: |
         sum(namespace:kube_pod_container_resource_requests_memory_bytes:sum{})
@@ -1125,7 +1087,7 @@ spec:
         severity: warning
     - alert: KubeCPUQuotaOvercommit
       annotations:
-        message: Cluster has overcommitted CPU resource requests for Namespaces.
+        message: 集群Namespace的CPU配额已超过集群CPU总和
         runbook_url: https://github.com/kubernetes-monitoring/kubernetes-mixin/tree/master/runbook.md#alert-name-kubecpuquotaovercommit
       expr: |
         sum(kube_resourcequota{job="kube-state-metrics", type="hard", resource="cpu"})
@@ -1137,7 +1099,7 @@ spec:
         severity: warning
     - alert: KubeMemoryQuotaOvercommit
       annotations:
-        message: Cluster has overcommitted memory resource requests for Namespaces.
+        message: 集群Namespace的内存配额已超过集群内存总和
         runbook_url: https://github.com/kubernetes-monitoring/kubernetes-mixin/tree/master/runbook.md#alert-name-kubememoryquotaovercommit
       expr: |
         sum(kube_resourcequota{job="kube-state-metrics", type="hard", resource="memory"})
@@ -1149,8 +1111,7 @@ spec:
         severity: warning
     - alert: KubeQuotaExceeded
       annotations:
-        message: Namespace {{ $labels.namespace }} is using {{ $value | humanizePercentage
-          }} of its {{ $labels.resource }} quota.
+        message: Namespace {{ $labels.namespace }}资源使用已超过配额{{ $labels.resource }}的{{ $value | humanizePercentage }}
         runbook_url: https://github.com/kubernetes-monitoring/kubernetes-mixin/tree/master/runbook.md#alert-name-kubequotaexceeded
       expr: |
         kube_resourcequota{job="kube-state-metrics", type="used"}
@@ -1162,9 +1123,7 @@ spec:
         severity: warning
     - alert: CPUThrottlingHigh
       annotations:
-        message: '{{ $value | humanizePercentage }} throttling of CPU in namespace
-          {{ $labels.namespace }} for container {{ $labels.container }} in pod {{
-          $labels.pod }}.'
+        message: '容器{{ $labels.namespace }}/{{ $labels.pod }}/{{ $labels.container }}的CPU将会出现节制，当前已使用/配额占比{{ $value | humanizePercentage }}'
         runbook_url: https://github.com/kubernetes-monitoring/kubernetes-mixin/tree/master/runbook.md#alert-name-cputhrottlinghigh
       expr: |
         sum(increase(container_cpu_cfs_throttled_periods_total{container!="", }[5m])) by (container, pod, namespace)
@@ -1178,9 +1137,7 @@ spec:
     rules:
     - alert: KubePersistentVolumeFillingUp
       annotations:
-        message: The PersistentVolume claimed by {{ $labels.persistentvolumeclaim
-          }} in Namespace {{ $labels.namespace }} is only {{ $value | humanizePercentage
-          }} free.
+        message: PVC {{ $labels.namespace }}/{{ $labels.persistentvolumeclaim }}申请的PV空间不足，当前剩余{{ $value | humanizePercentage }}
         runbook_url: https://github.com/kubernetes-monitoring/kubernetes-mixin/tree/master/runbook.md#alert-name-kubepersistentvolumefillingup
       expr: |
         kubelet_volume_stats_available_bytes{job="kubelet", metrics_path="/metrics"}

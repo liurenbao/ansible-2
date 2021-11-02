@@ -16,14 +16,14 @@ spec:
           labels:
             severity: critical
           annotations:
-            summary: Blackbox probe failed (instance {{ $labels.instance }})
-            description: "Probe failed.  VALUE = {{ $value }}"
+            summary: Blackbox探测接口失败
+            description: "Blackbox探测接口{{ $labels.instance }}失败，接口返回值{{ $value }}"
         - alert: BlackboxProbeSlowPing
           expr: avg_over_time(probe_icmp_duration_seconds[1m]) > 1
           for: 1m
           labels:
             severity: warning
           annotations:
-            summary: Blackbox probe slow ping (instance {{ $labels.instance }})
-            description: "Blackbox ping took more than 1s.  VALUE = {{ $value }}"
+            summary: Blackbox ping延迟过高
+            description: "Blackbox ping 探测服务{{ $labels.instance }}延迟超过1s，当前延迟{{ $value }}"
 

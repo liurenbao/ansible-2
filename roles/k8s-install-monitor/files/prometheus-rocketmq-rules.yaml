@@ -16,15 +16,13 @@ spec:
           labels:
             severity: warning
           annotations:
-            description: 'consumer {{$labels.group}} on {{$labels.topic}} lag behind
-          and is falling behind (behind value {{$value}}).'
-            summary: consumer lag behind
+            description: 'Rocketmq Topic {{$labels.topic}}消费者组{{$labels.group}}消费滞后，滞后值{{$value}}.'
+            summary: Rocketmq消费者滞后
         - alert: GroupGetLatencyByStoretime
           expr: rocketmq_group_get_latency_by_storetime > 10000
           for: 3m
           labels:
             severity: warning
           annotations:
-            description: 'consumer {{$labels.group}} on {{$labels.broker}}, {{$labels.topic}} consume time lag behind message store time
-          and (behind value is {{$value}}).'
-            summary: message consumes time lag behind message store time too much
+            description: 'Rocketmq节点{{$labels.broker}} 的Topic {{$labels.topic}}的消费者组{{$labels.group}}消息消费时间落后于消息生产实践太长，当前值{{$value}})
+            summary: 消息消费时间落后于生产时间太长

@@ -16,56 +16,48 @@ spec:
           labels:
             severity: critical
           annotations:
-            summary: Redis down (instance {{ $labels.instance }})
-            description: "Redis instance is down,  VALUE = {{ $value }}"
+            summary: Redis服务异常
+            description: "Redis {{ $labels.instance }}服务异常"
         - alert: RedisMissingMaster
           expr: (count(redis_instance_info{role="master"}) or vector(0)) < 3
           for: 1m
           labels:
             severity: critical
           annotations:
-            summary: Redis missing master (instance {{ $labels.instance }})
-            description: "Redis cluster has too few master nodes.  VALUE = {{ $value }}"
+            summary: Redis集群Master节点过少
+            description: "Redis集群Master节点过少，当前Master个数 {{ $value }}"
         - alert: RedisTooManyMasters
           expr: count(redis_instance_info{role="master"}) > 3
           for: 1m
           labels:
             severity: critical
           annotations:
-            summary: Redis too many masters (instance {{ $labels.instance }})
-            description: "Redis cluster has too many nodes marked as master.  VALUE = {{ $value }}"
+            summary: Redis集群Master节点过多
+            description: "Redis集群Master节点过多，当前Master个数 {{ $value }}"
         - alert: RedisDisconnectedSlaves
           expr: count without (instance, job) (redis_connected_slaves) - sum without (instance, job) (redis_connected_slaves) > 3
           for: 1m
           labels:
             severity: critical
           annotations:
-            summary: Redis disconnected slaves (instance {{ $labels.instance }})
-            description: "Redis not replicating for all slaves. Consider reviewing the redis replication status.  VALUE = {{ $value }}"
-        - alert: RedisReplicationBroken
-          expr: delta(redis_connected_slaves[1m]) < 0
-          for: 1m
-          labels:
-            severity: critical
-          annotations:
-            summary: Redis replication broken (instance {{ $labels.instance }})
-            description: "Redis instance lost a slave,  VALUE = {{ $value }}"
+            summary: Redis集群存在从节点失联
+            description: "Redis集群存在从节点失联，当前从节点数{{ $value }}"
         - alert: RedisClusterFlapping
           expr: changes(redis_connected_slaves[1m]) > 1
           for: 2m
           labels:
             severity: critical
           annotations:
-            summary: Redis cluster flapping (instance {{ $labels.instance }})
-            description: "Changes have been detected in Redis replica connection. This can occur when replica nodes lose connection to the master and reconnect (a.k.a flapping).  VALUE = {{ $value }}"
+            summary: Redis集群震荡
+            description: "Redis {{ $labels.instance }}主从连接发生变化。当集群主从节点断开并重新连接时会发生此类情况。"
         - alert: RedisMissingBackup
           expr: time() - redis_rdb_last_save_timestamp_seconds > 60 * 60 * 24
           for: 30m
           labels:
             severity: critical
           annotations:
-            summary: Redis missing backup (instance {{ $labels.instance }})
-            description: "Redis has not been backuped for 24 hours,  VALUE = {{ $value }}"
+            summary: Redis未备份
+            description: "Redis {{ $labels.instance }}超过24小时没有备份"
         # The exporter must be started with --include-system-metrics flag or REDIS_EXPORTER_INCL_SYSTEM_METRICS=true environment variable.
         - alert: RedisOutOfSystemMemory
           expr: redis_memory_used_bytes / redis_total_system_memory_bytes * 100 > 90
@@ -73,16 +65,16 @@ spec:
           labels:
             severity: warning
           annotations:
-            summary: Redis out of system memory (instance {{ $labels.instance }})
-            description: "Redis is running out of system memory (> 90%),  VALUE = {{ $value }}"
+            summary: Redis内存占用过高
+            description: "Redis {{ $labels.instance }}内存占用超过系统的90%，当前{{ $value }}"
         - alert: RedisOutOfConfiguredMaxmemory
           expr: redis_memory_used_bytes / redis_memory_max_bytes * 100 > 90
           for: 2m
           labels:
             severity: warning
           annotations:
-            summary: Redis out of configured maxmemory (instance {{ $labels.instance }})
-            description: "Redis is running out of configured maxmemory (> 90%),  VALUE = {{ $value }}"
+            summary: Redis内存占用过高 (instance {{ $labels.instance }})
+            description: "Redis {{ $labels.instance }}内存占用超过配置内存的90%，当前{{ $value }}"
         - alert: RedisTooManyConnections
           # maxclients 50000
           expr: redis_connected_clients > 45000
@@ -90,16 +82,16 @@ spec:
           labels:
             severity: warning
           annotations:
-            summary: Redis too many connections (instance {{ $labels.instance }})
-            description: "Redis instance has too many connections,  VALUE = {{ $value }}"
+            summary: Redis连接数过多
+            description: "Redis节点{{ $labels.instance }}连接数过多。最大值50000，当前连接数{{ $value }}"
         - alert: RedisRejectedConnections
           expr: increase(redis_rejected_connections_total[1m]) > 0
           for: 0m
           labels:
             severity: critical
           annotations:
-            summary: Redis rejected connections (instance {{ $labels.instance }})
-            description: "Some connections to Redis has been rejected,  VALUE = {{ $value }}"
+            summary: Redis节点出现拒绝连接
+            description: "Redis节点{{ $labels.instance }}拒绝了部分连接"
 
 
 
