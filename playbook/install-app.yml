@@ -1,5 +1,9 @@
 - name: install app on dc1
   hosts: k8s-master-init
   gather_facts: false
+  vars:
+    harbor_pull_account: admin
+    harbor_pull_password: admin123Admin
+    haror_auth_plaintext: '{{ harbor_pull_account }}:{{ harbor_pull_password }}'
   roles:
     - install-app

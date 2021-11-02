@@ -74,20 +74,21 @@
     path: '{{ nginx_root_dir }}/conf.d'
     state: directory
 
-- name: send traefik conf to remote
-  template:
-    src: 'traefik.conf.j2'
-    dest: "{{ nginx_root_dir }}/conf.d/traefik.conf"
-
-- name: send component conf to remote
-  template:
-    src: 'component.conf.j2'
-    dest: "{{ nginx_root_dir }}/conf.d/component.conf"
-
 - name: send nginx.conf
   template:
     src: nginx.conf.j2
     dest: '{{ nginx_root_dir }}/nginx.conf'
+
+- name: copy app nginx conf to remote
+  template:
+    src: '{{ item.src }}'
+    dest: "{{ nginx_root_dir }}/{{ item.path | regex_replace('.j2$', '') }}"
+  with_items:
+    - conf.d/plantu.conf.j2
+    - conf.d/rms.conf.j2
+    - conf.d/traefik.conf.j2
+    - conf.d/component.conf.j2
+    - conf.d/ams.conf.j2
 
 - name: start nginx
   shell: docker-compose up -d

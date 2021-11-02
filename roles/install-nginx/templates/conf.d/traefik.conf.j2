@@ -1,0 +1,20 @@
+upstream traefik {
+{% for host in groups['k8s-worker'] %}
+    server {{ host }}:31001  max_fails=0;
+{% endfor %}
+}
+
+server {
+    listen       80 backlog=65534;
+    listen  [::]:80 backlog=65534;
+    server_name  localhost;
+
+    location / {
+        proxy_read_timeout  60s;
+        proxy_next_upstream_timeout 1s;
+        proxy_pass http://traefik;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header Host $host;
+    }
+}
