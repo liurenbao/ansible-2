@@ -7,7 +7,7 @@ subsets:
   - addresses:
 {% for host in groups['eap'] %}
       - ip: {{ host }}
-        nodeName: {{ hostvars[host].host_name }}-{{ host }}
+        nodeName: {{ hostvars[host].host_name }}
 {% endfor %}
     ports:
       - port: 9100
