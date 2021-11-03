@@ -30,8 +30,8 @@ spec:
           regex: ([^.]+)(?::\d+)?;([^:]+)(?::\d+)?
           replacement: $1($2)
           targetLabel: instance
-        - action: drop
-          regex: addr
+        - action: labeldrop
+          regex: "addr"
       scheme: https
       tlsConfig:
         insecureSkipVerify: true
