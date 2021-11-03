@@ -10,6 +10,7 @@ data:
     #!/bin/bash
     kibana_host=${KIBANA_HOST}
     es_host=${ES_HOST}
+    pattern_keep_months=${PATTERN_KEEP_MONTHS:-2}
 
     if [ -z $kibana_host ]; then
         echo "env KIBANA_HOST is required"
@@ -21,7 +22,7 @@ data:
     fi
 
     current_month=$(date '+%Y-%m')
-    last_month=$(date '+%Y-%m' -d '1 month ago')
+    last_month=$(date +%Y-%m -d "$pattern_keep_months month ago")
     # 查询es的index,创建kibana的pattern
     indices=$(curl http://$es_host/_cat/indices/log-*-$current_month-* | cut -d ' ' -f3)
     for index in $indices;do
@@ -71,13 +72,15 @@ spec:
           restartPolicy: OnFailure
           containers:
             - name: alpine-curl-jq
-              image: 192.168.160.47:8888/public/curl-jq:debian
+              image: "{{ image_repository }}/public/curl-jq:debian"
               command: [ "/bin/bash", "-c", "/kibana/autocreate-kibana-pattern.sh" ]
               env:
                 - name: KIBANA_HOST
                   value: "kibana.elk:5601"
                 - name: ES_HOST
                   value: "elasticsearch.monitoring:9200"
+                - name: PATTERN_KEEP_MONTHS
+                  value: '2'
               volumeMounts:
                 - mountPath: /kibana/autocreate-kibana-pattern.sh
                   subPath: autocreate-kibana-pattern.sh

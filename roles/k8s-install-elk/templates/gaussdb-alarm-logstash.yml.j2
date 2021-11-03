@@ -73,7 +73,7 @@ data:
     path.data: /usr/share/logstash/data
     pipeline.workers: 4
     xpack.monitoring.enabled: true
-    xpack.monitoring.elasticsearch.hosts: ["192.168.163.82:9200","192.168.163.69:9200","192.168.163.194:9200","192.168.161.242:9200","192.168.161.199:9200","192.168.161.200:9200"]
+    xpack.monitoring.elasticsearch.hosts: {{ groups['es'] | map('regex_replace', '^(.*)$','\\1:9200') | list | to_json }}
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -84,7 +84,7 @@ data:
   input_main.conf: |-
     input {
         kafka {
-        bootstrap_servers => "192.168.161.194:9092,192.168.161.193:9092,192.168.161.195:9092"
+        bootstrap_servers => "{{ groups['kafka'] | map('regex_replace', '^(.*)$','\\1:9092') | list | join(',') }}"
         group_id => "gaussdb-alarm_group"
         topics => ["gaussdb-alarm"]
         consumer_threads => 12
@@ -109,7 +109,7 @@ data:
     output {
       stdout {  codec => rubydebug}
       elasticsearch {
-           hosts => ["192.168.163.82:9200","192.168.163.69:9200","192.168.163.194:9200","192.168.161.242:9200","192.168.161.199:9200","192.168.161.200:9200"]
+           hosts => {{ groups['es'] | map('regex_replace', '^(.*)$','\\1:9200') | list | to_json}}
            index => "gaussdb-alarm-%{+YYYY.MM}"
            codec => "json"
            manage_template => true
@@ -134,7 +134,7 @@ spec:
     spec:
       containers:
         - name: logstash
-          image: "192.168.160.47:8888/public/logstash:7.13.2"
+          image: "{{ image_repository }}/public/logstash:7.13.2"
           imagePullPolicy: Always
           resources:
             limits:
