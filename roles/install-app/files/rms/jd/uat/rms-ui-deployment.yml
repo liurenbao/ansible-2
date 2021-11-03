@@ -18,6 +18,8 @@ spec:
         app: rms-ui
         zone: uat
     spec:
+      imagePullSecrets:
+        - name: harbor
       affinity:
         podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
