@@ -5,9 +5,12 @@ metadata:
   labels:
     {{- include "rtd.common.labels" . | nindent 4 }}
 spec:
-  type: {{ .Values.service.type }}
+  type: {{ .Values.web.service.type }}
   ports:
     - port: {{ .Values.web.service.port }}
+      {{- if and (eq .Values.web.service.type "NodePort") .Values.web.service.nodePort }}
+      nodePort: {{ .Values.web.service.nodePort }}
+      {{- end }}
       targetPort: {{ .Values.web.service.targetPort }}
       protocol: {{ .Values.web.service.protocol }}
       name: {{ .Values.web.service.name }}

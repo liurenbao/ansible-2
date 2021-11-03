@@ -5,7 +5,7 @@ metadata:
   labels:
     {{- include "rtd.common.labels" . | nindent 4 }}
 spec:
-  type: {{ .Values.service.type }}
+  type: {{ .Values.workflow.service.type }}
   ports:
     - port: {{ .Values.workflow.service.port }}
       targetPort: {{ .Values.workflow.service.targetPort }}

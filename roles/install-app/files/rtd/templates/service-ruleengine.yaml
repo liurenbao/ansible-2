@@ -5,7 +5,7 @@ metadata:
   labels:
     {{- include "rtd.common.labels" . | nindent 4 }}
 spec:
-  type: {{ .Values.service.type }}
+  type: {{ .Values.ruleengine.service.type }}
   ports:
     - port: {{ .Values.ruleengine.service.port }}
       targetPort: {{ .Values.ruleengine.service.targetPort }}

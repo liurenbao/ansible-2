@@ -35,11 +35,27 @@ spec:
             - name: http
               containerPort: 80
               protocol: TCP
-
-          {{- with .Values.ruleengine.env }}
           env:
-            {{- toYaml . | nindent 12}}
-          {{- end }}
+            - name: SPRING_PROFILES_ACTIVE
+              value: dev
+            - name: SERVER_PORT
+              value: '8999'
+            - name: ZK_ENABLE
+              value: {{ .Values.rtd_common.zk_enable | quote}}
+            - name: ZK_HOST
+              value: "{{ .Release.Name}}-{{ .Values.rtd_common.zk_host_surfix }}.{{ .Release.Namespace}}"
+            - name: ZK_PORT
+              value: {{ .Values.rtd_common.zk_port | quote}}
+            - name: ZK_NODE
+              value: {{ .Values.rtd_common.zk_node | quote}}
+            - name: FILE_SERVER_TYPE
+              value: {{ .Values.rtd_common.file_server_type | quote}}
+            - name: IMPORT_FILE_PATH
+              value: '/data/ruleengine/resources'
+            - name: LOG_FILE_PATH
+              value: '/data/ruleengine/logs'
+            - name: DATA_FILE_PATH
+              value: '/data/ruleengine/data'
 
           {{- with .Values.ruleengine.livenessProbe }}
           livenessProbe:
@@ -53,12 +69,12 @@ spec:
           resources:
             {{- toYaml .Values.ruleengine.resources | nindent 12 }}
 
-          {{- with .Values.volumeMounts}}
+          {{- with .Values.ruleengine.volumeMounts}}
           volumeMounts:
             {{- toYaml . | nindent 12}}
           {{- end }}
 
-      {{- with .Values.volumes}}
+      {{- with .Values.ruleengine.volumes}}
       volumes:
         {{- toYaml . | nindent 12}}
       {{- end }}

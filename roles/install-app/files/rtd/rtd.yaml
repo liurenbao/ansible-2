@@ -1,5 +1,5 @@
-NAME: rtd
-LAST DEPLOYED: Fri Oct  8 15:29:31 2021
+NAME: rtdxxx
+LAST DEPLOYED: Thu Oct 28 22:00:58 2021
 NAMESPACE: rtd-test
 STATUS: pending-install
 REVISION: 1
@@ -23,38 +23,49 @@ podAnnotations: {}
 podSecurityContext: {}
 rtd_common:
   Host: rtd-test.fanli.inhuawei.com
+  file_server_type: nas
+  zk_enable: "true"
+  zk_host_suffix: zookeeper
+  zk_node: rtd
+  zk_port: "2181"
 ruleengine:
   PathPrefix: /ruleengine/
+  affinity:
+    podAntiAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+      - podAffinityTerm:
+          labelSelector:
+            matchExpressions:
+            - key: app.kubernetes.io/name
+              operator: In
+              values:
+              - rtd-ruleengine
+          topologyKey: zone
+        weight: 100
   env:
   - name: SPRING_PROFILES_ACTIVE
-    value: pro
+    value: dev
   - name: SERVER_PORT
     value: "8999"
-  - name: REGISTER_METHOD
-    value: "2"
+  - name: ZK_ENABLE
+    value: "true"
   - name: ZK_HOST
     value: rtd-zookeeper
   - name: ZK_NODE
     value: rtd
-  - name: USING_SHARED_STORAGE
-    value: "false"
+  - name: FILE_SERVER_TYPE
+    value: nas
   - name: IMPORT_FILE_PATH
-    value: /opt/ruleengine/resources
-  - name: LOG_FILE_PATH
-    value: /opt/ruleengine/logs
-  - name: DATA_FILE_PATH
-    value: /opt/ruleengine/data
-  - name: SHARED_IMPORT_FILE_PATH
     value: /data/ruleengine/resources
-  - name: SHARED_LOG_FILE_PATH
+  - name: LOG_FILE_PATH
     value: /data/ruleengine/logs
-  - name: SHARED_DATA_FILE_PATH
+  - name: DATA_FILE_PATH
     value: /data/ruleengine/data
   image:
     pullPolicy: Always
     repository: 10.243.36.7:80/rtd/ruleengine
-    tag: 1.0.306
-  replicaCount: 1
+    tag: 20211028.61338-develop
+  replicaCount: 2
   resources:
     limits:
       cpu: "2"
@@ -62,14 +73,17 @@ ruleengine:
     requests:
       cpu: 10m
       memory: 50Mi
+  service:
+    name: http
+    port: 80
+    protocol: TCP
+    targetPort: 80
+    type: ClusterIP
   volumeMounts:
   - mountPath: /data
     name: rtd-data
   volumes:
   - name: rtd-data
-    nfs:
-      path: /k8s-nfs/grafana/data
-      server: 10.10.100.11
 securityContext: {}
 service:
   port: 80
@@ -81,31 +95,26 @@ serviceAccount:
 tolerations: []
 web:
   PathPrefix: /
+  affinity:
+    podAntiAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+      - podAffinityTerm:
+          labelSelector:
+            matchExpressions:
+            - key: app.kubernetes.io/name
+              operator: In
+              values:
+              - rtd-web
+          topologyKey: zone
+        weight: 100
   env:
   - name: SERVER_PORT
     value: "80"
   image:
     pullPolicy: Always
     repository: 10.243.36.7:80/rtd/rtd-web
-    tag: 1.0.241
-  livenessProbe:
-    failureThreshold: 3
-    httpGet:
-      path: /
-      port: 80
-    initialDelaySeconds: 200
-    periodSeconds: 10
-    successThreshold: 1
-    timeoutSeconds: 10
-  readinessProbe:
-    failureThreshold: 3
-    httpGet:
-      path: /
-      port: 80
-    periodSeconds: 10
-    successThreshold: 1
-    timeoutSeconds: 10
-  replicaCount: 1
+    tag: 1.0.301
+  replicaCount: 2
   resources:
     limits:
       cpu: "1"
@@ -113,79 +122,39 @@ web:
     requests:
       cpu: "0.1"
       memory: 100Mi
+  service:
+    name: http
+    port: 80
+    protocol: TCP
+    targetPort: 80
+    type: ClusterIP
 workflow:
   PathPrefix: /workflow/
+  affinity:
+    podAntiAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+      - podAffinityTerm:
+          labelSelector:
+            matchExpressions:
+            - key: app.kubernetes.io/name
+              operator: In
+              values:
+              - rtd-workflow
+          topologyKey: zone
+        weight: 100
   env:
-  - name: SPRING_PROFILES_ACTIVE
-    value: test
-  - name: SERVER_PORT
-    value: "8080"
-  - name: DB_IP
-    value: 10.247.139.143
-  - name: DB_PORT
-    value: "15400"
-  - name: DB_USER_NAME
-    value: RTD_DEV
-  - name: DB_USER_PWD
-    value: Huawei@123
-  - name: DB_USER_NAME_QUARTZ
-    value: RTD_QUARZ
-  - name: WORKFLOW_ENGINE_ENDPOINT
-    value: ruleengine.rtd-test:80
-  - name: DATASOURCE_AGENT_ENDPOINT
-    value: rtd-datasource.rtd:80
-  - name: FILE_SERVER_TYPE
-    value: NAS
-  - name: FILE_PATH
-    value: /usr/importFile
-  - name: ZK_TIME_OUT
-    value: "40000"
-  - name: ZK_HOST
-    value: rtd-zookeeper
-  - name: ZK_PORT
-    value: "2181"
-  - name: RTD_NODE_PATH
-    value: /rtd-dev
-  - name: GRPC_ENDPOINT
-    value: rtd-ruleengine
-  - name: GRPC_ENDPOINT_PORT
-    value: "8999"
-  - name: ZOOKEEPER_ENABLE
-    value: "true"
-  - name: RAVENCAST_ENABLE
-    value: "true"
-  - name: RAVENCAST_IP
-    value: 10.247.4.8
-  - name: RAVENCAST_PORT
-    value: "10101"
-  - name: RAVENCAST_SESSION
-    value: rtd_server
-  - name: RAVENCAST_CHANNEL
-    value: /Rtd/NextDispatchRequest/v3
+    db_ip: 10.247.139.143
+    db_port: "15400"
+    db_user_name: RTD
+    db_user_pwd: ENC(F8Rj+7/4BZwgsgrc8F9IxZrgclWSfKL6)
+    ravencast_channel: /Rtd/Test/NextDispatchRequest
+    ravencast_hosts: 10.247.4.8:10101;10.247.4.8:10201
+    ravencast_server: rtd_server
   image:
     pullPolicy: Always
     repository: 10.243.36.7:80/rtd/rtd-workflow
-    tag: 1.0.398
-  livenessProbe:
-    failureThreshold: 3
-    httpGet:
-      path: /workflow/v1/health
-      port: 8080
-      scheme: HTTP
-    initialDelaySeconds: 400
-    periodSeconds: 10
-    successThreshold: 1
-    timeoutSeconds: 10
-  readinessProbe:
-    failureThreshold: 3
-    httpGet:
-      path: /workflow/v1/health
-      port: 8080
-      scheme: HTTP
-    periodSeconds: 10
-    successThreshold: 1
-    timeoutSeconds: 10
-  replicaCount: 1
+    tag: 20211028.61060-dev
+  replicaCount: 2
   resources:
     limits:
       cpu: "2"
@@ -193,8 +162,25 @@ workflow:
     requests:
       cpu: 10m
       memory: 50Mi
+  service:
+    name: http
+    port: 80
+    protocol: TCP
+    targetPort: 8080
+    type: ClusterIP
 zookeeper:
-  affinity: {}
+  affinity:
+    podAntiAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+      - podAffinityTerm:
+          labelSelector:
+            matchExpressions:
+            - key: app.kubernetes.io/name
+              operator: In
+              values:
+              - zookeeper
+          topologyKey: zone
+        weight: 100
   allowAnonymousLogin: true
   auth:
     clientPassword: ""
@@ -397,19 +383,19 @@ MANIFEST:
 apiVersion: policy/v1beta1
 kind: PodDisruptionBudget
 metadata:
-  name: rtd-zookeeper
+  name: rtdxxx-zookeeper
   namespace: rtd-test
   labels:
     app.kubernetes.io/name: zookeeper
     helm.sh/chart: zookeeper-7.4.3
-    app.kubernetes.io/instance: rtd
+    app.kubernetes.io/instance: rtdxxx
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: zookeeper
 spec:
   selector:
     matchLabels:
       app.kubernetes.io/name: zookeeper
-      app.kubernetes.io/instance: rtd
+      app.kubernetes.io/instance: rtdxxx
       app.kubernetes.io/component: zookeeper
   maxUnavailable: 1
 ---
@@ -417,10 +403,10 @@ spec:
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: rtd
+  name: rtdxxx
   labels:
     helm.sh/chart: rtd-0.1.0
-    app.kubernetes.io/instance: rtd
+    app.kubernetes.io/instance: rtdxxx
     app.kubernetes.io/version: "1.16.0"
     app.kubernetes.io/managed-by: Helm
 ---
@@ -428,12 +414,12 @@ metadata:
 apiVersion: v1
 kind: Service
 metadata:
-  name: rtd-zookeeper-headless
+  name: rtdxxx-zookeeper-headless
   namespace: rtd-test
   labels:
     app.kubernetes.io/name: zookeeper
     helm.sh/chart: zookeeper-7.4.3
-    app.kubernetes.io/instance: rtd
+    app.kubernetes.io/instance: rtdxxx
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: zookeeper
 spec:
@@ -455,19 +441,19 @@ spec:
       targetPort: election
   selector:
     app.kubernetes.io/name: zookeeper
-    app.kubernetes.io/instance: rtd
+    app.kubernetes.io/instance: rtdxxx
     app.kubernetes.io/component: zookeeper
 ---
 # Source: rtd/charts/zookeeper/templates/svc.yaml
 apiVersion: v1
 kind: Service
 metadata:
-  name: rtd-zookeeper
+  name: rtdxxx-zookeeper
   namespace: rtd-test
   labels:
     app.kubernetes.io/name: zookeeper
     helm.sh/chart: zookeeper-7.4.3
-    app.kubernetes.io/instance: rtd
+    app.kubernetes.io/instance: rtdxxx
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: zookeeper
 spec:
@@ -488,31 +474,31 @@ spec:
       targetPort: election
   selector:
     app.kubernetes.io/name: zookeeper
-    app.kubernetes.io/instance: rtd
+    app.kubernetes.io/instance: rtdxxx
     app.kubernetes.io/component: zookeeper
 ---
 # Source: rtd/templates/service-ruleengine.yaml
 apiVersion: v1
 kind: Service
 metadata:
-  name: rtd-ruleengine
+  name: rtdxxx-ruleengine
   labels:
     helm.sh/chart: rtd-0.1.0
-    app.kubernetes.io/instance: rtd
+    app.kubernetes.io/instance: rtdxxx
     app.kubernetes.io/version: "1.16.0"
     app.kubernetes.io/managed-by: Helm
 spec:
   type: ClusterIP
   ports:
     - port: 80
-      targetPort: http
+      targetPort: 80
       protocol: TCP
       name: http
   selector:
     app.kubernetes.io/name: rtd-ruleengine
     app.kubernetes.io/component: rtd-ruleengine
     helm.sh/chart: rtd-0.1.0
-    app.kubernetes.io/instance: rtd
+    app.kubernetes.io/instance: rtdxxx
     app.kubernetes.io/version: "1.16.0"
     app.kubernetes.io/managed-by: Helm
 ---
@@ -520,24 +506,24 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: rtd-web
+  name: rtdxxx-web
   labels:
     helm.sh/chart: rtd-0.1.0
-    app.kubernetes.io/instance: rtd
+    app.kubernetes.io/instance: rtdxxx
     app.kubernetes.io/version: "1.16.0"
     app.kubernetes.io/managed-by: Helm
 spec:
   type: ClusterIP
   ports:
     - port: 80
-      targetPort: http
+      targetPort: 80
       protocol: TCP
       name: http
   selector:
     app.kubernetes.io/name: rtd-web
     app.kubernetes.io/component: rtd-web
     helm.sh/chart: rtd-0.1.0
-    app.kubernetes.io/instance: rtd
+    app.kubernetes.io/instance: rtdxxx
     app.kubernetes.io/version: "1.16.0"
     app.kubernetes.io/managed-by: Helm
 ---
@@ -545,24 +531,24 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: rtd-workflow
+  name: rtdxxx-workflow
   labels:
     helm.sh/chart: rtd-0.1.0
-    app.kubernetes.io/instance: rtd
+    app.kubernetes.io/instance: rtdxxx
     app.kubernetes.io/version: "1.16.0"
     app.kubernetes.io/managed-by: Helm
 spec:
   type: ClusterIP
   ports:
     - port: 80
-      targetPort: http
+      targetPort: 8080
       protocol: TCP
       name: http
   selector:
     app.kubernetes.io/name: rtd-workflow
     app.kubernetes.io/component: rtd-workflow
     helm.sh/chart: rtd-0.1.0
-    app.kubernetes.io/instance: rtd
+    app.kubernetes.io/instance: rtdxxx
     app.kubernetes.io/version: "1.16.0"
     app.kubernetes.io/managed-by: Helm
 ---
@@ -570,22 +556,22 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: rtd-ruleengine
+  name: rtdxxx-ruleengine
   labels:
     app.kubernetes.io/name: rtd-ruleengine
     app.kubernetes.io/component: rtd-ruleengine
     helm.sh/chart: rtd-0.1.0
-    app.kubernetes.io/instance: rtd
+    app.kubernetes.io/instance: rtdxxx
     app.kubernetes.io/version: "1.16.0"
     app.kubernetes.io/managed-by: Helm
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app.kubernetes.io/name: rtd-ruleengine
       app.kubernetes.io/component: rtd-ruleengine
       helm.sh/chart: rtd-0.1.0
-      app.kubernetes.io/instance: rtd
+      app.kubernetes.io/instance: rtdxxx
       app.kubernetes.io/version: "1.16.0"
       app.kubernetes.io/managed-by: Helm
   template:
@@ -594,20 +580,20 @@ spec:
         app.kubernetes.io/name: rtd-ruleengine
         app.kubernetes.io/component: rtd-ruleengine
         helm.sh/chart: rtd-0.1.0
-        app.kubernetes.io/instance: rtd
+        app.kubernetes.io/instance: rtdxxx
         app.kubernetes.io/version: "1.16.0"
         app.kubernetes.io/managed-by: Helm
     spec:
       imagePullSecrets:
         - name: myregistrykey
-      serviceAccountName: rtd
+      serviceAccountName: rtdxxx
       securityContext:
         {}
       containers:
-        - name: rtd-ruleengine
+        - name: rtdxxx-ruleengine
           securityContext:
             {}
-          image: "10.243.36.7:80/rtd/ruleengine:1.0.306"
+          image: "10.243.36.7:80/rtd/ruleengine:20211028.61338-develop"
           imagePullPolicy: Always
           ports:
             - name: http
@@ -615,29 +601,23 @@ spec:
               protocol: TCP
           env:
             - name: SPRING_PROFILES_ACTIVE
-              value: pro
+              value: dev
             - name: SERVER_PORT
-              value: "8999"
-            - name: REGISTER_METHOD
-              value: "2"
+              value: '8999'
+            - name: ZK_ENABLE
+              value: "true"
             - name: ZK_HOST
-              value: rtd-zookeeper
+              value: rtdxxx_"zookeeper"
             - name: ZK_NODE
-              value: rtd
-            - name: USING_SHARED_STORAGE
-              value: "false"
+              value: "rtd"
+            - name: FILE_SERVER_TYPE
+              value: "nas"
             - name: IMPORT_FILE_PATH
-              value: /opt/ruleengine/resources
+              value: '/data/ruleengine/resources'
             - name: LOG_FILE_PATH
-              value: /opt/ruleengine/logs
+              value: '/data/ruleengine/logs'
             - name: DATA_FILE_PATH
-              value: /opt/ruleengine/data
-            - name: SHARED_IMPORT_FILE_PATH
-              value: /data/ruleengine/resources
-            - name: SHARED_LOG_FILE_PATH
-              value: /data/ruleengine/logs
-            - name: SHARED_DATA_FILE_PATH
-              value: /data/ruleengine/data
+              value: '/data/ruleengine/data'
 
           resources:
             limits:
@@ -646,27 +626,44 @@ spec:
             requests:
               cpu: 10m
               memory: 50Mi
+          volumeMounts:
+            - mountPath: /data
+              name: rtd-data
+      volumes:
+            - name: rtd-data
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app.kubernetes.io/name
+                  operator: In
+                  values:
+                  - rtd-ruleengine
+              topologyKey: zone
+            weight: 100
 ---
 # Source: rtd/templates/deployment-web.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: rtd-web
+  name: rtdxxx-web
   labels:
     app.kubernetes.io/name: rtd-web
     app.kubernetes.io/component: rtd-web
     helm.sh/chart: rtd-0.1.0
-    app.kubernetes.io/instance: rtd
+    app.kubernetes.io/instance: rtdxxx
     app.kubernetes.io/version: "1.16.0"
     app.kubernetes.io/managed-by: Helm
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app.kubernetes.io/name: rtd-web
       app.kubernetes.io/component: rtd-web
       helm.sh/chart: rtd-0.1.0
-      app.kubernetes.io/instance: rtd
+      app.kubernetes.io/instance: rtdxxx
       app.kubernetes.io/version: "1.16.0"
       app.kubernetes.io/managed-by: Helm
   template:
@@ -675,42 +672,42 @@ spec:
         app.kubernetes.io/name: rtd-web
         app.kubernetes.io/component: rtd-web
         helm.sh/chart: rtd-0.1.0
-        app.kubernetes.io/instance: rtd
+        app.kubernetes.io/instance: rtdxxx
         app.kubernetes.io/version: "1.16.0"
         app.kubernetes.io/managed-by: Helm
     spec:
       imagePullSecrets:
         - name: myregistrykey
-      serviceAccountName: rtd
+      serviceAccountName: rtdxxx
       securityContext:
         {}
       containers:
-        - name: rtd-web
+        - name: rtdxxx-web
           securityContext:
             {}
-          image: "10.243.36.7:80/rtd/rtd-web:1.0.241"
+          image: "10.243.36.7:80/rtd/rtd-web:1.0.301"
           imagePullPolicy: Always
           ports:
             - name: http
               containerPort: 80
               protocol: TCP
           livenessProbe:
-            failureThreshold: 3
             httpGet:
               path: /
               port: 80
             initialDelaySeconds: 200
+            timeoutSeconds: 10
             periodSeconds: 10
             successThreshold: 1
-            timeoutSeconds: 10
-          readinessProbe:
             failureThreshold: 3
+          readinessProbe:
             httpGet:
               path: /
               port: 80
+            timeoutSeconds: 10
             periodSeconds: 10
             successThreshold: 1
-            timeoutSeconds: 10
+            failureThreshold: 3
 
           resources:
             limits:
@@ -719,27 +716,39 @@ spec:
             requests:
               cpu: "0.1"
               memory: 100Mi
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app.kubernetes.io/name
+                  operator: In
+                  values:
+                  - rtd-web
+              topologyKey: zone
+            weight: 100
 ---
 # Source: rtd/templates/deployment-workflow.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: rtd-workflow
+  name: rtdxxx-workflow
   labels:
     app.kubernetes.io/name: rtd-workflow
     app.kubernetes.io/component: rtd-workflow
     helm.sh/chart: rtd-0.1.0
-    app.kubernetes.io/instance: rtd
+    app.kubernetes.io/instance: rtdxxx
     app.kubernetes.io/version: "1.16.0"
     app.kubernetes.io/managed-by: Helm
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app.kubernetes.io/name: rtd-workflow
       app.kubernetes.io/component: rtd-workflow
       helm.sh/chart: rtd-0.1.0
-      app.kubernetes.io/instance: rtd
+      app.kubernetes.io/instance: rtdxxx
       app.kubernetes.io/version: "1.16.0"
       app.kubernetes.io/managed-by: Helm
   template:
@@ -748,20 +757,20 @@ spec:
         app.kubernetes.io/name: rtd-workflow
         app.kubernetes.io/component: rtd-workflow
         helm.sh/chart: rtd-0.1.0
-        app.kubernetes.io/instance: rtd
+        app.kubernetes.io/instance: rtdxxx
         app.kubernetes.io/version: "1.16.0"
         app.kubernetes.io/managed-by: Helm
     spec:
       imagePullSecrets:
         - name: myregistrykey
-      serviceAccountName: rtd
+      serviceAccountName: rtdxxx
       securityContext:
         {}
       containers:
-        - name: rtd-workflow
+        - name: rtdxxx-workflow
           securityContext:
             {}
-          image: "10.243.36.7:80/rtd/rtd-workflow:1.0.398"
+          image: "10.243.36.7:80/rtd/rtd-workflow:20211028.61060-dev"
           imagePullPolicy: Always
           ports:
             - name: http
@@ -771,19 +780,19 @@ spec:
             - name: SPRING_PROFILES_ACTIVE
               value: test
             - name: SERVER_PORT
-              value: "8080"
+              value: '8080'
             - name: DB_IP
-              value: 10.247.139.143
+              value: "10.247.139.143"
             - name: DB_PORT
               value: "15400"
             - name: DB_USER_NAME
-              value: RTD_DEV
+              value: "RTD"
             - name: DB_USER_PWD
-              value: Huawei@123
+              value: "ENC(F8Rj+7/4BZwgsgrc8F9IxZrgclWSfKL6)"
             - name: DB_USER_NAME_QUARTZ
               value: RTD_QUARZ
             - name: WORKFLOW_ENGINE_ENDPOINT
-              value: ruleengine.rtd-test:80
+              value: rtdxxx-ruleengine.rtd-test:80
             - name: DATASOURCE_AGENT_ENDPOINT
               value: rtd-datasource.rtd:80
             - name: FILE_SERVER_TYPE
@@ -791,48 +800,48 @@ spec:
             - name: FILE_PATH
               value: /usr/importFile
             - name: ZK_TIME_OUT
-              value: "40000"
+              value: '40000'
             - name: ZK_HOST
-              value: rtd-zookeeper
+              value: rtdxxx_
             - name: ZK_PORT
               value: "2181"
             - name: RTD_NODE_PATH
-              value: /rtd-dev
+              value: "rtd"
             - name: GRPC_ENDPOINT
               value: rtd-ruleengine
             - name: GRPC_ENDPOINT_PORT
-              value: "8999"
+              value: '8999'
             - name: ZOOKEEPER_ENABLE
               value: "true"
             - name: RAVENCAST_ENABLE
-              value: "true"
-            - name: RAVENCAST_IP
-              value: 10.247.4.8
-            - name: RAVENCAST_PORT
-              value: "10101"
+              value: 'true'
+            - name: RAVENCAST_HOSTS
+              value: "10.247.4.8:10101;10.247.4.8:10201"
             - name: RAVENCAST_SESSION
-              value: rtd_server
+              value: 
             - name: RAVENCAST_CHANNEL
-              value: /Rtd/NextDispatchRequest/v3
+              value: "/Rtd/Test/NextDispatchRequest"
+        
           livenessProbe:
-            failureThreshold: 3
             httpGet:
               path: /workflow/v1/health
               port: 8080
               scheme: HTTP
             initialDelaySeconds: 400
+            timeoutSeconds: 10
             periodSeconds: 10
             successThreshold: 1
-            timeoutSeconds: 10
-          readinessProbe:
             failureThreshold: 3
+        
+          readinessProbe:
             httpGet:
               path: /workflow/v1/health
               port: 8080
               scheme: HTTP
+            timeoutSeconds: 10
             periodSeconds: 10
             successThreshold: 1
-            timeoutSeconds: 10
+            failureThreshold: 3
 
           resources:
             limits:
@@ -841,22 +850,34 @@ spec:
             requests:
               cpu: 10m
               memory: 50Mi
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app.kubernetes.io/name
+                  operator: In
+                  values:
+                  - rtd-workflow
+              topologyKey: zone
+            weight: 100
 ---
 # Source: rtd/charts/zookeeper/templates/statefulset.yaml
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: rtd-zookeeper
+  name: rtdxxx-zookeeper
   namespace: rtd-test
   labels:
     app.kubernetes.io/name: zookeeper
     helm.sh/chart: zookeeper-7.4.3
-    app.kubernetes.io/instance: rtd
+    app.kubernetes.io/instance: rtdxxx
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: zookeeper
     role: zookeeper
 spec:
-  serviceName: rtd-zookeeper-headless
+  serviceName: rtdxxx-zookeeper-headless
   replicas: 3
   podManagementPolicy: Parallel
   updateStrategy:
@@ -864,15 +885,15 @@ spec:
   selector:
     matchLabels:
       app.kubernetes.io/name: zookeeper
-      app.kubernetes.io/instance: rtd
+      app.kubernetes.io/instance: rtdxxx
       app.kubernetes.io/component: zookeeper
   template:
     metadata:
-      name: rtd-zookeeper
+      name: rtdxxx-zookeeper
       labels:
         app.kubernetes.io/name: zookeeper
         helm.sh/chart: zookeeper-7.4.3
-        app.kubernetes.io/instance: rtd
+        app.kubernetes.io/instance: rtdxxx
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/component: zookeeper
     spec:
@@ -881,22 +902,17 @@ spec:
       securityContext:
         fsGroup: 1001
       affinity:
-        podAffinity:
-          
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
-            - podAffinityTerm:
-                labelSelector:
-                  matchLabels:
-                    app.kubernetes.io/name: zookeeper
-                    app.kubernetes.io/instance: rtd
-                    app.kubernetes.io/component: zookeeper
-                namespaces:
-                  - "rtd-test"
-                topologyKey: kubernetes.io/hostname
-              weight: 1
-        nodeAffinity:
-          
+          - podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app.kubernetes.io/name
+                  operator: In
+                  values:
+                  - zookeeper
+              topologyKey: zone
+            weight: 100
       containers:
         - name: zookeeper
           image: 10.243.36.7:80/rtd/zookeeper:3.7.0-debian-10-r127
@@ -957,7 +973,7 @@ spec:
             - name: ZOO_MAX_SESSION_TIMEOUT
               value: "40000"
             - name: ZOO_SERVERS
-              value: rtd-zookeeper-0.rtd-zookeeper-headless.rtd-test.svc.cluster.local:2888:3888::1 rtd-zookeeper-1.rtd-zookeeper-headless.rtd-test.svc.cluster.local:2888:3888::2 rtd-zookeeper-2.rtd-zookeeper-headless.rtd-test.svc.cluster.local:2888:3888::3 
+              value: rtdxxx-zookeeper-0.rtdxxx-zookeeper-headless.rtd-test.svc.cluster.local:2888:3888::1 rtdxxx-zookeeper-1.rtdxxx-zookeeper-headless.rtd-test.svc.cluster.local:2888:3888::2 rtdxxx-zookeeper-2.rtdxxx-zookeeper-headless.rtd-test.svc.cluster.local:2888:3888::3 
             - name: ZOO_ENABLE_AUTH
               value: "no"
             - name: ZOO_HEAP_SIZE
@@ -1016,7 +1032,7 @@ kind: IngressRoute
 metadata:
   annotations:
   generation: 1
-  name: rtd-ruleengine
+  name: rtdxxx-ruleengine
 spec:
   entryPoints:
     - web
@@ -1024,7 +1040,7 @@ spec:
     - kind: Rule
       match: Host(`rtd-test.fanli.inhuawei.com`)&&PathPrefix(`/ruleengine/`)
       services:
-        - name: rtd-ruleengine
+        - name: rtdxxx-ruleengine
           port: 80
 ---
 # Source: rtd/templates/ingressRouter-web.yaml
@@ -1033,7 +1049,7 @@ kind: IngressRoute
 metadata:
   annotations:
   generation: 1
-  name: rtd-web
+  name: rtdxxx-web
 spec:
   entryPoints:
     - web
@@ -1041,7 +1057,7 @@ spec:
     - kind: Rule
       match: Host(`rtd-test.fanli.inhuawei.com`)&&PathPrefix(`/`)
       services:
-        - name: rtd-web
+        - name: rtdxxx-web
           port: 80
 ---
 # Source: rtd/templates/ingressRouter-workflow.yaml
@@ -1050,7 +1066,7 @@ kind: IngressRoute
 metadata:
   annotations:
   generation: 1
-  name: rtd-workflow
+  name: rtdxxx-workflow
 spec:
   entryPoints:
     - web
@@ -1058,12 +1074,12 @@ spec:
     - kind: Rule
       match: Host(`rtd-test.fanli.inhuawei.com`)&&PathPrefix(`/workflow/`)
       services:
-        - name: rtd-workflow
+        - name: rtdxxx-workflow
           port: 80
 
 NOTES:
 1. Get the application URL by running these commands:
-  export POD_NAME=$(kubectl get pods --namespace rtd-test -l "app.kubernetes.io/name=rtd,app.kubernetes.io/instance=rtd" -o jsonpath="{.items[0].metadata.name}")
+  export POD_NAME=$(kubectl get pods --namespace rtd-test -l "app.kubernetes.io/name=rtd,app.kubernetes.io/instance=rtdxxx" -o jsonpath="{.items[0].metadata.name}")
   export CONTAINER_PORT=$(kubectl get pod --namespace rtd-test $POD_NAME -o jsonpath="{.spec.containers[0].ports[0].containerPort}")
   echo "Visit http://127.0.0.1:8080 to use your application"
   kubectl --namespace rtd-test port-forward $POD_NAME 8080:$CONTAINER_PORT
