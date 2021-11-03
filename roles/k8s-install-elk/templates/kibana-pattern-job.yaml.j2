@@ -49,7 +49,7 @@ data:
     done
 
     # 删除上一个月的pattern
-    index_pattern_ids=$(curl -XGET http://192.168.160.36:30001/api/saved_objects/_find?type=index-pattern | jq  -r --arg last_month $last_month '.saved_objects | .[] | select(.attributes.title | contains($last_month)) | .id')
+    index_pattern_ids=$(curl -XGET http://$kibana_host/api/saved_objects/_find?type=index-pattern | jq  -r --arg last_month $last_month '.saved_objects | .[] | select(.attributes.title | contains($last_month)) | .id')
     for index_pattern_id in $index_pattern_ids ; do
     curl -X DELETE -H "kbn-version: 7.13.2" http://$kibana_host/api/index_patterns/index_pattern/$index_pattern_id
     done
@@ -64,7 +64,7 @@ spec:
   successfulJobsHistoryLimit: 1
   concurrencyPolicy: Replace
   startingDeadlineSeconds: 20
-  schedule: "* */1 1-5 * *"
+  schedule: "*/10 * * * *"
   jobTemplate:
     spec:
       template:
