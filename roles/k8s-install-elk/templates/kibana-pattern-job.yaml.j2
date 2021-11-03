@@ -24,7 +24,7 @@ data:
     current_month=$(date '+%Y-%m')
     last_month=$(date +%Y-%m -d "$pattern_keep_months month ago")
     # 查询es的index,创建kibana的pattern
-    indices=$(curl http://$es_host/_cat/indices/log-*-$current_month-* | cut -d ' ' -f3)
+    indices=$(curl http://$es_host/_cat/indices/log-*$current_month* | cut -d ' ' -f3)
     for index in $indices;do
     index_prefix=${index%${current_month}*}
     pattern=$index_prefix$current_month-*
