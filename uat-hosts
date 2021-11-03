@@ -80,3 +80,7 @@ ravencast_tcphosts=192.168.160.205[7800],192.168.160.204[7800]
 ravencast_tcphosts=192.168.160.201[7800],192.168.160.200[7800]
 [ravencast-apc:vars]
 ravencast_tcphosts=192.168.160.211[7800],192.168.160.210[7800]
+
+[eap]
+192.168.161.225 ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com" host_name=eap-uat-2
+192.168.161.211 ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com" host_name=eap-uat-1
