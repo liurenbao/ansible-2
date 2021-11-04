@@ -28,7 +28,7 @@ spec:
             description: "Blackbox ping took more than 1s.  VALUE = {{ $value }}"
         - alert: BlackboxProbeHttpFailure
           expr: probe_http_status_code <= 199 OR probe_http_status_code >= 400
-          for: 0m
+          for: 1m
           labels:
             severity: critical
           annotations:
