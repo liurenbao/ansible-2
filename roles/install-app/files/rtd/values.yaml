@@ -6,16 +6,18 @@ rtd_common:
   #Host: rtd-test.fanli.inhuawei.com 
   zk_host_surfix: 'zookeeper'
   zk_port: '2181'
-  zk_node: 'rtd'
+  zk_node: '/rtd'
   zk_enable: 'true'
+  file_server_type: 'NAS'
 
 web:
-  replicaCount: 2
+  replicaCount: 1
   image:
     repository: 192.168.160.47:8888/full-auto/rtd/rtd-web
-    tag: "10.25-1"
+    tag: "11.4"
+    #repository: IP:port/full-auto-test/rtd-web
     #repository: 10.243.36.7:80/rtd/rtd-web
-    #tag: 1.0.301
+    #tag: 20211103.63444-dev 
     pullPolicy: Always
   PathPrefix: /
 
@@ -42,24 +44,21 @@ web:
 
   affinity:
     podAntiAffinity:
-      preferredDuringSchedulingIgnoredDuringExecution:
-      - weight: 100
-        podAffinityTerm:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        - topologyKey: kubernetes.io/hostname
           labelSelector:
             matchExpressions:
-            - key: app.kubernetes.io/name
-              operator: In
-              values:
-              - rtd-web
-          topologyKey: zone
-
+              - key: app.kubernetes.io/name
+                operator: In
+                values:
+                  - rtd-web
 workflow:
-  replicaCount: 2
+  replicaCount: 1
   image:
     repository: 192.168.160.47:8888/full-auto/rtd/rtd-workflow
-    tag: "10.25-1"
+    tag: "11.4"
     #repository: 10.243.36.7:80/rtd/rtd-workflow
-    #tag: 20211028.61060-dev
+    #tag: 20211103.63473-dev
     pullPolicy: Always
   PathPrefix: /workflow/
 
@@ -67,9 +66,9 @@ workflow:
     db_ip: 192.168.160.58
     #db_ip: 10.247.139.143
     db_port: 15400
-    db_user_name: 'RTD'
-    db_user_pwd:  "Huawei@123"
-    #db_user_pwd: "ENC(F8Rj+7/4BZwgsgrc8F9IxZrgclWSfKL6)"
+    db_user_name: 'rtd'
+    #db_user_pwd:  "Huawei@123"
+    db_user_pwd: "ENC(F8Rj+7/4BZwgsgrc8F9IxZrgclWSfKL6)"
     ravencast_hosts: 192.168.160.63:10101?fallbackToPrimary=true&pingTimeout=20000
     #ravencast_hosts: 10.247.4.8:10101;10.247.4.8:10201?fallbackToPrimary=true&pingTimeout=20000
     ravencast_session: rtd_server
@@ -91,24 +90,21 @@ workflow:
      
   affinity:
     podAntiAffinity:
-      preferredDuringSchedulingIgnoredDuringExecution:
-      - weight: 100
-        podAffinityTerm:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        - topologyKey: kubernetes.io/hostname
           labelSelector:
             matchExpressions:
-            - key: app.kubernetes.io/name
-              operator: In
-              values:
-              - rtd-workflow
-          topologyKey: zone
- 
+              - key: app.kubernetes.io/name
+                operator: In
+                values:
+                  - rtd-workflow
 ruleengine:
-  replicaCount: 2
+  replicaCount: 1
   image:
     repository: 192.168.160.47:8888/full-auto/rtd/ruleengine
-    tag: "10.25-1"
+    tag: "11.4"
     #repository: 10.243.36.7:80/rtd/ruleengine
-    #tag: 20211028.61338-develop
+    #tag: 20211103.63388-develop
     pullPolicy: Always
   PathPrefix: /ruleengine/
 
@@ -127,7 +123,7 @@ ruleengine:
   volumes:
      - name: rtd-data
        nfs:
-       # TODO: modify path and nfs server IP
+       ## TODO: modify path and nfs server IP
          path: /data01/rtd
          server: 192.168.163.158
   service:
@@ -139,25 +135,23 @@ ruleengine:
 
   affinity:
     podAntiAffinity:
-      preferredDuringSchedulingIgnoredDuringExecution:
-      - weight: 100
-        podAffinityTerm:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        - topologyKey: kubernetes.io/hostname
           labelSelector:
             matchExpressions:
-            - key: app.kubernetes.io/name
-              operator: In
-              values:
-              - rtd-ruleengine
-          topologyKey: zone
+              - key: app.kubernetes.io/name
+                operator: In
+                values:
+                  - rtd-ruleengine
 
 zookeeper:
   image:
     repository: 192.168.160.47:8888/full-auto/rtd/zk
-    tag: 3.7.0
+    tag: "3.7.0"
     #repository: 10.243.36.7:80/rtd/zookeeper
     #tag: 3.7.0-debian-10-r127
     pullPolicy: IfNotPresent
-    pullSecrets: []
+    pullSecrets: [name: harbor]
   persistence:
     # TODO: modify storageClass name for zk applying storage.
     storageClass: "nfs-storage"
@@ -170,17 +164,14 @@ zookeeper:
 
   affinity:
     podAntiAffinity:
-      preferredDuringSchedulingIgnoredDuringExecution:
-      - weight: 100
-        podAffinityTerm:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        - topologyKey: kubernetes.io/hostname
           labelSelector:
             matchExpressions:
-            - key: app.kubernetes.io/name
-              operator: In
-              values:
-              - zookeeper
-          topologyKey: zone
- 
+              - key: app.kubernetes.io/name
+                operator: In
+                values:
+                  - zookeeper 
 imagePullSecrets: [name: harbor]
  
 serviceAccount:

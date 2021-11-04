@@ -1,13 +1,15 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "rtd.fullname" . }}-ruleengine
+  name: {{ include "rtd.fullname" . }}-ruleengine-dc2
   labels:
+    zone: dc2
     {{- include "rtd.ruleengine.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.ruleengine.replicaCount }}
   selector:
     matchLabels:
+      zone: dc2
       {{- include "rtd.ruleengine.labels" . | nindent 6 }}
   template:
     metadata:
@@ -16,6 +18,7 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
+        zone: dc2
         {{- include "rtd.ruleengine.labels" . | nindent 8 }}
     spec:
       {{- with .Values.imagePullSecrets }}
@@ -33,11 +36,9 @@ spec:
           imagePullPolicy: {{ .Values.ruleengine.image.pullPolicy }}
           ports:
             - name: http
-              containerPort: 80
+              containerPort: 8999
               protocol: TCP
           env:
-            - name: SPRING_PROFILES_ACTIVE
-              value: dev
             - name: SERVER_PORT
               value: '8999'
             - name: ZK_ENABLE
@@ -57,15 +58,42 @@ spec:
             - name: DATA_FILE_PATH
               value: '/data/ruleengine/data'
 
-          {{- with .Values.ruleengine.livenessProbe }}
+          startupProbe:
+            exec:
+              command:
+                - /bin/grpc_health_probe
+                - '-addr=localhost:8999'
+            initialDelaySeconds: 20
+            timeoutSeconds: 1
+            periodSeconds: 10
+            successThreshold: 1
+            failureThreshold: 8
           livenessProbe:
-            {{- toYaml . | nindent 12}}
-          {{- end }}
-          {{- with .Values.ruleengine.readinessProbe }}
+            exec:
+              command:
+                - /bin/grpc_health_probe
+                - '-addr=localhost:8999'
+            initialDelaySeconds: 10
+            timeoutSeconds: 1
+            periodSeconds: 10
+            successThreshold: 1
+            failureThreshold: 3
           readinessProbe:
-            {{- toYaml . | nindent 12}}
-          {{- end }}
-
+            exec:
+              command:
+                - /bin/grpc_health_probe
+                - '-addr=localhost:8999'
+            initialDelaySeconds: 5
+            timeoutSeconds: 1
+            periodSeconds: 10
+            successThreshold: 1
+            failureThreshold: 3
+          lifecycle:
+            preStop:
+              exec:
+                command:
+                  - sleep
+                  - '40'
           resources:
             {{- toYaml .Values.ruleengine.resources | nindent 12 }}
 
@@ -79,10 +107,8 @@ spec:
         {{- toYaml . | nindent 12}}
       {{- end }}
 
-      {{- with .Values.nodeSelector }}
       nodeSelector:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
+        zone: dc2
       {{- with .Values.ruleengine.affinity }}
       affinity:
         {{- toYaml . | nindent 8 }}

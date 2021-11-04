@@ -1,13 +1,15 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "rtd.fullname" . }}-web
+  name: {{ include "rtd.fullname" . }}-web-dc2
   labels:
+    zone: dc2
     {{- include "rtd.web.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.web.replicaCount }}
   selector:
     matchLabels:
+      zone: dc2
       {{- include "rtd.web.labels" . | nindent 6 }}
   template:
     metadata:
@@ -16,6 +18,7 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
+        zone: dc2
         {{- include "rtd.web.labels" . | nindent 8 }}
     spec:
       {{- with .Values.imagePullSecrets }}
@@ -35,11 +38,19 @@ spec:
             - name: http
               containerPort: 80
               protocol: TCP
+          startupProbe :
+            httpGet:
+              path: /
+              port: 80
+            timeoutSeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            failureThreshold: 5
           livenessProbe:
             httpGet:
               path: /
               port: 80
-            initialDelaySeconds: 200
+            initialDelaySeconds: 20
             timeoutSeconds: 10
             periodSeconds: 10
             successThreshold: 1
@@ -52,21 +63,17 @@ spec:
             periodSeconds: 10
             successThreshold: 1
             failureThreshold: 3
-          {{- with .Values.web.livenessProbe }}
-          livenessProbe:
-            {{- toYaml . | nindent 12}}
-          {{- end }}
-          {{- with .Values.web.readinessProbe }}
-          readinessProbe:
-            {{- toYaml . | nindent 12}}
-          {{- end }}
-
+          lifecycle:
+            preStop:
+              exec:
+                command:
+                  - sleep
+                  - '40'
           resources:
             {{- toYaml .Values.web.resources | nindent 12 }}
-      {{- with .Values.nodeSelector }}
       nodeSelector:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
+        zone: dc2
+
       {{- with .Values.web.affinity }}
       affinity:
         {{- toYaml . | nindent 8 }}

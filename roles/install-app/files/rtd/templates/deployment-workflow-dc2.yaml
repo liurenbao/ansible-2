@@ -1,13 +1,15 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "rtd.fullname" . }}-workflow
+  name: {{ include "rtd.fullname" . }}-workflow-dc2
   labels:
     {{- include "rtd.workflow.labels" . | nindent 4 }}
+    zone: dc2
 spec:
   replicas: {{ .Values.workflow.replicaCount }}
   selector:
     matchLabels:
+      zone: dc2
       {{- include "rtd.workflow.labels" . | nindent 6 }}
   template:
     metadata:
@@ -16,6 +18,7 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
+        zone: dc2
         {{- include "rtd.workflow.labels" . | nindent 8 }}
     spec:
       {{- with .Values.imagePullSecrets }}
@@ -36,8 +39,6 @@ spec:
               containerPort: 80
               protocol: TCP
           env:
-            - name: SPRING_PROFILES_ACTIVE
-              value: test
             - name: SERVER_PORT
               value: '8080'
             - name: DB_IP
@@ -48,15 +49,9 @@ spec:
               value: {{ .Values.workflow.env.db_user_name | quote}}
             - name: DB_USER_PWD
               value: {{ .Values.workflow.env.db_user_pwd | quote}}
-            - name: DB_USER_NAME_QUARTZ
-              value: RTD_QUARZ
-            - name: WORKFLOW_ENGINE_ENDPOINT
-              value: {{ .Release.Name}}-ruleengine.{{ .Release.Namespace}}:80
-            - name: DATASOURCE_AGENT_ENDPOINT
-              value: rtd-datasource.rtd:80
             - name: FILE_SERVER_TYPE
               value: NAS
-            - name: FILE_PATH
+            - name: IMPORT_FILE_PATH
               value: /usr/importFile
             - name: ZK_TIME_OUT
               value: '40000'
@@ -64,13 +59,13 @@ spec:
               value: "{{ .Release.Name}}-{{ .Values.rtd_common.zk_host_surfix }}.{{ .Release.Namespace}}"
             - name: ZK_PORT
               value: {{ .Values.rtd_common.zk_port | quote}}
-            - name: RTD_NODE_PATH
+            - name: ZK_NODE
               value: {{ .Values.rtd_common.zk_node | quote}}
             - name: GRPC_ENDPOINT
               value: rtd-ruleengine
             - name: GRPC_ENDPOINT_PORT
               value: '8999'
-            - name: ZOOKEEPER_ENABLE
+            - name: ZK_ENABLE
               value: {{ .Values.rtd_common.zk_enable | quote}}
             - name: RAVENCAST_ENABLE
               value: 'true'
@@ -81,16 +76,25 @@ spec:
             - name: RAVENCAST_CHANNEL
               value: {{ .Values.workflow.env.ravencast_channel | quote}}
         
+          startupProbe:
+            httpGet:
+              path: /workflow/v1/health
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 20
+            timeoutSeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            failureThreshold: 8
           livenessProbe:
             httpGet:
               path: /workflow/v1/health
               port: 8080
               scheme: HTTP
-            initialDelaySeconds: 400
             timeoutSeconds: 10
             periodSeconds: 10
             successThreshold: 1
-            failureThreshold: 3
+            failureThreshold: 5
         
           readinessProbe:
             httpGet:
@@ -100,14 +104,17 @@ spec:
             timeoutSeconds: 10
             periodSeconds: 10
             successThreshold: 1
-            failureThreshold: 3
-
+            failureThreshold: 5
+          lifecycle:
+            preStop:
+              exec:
+                command:
+                  - sleep
+                  - '40'
           resources:
             {{- toYaml .Values.workflow.resources | nindent 12 }}
-      {{- with .Values.nodeSelector }}
       nodeSelector:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
+        zone: dc2
       {{- with .Values.workflow.affinity }}
       affinity:
         {{- toYaml . | nindent 8 }}

@@ -44,6 +44,7 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 Create a web Selector labels
 */}}
 {{- define "rtd.web.labels" -}}
+app:  {{ include "rtd.name" . }}-web
 app.kubernetes.io/name: {{ include "rtd.name" . }}-web
 app.kubernetes.io/component: rtd-web
 {{ include "rtd.common.labels" . }}
@@ -53,6 +54,7 @@ app.kubernetes.io/component: rtd-web
 Create a workflow Selector labels
 */}}
 {{- define "rtd.workflow.labels" -}}
+app:  {{ include "rtd.name" . }}-workflow
 app.kubernetes.io/name: {{ include "rtd.name" . }}-workflow
 app.kubernetes.io/component: rtd-workflow
 {{ include "rtd.common.labels" . }}
@@ -63,6 +65,7 @@ app.kubernetes.io/component: rtd-workflow
 Create a ruleengine Selector labels
 */}}
 {{- define "rtd.ruleengine.labels" -}}
+app:  {{ include "rtd.name" . }}-ruleengine
 app.kubernetes.io/name: {{ include "rtd.name" . }}-ruleengine
 app.kubernetes.io/component: rtd-ruleengine
 {{ include "rtd.common.labels" . }}
