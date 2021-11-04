@@ -19,6 +19,7 @@ receivers:
   - name: default
     email_configs:
       - to: tangjizhou@huawei.com
+      - to: mouyongde@huawei.com
 inhibit_rules:
   - source_match:
       alertname: KubeDeploymentReplicasMismatch
