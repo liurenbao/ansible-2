@@ -118,12 +118,12 @@ data:
     MES_PASSWORD_LOCK_COUNT=5
     
     #MES Cast Channel for External Systems
-    customer.MES2EAP.RC_CHANNEL = /DEV1/EAP
-    customer.MES2APC.RC_CHANNEL = /DEV1/APC
-    customer.MES2FDC.RC_CHANNEL = /DEV1/FDC
-    customer.MES2SPC.RC_CHANNEL = /DEV1/SPC
-    customer.MES2RTD.RC_CHANNEL = /DEV1/RTD
-    customer.MES2MES.RC_CHANNEL = /TST1/MESServer
+    customer.MES2EAP.RC_CHANNEL = /PROD/EAP
+    customer.MES2APC.RC_CHANNEL = /PROD/APC
+    customer.MES2FDC.RC_CHANNEL = /PROD/FDC
+    customer.MES2SPC.RC_CHANNEL = /PROD/SPC
+    customer.MES2RTD.RC_CHANNEL = /PROD/RTD
+    customer.MES2MES.RC_CHANNEL = /PROD/MESServer
     customer.MES2MESR.RC_CHANNEL = /MESR/MESServer
     
   quartz.properties: |

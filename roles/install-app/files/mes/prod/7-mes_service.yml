@@ -18,10 +18,11 @@ spec:
       # 服务端口号，spring boot的应用可以直接用默认的8080
       port: 8383
       targetPort: 8383
+      nodePort: 32700
+    - name: tcp
+      port: 29096
+      targetPort: 29096
   selector:
     # 此处不需要加zone的label，所以双机房可以共用一个service
     app: plantu-mes
-  ports:
-    # 应用的端口号，用于上方tcp探测
-    - port: 29096
   type: NodePort

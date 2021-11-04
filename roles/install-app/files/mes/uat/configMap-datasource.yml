@@ -11,7 +11,7 @@ data:
     maximumPoolSize=320
     minimumIdle=50
     autoCommit=false
-    connectionTimeout=30000
+    connectionTimeout=7000
     poolName=hikariDbPool
     connectionTestQuery=select 1
     idleTimeout=180000
