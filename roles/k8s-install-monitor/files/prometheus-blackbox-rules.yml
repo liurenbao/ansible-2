@@ -17,7 +17,7 @@ spec:
             severity: critical
           annotations:
             summary: Blackbox probe failed (instance {{ $labels.instance }})
-            description: "Probe failed, service down"
+            description: "Probe failed. Please check status of all service instances"
         - alert: BlackboxProbeSlowPing
           expr: avg_over_time(probe_icmp_duration_seconds[1m]) > 1
           for: 0m
@@ -59,18 +59,18 @@ spec:
             summary: Blackbox SSL certificate expired (instance {{ $labels.instance }})
             description: "SSL certificate has expired already. VALUE = {{ $value }}."
         - alert: BlackboxProbeSlowHttp
-          expr: avg_over_time(probe_http_duration_seconds[1m]) > 3
+          expr: avg_over_time(probe_http_duration_seconds[1m]) > 5
           for: 0m
           labels:
             severity: warning
           annotations:
             summary: Blackbox probe slow HTTP (instance {{ $labels.instance }})
-            description: "HTTP request took more than 3s. VALUE = {{ $value }}."
+            description: "HTTP request took more than 5s. VALUE = {{ $value }}."
         - alert: BlackboxSlowProbe
-          expr: avg_over_time(probe_duration_seconds[1m]) > 3
+          expr: avg_over_time(probe_duration_seconds[1m]) > 5
           for: 0m
           labels:
             severity: warning
           annotations:
             summary: Blackbox slow probe (instance {{ $labels.instance }})
-            description: "Blackbox probe took more than 3s to complete. VALUE = {{ $value }}."
+            description: "Blackbox probe took more than 5s to complete. VALUE = {{ $value }}."

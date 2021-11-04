@@ -1661,7 +1661,7 @@ spec:
             severity: critical
     - name: general.rules
       rules:
-        - alert: TargetDown
+        - alert: PrometheusTargetDown
           annotations:
             message: Targets scraped by prometheus are down.
           expr: up == 0
