@@ -37,7 +37,7 @@ stream {
   }
   server {
     listen 30000;
-    proxy_connect_timeout 1s;
+    proxy_connect_timeout 10ms;
     proxy_timeout 300s;
     proxy_pass k8s_dashboard;
   }

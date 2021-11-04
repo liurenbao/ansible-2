@@ -1,48 +1,36 @@
 upstream FR.com {
-    server 192.168.163.172:8080 max_fails=15 fail_timeout=300s;
-	keepalive 300;
-    check interval=2000 rise=5 fall=10 timeout=10000 type=http;
-    check_http_send "GET /webroot/decision/system/health HTTP/1.0\r\n\r\n";
-    check_http_expect_alive http_2xx http_3xx;
+    server 192.168.163.172:8080 max_fails=0;
 }
 
 upstream WBS.com {
-    server 192.168.163.172:38888 max_fails=15 fail_timeout=300s;
+    server 192.168.163.172:38888 max_fails=0;
     ip_hash;
 }
 server {
-    listen       80;
+    listen       38080;
     server_name  localhost;
     underscores_in_headers on;
-    location /status {
-        healthcheck_status html;
-    }
     location / {
         proxy_http_version 1.1;
         proxy_pass http://FR.com;
-        proxy_next_upstream http_500 http_502 http_503 http_504 http_403 http_404 http_429 error timeout invalid_header non_idempotent;
+        proxy_next_upstream_timeout 1s;
+        proxy_next_upstream http_502 http_503 http_429 error timeout invalid_header;
         proxy_redirect off;
         proxy_set_header Host $host:$server_port;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header Connection "";
-        proxy_connect_timeout    75;
         proxy_read_timeout       400;
         proxy_send_timeout       400;
     }
-
-    error_page   500 502 503 504  /50x.html;
-    location = /50x.html {
-        root   html;
-    }
 }
 server {
-    listen 38889;
+    listen 38888;
     server_name localhost;
     location / {
         proxy_http_version 1.1;
+        proxy_next_upstream_timeout 1s;
         proxy_pass http://WBS.com;
-        proxy_connect_timeout 75;
         proxy_read_timeout 400;
         proxy_send_timeout 400;
 	    proxy_set_header Upgrade $http_upgrade;
