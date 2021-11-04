@@ -8,7 +8,7 @@ data:
     app_config:
       # is_enable: 1
       app_workers: 32
-      app_group: /TST1/RMS
+      app_group: /UAT/RMS
       log_path: /opt/RMSServer_linux/Logs
       log_file_name: app.log
       db_log_file_name: app_db.log
@@ -16,7 +16,7 @@ data:
       log_encrypted: 0
     ui_service:
       # is_enable: 1
-      ui_srv_list: "{'/TST1/RMS1':'8100', '/TST1/RMS2':'8200'}"
+      ui_srv_list: "{'/UAT/RMS1':'8100', '/UAT/RMS2':'8200'}"
       ui_max_workers: 3
       tcp_max_conns: 20
       tcp_t3: 45
@@ -28,7 +28,7 @@ data:
       mq_host: 10.12.117.164:10101;10.12.117.165:10101?fallbackToPrimary=true&pingTimeout=20000
       mq_port: 10104
       mq_t3: 45
-      channel_rule: '/TST1/EAP/RMS/$EqpId'
+      channel_rule: '/UAT/EAP/RMS/$EqpId'
     smtp_setting:
       smtp_server: xxxx
       smtp_port: 25
@@ -45,7 +45,7 @@ data:
     app_config:
       # is_enable: 1
       app_workers: 32
-      app_group: /PRD1/RMS
+      app_group: /PROD/RMS
       log_path: /opt/RMSServer_linux/Logs
       log_file_name: app.log
       db_log_file_name: app_db.log
@@ -53,7 +53,7 @@ data:
       log_encrypted: 0
     ui_service:
       # is_enable: 1
-      ui_srv_list: "{'/PRD1/RMS1':'8100', '/PRD1/RMS2':'8200'}"
+      ui_srv_list: "{'/PROD/RMS1':'8100', '/PROD/RMS2':'8200'}"
       ui_max_workers: 3
       tcp_max_conns: 20
       tcp_t3: 45
@@ -65,7 +65,7 @@ data:
       mq_host: 10.12.107.201:10101;10.12.107.202:10101?fallbackToPrimary=true&pingTimeout=20000
       mq_port: 10104
       mq_t3: 45
-      channel_rule: '/PRD1/EAP/RMS/$EqpId'
+      channel_rule: '/PROD/EAP/RMS/$EqpId'
     smtp_setting:
       smtp_server: xxxx
       smtp_port: 25
