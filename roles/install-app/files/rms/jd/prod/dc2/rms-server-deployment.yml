@@ -104,40 +104,15 @@ spec:
           effect: NoExecute
           tolerationSeconds: 2
       initContainers:
-      - command:
-        - sysctl
-        - -w
-        - net.ipv4.tcp_keepalive_time=10
-        - net.ipv4.tcp_keepalive_probes=2
-        - net.ipv4.tcp_keepalive_intvl=5
-        image: 10.12.107.150:80/public/busybox:1.34
-        imagePullPolicy: IfNotPresent
-        name: setsysctl
-        resources: {}
-        securityContext:
-          privileged: true
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: rms-server
-  namespace: rms
-  annotations:
-    prometheus.io/http-probe: "true"
-    prometheus.io/http-probe-port: "8080"
-    prometheus.io/http-probe-path: "/viability"
-
-    prometheus.io/scrape: "true"
-    prometheus.io/port: '8080'
-    prometheus.io/scheme: "http"
-    prometheus.io/path: '/metrics'
-spec:
-  selector:
-    app: rms-server
-  ports:
-    - port: 8100
-      name: port1
-    - port: 8200
-      name: port2
-    - port: 8080
-      name: web
+        - command:
+            - sysctl
+            - -w
+            - net.ipv4.tcp_keepalive_time=10
+            - net.ipv4.tcp_keepalive_probes=2
+            - net.ipv4.tcp_keepalive_intvl=5
+          image: 10.12.107.150:80/public/busybox:1.34
+          imagePullPolicy: IfNotPresent
+          name: setsysctl
+          resources: { }
+          securityContext:
+            privileged: true
