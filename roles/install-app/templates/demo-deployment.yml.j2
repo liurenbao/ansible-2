@@ -10,7 +10,7 @@ metadata:
   namespace: test
 spec:
   selector:
-    matchLabels: {}
+    matchLabels: { }
   env:
     - name: TZ
       value: "Asia/Shanghai"
@@ -29,6 +29,7 @@ metadata:
   namespace: test
   labels:
     app: demo-monitoring
+    zone: dc1
 spec:
   replicas: 1
   template:
@@ -36,10 +37,23 @@ spec:
       name: demo-monitoring
       labels:
         app: demo-monitoring
+        zone: dc1
     spec:
+      nodeSelector:
+        zone: dc1
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - topologyKey: kubernetes.io/hostname
+              labelSelector:
+                matchExpressions:
+                  - key: app
+                    operator: In
+                    values:
+                      - demo-monitoring
       containers:
         - name: demo-monitoring
-          image: 192.168.160.47:8888/public/demo-monitoring:1.0
+          image: "{{ image_repository }}/public/demo-monitoring:1.0"
           imagePullPolicy: Always
           startupProbe:
             httpGet:
@@ -75,13 +89,13 @@ spec:
               memory: 200Mi
             limits:
               cpu: '2'
-              memory: 800Mi
+              memory: 500Mi
           lifecycle:
             preStop:
               exec:
                 command: [ "sleep", "30" ]
       restartPolicy: Always
-      terminationGracePeriodSeconds: 120
+      terminationGracePeriodSeconds: 40
       tolerations:
         - key: node.kubernetes.io/not-ready
           operator: Exists
@@ -94,6 +108,7 @@ spec:
   selector:
     matchLabels:
       app: demo-monitoring
+      zone: dc1
 ---
 apiVersion: v1
 kind: Service
@@ -101,6 +116,7 @@ metadata:
   name: demo-monitoring
   namespace: test
   annotations:
+    maintainer: "tangjizhou@huawei.com"
     prometheus.io/tcp-probe: "true"
     prometheus.io/http-probe: "true"
     prometheus.io/http-probe-port: "8080"
