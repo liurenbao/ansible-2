@@ -39,6 +39,9 @@ stringData:
         - action: replace
           source_labels: [ __meta_kubernetes_endpoint_node_name ]
           target_label: nodename
+        - action: replace
+          source_labels: [ __meta_kubernetes_service_annotation_maintainer ]
+          target_label: maintainer
       metric_relabel_configs:
         - action: replace
           source_labels: [ nodename, instance ]
@@ -78,6 +81,9 @@ stringData:
           target_label: namespace
         - source_labels: [ __meta_kubernetes_service_name ]
           target_label: service
+        - action: replace
+          source_labels: [ __meta_kubernetes_service_annotation_maintainer ]
+          target_label: maintainer
       metric_relabel_configs:
         - action: labeldrop
           regex: __meta_kubernetes_.+
@@ -106,6 +112,9 @@ stringData:
           target_label: namespace
         - source_labels: [ __meta_kubernetes_service_name ]
           target_label: service
+        - action: replace
+          source_labels: [ __meta_kubernetes_service_annotation_maintainer ]
+          target_label: maintainer
       metric_relabel_configs:
         - action: labeldrop
           regex: __meta_kubernetes_.+
