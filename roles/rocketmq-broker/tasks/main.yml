@@ -1,8 +1,7 @@
 - name: create dirs
-  shell: |
-    mkdir -p {{ rocketmq_root_dir }}
-    mkdir -p {{ rocketmq_root_dir }}/logs
-    mkdir -p {{ rocketmq_root_dir }}/conf/2m-2s-sync
+  file:
+    path: "{{ rocketmq_root_dir }}"
+    state: directory
 
 - name: send rocketmq to remote
   unarchive:
@@ -17,13 +16,6 @@
     src: broker-{{ role }}.properties.j2
     dest: "{{ rocketmq_root_dir }}/conf/2m-2s-sync/{{ broker_name }}.properties"
 
-- name: replace rocketmq manager script
-  template:
-    src: rmq-tools.sh.j2
-    dest: "{{ rocketmq_root_dir }}/bin/rmq-tools.sh"
-    owner: "{{ rocketmq_user }}"
-    mode: '0755'
-
 - name: set mq env conf
   lineinfile:
     dest: /etc/profile
@@ -36,11 +28,6 @@
 - name: enable profile
   shell: source /etc/profile
 
-- name: rotate rockemq logs
-  template:
-    src: rocketmq.j2
-    dest: /etc/logrotate.d/rocketmq
-
 - name: remove rocketmq logs
   shell: rm -rf {{ rocketmq_root_dir }}/logs
 
@@ -49,40 +36,30 @@
     path: '{{ rocketmq_root_dir }}/logs'
     state: directory
 
-- name: create rocketmq log file
-  file:
-    path: '{{ rocketmq_root_dir }}/logs/{{ broker_name }}.log'
-    state: touch
+- name: list logback conf files
+  find:
+    paths:
+      - "{{ rocketmq_root_dir }}/conf"
+    patterns:
+      - "logback*.xml"
+  register: logback_conf
 
-- name: copy auto start shell
+- name: replace log path
+  replace:
+    path: "{{ item.path }}"
+    regexp: "\\$\\{user.home\\}"
+    replace: "{{ rocketmq_root_dir }}"
+  with_items:
+    - "{{ logback_conf.files }}"
+
+- name: copy rocketmq unit service
   template:
-    src: rocketmq-cron.sh.j2
-    dest: '{{ rocketmq_root_dir }}/bin/rocketmq-cron.sh'
-    mode: 0755
+    src: rocketmq.service.j2
+    dest: /usr/lib/systemd/system/rocketmq.service
 
-- name: mq-user permission
-  file:
-    path: '{{ rocketmq_root_dir }}'
-    owner: '{{ rocketmq_user }}'
-    group: '{{ docker_gid }}'
-    recurse: yes
-
-- name: start mq
-  become: yes
-  become_user: "{{ rocketmq_user }}"
-  shell: "./rmq-tools.sh {{ broker_name }} restart"
-  args:
-    chdir: '{{ rocketmq_root_dir }}/bin'
-
-- name: add auto start rocketmq when bootstrap
-  lineinfile:
-    line: "{{ rocketmq_root_dir }}/bin/rmq-tools.sh {{ broker_name }} start"
-    path: /etc/rc.d/rc.local
-    state: absent
-
-- name: add cron job
-  cron:
-    name: 'rocketmq'
-    user: '{{ rocketmq_user }}'
-    minute: '*/1'
-    job: '{{ rocketmq_root_dir }}/bin/rocketmq-cron.sh'
+- name: start rocketmq unit service
+  systemd:
+    name: rocketmq
+    daemon_reload: yes
+    enabled: yes
+    state: restarted

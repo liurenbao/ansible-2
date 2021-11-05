@@ -2,10 +2,10 @@
 
 
 [k8s-master-init]
-192.168.160.121	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name=k8s-uat-master-1  MASTER_BACKUP=MASTER	label="zone=dc1"
+192.168.160.121	ansible_ssh_user=root	ansible_ssh_pass="mouyongde123.."	host_name=k8s-uat-master-1  MASTER_BACKUP=MASTER	label="zone=dc1"
 [k8s-master-join]
-192.168.160.123	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name=k8s-uat-master-2  MASTER_BACKUP=BACKUP	label="zone=dc2"
-192.168.160.122	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name=k8s-uat-master-1  MASTER_BACKUP=BACKUP	label="zone=dc2"
+192.168.160.123	ansible_ssh_user=root	ansible_ssh_pass="mouyongde123.."	host_name=k8s-uat-master-2  MASTER_BACKUP=BACKUP	label="zone=dc2"
+192.168.160.122	ansible_ssh_user=root	ansible_ssh_pass="mouyongde123.."	host_name=k8s-uat-master-1  MASTER_BACKUP=BACKUP	label="zone=dc2"
 [k8s-worker]
 192.168.163.42  ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name=k8s-uat-worker-10 label="zone=dc1"
 192.168.163.15  ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name=k8s-uat-worker-9  label="zone=dc1"

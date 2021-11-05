@@ -1,18 +1,12 @@
 - name: create dirs
   file:
-    path: '{{ rocketmq_root_dir }}/logs'
+    path: "{{ rocketmq_root_dir }}"
     state: directory
 
 - name: send rocketmq to remote
   unarchive:
     src: "{{ rocketmq_package_dir }}/rocketmq-all-4.7.1-bin-release.tar.gz"
     dest: "{{ rocketmq_root_dir }}"
-
-- name: replace rocketmq manager script
-  template:
-    src: rmq-tools.sh.j2
-    dest: "{{ rocketmq_root_dir }}/bin/rmq-tools.sh"
-    mode: 0755
 
 - name: set mq env conf
   lineinfile:
@@ -26,39 +20,38 @@
 - name: enable profile
   shell: source /etc/profile
 
-- name: copy auto start shell
-  template:
-    src: rocketmq-cron.sh.j2
-    dest: '{{ rocketmq_root_dir }}/bin/rocketmq-cron.sh'
-    mode: 0755
+- name: remove rocketmq logs
+  shell: rm -rf {{ rocketmq_root_dir }}/logs
 
-- name: mq-user permission
+- name: create rocketmq log dir
   file:
-    path: '{{ rocketmq_root_dir }}'
-    owner: '{{ rocketmq_user }}'
-    group: '{{ docker_gid }}'
-    recurse: yes
+    path: '{{ rocketmq_root_dir }}/logs'
+    state: directory
 
-- name: rotate rockemq logs
+- name: list logback conf files
+  find:
+    paths:
+      - "{{ rocketmq_root_dir }}/conf"
+    patterns:
+      - "logback*.xml"
+  register: logback_conf
+
+- name: replace log path
+  replace:
+    path: "{{ item.path }}"
+    regexp: "\\$\\{user.home\\}"
+    replace: "{{ rocketmq_root_dir }}"
+  with_items:
+    - "{{ logback_conf.files }}"
+
+- name: copy rocketmq unit service
   template:
-    src: rocketmq.j2
-    dest: /etc/logrotate.d/rocketmq
+    src: rocketmq.service.j2
+    dest: /usr/lib/systemd/system/rocketmq.service
 
-- name: start mq
-  become: yes
-  become_user: "{{ rocketmq_user }}"
-  shell: "{{ rocketmq_root_dir }}/bin/rmq-tools.sh namesrv restart"
-
-- name: add auto start rocketmq namesrv when bootstrap
-  lineinfile:
-    line: "{{ rocketmq_root_dir }}/bin/rmq-tools.sh namesrv start"
-    path: /etc/rc.d/rc.local
-    state: present
-    mode: 0774
-
-- name: add cron job
-  cron:
-    name: 'rocketmq-namesrv'
-    user: '{{ rocketmq_user }}'
-    minute: '*/1'
-    job: '{{ rocketmq_root_dir }}/bin/rocketmq-cron.sh'
+- name: start rocketmq unit service
+  systemd:
+    name: rocketmq
+    daemon_reload: yes
+    enabled: yes
+    state: restarted

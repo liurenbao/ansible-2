@@ -5,7 +5,7 @@
 - import_playbook: playbook/change-network.yml
 - import_playbook: playbook/install-software.yml
 - import_playbook: playbook/install-docker.yml
-#- import_playbook: playbook/install-harbor.yml
+- import_playbook: playbook/install-harbor.yml
 - import_playbook: playbook/install-nginx.yml
 - import_playbook: playbook/install-kubernetes.yml
 - import_playbook: playbook/install-kubernetes-component.yml
@@ -19,5 +19,4 @@
 - import_playbook: playbook/install-rocketmq.yml
 - import_playbook: playbook/install-ravencast.yml
 - import_playbook: playbook/install-node-exporter.yml
-- import_playbook: playbook/install-process-exporter.yml
 - import_playbook: playbook/collect-install-result.yml

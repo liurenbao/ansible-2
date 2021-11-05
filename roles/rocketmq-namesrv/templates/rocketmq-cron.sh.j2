@@ -1,9 +1,0 @@
-#!/bin/sh
-RMQ_DIR="{{ rocketmq_root_dir }}"
-RMQ_BIN="${RMQ_DIR}/bin"
-NPID=`ps ax | grep -i 'org.apache.rocketmq.namesrv.NamesrvStartup' |grep java | grep -v grep | awk '{print $1}'`
-if [[ -n $NPID ]]; then
-  echo "Rocketmq already started"
-else
-  ${RMQ_BIN}/rmq-tools.sh namesrv start
-fi
