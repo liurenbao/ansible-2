@@ -39,11 +39,12 @@
 192.168.160.219	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name=rocketmq-master-pirun-1	broker_name=broker-a
 
 [rocketmq-slave]
-192.168.160.216	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name=rocketmq-slave-pirun-2	broker_name=broker-b-s
-192.168.160.217	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name=rocketmq-slave-pirun-1	broker_name=broker-a-s
+192.168.160.216	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name=rocketmq-slave-pirun-2	broker_name=broker-b
+192.168.160.217	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name=rocketmq-slave-pirun-1	broker_name=broker-a
 
 [nginx]
-
+192.168.160.137 ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"   host_name=nginx-pirun-2 MASTER_BACKUP=MASTER
+192.168.160.138 ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"   host_name=nginx-pirun-1 MASTER_BACKUP=BACKUP
 [es]
 192.168.160.226	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name=es-pirun-6
 192.168.160.227	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name=es-pirun-5

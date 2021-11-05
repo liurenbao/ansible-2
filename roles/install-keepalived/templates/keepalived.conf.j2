@@ -14,8 +14,8 @@ vrrp_script health_check {
 
 vrrp_instance VI_1 {
     state {{ MASTER_BACKUP }}
-{% for ip in keepalived_vrrp_instance_interface %}
-    interface {{ ip }}
+{% for interface in keepalived_vrrp_instance_interface %}
+    interface {{ interface }}
 {% endfor %}
     virtual_router_id {{ keepalived_virtual_router_id }}
     # {{ ansible_ssh_host.split('.')[3] }}
