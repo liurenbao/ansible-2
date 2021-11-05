@@ -1,3 +1,14 @@
+- name: timedatectl set-timezone Asia/Shanghai
+  shell: timedatectl set-timezone Asia/Shanghai
+
+- name: date
+  shell: date
+  register: date_value
+
+- name: show date
+  debug:
+    msg: "{{ date_value.stdout }}"
+
 - name: yum install ntp -y
   shell: yum install ntp -y
 
@@ -20,8 +31,11 @@
 - name: ntpdate  ntp-server
   shell: ntpdate  {{ ntp_server }}
 
-- name: service ntpd start/stop/restart
-  shell: service ntpd start
+- name: service ntpd start & enable
+  systemd:
+    name: ntpd
+    state: restarted
+    enabled: yes
 
 - name: add auto start ntp when bootstrap
   lineinfile:
