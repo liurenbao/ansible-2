@@ -92,9 +92,3 @@
     name: "docker clean"
     special_time: "monthly"
     job: "docker system prune -af"
-
-- name: add cim user to docker group
-  user:
-    name: '{{ cim_ops_user }}'
-    groups: docker
-    append: yes
