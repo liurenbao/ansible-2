@@ -21,7 +21,6 @@
         path: "{{ rocketmq_root_dir }}/bin/rmq-tools.sh"
       register: rocketmq_tools
     - name: remove rocketmq namesrv
-      become_user: "{{ rocketmq_user }}"
       when: rocketmq_tools.stat.exists == true
       shell: "{{ rocketmq_root_dir }}/bin/rmq-tools.sh namesrv stop"
 
@@ -36,7 +35,6 @@
       register: rocketmq_tools
     - name: remove rocketmq broker
       when: rocketmq_tools.stat.exists == true
-      become_user: "{{ rocketmq_user }}"
       shell: "{{ rocketmq_root_dir }}/bin/rmq-tools.sh {{ broker_name }} stop"
 
 - name: remove rocketmq user
@@ -44,13 +42,6 @@
   hosts:
     - rocketmq-namesrv
     - rocketmq-broker
-  tasks:
-    - name: wait for rocketmq process down
-      shell: sleep 10
-    - name: remove rocketmq user
-      user:
-        name: "{{ rocketmq_user }}"
-        state: absent
 
 - name: remove rocketmq dirs
   gather_facts: false

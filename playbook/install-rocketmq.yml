@@ -24,12 +24,6 @@
     - rocketmq-broker
   roles:
     - install-java
-  tasks:
-    - name: create rocketmq user
-      user:
-        name: "{{ rocketmq_user }}"
-        password: "{{ rocketmq_user_pass }}"
-        state: present
 
 - name: install rocketmq namesrv
   gather_facts: false
@@ -47,6 +41,7 @@
   gather_facts: false
   hosts: rocketmq-console
   roles:
+    - install-docker
     - rocketmq-console
 
 - name: create topic
