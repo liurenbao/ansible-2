@@ -1,0 +1,15 @@
+- name: check filebeat installed
+  stat:
+    path: /etc/filebeat/filebeat.yml
+  register: filebeat_conf
+
+- name: overide filebeat conf
+  template:
+    src: filebeat.yml.j2
+    dest: /etc/filebeat/filebeat.yml
+
+- name: restart filebeat
+  systemd:
+    name: filebeat
+    state: restarted
+    enabled: yes

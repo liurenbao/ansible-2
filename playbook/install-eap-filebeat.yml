@@ -1,0 +1,6 @@
+- name: install eap filebeat
+  hosts: eap
+  gather_facts: false
+  roles:
+    - install-filebeat
+    - install-eap-filbeat

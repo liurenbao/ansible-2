@@ -1,6 +1,7 @@
 - import_playbook: playbook/copy-ssh-id.yml
 - import_playbook: playbook/change-hostname.yml
 - import_playbook: playbook/change-sysconf.yml
+- import_playbook: playbook/install-yum.yml
 - import_playbook: playbook/install-time.yml
 # fixme 注意修改网络配置
 - import_playbook: playbook/change-network.yml
