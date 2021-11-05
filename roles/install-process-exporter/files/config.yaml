@@ -1,4 +1,0 @@
-process_names:
-  - name: "{{.Matches}}"
-    cmdline:
-      - 'java'
