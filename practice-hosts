@@ -1,34 +1,35 @@
 [harbor]
-
+192.168.163.21	host_name=harbor-drill-1	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com	MASTER_BACKUP=MASTER
+192.168.163.195	host_name=harbor-drill-2	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com	MASTER_BACKUP=BACKUP
 [rocketmq-console]
-192.168.163.192	host_name=rocketmq-namesrv-drill-2	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com
+192.168.163.109	host_name=rocketmq-namesrv-drill-1	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com
 [rocketmq-namesrv]
-192.168.163.192	host_name=rocketmq-namesrv-drill-2	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com
-192.168.163.214	host_name=rocketmq-namesrv-drill-1	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com
+192.168.163.63	host_name=rocketmq-namesrv-drill-2	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com
+192.168.163.109	host_name=rocketmq-namesrv-drill-1	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com
 [rocketmq-broker]
-192.168.163.227	host_name=rocketmq-master-drill-2	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com	broker_name=broker-a role=master
-192.168.163.207	host_name=rocketmq-master-drill-1	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com	broker_name=broker-b role=master
-192.168.163.220	host_name=rocketmq-slave-drill-2	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com	broker_name=broker-a role=slave
-192.168.163.229	host_name=rocketmq-slave-drill-1	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com	broker_name=broker-b role=slave
+192.168.163.99	host_name=rocketmq-slave-drill-2	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com	broker_name=broker-a
+192.168.163.70	host_name=rocketmq-slave-drill-1	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com	broker_name=broker-b
+192.168.163.90	host_name=rocketmq-master-drill-2	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com	broker_name=broker-a
+192.168.163.64	host_name=rocketmq-master-drill-1	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com	broker_name=broker-b
 [redis]
-192.168.163.212	host_name=redis-drill-6	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com
-192.168.163.232	host_name=redis-drill-5	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com
-192.168.163.190	host_name=redis-drill-4	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com
-192.168.163.208	host_name=redis-drill-3	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com
-192.168.163.231	host_name=redis-drill-2	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com
-192.168.163.193	host_name=redis-drill-1	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com
+192.168.163.108	host_name=redis-drill-6	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com
+192.168.163.25	host_name=redis-drill-5	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com
+192.168.163.84	host_name=redis-drill-4	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com
+192.168.163.76	host_name=redis-drill-3	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com
+192.168.163.74	host_name=redis-drill-2	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com
+192.168.163.80	host_name=redis-drill-1	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com
 [ravencast-mes]
-192.168.163.206	host_name=ravencast-mes-drill-2	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com
-192.168.163.215	host_name=ravencast-mes-drill-1	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com
+192.168.163.81	host_name=ravencast-mes-drill-2	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com
+192.168.163.107	host_name=ravencast-mes-drill-1	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com
 [ravencast-fdc]
-192.168.163.218	host_name=ravencast-fdc-drill-2	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com
-192.168.163.168	host_name=ravencast-fdc-drill-1	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com
+192.168.163.60	host_name=ravencast-fdc-drill-2	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com
+192.168.163.112	host_name=ravencast-fdc-drill-1	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com
 [ravencast-eis]
-192.168.163.174	host_name=ravencast-eis-drill-2	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com
-192.168.163.182	host_name=ravencast-eis-drill-1	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com
+192.168.163.142	host_name=ravencast-eis-drill-2	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com
+192.168.163.27	host_name=ravencast-eis-drill-1	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com
 [ravencast-apc]
-192.168.163.152	host_name=ravencast-apc-drill-2	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com
-192.168.163.153	host_name=ravencast-apc-drill-1	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com
+192.168.163.61	host_name=ravencast-apc-drill-2	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com
+192.168.163.118	host_name=ravencast-apc-drill-1	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com
 [ravencast-mes:vars]
 ravencast_tcphosts=192.168.163.206[7800],192.168.163.215[7800]
 [ravencast-fdc:vars]
@@ -38,38 +39,39 @@ ravencast_tcphosts=192.168.163.174[7800],192.168.163.182[7800]
 [ravencast-apc:vars]
 ravencast_tcphosts=192.168.163.152[7800],192.168.163.153[7800]
 [nginx]
-192.168.160.43	host_name=nginx-drill-2	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com	MASTER_BACKUP=BACKUP
-192.168.160.20	host_name=nginx-drill-1	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com	MASTER_BACKUP=MASTER
+192.168.163.97	host_name=nginx-drill-2	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com	MASTER_BACKUP=BACKUP
+192.168.163.129	host_name=nginx-drill-1	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com	MASTER_BACKUP=MASTER
 [nas]
-192.168.163.158	host_name=nas-drill	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com
+192.168.163.73	host_name=nas-drill	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com
 [kafka]
-192.168.163.186	host_name=kafka-drill-3	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com
-192.168.163.219	host_name=kafka-drill-2	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com
-192.168.163.228	host_name=kafka-drill-1	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com
+192.168.163.126	host_name=kafka-drill-3	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com
+192.168.163.62	host_name=kafka-drill-2	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com
+192.168.163.116	host_name=kafka-drill-1	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com
 [k8s-worker]
-192.168.163.224	host_name=k8s-worker-drill-7	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com	label="zone=dc1"
-192.168.163.210	host_name=k8s-worker-drill-6	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com	label="zone=dc1"
-192.168.163.234	host_name=k8s-worker-drill-5	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com	label="zone=dc1"
-192.168.163.216	host_name=k8s-worker-drill-4	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com	label="zone=dc2"
-192.168.163.205	host_name=k8s-worker-drill-3	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com	label="zone=dc2"
-192.168.163.233	host_name=k8s-worker-drill-2	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com	label="zone=dc2"
-192.168.163.200	host_name=k8s-worker-drill-1	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com	label="zone=dc2"
+192.168.163.85	host_name=k8s-worker-drill-7	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com	label="zone=dc1"
+192.168.163.91	host_name=k8s-worker-drill-6	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com	label="zone=dc1"
+192.168.163.93	host_name=k8s-worker-drill-5	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com	label="zone=dc1"
+192.168.163.104	host_name=k8s-worker-drill-4	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com	label="zone=dc2"
+192.168.163.1	host_name=k8s-worker-drill-3	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com	label="zone=dc2"
+192.168.163.98	host_name=k8s-worker-drill-2	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com	label="zone=dc2"
+192.168.163.65	host_name=k8s-worker-drill-1	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com	label="zone=dc2"
 [k8s-master-init]
-192.168.163.223	host_name=k8s-master-drill-3	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com	MASTER_BACKUP=MASTER	label="zone=dc1"
+192.168.163.58	host_name=k8s-master-drill-3	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com	MASTER_BACKUP=MASTER	label="zone=dc1"
 [k8s-master-join]
-192.168.163.221	host_name=k8s-master-drill-2	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com	MASTER_BACKUP=BACKUP	label="zone=dc2"
-192.168.163.198	host_name=k8s-master-drill-1	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com	MASTER_BACKUP=BACKUP	label="zone=dc2"
+192.168.163.57	host_name=k8s-master-drill-2	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com	MASTER_BACKUP=BACKUP	label="zone=dc2"
+192.168.163.101	host_name=k8s-master-drill-1	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com	MASTER_BACKUP=BACKUP	label="zone=dc2"
 [es]
-192.168.163.162	host_name=es-drill-6	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com
-192.168.163.170	host_name=es-drill-5	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com
-192.168.163.159	host_name=es-drill-4	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com
-192.168.163.164	host_name=es-drill-3	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com
-192.168.163.145	host_name=es-drill-2	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com
-192.168.163.166	host_name=es-drill-1	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com
+192.168.163.75	host_name=es-drill-6	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com
+192.168.163.77	host_name=es-drill-5	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com
+192.168.163.83	host_name=es-drill-4	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com
+192.168.163.100	host_name=es-drill-3	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com
+192.168.163.95	host_name=es-drill-2	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com
+192.168.163.79	host_name=es-drill-1	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com
 
 [eap]
-192.168.163.61  ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name=eap-drill-5
-192.168.163.163 ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name=eap-drill-4
-192.168.163.180 ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name=eap-drill-3
-192.168.163.160 ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name=eap-drill-2
-192.168.163.156 ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name=eap-drill-1
+192.168.163.87	host_name=eap-drill-1	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com
+192.168.163.88	host_name=eap-drill-2	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com
+192.168.163.78	host_name=eap-drill-3	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com
+192.168.163.96	host_name=eap-drill-4	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com
+192.168.163.105	host_name=eap-drill-5	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com
+192.168.163.92	host_name=eap-drill-6	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com
