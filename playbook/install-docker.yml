@@ -1,5 +1,14 @@
 - name: install docker
   gather_facts: false
-  hosts: all
+  hosts:
+    - harbor
+    - k8s-master-init
+    - k8s-master-join
+    - k8s-worker
+    - rocketmq-console
+    - nginx
+    - es
+    - kafka
+    - redis
   roles:
     - install-docker
