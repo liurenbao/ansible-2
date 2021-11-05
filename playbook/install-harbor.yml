@@ -19,7 +19,7 @@
     harbor_hosts: "{{groups['harbor']|join(',')}}"
   tasks:
     - name: copy harbor
-      shell: "scp -r {{ harbor_tar }} {{ item }}:{{ harbor_root_dir }}"
+      shell: "scp -r {{ harbor_tar }} {{ item }}:{{ harbor_root_dir }}/harbor.tar.gz"
       with_items: '{{ harbor_hosts.split(",") }}'
 
 - name: install harbor vip
