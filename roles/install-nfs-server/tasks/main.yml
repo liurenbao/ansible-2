@@ -20,6 +20,11 @@
     firewall-cmd --reload
   when: firewalld.status.ActiveState == 'active'
 
+- name: eusure nfs root dir exist
+  file:
+    path: '{{ nfs_root_dir }}'
+    state: directory
+
 - name: config nfs permission
   lineinfile:
     path: /etc/exports
