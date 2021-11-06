@@ -1,25 +1,31 @@
+- name: disable firewalld
+  systemd:
+    name: firewalld
+    state: stopped
+    enabled: no
+
 - name: close selinux
-  shell: /sbin/setenforce 0
-  ignore_errors: True
+  shell: setenforce 0 || true
 
-- name: sed selinux
-  shell: sed -i '/^SELINUX=/s/enforcing/disabled/' /etc/selinux/config
-
-- name: close firewalld
-  shell: systemctl stop firewalld &&  systemctl disable firewalld
+- name: disable selinux
+  lineinfile:
+    state: present
+    path: /etc/selinux/config
+    regexp: '^SELINUX='
+    line: SELINUX=disabled
 
 - name: rm -rf /tmp/keepalived
   shell: rm -rf /tmp/keepalived
 
 - name: mkdir /tmp/keepalived
   shell: mkdir -p /tmp/keepalived
-  
+
 - name: cp keepalived
   copy:
     src: '{{ package_dir }}/keepalived/'
     dest: /tmp/keepalived/
 
-- name: install keepalived 
+- name: install keepalived
   shell: yum localinstall -y /tmp/keepalived/*.rpm
 
 - name: replace keepalived.conf

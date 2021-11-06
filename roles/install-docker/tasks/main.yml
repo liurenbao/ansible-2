@@ -18,10 +18,10 @@
   shell: source /etc/profile
 
 - name: disable firewalld
-  shell: systemctl stop firewalld
-
-- name: disable firewalld
-  shell: systemctl disable firewalld
+  systemd:
+    name: firewalld
+    state: stopped
+    enabled: no
 
 - name: disable firewalld
   shell: iptables -F && iptables -X && iptables -F -t nat && iptables -X -t nat && iptables -P FORWARD ACCEPT
