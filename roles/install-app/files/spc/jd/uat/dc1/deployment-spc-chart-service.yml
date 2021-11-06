@@ -47,6 +47,8 @@ spec:
         app: spc-chart-service
         zone: dc1
     spec:
+      imagePullSecrets:
+        - name: harbor
       hostNetwork: false
       tolerations:
         - key: "node.kubernetes.io/unreachable"

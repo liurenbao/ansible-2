@@ -49,6 +49,8 @@ spec:
         app: spc-ui-service
         zone: dc2
     spec:
+      imagePullSecrets:
+        - name: harbor
       hostNetwork: false
       tolerations:
         - key: "node.kubernetes.io/unreachable"

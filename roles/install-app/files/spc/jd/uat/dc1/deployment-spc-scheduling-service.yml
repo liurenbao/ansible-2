@@ -60,6 +60,8 @@ spec:
         app: spc-scheduling-service
         zone: dc1
     spec:
+      imagePullSecrets:
+        - name: harbor
       hostNetwork: false
       tolerations:
         - key: "node.kubernetes.io/unreachable"

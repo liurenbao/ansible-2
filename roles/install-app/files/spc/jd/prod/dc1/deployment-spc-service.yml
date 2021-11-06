@@ -78,6 +78,8 @@ spec:
         app: spc-service
         zone: dc1
     spec:
+      imagePullSecrets:
+        - name: harbor
       hostNetwork: false
       tolerations:
         - key: "node.kubernetes.io/unreachable"
@@ -152,11 +154,13 @@ spec:
             - name: ravencast.address
               value: "10.12.107.201:10101;10.12.107.202:10101?fallbackToPrimary=true&pingTimeout=20000"
             - name: ravencast.spcServerChannel
-              value: "/JD/PRD1/SPC"
+              value: "/PROD/SPC"
             - name: ravencast.mesServerChannel
-              value: "/JD/PRD1/MES"
+              value: "/PROD/EIS01"
             - name: spc.rtservice.threads
-              value: "100"
+              value: '100'
+            - name: spc.default-import-limit
+              value: '20000'
           ports:
             - containerPort: 8080
           resources:
