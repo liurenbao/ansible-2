@@ -10,14 +10,6 @@ spec:
   groups:
     - name: ravencast
       rules:
-        - alert: RavencastAgentDown
-          expr: up{service=~"ravencast.*"} == 0
-          for: 30s
-          labels:
-            severity: critical
-          annotations:
-            summary: Ravencast down (instance {{ $labels.instance }})
-            description: "Ravencast down"
         - alert: RavencastLicenseExpiring
           expr: ravencast_expire_days_total{} < 60
           for: 0m
