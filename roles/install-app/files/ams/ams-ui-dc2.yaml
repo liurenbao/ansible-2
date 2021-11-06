@@ -77,6 +77,8 @@ spec:
                 command: [ "sleep" ,"15" ]
       terminationGracePeriodSeconds: 120
       restartPolicy: Always
+      imagePullSecrets:
+        - name: harbor
       tolerations:
         - key: node.kubernetes.io/not-ready
           operator: Exists

@@ -49,9 +49,9 @@ spec:
               path: /metrics
             initialDelaySeconds: 15
             timeoutSeconds: 1
-            periodSeconds: 3
+            periodSeconds: 10
             successThreshold: 1
-            failureThreshold: 3
+            failureThreshold: 5
           readinessProbe:
             httpGet:
               port: 8100
@@ -77,6 +77,8 @@ spec:
                 command: [ "sleep" ,"40" ]
       terminationGracePeriodSeconds: 120
       restartPolicy: Always
+      imagePullSecrets:
+        - name: harbor
       tolerations:
         - key: node.kubernetes.io/not-ready
           operator: Exists
