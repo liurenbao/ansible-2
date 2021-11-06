@@ -102,10 +102,9 @@ alertmanager_smtp_server: 192.168.160.1:587
 alertmanager_smtp_from: alertmanager@icrd.com
 alertmanager_smtp_username: alertmanager@icrd.com
 alertmanager_smtp_password: Huawei@777.com
-alertmanager_app_email_to: tangjizhou@huawei.com
+alertmanager_app_email_to: tangjizhou@huawei.com, mouyongde@huawei.com
 alertmanager_db_email_to: lujinzhu@huawei.com, tangjizhou@huawei.com
 node_exporter_root_dir: /data01/node-exporter
-process_exporter_root_dir: /data01/process-exporter
 
 # redis---------------------------------------------------------------------------------------
 redis_data_dir: '/data01/redis'

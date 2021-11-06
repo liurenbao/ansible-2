@@ -74,3 +74,10 @@ ravencast_tcphosts=192.168.160.209[7800],192.168.160.208[7800]
 
 [nas]
 192.168.160.194  ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com" host_name=nas-pirun
+
+[eap]
+192.168.160.141 ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com" host_name=eap-pirun-1
+192.168.160.142 ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com" host_name=eap-pirun-2
+192.168.160.143 ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com" host_name=eap-pirun-3
+192.168.160.144 ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com" host_name=eap-pirun-4
+192.168.160.145 ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com" host_name=eap-pirun-5
