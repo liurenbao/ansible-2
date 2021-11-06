@@ -39,8 +39,8 @@ ravencast_tcphosts=192.168.163.174[7800],192.168.163.182[7800]
 [ravencast-apc:vars]
 ravencast_tcphosts=192.168.163.152[7800],192.168.163.153[7800]
 [nginx]
-192.168.163.97	host_name=nginx-drill-2	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com	MASTER_BACKUP=BACKUP
-192.168.163.129	host_name=nginx-drill-1	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com	MASTER_BACKUP=MASTER
+192.168.160.20	host_name=nginx-drill-2	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com	MASTER_BACKUP=BACKUP    host_gateway=192.168.160.126 host_netmask=255.255.255.128
+192.168.160.43	host_name=nginx-drill-1	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com	MASTER_BACKUP=MASTER    host_gateway=192.168.160.126 host_netmask=255.255.255.128
 [nas]
 192.168.163.73	host_name=nas-drill	ansible_ssh_user=root	ansible_ssh_pass=Huawei@777.com
 [kafka]

@@ -10,7 +10,7 @@ metadata:
   namespace: elk
 spec:
   selector:
-    matchLabels:
+    matchLabels: {}
   env:
     - name: TZ
       value: "Asia/Shanghai"

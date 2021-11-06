@@ -3,7 +3,7 @@
     path: /etc/sysconfig/network-scripts/{{ netcard }}
     state: present
     regexp: '^NETMASK'
-    line: NETMASK={{ netmask }}
+    line: NETMASK={{ host_netmask | default(netmask) }}
 
 - name: static bootproto
   lineinfile:
@@ -24,7 +24,7 @@
     path: /etc/sysconfig/network-scripts/{{ netcard }}
     state: present
     regexp: '^GATEWAY'
-    line: GATEWAY={{ gateway }}
+    line: GATEWAY={{ host_gateway | default(gateway) }}
 
 - name: static ip addr
   lineinfile:
