@@ -12,15 +12,15 @@
     - name: mkdir harbor
       shell: "mkdir -p {{ harbor_root_dir }}"
 
-- hosts: localhost
-  name: copy harbor
-  gather_facts: false
-  vars:
-    harbor_hosts: "{{groups['harbor']|join(',')}}"
-  tasks:
-    - name: copy harbor
-      shell: "scp -r {{ harbor_tar }} {{ item }}:{{ harbor_root_dir }}/harbor.tar.gz"
-      with_items: '{{ harbor_hosts.split(",") }}'
+#- hosts: localhost
+#  name: copy harbor
+#  gather_facts: false
+#  vars:
+#    harbor_hosts: "{{groups['harbor']|join(',')}}"
+#  tasks:
+#    - name: copy harbor
+#      shell: "scp -r {{ harbor_tar }} {{ item }}:{{ harbor_root_dir }}/harbor.tar.gz"
+#      with_items: '{{ harbor_hosts.split(",") }}'
 
 - name: install harbor vip
   hosts: harbor

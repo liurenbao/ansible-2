@@ -2,7 +2,7 @@
 # 注意修改内存配置
 # 注意修改VIP地址
 #---------------------
-harbor_keepalived_vip: 192.168.160.31
+harbor_keepalived_vip: 192.168.163.252
 nginx_keepalived_vip: 192.168.160.36
 k8s_keepalived_vip: 192.168.163.249
 
