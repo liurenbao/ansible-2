@@ -5,6 +5,7 @@
 harbor_keepalived_vip: 192.168.163.252
 nginx_keepalived_vip: 192.168.160.36
 k8s_keepalived_vip: 192.168.163.249
+es_initial_master_nodes: '["192.168.163.6", "192.168.163.209", "192.168.163.11"]'
 
 cim_ops_uid: '9999'
 cim_ops_user: 'cimops'
@@ -49,7 +50,6 @@ nginx_keepalived_vrrp_instance_interface: eth0
 es_root_dir: '/data01/es'
 # es集群名
 es_cluster_name: 'es-drill-cluster-7.3.2'
-es_initial_master_nodes: '["192.168.163.75", "192.168.163.77", "192.168.163.83"]'
 # es jvm信息
 es_java_opts: '-Xms16G -Xmx16G'
 es_index_keep: 3

@@ -17,4 +17,5 @@
         regexp: '^SELINUX='
         line: SELINUX=disabled
 
-
+    - name: disable firewalld
+      shell: systemctl disable firewalld
