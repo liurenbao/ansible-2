@@ -1,0 +1,17 @@
+- name: ensure cron dir exists
+  file:
+    path: /data01/cron
+    state: directory
+
+- name: copy cron shell
+  copy:
+    src: delete-secret.sh
+    dest: /data01/cron/delete-secret.sh
+    mode: 0755
+    remote_src:
+
+- name: add delete secret cron job
+  cron:
+    name: delete k8s namespace admin secret
+    job: /data01/cron/delete-secret.sh
+    hour: "*/8"
