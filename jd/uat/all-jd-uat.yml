@@ -15,8 +15,7 @@ docker_gid: '994'
 # 离线文件安装包所在目录-----------------------------------------------------------------------
 package_dir: '/data01/package'
 # 一主一备，都可以用
-# 10.13.253.12/10.13.253.13
-ntp_server_addr: '10.13.253.13'
+ntp_server_addr: 10.12.117.251
 # fixme 现在只知道ip是187，yum源地址需要确认
 yum_base_url: 'ftp://10.12.107.187/pub/centos/7/'
 
@@ -29,7 +28,7 @@ harbor_keepalived_vrrp_instance_interface: eth0
 harbor_root_dir: '/data01/harbor'
 # harbor压缩包
 harbor_tar: '{{ package_dir }}/harbor.tar'
-harbor_password: 'Icrd@harbor.com'
+harbor_password: 'harbor123Icrd'
 # harbor安装数据目录
 harbor_data_volume: '{{ harbor_root_dir }}/harbor-data'
 
@@ -55,9 +54,9 @@ es_root_dir: '/data01/es'
 es_cluster_name: 'es-uat-cluster'
 # es jvm信息
 es_java_opts: '-Xms16G -Xmx16G'
-es_index_keep: 3
+es_index_keep: 12
 # week或者month
-es_index_keep_unit: week
+es_index_keep_unit: month
 es_log_replicas: 1
 es_log_shards: 60
 
@@ -96,17 +95,17 @@ nfs_root_dir: '/data01'
 nfs_server: "{{ groups['nas'][0] }}"
 monitor_nfs_path: '{{ nfs_root_dir }}/monitoring'
 monitor_manifest_root_dir: '{{ component_manifest_dir }}/monitoring'
-prometheus_storage: '50Gi'
+prometheus_storage: '200Gi'
 prometheus_data_retention: '35d'
 grafana_storage: '50Gi'
-alertmanager_storage: '20Gi'
+alertmanager_storage: '50Gi'
 alertmanager_data_retention: '120h'
 alertmanager_smtp_server: 192.168.160.1:587
 alertmanager_smtp_from: alertmanager@icrd.com
 alertmanager_smtp_username: alertmanager@icrd.com
-alertmanager_smtp_password: Huawei@777.com
-alertmanager_app_email_to: tangjizhou@huawei.com, mouyongde@huawei.com
-alertmanager_db_email_to: lujinzhu@huawei.com, tangjizhou@huawei.com
+alertmanager_smtp_password: alertmanager@icrd.com
+alertmanager_app_email_to: tangjizhou@icrd.com, mouyongde@icrd.com
+alertmanager_db_email_to: lujinzhu@icrd.com, tangjizhou@icrd.com
 node_exporter_root_dir: /data01/node-exporter
 
 # redis---------------------------------------------------------------------------------------

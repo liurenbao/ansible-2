@@ -69,8 +69,8 @@ ravencast_tcphosts=10.12.117.170[7800],10.12.117.171[7800]
 10.12.117.121 host_name=jdfau-elkes01 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
 10.12.117.122 host_name=jdfau-elkes02 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
 10.12.117.123 host_name=jdfau-elkes03 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
-[eap]
-10.12.117.41    host_name=jdfau-eap01   ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
-10.12.117.42    host_name=jdfau-eap02   ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
-10.12.117.43    host_name=jdfau-eap03   ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
-10.12.117.44    host_name=jdfau-eap04   ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
+#[eap]
+#10.12.117.41    host_name=jdfau-eap01   ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
+#10.12.117.42    host_name=jdfau-eap02   ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
+#10.12.117.43    host_name=jdfau-eap03   ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
+#10.12.117.44    host_name=jdfau-eap04   ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
