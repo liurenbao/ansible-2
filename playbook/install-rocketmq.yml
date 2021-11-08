@@ -48,7 +48,7 @@
   gather_facts: false
   hosts: rocketmq-namesrv
   tasks:
-    - name: set java env conf ~/.bashrc
+    - name: set java env conf ~/.bashrc for rocketmq
       lineinfile:
         dest: ~/.bashrc
         state: present
@@ -65,4 +65,9 @@
       args:
         chdir: "{{ rocketmq_root_dir }}/bin"
       with_items:
-        - "{{ rocket_topic_list }}"
+        - test
+        - spc-calc-service-chartCalc-topic
+        - spc-job-check-post-process
+        - spc-mes-save-param
+        - spc-rpt-excute-calculate
+        - spc-rpt-execute-calculate

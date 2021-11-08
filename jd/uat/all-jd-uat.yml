@@ -28,7 +28,7 @@ harbor_keepalived_vrrp_instance_interface: eth0
 harbor_root_dir: '/data01/harbor'
 # harbor压缩包
 harbor_tar: '{{ package_dir }}/harbor.tar'
-harbor_password: 'harbor123Icrd'
+harbor_password: 'admin123Admin'
 # harbor安装数据目录
 harbor_data_volume: '{{ harbor_root_dir }}/harbor-data'
 
