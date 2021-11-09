@@ -1,16 +1,16 @@
 upstream mesadmin {
 {% for host in groups['k8s-worker'] %}
-    server {{ host }}:31061  max_fails=0;
+    server {{ host }}:32701  max_fails=0;
 {% endfor %}
 }
 upstream plantuservers {
 {% for host in groups['k8s-worker'] %}
-    server {{ host }}:31070  max_fails=0;
+    server {{ host }}:32700  max_fails=0;
 {% endfor %}
 }
 server {
-    listen       31061 backlog=65534;
-    listen  [::]:31061 backlog=65534;
+    listen       8282 backlog=65534;
+    listen  [::]:8282 backlog=65534;
     server_name  localhost;
 
     location / {
@@ -23,8 +23,8 @@ server {
     }
 }
 server {
-    listen 8282 backlog=65534;
-    listen  [::]:8282 backlog=65534;
+    listen 8383 backlog=65534;
+    listen  [::]:8383 backlog=65534;
     location / {
         proxy_read_timeout  90s;
         proxy_next_upstream_timeout 1s;
