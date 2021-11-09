@@ -46,7 +46,7 @@ data:
     TTL = 3000
     
     #server auto upgrade
-    CUST_CLASSLOADER_BASE_PACKAGE=cust,plantu.custdb,tmesis.cust,tmesis.eism
+    CUST_CLASSLOADER_BASE_PACKAGE=cust,plantu.custdb,tmesis.cust,tmesis.eism,tmesis.invm,tmesis.tcsm
     
     WIPM_RULE_BASED_PROCESS_CLASS = tmesis.wipm.WipmRuleBasedProcessAction
     WIPM_CUST_RULE_CHECK_CONDITION_CLASS = tmesis.cust.wipm.UWipmRuleCheckCustomCondition
@@ -118,13 +118,16 @@ data:
     MES_PASSWORD_LOCK_COUNT=5
     
     #MES Cast Channel for External Systems
-    customer.MES2EAP.RC_CHANNEL = /PROD/EAP
-    customer.MES2APC.RC_CHANNEL = /PROD/APC
-    customer.MES2FDC.RC_CHANNEL = /PROD/FDC
-    customer.MES2SPC.RC_CHANNEL = /PROD/SPC
-    customer.MES2RTD.RC_CHANNEL = /PROD/RTD
-    customer.MES2MES.RC_CHANNEL = /PROD/MESServer
-    customer.MES2MESR.RC_CHANNEL = /MESR/MESServer
+    customer.MES2EIS.cast.channel = /PROD/EIS
+    customer.EIS2EIS.cast.channel = /PROD/EIS
+    customer.EIS2MES.cast.channel = /PROD/MESServer
+    customer.EIS2EAP.cast.channel = /PROD/EAP
+    customer.EIS2APC.cast.channel = /PROD/APC
+    customer.EIS2FDC.cast.channel = /PROD/FDC
+    customer.EIS2SPC.cast.channel = /PROD/SPC
+    customer.EIS2RTD.cast.channel = /PROD/RTD
+    customer.EIS2SDR.cast.channel = /PROD/SDR
+    customer.EIS2MCS.cast.channel = /PROD/MCS
     
   quartz.properties: |
     org.quartz.scheduler.instanceName = MesJobScheduler

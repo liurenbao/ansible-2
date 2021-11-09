@@ -21,6 +21,8 @@ spec:
     spec:
       imagePullSecrets:
         - name: harbor
+      nodeSelector:
+        zone: dc1
       affinity:
         podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
@@ -51,6 +53,8 @@ spec:
               value: "NO"
             - name: PLANTU_MSG_BACKUP
               value: "/mesdata/prod/msg/mes_1"
+            - name: PRCM_WORK_PROC_STATUS_ATTACH_STORAGE_PATH
+              value: "/mesdata/prod/data"
             - name: ADDRESS
               value: "10.12.107.201:10101;10.12.107.202:10101?fallbackToPrimary=true&pingTimeout=20000"
             - name: SITE_ID
@@ -92,7 +96,7 @@ spec:
               cpu: "32"
               memory: 30720Mi
             requests:
-              cpu: "1"
+              cpu: "4"
               memory: 20480Mi
           # 优雅关机，需要确保基础镜像要有/bin/bash命令
           lifecycle:

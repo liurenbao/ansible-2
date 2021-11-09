@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: pirun-template
+  namespace: plantu
+data:
+  mail_alarm_template.html: |
+    <html>
+    <head>
+        <meta charset="utf-8">
+        <title>Mes Alarm</title>
+    </head>
+    <body>
+    <h2 align="center">${title}</h2>
+    <table border="1" width="500" cellpadding="10" cellspacing="0" align="center">
+        #foreach($item in ${list.entrySet()})  
+    		<tr>  
+    			<td width="13%" align="center" bgcolor="#000080">  
+    			  ${item.key}  
+    			</td>  
+    		   <td>${item.value}</td>  
+    		</tr>  
+    	#end   
+    </table>
+    </body>
+    </html>

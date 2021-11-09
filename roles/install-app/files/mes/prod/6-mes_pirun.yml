@@ -2,25 +2,27 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: plantu-eis-huidu
+  name: plantu-mes-pirun
   namespace: plantu
   labels:
-    app: plantu-eis-huidu
+    app: plantu-mes-pirun
     zone: dc1
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
-      app: plantu-eis-huidu
+      app: plantu-mes-pirun
       zone: dc1
   template:
     metadata:
       labels:
-        app: plantu-eis-huidu
+        app: plantu-mes-pirun
         zone: dc1
     spec:
       imagePullSecrets:
         - name: harbor
+      nodeSelector:
+        zone: dc1
       affinity:
         podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
@@ -30,7 +32,7 @@ spec:
                   - key: app
                     operator: In
                     values:
-                      - plantu-eis-huidu
+                      - plantu-mes-pirun
       hostNetwork: false
       tolerations:
         - key: "node.kubernetes.io/unreachable"
@@ -42,25 +44,27 @@ spec:
           effect: "NoExecute"
           tolerationSeconds: 2
       containers:
-        - name: plantu-eis-huidu
+        - name: plantu-mes-pirun
           image: 10.12.107.150:80/plantu-prod/plantu-mes:v1.0.0
           env:
             - name: SUPPORT_HTTP_REQUEST
-              value: "NO"
+              value: "YES"
             - name: START_SCHEDULE_JOB_FLAG
               value: "NO"
             - name: PLANTU_MSG_BACKUP
-              value: "/mesdata/prod/msg/eis_huidu"
+              value: "/mesdata/prod/msg/mes_huidu"
+            - name: PRCM_WORK_PROC_STATUS_ATTACH_STORAGE_PATH
+              value: "/mesdata/prod/data"
             - name: ADDRESS
-              value: "10.12.107.206:10101;10.12.107.207:10101?fallbackToPrimary=true&pingTimeout=20000"
+              value: "10.12.107.201:10101;10.12.107.202:10101?fallbackToPrimary=true&pingTimeout=20000"
             - name: SITE_ID
-              value: "HUIDU"
+              value: "PIRUN"
             - name: CHANNEL
-              value: "/HUIDU/EIS01"
+              value: "/PIRUN/MESServer"
             - name: ADMIN_CHANNEL
-              value: "/HUIDU/ADMIN/EIS"
+              value: "/PIRUN/ADMIN/MESServer"
             - name: USE_NETCORE_RPT_SERVER
-              value: "NO"
+              value: "YES"
           # 当前服务器已经存在相同版本的镜像则不会重复拉取
           imagePullPolicy: IfNotPresent
           startupProbe:
@@ -105,11 +109,11 @@ spec:
           - name: prod-mes-jvm
             mountPath: /PlantUMes/Server/plantu-mes-console.config
             subPath: plantu-mes-console.config
-          - name: prod-mes-config
+          - name: pirun-mes-config
             mountPath: /PlantUMes/Server/config
           - name: prod-datasource
             mountPath: /PlantUMes/Server/datasource
-          - name: prod-template
+          - name: pirun-template
             mountPath: /PlantUMes/Server/template
           - name: prod-unixodbc
             mountPath: /etc/odbc.ini
@@ -136,15 +140,15 @@ spec:
         - name: prod-mes-jvm
           configMap:
             name: prod-mes-jvm
-        - name: prod-mes-config
+        - name: pirun-mes-config
           configMap:
-            name: prod-mes-config
+            name: pirun-mes-config
         - name: prod-datasource
           configMap:
             name: prod-datasource
-        - name: prod-template
+        - name: pirun-template
           configMap:
-            name: prod-template
+            name: pirun-template
         - name: prod-unixodbc
           configMap:
             name: prod-unixodbc

@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: uat-mes-config
+  name: pirun-mes-config
   namespace: plantu
 data:
   mes.properties: |
@@ -30,15 +30,15 @@ data:
     MES_MSG_BACKUP_DIR=/PlantUMes/Server/msg
     
     #mes service pool size
-    SERVICE_CORE_POOL_SIZE = 100
+    SERVICE_CORE_POOL_SIZE = 300
     
-    USE_NETCORE_RPT_SERVER = YES
-    SERVICE_RPT_CORE_POOL_SIZE  = 50
+    USE_NETCORE_RPT_SERVER = NO
+    SERVICE_RPT_CORE_POOL_SIZE  = 100
     
     #mes middleware configure
     #supported middleware
     MIDDLEWARE_TYPE = RAVENCAST
-    ADDRESS = 192.168.160.63:10101;192.168.160.65:10101?fallbackToPrimary=true
+    ADDRESS = 192.168.163.174:10101;192.168.163.182:10101?fallbackToPrimary=true
     SITE_ID = EAP1
     CHANNEL = /EAP1/MESServer
     ADMIN_CHANNEL = /ADMIN/MESServer
@@ -118,16 +118,16 @@ data:
     MES_PASSWORD_LOCK_COUNT=5
     
     #MES Cast Channel for External Systems
-    customer.MES2EIS.cast.channel = /UAT/MESServer
-    customer.EIS2EIS.cast.channel = /UAT/MESServer
-    customer.EIS2MES.cast.channel = /UAT/MESServer
-    customer.EIS2EAP.cast.channel = /UAT/EAP
-    customer.EIS2APC.cast.channel = /UAT/APC
-    customer.EIS2FDC.cast.channel = /UAT/FDC
-    customer.EIS2SPC.cast.channel = /UAT/SPC
-    customer.EIS2RTD.cast.channel = /UAT/RTD
-    customer.EIS2SDR.cast.channel = /UAT/SDR
-    customer.EIS2MCS.cast.channel = /UAT/MCS
+    customer.MES2EIS.cast.channel = /PIRUN/EIS
+    customer.EIS2EIS.cast.channel = /PIRUN/EIS
+    customer.EIS2MES.cast.channel = /PIRUN/MESServer
+    customer.EIS2EAP.cast.channel = /PIRUN/EAP
+    customer.EIS2APC.cast.channel = /PIRUN/APC
+    customer.EIS2FDC.cast.channel = /PIRUN/FDC
+    customer.EIS2SPC.cast.channel = /PIRUN/SPC
+    customer.EIS2RTD.cast.channel = /PIRUN/RTD
+    customer.EIS2SDR.cast.channel = /PIRUN/SDR
+    customer.EIS2MCS.cast.channel = /PIRUN/MCS
     
   quartz.properties: |
     org.quartz.scheduler.instanceName = MesJobScheduler
@@ -141,7 +141,7 @@ data:
     org.quartz.jobStore.dataSource = myDS
     org.quartz.jobStore.isClustered = true
     org.quartz.dataSource.myDS.driver = com.huawei.gauss.jdbc.ZenithDriver
-    org.quartz.dataSource.myDS.URL = jdbc:zenith:@10.12.117.10:15400
+    org.quartz.dataSource.myDS.URL = jdbc:zenith:@10.12.114.20:15400
     org.quartz.dataSource.myDS.user = mesmgr
     org.quartz.dataSource.myDS.password = Gauss_123
     org.quartz.dataSource.myDS.maxConnections = 5

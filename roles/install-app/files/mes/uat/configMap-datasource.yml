@@ -5,7 +5,7 @@ metadata:
   namespace: plantu
 data:
   master.properties: |
-    jdbcUrl=jdbc:zenith:@10.12.109.10:15400
+    jdbcUrl=jdbc:zenith:@10.12.117.10:15400
     username=mesmgr
     password=Gauss_123
     maximumPoolSize=320
