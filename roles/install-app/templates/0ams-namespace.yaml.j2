@@ -117,9 +117,9 @@ stringData:
     {
       "auths": {
         "{{ image_repository }}": {
-          "username": "{{ harbor_pull_account }}",
-          "password": "{{ harbor_pull_password }}",
-          "auth": "{{ haror_auth_plaintext | b64encode }}"
+          "username": "{{ ams_harbor_account }}",
+          "password": "{{ ams_harbor_password }}",
+          "auth": "{{ ams_haror_auth_plaintext | b64encode }}"
         }
       }
     }

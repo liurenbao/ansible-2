@@ -2,8 +2,24 @@
   hosts: k8s-master-init
   gather_facts: false
   vars:
-    harbor_pull_account: admin
-    harbor_pull_password: '{{ harbor_password }}'
-    haror_auth_plaintext: '{{ harbor_pull_account }}:{{ harbor_pull_password }}'
+    ams_harbor_account: ams
+    ams_harbor_password: AMS@034b
+    ams_haror_auth_plaintext: '{{ harbor_pull_account }}:{{ harbor_pull_password }}'
+
+    plantu_harbor_account: plantu
+    plantu_harbor_password: PLANTU@6f8c
+    plantu_haror_auth_plaintext: '{{ harbor_pull_account }}:{{ harbor_pull_password }}'
+
+    rms_harbor_account: rms
+    rms_harbor_password: RMS@cec5
+    rms_haror_auth_plaintext: '{{ harbor_pull_account }}:{{ harbor_pull_password }}'
+
+    rtd_harbor_account: rtd
+    rtd_harbor_password: RTD@6abe
+    rtd_haror_auth_plaintext: '{{ harbor_pull_account }}:{{ harbor_pull_password }}'
+
+    spc_harbor_account: spc
+    spc_harbor_password: SPC@d906
+    spc_haror_auth_plaintext: '{{ harbor_pull_account }}:{{ harbor_pull_password }}'
   roles:
     - install-app
