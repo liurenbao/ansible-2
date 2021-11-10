@@ -57,6 +57,24 @@
     src: rocketmq.service.j2
     dest: /usr/lib/systemd/system/rocketmq.service
 
+- name: change disk scheduler for rocketmq broker &
+  shell: |
+    DISK=`df -k | sort -n -r -k 2 | awk -F/ 'NR==1 {gsub(/[0-9].*/,"",$3); print $3}'`
+    [ "$DISK" = 'cciss' ] && DISK='cciss!c0d0'
+    echo 'deadline' > /sys/block/${DISK}/queue/scheduler
+    if [ -d ${HOME}/tmpfs ] ; then
+        echo "tmpfs exist, do nothing."
+    else
+        ln -s /dev/shm ${HOME}/tmpfs
+        echo "create tmpfs ok"
+    fi
+
+- name: link rockemtq tmpfs
+  file:
+    src: /dev/shm
+    dest: ${HOME}/tmpfs
+    state: link
+
 - name: start rocketmq unit service
   systemd:
     name: rocketmq

@@ -15,7 +15,21 @@
         - "vm.dirty_ratio = 50"
         - "vm.page-cluster = 3"
         - "vm.dirty_writeback_centisecs = 360000"
-        - "vm.swappiness = 10"
+        - "vm.swappiness = 1"
+        - "vm.max_map_count = 655360"
+        - "vm.overcommit_memory=1"
+    - name: change /etc/profile
+      lineinfile:
+        path: /etc/profile
+        regexp: "^ulimit"
+        line: "ulimit -n 655350"
+        state: present
+    - name: change /etc/security/limits.conf
+      lineinfile:
+        path: /etc/security/limits.conf
+        regexp: ".* memlock .*"
+        line: "* - memlock      unlimited"
+        state: present
 
 - name: install jdk
   gather_facts: false
@@ -41,7 +55,6 @@
   gather_facts: false
   hosts: rocketmq-console
   roles:
-    - install-docker
     - rocketmq-console
 
 - name: create topic
@@ -65,7 +78,6 @@
       args:
         chdir: "{{ rocketmq_root_dir }}/bin"
       with_items:
-        - test
         - spc-calc-service-chartCalc-topic
         - spc-job-check-post-process
         - spc-mes-save-param

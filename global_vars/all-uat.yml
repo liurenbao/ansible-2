@@ -71,6 +71,7 @@ rocketmq_root_dir: '/data01/rocketmq'
 rocketmq_package_dir: '{{ package_dir }}/rocketmq'
 rocketmq_user: '{{ cim_ops_user }}'
 rocketmq_user_pass: '{{ cim_ops_user_pass }}'
+rocketmq_jvm_args: -Xms16g -Xmx16g -Xmn8g
 rocket_topic_list: test
 
 # ravencast-----------------------------------------------------------------------------------
