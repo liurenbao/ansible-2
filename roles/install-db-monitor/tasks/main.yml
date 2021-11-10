@@ -1,21 +1,3 @@
-- name: set java env conf ~/.bashrc
-  become: yes
-  become_user: '{{ gaussdb_user }}'
-  lineinfile:
-    dest: '~/.bashrc'
-    state: present
-    line: "{{ item }}"
-  with_items:
-    - "export JAVA_HOME={{ jdk_dir }}"
-    - "export JRE_HOME=${JAVA_HOME}/jre"
-    - "export CLASSPATH=.:${JAVA_HOME}/lib:${JRE_HOME}/lib"
-    - "export PATH=${JAVA_HOME}/bin:$PATH"
-
-- name: source bashrc
-  become: yes
-  become_user: '{{ gaussdb_user }}'
-  shell: 'source ~/.bashrc'
-
 - name: create agent root dir
   file:
     path: '{{ gaussdb_monitor_agent_root_dir }}/{{ gaussdb_user }}'
@@ -37,8 +19,6 @@
   copy:
     src: agent/hisi-uoamp-monitor-agent-1.0-SNAPSHOT.jar
     dest: '{{ gaussdb_monitor_agent_root_dir }}/{{ gaussdb_user }}/agent.jar'
-    owner: '{{ gaussdb_user }}'
-    group: '{{ gaussdb_user_group }}'
 
 - name: chmod agent dir
   file:
@@ -48,99 +28,27 @@
     group: '{{ gaussdb_user_group }}'
     recurse: yes
 
-- name: get agent pid
-  shell: ps -ef | grep -v grep | grep agent.jar | awk '{print $2}'
-  register: pid
+- name: copy gaussdb agent startup shell
+  template:
+    src: start-agent.sh.j2
+    dest: '{{ gaussdb_monitor_agent_root_dir }}/{{ gaussdb_user }}/start-agent.sh'
 
-- name: kill agent pid
-  shell: kill -9 {{ pid.stdout }}
-  when: pid.stdout != ""
-
-#启动不起来执行以下命令
-#ansible -i gaussdb-hosts gaussdb --become-user omm -m shell -a "cd /data01/gaussdb-monitor-agent/omm/ && nohup java -jar agent.jar > /dev/null 2>&1 &"
-
-- name: check java command exists
-  shell: java -version
-  register: java
-
-- name: show java command exists
-  debug:
-    msg: '{{ java }}'
-
-- name: copy startup.sh
-  copy:
-    src: startup.sh
-    dest: '{{ gaussdb_monitor_agent_root_dir }}/{{ gaussdb_user }}/startup.sh'
-    mode: 0755
-    owner: '{{ gaussdb_user }}'
-    group: '{{ gaussdb_user_group }}'
-
-- name: start agent
-  become: yes
+- name: create cron job for db agent
   become_user: '{{ gaussdb_user }}'
-  shell: ./startup.sh
-  register: result
-  args:
-    chdir: '{{ gaussdb_monitor_agent_root_dir }}/{{ gaussdb_user }}'
+  become: yes
+  cron:
+    name: gaussdb agent job
+    job: '{{ gaussdb_monitor_agent_root_dir }}/{{ gaussdb_user }}/start-agent.sh'
+    minute: "*/1"
 
-#- name: create filebeat dir
-#  command: rm -rf /data01/filebeat/
-
-- name: create filebeat dir
-  file:
-    path: '/data01/filebeat/'
-    state: directory
-
-- name: install rsync
-  shell: yum install rsync -y
-
-- name: send filebeat package
-  synchronize:
-    src: '{{ package_dir }}/filebeat/'
-    dest: '/data01/filebeat/'
+- name: start gaussdb agent systemd service
+  systemd:
+    name: gaussdb-agent
+    daemon_reload: yes
+    state: restarted
+    enabled: yes
 
 - name: send filebeat.yml
   template:
     src: filebeat.yml.j2
-    dest: /data01/filebeat/filebeat-7.3.0-linux-x86_64/filebeat.yml
-
-- name: add execute permission
-  file:
-    dest: '{{ item }}'
-    mode: 0770
-  with_items:
-    - "/data01/filebeat/filebeat-7.3.0-linux-x86_64/filebeat"
-    - "/data01/filebeat/filebeat_monitor.sh"
-    - "/data01/filebeat/filebeat-7.3.0-linux-x86_64/start.sh"
-
-- name: chown dir
-  file:
-    path: '/data01/filebeat/'
-    state: directory
-    owner: '{{ gaussdb_user }}'
-    group: '{{ gaussdb_user_group }}'
-    recurse: yes
-
-- name: add cron job for filebeat
-  cron:
-    name: start filebeat
-    minute: "*/2"
-    job: "/data01/filebeat/filebeat_monitor.sh"
-    user: '{{ gaussdb_user }}'
-
-- name: start filebeat
-  become: yes
-  become_user: '{{ gaussdb_user }}'
-  command: "./filebeat_monitor.sh"
-  args:
-    chdir: /data01/filebeat
-
-- name: check if process started success
-  become: yes
-  become_user: '{{ gaussdb_user }}'
-  shell: ps -ef | grep -v grep | grep -E "filebeat|agent.jar"
-  register: process
-
-- name: show process
-  debug:
-    msg: '{{ process.stdout_lines }}'
+    dest: /etc/filebeat/filebeat.yml

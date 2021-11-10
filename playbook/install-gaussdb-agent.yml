@@ -6,6 +6,7 @@
     gaussdb_user: omm
     gaussdb_user_group: dbgrp
     gaussdb_agent_server_port: 9999
-    jdk_dir: /opt/software/jdk1.8.0_252
+    gaussdb_jdk_dir: /opt/software/jdk1.8.0_252
   roles:
+    - install-filebeat
     - install-db-monitor

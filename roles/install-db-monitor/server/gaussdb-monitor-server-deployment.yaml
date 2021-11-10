@@ -127,12 +127,40 @@ spec:
     spec:
       containers:
         - name: gaussdb-monitor-server
-          image: 192.168.160.47:8888/public/gaussdb-monitor-server:1.0.1
+          image: 192.168.160.47:8888/public/gaussdb-monitor-server:1028
           imagePullPolicy: Always
           volumeMounts:
             - mountPath: /srv/application.yml
               subPath: application.yml
               name: application-yml
+          startupProbe:
+            httpGet:
+              port: 9990
+              path: /gaussdb-monitor-server/api/v1/desEncrypt?text=1
+            failureThreshold: 10
+            periodSeconds: 10
+            successThreshold: 1
+          livenessProbe:
+            httpGet:
+              port: 9990
+              path: /gaussdb-monitor-server/api/v1/desEncrypt?text=1
+            failureThreshold: 3
+            periodSeconds: 10
+            successThreshold: 1
+          readinessProbe:
+            httpGet:
+              port: 9990
+              path: /gaussdb-monitor-server/api/v1/desEncrypt?text=1
+            failureThreshold: 3
+            periodSeconds: 10
+            successThreshold: 1
+          resources:
+            requests:
+              cpu: 300m
+              memory: 200Mi
+            limits:
+              cpu: '2'
+              memory: 2048Mi
       restartPolicy: Always
       volumes:
         - name: application-yml
@@ -147,6 +175,11 @@ kind: Service
 metadata:
   name: gaussdb-monitor-server
   namespace: monitoring
+  annotations:
+    maintainer: "lujinzhu@huawei.com"
+    prometheus.io/http-probe: "true"
+    prometheus.io/http-probe-port: "9990"
+    prometheus.io/http-probe-path: "/gaussdb-monitor-server/api/v1/desEncrypt?text=1"
 spec:
   selector:
     app: gaussdb-monitor-server

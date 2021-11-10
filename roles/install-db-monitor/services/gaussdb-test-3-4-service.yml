@@ -18,6 +18,10 @@ metadata:
   name: gaussdb-test-3-4
   namespace: monitoring
   annotations:
+    maintainer: "lujinzhu@huawei.com"
+    prometheus.io/http-probe: "true"
+    prometheus.io/http-probe-port: "9999"
+    prometheus.io/http-probe-path: "/gaussdb-monitor-agent/metrics"
     prometheus.io/scrape: "true"
     prometheus.io/port: '9999'
     prometheus.io/scheme: "http"
