@@ -48,13 +48,13 @@ nginx_keepalived_vrrp_instance_interface: eth0
 # es数据盘
 es_root_dir: '/data01/es'
 # es集群名
-es_cluster_name: 'es-practice-cluster-7.3.2'
+es_cluster_name: 'es-pirun-cluster-7.3.2'
 es_initial_master_nodes: '["192.168.160.224", "192.168.160.225", "192.168.160.226"]'
 # es jvm信息
 es_java_opts: '-Xms16G -Xmx16G'
 es_index_keep: 3
 # week或者month
-es_index_keep_unit: week
+es_index_keep_unit: month
 es_log_replicas: 1
 es_log_shards: 60
 
@@ -69,7 +69,7 @@ jdk_dir: '/data01/jdk1.8.0_202'
 rocket_cluster_name: CIMCluster
 rocketmq_root_dir: '/data01/rocketmq'
 rocketmq_package_dir: '{{ package_dir }}/rocketmq'
-rocket_topic_list: test
+rocketmq_jvm_args: -Xms16g -Xmx16g -Xmn8g
 
 # ravencast-----------------------------------------------------------------------------------
 ravencast_xms_xmx_args: '-Xms24G -Xmx24G'
