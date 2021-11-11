@@ -12,11 +12,11 @@
 192.168.161.195
 
 [gaussdb]
-192.168.160.250 ansible_ssh_user=root host_name=sittdb03     ansible_ssh_pass=Huawei11445@Huawei..  gaussdb_user=omm3
-192.168.160.251 ansible_ssh_user=root host_name=sittdb04      ansible_ssh_pass=Huawei11445@Huawei.. gaussdb_user=omm3
-#192.168.163.46 ansible_ssh_user=root  host_name=gaussdb-test-3 ansible_ssh_pass=Huawei@777.com
-#192.168.163.53 ansible_ssh_user=root  host_name=gaussdb-test-4 ansible_ssh_pass=Huawei@777.com
-#192.168.163.155 ansible_ssh_user=root host_name=gaussdb-test-5  ansible_ssh_pass=Huawei@777.com
-#192.168.163.47 ansible_ssh_user=root  host_name=gaussdb-test-6 ansible_ssh_pass=Huawei@777.com
-#192.168.160.12 ansible_ssh_user=root  host_name=gaussdb-test-1 ansible_ssh_pass=Huawei@777.com
-#192.168.160.30 ansible_ssh_user=root  host_name=gaussdb-test-2 ansible_ssh_pass=Huawei@777.com
+#192.168.160.250 ansible_ssh_user=root host_name=sittdb03     ansible_ssh_pass=Huawei11445@Huawei..  gaussdb_user=omm3
+#192.168.160.251 ansible_ssh_user=root host_name=sittdb04      ansible_ssh_pass=Huawei11445@Huawei.. gaussdb_user=omm3
+192.168.163.46 ansible_ssh_user=root  host_name=gaussdb-test-3 ansible_ssh_pass=Huawei@777.com
+192.168.163.53 ansible_ssh_user=root  host_name=gaussdb-test-4 ansible_ssh_pass=Huawei@777.com
+192.168.163.155 ansible_ssh_user=root host_name=gaussdb-test-5  ansible_ssh_pass=Huawei@777.com
+192.168.163.47 ansible_ssh_user=root  host_name=gaussdb-test-6 ansible_ssh_pass=Huawei@777.com
+192.168.160.12 ansible_ssh_user=root  host_name=gaussdb-test-1 ansible_ssh_pass=Huawei@777.com
+192.168.160.30 ansible_ssh_user=root  host_name=gaussdb-test-2 ansible_ssh_pass=Huawei@777.com

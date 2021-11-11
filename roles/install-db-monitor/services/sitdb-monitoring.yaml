@@ -10,7 +10,7 @@ subsets:
       - ip: 192.168.160.251
         nodeName: sittdb04
     ports:
-      - port: 9999
+      - port: 9998
 ---
 apiVersion: v1
 kind: Service
@@ -20,15 +20,15 @@ metadata:
   annotations:
     maintainer: "lujinzhu@huawei.com"
     prometheus.io/http-probe: "true"
-    prometheus.io/http-probe-port: "9999"
-    prometheus.io/http-probe-path: "/gaussdb-monitor-agent/metrics"
+    prometheus.io/http-probe-port: "9998"
+    prometheus.io/http-probe-path: "/monitor-client-agent/metrics"
     prometheus.io/scrape: "true"
-    prometheus.io/port: '9999'
+    prometheus.io/port: '9998'
     prometheus.io/scheme: "http"
-    prometheus.io/path: '/gaussdb-monitor-agent/metrics'
+    prometheus.io/path: '/monitor-client-agent/metrics'
 spec:
   ports:
-    - port: 9999
+    - port: 9998
 ---
 apiVersion: v1
 kind: Endpoints

@@ -31,7 +31,7 @@
   become: yes
   cron:
     name: gaussdb agent job
-    job: 'source ~/.bashrc && {{ gaussdb_monitor_agent_root_dir }}/{{ gaussdb_user }}/start-agent.sh start'
+    job: 'source ~/.bashrc && {{ gaussdb_monitor_agent_root_dir }}/{{ gaussdb_user }}/start-agent.sh check'
     minute: "*/1"
 
 - name: chmod agent dir
