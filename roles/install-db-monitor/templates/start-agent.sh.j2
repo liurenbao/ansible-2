@@ -60,14 +60,14 @@ restart() {
   start
 }
 
-if [ $command == "start" ]; then
-    start
+if [ $command == "check" ]; then
+    check
 elif [ $command == "stop" ]; then
     stop
 elif [ $command == "restart" ]; then
     restart
-elif [ $command == "check" ]; then
-    check
+elif [ $command == "start" ]; then
+    start
 else usage
 fi
 
