@@ -20,6 +20,20 @@
     src: agent/hisi-uoamp-monitor-agent-1.0-SNAPSHOT.jar
     dest: '{{ gaussdb_monitor_agent_root_dir }}/{{ gaussdb_user }}/agent.jar'
 
+- name: copy gaussdb agent startup shell
+  template:
+    src: start-agent.sh.j2
+    dest: '{{ gaussdb_monitor_agent_root_dir }}/{{ gaussdb_user }}/start-agent.sh'
+    mode: 0755
+
+- name: create cron job for db agent
+  become_user: '{{ gaussdb_user }}'
+  become: yes
+  cron:
+    name: gaussdb agent job
+    job: 'source ~/.bashrc && {{ gaussdb_monitor_agent_root_dir }}/{{ gaussdb_user }}/start-agent.sh start'
+    minute: "*/1"
+
 - name: chmod agent dir
   file:
     path: '{{ gaussdb_monitor_agent_root_dir }}/{{ gaussdb_user }}'
@@ -28,27 +42,39 @@
     group: '{{ gaussdb_user_group }}'
     recurse: yes
 
-- name: copy gaussdb agent startup shell
-  template:
-    src: start-agent.sh.j2
-    dest: '{{ gaussdb_monitor_agent_root_dir }}/{{ gaussdb_user }}/start-agent.sh'
-
-- name: create cron job for db agent
-  become_user: '{{ gaussdb_user }}'
-  become: yes
-  cron:
-    name: gaussdb agent job
-    job: '{{ gaussdb_monitor_agent_root_dir }}/{{ gaussdb_user }}/start-agent.sh'
-    minute: "*/1"
-
-- name: start gaussdb agent systemd service
-  systemd:
-    name: gaussdb-agent
-    daemon_reload: yes
-    state: restarted
-    enabled: yes
-
 - name: send filebeat.yml
   template:
     src: filebeat.yml.j2
     dest: /etc/filebeat/filebeat.yml
+
+- name: chmod filebeat dir
+  file:
+    path: '{{ item }}'
+    owner: '{{ gaussdb_user }}'
+    group: '{{ gaussdb_user_group }}'
+    recurse: yes
+  with_items:
+    - /etc/filebeat
+    - /var/lib/filebeat
+    - /usr/share/filebeat
+
+- name: chmod filebeat file
+  file:
+    path: '{{ item }}'
+    owner: '{{ gaussdb_user }}'
+    group: '{{ gaussdb_user_group }}'
+  with_items:
+    - /usr/bin/filebeat
+    - /etc/rc.d/init.d/filebeat
+
+- name: override filebeat.service
+  template:
+    src: filebeat.service.j2
+    dest: /usr/lib/systemd/system/filebeat.service
+
+- name: start gaussdb filebeat systemd service
+  systemd:
+    name: filebeat
+    daemon_reload: yes
+    state: restarted
+    enabled: yes

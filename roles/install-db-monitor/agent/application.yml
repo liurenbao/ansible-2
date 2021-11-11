@@ -1,0 +1,119 @@
+server:
+  port: 9998
+  servlet:
+    context-path: /monitor-client-agent
+    
+#management:
+#  endpoints:
+#    web:
+#      exposure:
+#        include: '*'    
+spring:
+  application:
+    name: imonitor-agent
+logging:
+  path: ./log
+  
+#默认定时任务
+monitortask:
+  scheduledGroups:
+  -
+   groupName: GrpOmStatus
+   groupDesc: 数据库实例状态检查任务组
+   groupCron: "0 */5 * * * ?"
+   enabled: true
+  -
+   groupName: GrpGsCheck
+   groupDesc: gs_check巡检任务组
+   groupCron: "0 */30 * * * ?"
+   enabled: true
+  -
+   groupName: GrpSqlCheck
+   groupDesc: SQL检查任务组
+   groupCron: "0 */5 * * * ?"
+   enabled: true
+   
+  subTasks:
+  -
+   taskGroup: GrpOmStatus
+   taskKey: gsOmStatus
+   taskDesc: gs_om巡检任务,Check数据库实例状态
+   enabled: true
+  -
+   taskGroup: GrpGsCheck
+   taskKey: gsCheckCluster
+   taskDesc: "gs_check巡检任务,Check Cluster"
+   enabled: true
+  -
+   taskGroup: GrpGsCheck
+   taskKey: gsCheckDbInst
+   taskDesc: "gs_check巡检任务,Check DB instances"
+   enabled: true
+  -
+   taskGroup: GrpGsCheck
+   taskKey: gsCheckDbStatus
+   taskDesc: "gs_check巡检任务,Check DB Status"
+   enabled: true
+  -
+   taskGroup: GrpGsCheck
+   taskKey: gsCheckInstStatus
+   taskDesc: "gs_check巡检任务,Check Inst Status"
+   enabled: true
+  -
+   taskGroup: GrpGsCheck
+   taskKey: gsCheckOs
+   taskDesc: "gs_check巡检任务,Check OS"
+   enabled: true
+  -
+   taskGroup: GrpGsCheck
+   taskKey: gsCheckPeriod
+   taskDesc: "gs_check巡检任务,Check Period"
+   enabled: true
+  -
+   taskGroup: GrpSqlCheck
+   taskKey: sqlCheckClusterRunMode
+   taskDesc: "SQL check巡检任务,集群状态是否最大可用模式"
+   enabled: true
+  -
+   taskGroup: GrpSqlCheck
+   taskKey: sqlCheckSyncInfo
+   taskDesc: "SQL check巡检任务,主备之间的物理复制是否同步"
+   enabled: true
+  -
+   taskGroup: GrpSqlCheck
+   taskKey: sqlCheckLogicRep
+   taskDesc: "SQL check巡检任务,主备之间的逻辑复制延迟是否超过指定时间(秒)"
+   #主备之间的逻辑复制延迟时间(秒)
+   queryParam1: 10
+   enabled: true
+  -
+   taskGroup: GrpSqlCheck
+   taskKey: sqlCheckFailOver
+   taskDesc: "SQL check巡检任务,主备之间是否发生FailOver"
+   enabled: true  
+  -
+   taskGroup: GrpSqlCheck
+   taskKey: sqlCheckLongSQL
+   taskDesc: "SQL check巡检任务,查询执行时间超过指定时间(秒)的长sql"
+   #执行时间超过时间(秒)
+   queryParam1: 30
+   enabled: true
+  -
+   taskGroup: GrpSqlCheck
+   taskKey: sqlCheckLockTableSQL
+   taskDesc: "SQL check巡检任务,查询被锁影响超过指定时间(秒)的sql"
+   #被锁影响超过指定时间(秒)
+   queryParam1: 30
+   enabled: true
+  -
+   taskGroup: GrpSqlCheck
+   taskKey: sqlCheckLongTransaction
+   taskDesc: "SQL check巡检任务,查询超过指定时间(秒)的事务"
+   #执行时间超过时间(秒)
+   queryParam1: 30
+   enabled: true
+#自定义配置参数
+base:
+  #monitor-server端访问地址
+  serverUrl: http://192.168.160.78:31990/monitor-server
+  

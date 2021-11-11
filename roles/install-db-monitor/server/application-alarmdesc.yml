@@ -1,3 +1,132 @@
+gaussdbalarm:
+  periodMinutes: 30
+  taskCron: "0 */30 * * * ?"
+
+#告警配置, 按集群设置告警配置,未设置则使用默认项
+extalert:
+  extGroups:
+  -
+    #按集群设置告警配置，default表示默认配置，
+    clusterHostInfo: default
+    #收件人邮件地址，多个用分号隔开
+    toMailAddress: lujinzhu@huawei.com;tangjizhou@huawei.com;mouyongde@huawei.com
+    #告警邮件总开关，yes开启，no关闭
+    allWarnMail: yes
+
+    gscheckWarnMail:
+      #按照检查项关闭告警，关闭后不发送告警通知, 多个项用逗号隔开, All表示关闭组内所有项
+      #例如： CheckDirPermissions, CheckClusterVer, CheckNodes
+      excludeItems: CheckAccess, CheckLogLogicalLimit, CheckSucTransUsage, CheckTableCount, CheckConnCount, CheckFirewall, CheckSysParams, CheckNetPort
+
+    #监控gaussDB数据库连接数使用率%报警值，超过此值即发送邮件报警
+    connectionUsageVal: 80
+
+
+#wsr报告, outDir为报告归档目录，time为生成周期(单位:分钟，值为30的倍数: 30,60,90),enable为false时不生成报告
+wsr:
+  outDir: /monitorgsdata/wsr
+  time: 60
+  enabled: true
+
+#默认定时任务
+monitortask:
+  scheduledGroups:
+  -
+   groupName: GrpOmStatus
+   groupDesc: 数据库实例状态检查任务组
+   groupCron: "0 */5 * * * ?"
+   enabled: true
+  -
+   groupName: GrpGsCheck
+   groupDesc: gs_check巡检任务组
+   groupCron: "0 */30 * * * ?"
+   enabled: true
+  -
+   groupName: GrpSqlCheck
+   groupDesc: SQL检查任务组
+   groupCron: "0 */5 * * * ?"
+   enabled: true
+   
+  subTasks:
+  -
+   taskGroup: GrpOmStatus
+   taskKey: gsOmStatus
+   taskDesc: gs_om巡检任务,Check数据库实例状态
+   enabled: true
+  -
+   taskGroup: GrpGsCheck
+   taskKey: gsCheckCluster
+   taskDesc: "gs_check巡检任务,Check Cluster"
+   enabled: true
+  -
+   taskGroup: GrpGsCheck
+   taskKey: gsCheckDbInst
+   taskDesc: "gs_check巡检任务,Check DB instances"
+   enabled: true
+  -
+   taskGroup: GrpGsCheck
+   taskKey: gsCheckDbStatus
+   taskDesc: "gs_check巡检任务,Check DB Status"
+   enabled: true
+  -
+   taskGroup: GrpGsCheck
+   taskKey: gsCheckInstStatus
+   taskDesc: "gs_check巡检任务,Check Inst Status"
+   enabled: true
+  -
+   taskGroup: GrpGsCheck
+   taskKey: gsCheckOs
+   taskDesc: "gs_check巡检任务,Check OS"
+   enabled: true
+  -
+   taskGroup: GrpGsCheck
+   taskKey: gsCheckPeriod
+   taskDesc: "gs_check巡检任务,Check Period"
+   enabled: true
+  -
+   taskGroup: GrpSqlCheck
+   taskKey: sqlCheckClusterRunMode
+   taskDesc: "SQL check巡检任务,集群状态是否最大可用模式"
+   enabled: true
+  -
+   taskGroup: GrpSqlCheck
+   taskKey: sqlCheckSyncInfo
+   taskDesc: "SQL check巡检任务,主备之间的物理复制是否同步"
+   enabled: true
+  -
+   taskGroup: GrpSqlCheck
+   taskKey: sqlCheckLogicRep
+   taskDesc: "SQL check巡检任务,主备之间的逻辑复制延迟是否超过指定时间(秒)"
+   #主备之间的逻辑复制延迟时间(秒)
+   queryParam1: 10
+   enabled: true
+  -
+   taskGroup: GrpSqlCheck
+   taskKey: sqlCheckFailOver
+   taskDesc: "SQL check巡检任务,主备之间是否发生FailOver"
+   enabled: true
+  -
+   taskGroup: GrpSqlCheck
+   taskKey: sqlCheckLongSQL
+   taskDesc: "SQL check巡检任务,查询执行时间超过指定时间(秒)的长sql"
+   #执行时间超过时间(秒)
+   queryParam1: 30
+   enabled: true
+  -
+   taskGroup: GrpSqlCheck
+   taskKey: sqlCheckLockTableSQL
+   taskDesc: "SQL check巡检任务,查询被锁影响超过指定时间(秒)的sql"
+   #被锁影响超过指定时间(秒)
+   queryParam1: 30
+   enabled: true
+  -
+   taskGroup: GrpSqlCheck
+   taskKey: sqlCheckLongTransaction
+   taskDesc: "SQL check巡检任务,查询超过指定时间(秒)的事务"
+   #执行时间超过时间(秒)
+   queryParam1: 30
+   enabled: true
+   
 alarmdesc:
   alarmList:
     -

@@ -1,0 +1,132 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: uoamp
+  namespace: monitoring
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: uoamp
+      zone: dc1
+  template:
+    metadata:
+      labels:
+        app: uoamp
+        zone: dc1
+    spec:
+      volumes:
+        - name: monitordata-wsr
+          nfs:
+            server: 192.168.160.61
+            path: /data01/db_monitor/wsr
+        - name: monitordata-config
+          nfs:
+            server: 192.168.160.61
+            path: /data01/db_monitor/config
+      tolerations:
+        - key: "node.kubernetes.io/unreachable"
+          operator: "Exists"
+          effect: "NoExecute"
+          tolerationSeconds: 2
+        - key: "node.kubernetes.io/not-ready"
+          operator: "Exists"
+          effect: "NoExecute"
+          tolerationSeconds: 2
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                topologyKey: "kubernetes.io/hostname"
+                labelSelector:
+                  matchExpressions:
+                    - key: app
+                      operator: In
+                      values:
+                        - uoamp
+              weight: 100
+      nodeSelector:
+        zone: dc1
+      containers:
+        - name: uoamp
+          image: '192.168.160.47:8888/public/uoamp:20211022-dev'
+          ports:
+            - containerPort: 9990
+              protocol: TCP
+          env:
+            - name: TZ
+              value: Asia/Shanghai
+          resources:
+            limits:
+              cpu: '2'
+              memory: 2Gi
+            requests:
+              cpu: 50m
+              memory: 300m
+          volumeMounts:
+            - name: monitordata-wsr
+              mountPath: /monitorgsdata/wsr
+            - name: monitordata-config
+              mountPath: /monitorgsdata/config
+          # 存活性探针 和 准备就绪探针
+          startupProbe:
+            httpGet:
+              port: 9990
+              path: /uoamp/health/
+            initialDelaySeconds: 30
+            timeoutSeconds: 5
+            periodSeconds: 3
+            successThreshold: 1
+            failureThreshold: 3
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /uoamp/health/
+              port: 9990
+              scheme: HTTP
+            initialDelaySeconds: 120
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 20
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /uoamp/health/
+              port: 9990
+              scheme: HTTP
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 10
+          # 0宕机(zero-downtime)更新
+          lifecycle:
+            preStop:
+              exec:
+                command: [ "/bin/sh", "-c", "sleep 30" ]
+
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: uoamp
+  namespace: monitoring
+  annotations:
+    # 使用http检测应用可用性，手动提供支持http检测的端口
+    prometheus.io/http-probe: "true"
+    prometheus.io/http-probe-port: "9990"
+    prometheus.io/http-probe-path: "/uoamp/health/healthz"
+
+    # 抓取应用的监控指标,路径不填写则为：/metrics
+    prometheus.io/scrape: "true"
+    prometheus.io/port: '9990'
+    prometheus.io/scheme: "http"
+    prometheus.io/path: '/uoamp/actuator/prometheus'
+spec:
+  ports:
+    - name: http
+      protocol: TCP
+      port: 9990
+      targetPort: 9990
+      nodePort: 31990
+  selector:
+    app: uoamp
+  type: NodePort
