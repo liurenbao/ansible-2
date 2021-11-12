@@ -20,3 +20,8 @@
 192.168.163.47 ansible_ssh_user=root  host_name=gaussdb-test-6 ansible_ssh_pass=Huawei@777.com
 192.168.160.12 ansible_ssh_user=root  host_name=gaussdb-test-1 ansible_ssh_pass=Huawei@777.com
 192.168.160.30 ansible_ssh_user=root  host_name=gaussdb-test-2 ansible_ssh_pass=Huawei@777.com
+
+[gaussdbnew]
+192.168.160.2   ansible_ssh_user=root   ansible_ssh_pass=Huawei@777.com
+192.168.163.145 ansible_ssh_user=root   ansible_ssh_pass=Huawei@777.com
+192.168.163.158 ansible_ssh_user=root   ansible_ssh_pass=Huawei@777.com
