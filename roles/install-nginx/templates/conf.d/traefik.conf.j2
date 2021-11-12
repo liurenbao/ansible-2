@@ -5,8 +5,8 @@ upstream traefik {
 }
 
 server {
-    listen       80 backlog=65534;
-    listen  [::]:80 backlog=65534;
+    listen       80 backlog=65534   default_server;
+    listen  [::]:80 backlog=65534   default_server;
     server_name  localhost;
 
     location / {

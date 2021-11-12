@@ -15,6 +15,7 @@ cicem.fa:53 {
         192.168.160.5	rocketmq-console-uat.cicem.fa
         192.168.160.5	es-uat.cicem.fa
         192.168.160.5	spc-uat.cicem.fa
+        192.168.160.5	spc-stress.cicem.fa
         192.168.160.5	rms-uat.cicem.fa
         192.168.160.5	ams-uat.cicem.fa
         192.168.160.5	mes-uat.cicem.fa
