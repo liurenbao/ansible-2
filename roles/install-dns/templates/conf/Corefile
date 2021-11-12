@@ -1,0 +1,39 @@
+cicem.fa:53 {
+	errors
+	reload
+	loop
+	cache 30
+	forward . /etc/resolv.conf
+	hosts {
+		192.168.160.5	k8s-dashboard-uat.cicem.fa
+        192.168.160.5	kibana-uat.cicem.fa
+        192.168.160.5	prometheus-uat.cicem.fa
+        192.168.160.5	blackbox-uat.cicem.fa
+        192.168.160.5	grafana-uat.cicem.fa
+        192.168.160.5	alertmanager-uat.cicem.fa
+        192.168.160.5	traefik-dashboard-uat.cicem.fa
+        192.168.160.5	rocketmq-console-uat.cicem.fa
+        192.168.160.5	es-uat.cicem.fa
+        192.168.160.5	spc-uat.cicem.fa
+        192.168.160.5	rms-uat.cicem.fa
+        192.168.160.5	ams-uat.cicem.fa
+        192.168.160.5	mes-uat.cicem.fa
+
+
+		192.168.160.140	k8s-dashboard-pirun.cicem.fa
+        192.168.160.140	kibana-pirun.cicem.fa
+        192.168.160.140	prometheus-pirun.cicem.fa
+        192.168.160.140	blackbox-pirun.cicem.fa
+        192.168.160.140	grafana-pirun.cicem.fa
+        192.168.160.140	alertmanager-pirun.cicem.fa
+        192.168.160.140	traefik-dashboard-pirun.cicem.fa
+        192.168.160.140	spc-pirun.cicem.fa
+        192.168.160.140	rms-pirun.cicem.fa
+        192.168.160.140	ams-pirun.cicem.fa
+        192.168.160.140	mes-pirun.cicem.fa
+
+		192.168.160.249 spc-dryrun.cicem.fa
+
+		fallthrough
+	}
+}
