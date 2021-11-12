@@ -30,6 +30,7 @@ spec:
             - --api
             - --api.insecure
             - --entrypoints.web.address=:80
+            - --entrypoints.websecure.address=:443
             - --entrypoints.tcpep.address=:8000
             - --entrypoints.udpep.address=:9000/udp
             - --providers.kubernetescrd
@@ -42,6 +43,8 @@ spec:
           ports:
             - name: web
               containerPort: 80
+            - name: websecure
+              containerPort: 443
             - name: admin
               containerPort: 8080
             - name: tcpep
@@ -118,5 +121,10 @@ spec:
       name: prometheus
       targetPort: 8082
       nodePort: 31004
+    - protocol: TCP
+      port: 443
+      name: websecure
+      targetPort: 443
+      nodePort: 31005
   externalTrafficPolicy: Local
   type: NodePort
