@@ -42,3 +42,18 @@ spec:
       services:
         - name: blackbox
           port: 9115
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: grafana
+  namespace: monitoring
+spec:
+  entryPoints:
+    - web
+  routes:
+    - kind: Rule
+      match: Host(`grafana-uat.cicem.fa`)
+      services:
+        - name: grafana
+          port: 3000
