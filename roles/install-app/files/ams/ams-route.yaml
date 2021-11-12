@@ -1,0 +1,39 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: ams-ui
+  namespace: ams
+spec:
+  entryPoints:
+    - web
+  routes:
+    - kind: Rule
+      match: Host(`ams-uat.cicem.fa`)
+      services:
+        - name: ams-ui
+          port: 80
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: ams-api-replacepath
+spec:
+  replacePath:
+    path: /
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: ams-ui
+  namespace: ams
+spec:
+  entryPoints:
+    - web
+  routes:
+    - kind: Rule
+      match: Host(`ams-uat.cicem.fa`) && PathPrefix(`/api/`)
+      middlewares:
+        - name: ams-api-replacepath
+      services:
+        - name: ams-api
+          port: 8100
