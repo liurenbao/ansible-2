@@ -2,10 +2,10 @@
 # 注意修改内存配置
 # 注意修改VIP地址
 #---------------------
-harbor_keepalived_vip: 192.168.163.252
+harbor_keepalived_vip: 192.168.160.47
 nginx_keepalived_vip: 192.168.160.36
 k8s_keepalived_vip: 192.168.163.249
-es_initial_master_nodes: '["192.168.163.6", "192.168.163.209", "192.168.163.11"]'
+es_initial_master_nodes: '["192.168.163.185", "192.168.163.229", "192.168.163.166"]'
 
 cim_ops_uid: '9999'
 cim_ops_user: 'cimops'
@@ -20,7 +20,7 @@ yum_base_url: 'http://192.168.161.202/yum/'
 keepalived_root_dir: /data01/keepalived
 ## harbor----------------------------------------------------------------------------------
 # harbor主备vip
-harbor_port: '80'
+harbor_port: '8888'
 harbor_keepalived_virtual_router_id: '{{ harbor_keepalived_vip.split(".")[3] }}'
 harbor_keepalived_vrrp_instance_interface: eth0
 harbor_root_dir: '/data01/harbor'
@@ -69,7 +69,7 @@ jdk_dir: '/data01/jdk1.8.0_202'
 rocket_cluster_name: CIMCluster
 rocketmq_root_dir: '/data01/rocketmq'
 rocketmq_package_dir: '{{ package_dir }}/rocketmq'
-rocket_topic_list: test
+rocketmq_jvm_args: -Xms16g -Xmx16g -Xmn8g
 
 # ravencast-----------------------------------------------------------------------------------
 ravencast_xms_xmx_args: '-Xms24G -Xmx24G'

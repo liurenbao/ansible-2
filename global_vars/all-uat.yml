@@ -105,7 +105,6 @@ alertmanager_smtp_password: Huawei@777.com
 alertmanager_app_email_to: tangjizhou@huawei.com, mouyongde@huawei.com
 alertmanager_db_email_to: lujinzhu@huawei.com, tangjizhou@huawei.com
 node_exporter_root_dir: /data01/node-exporter
-process_exporter_root_dir: /data01/process-exporter
 
 # redis---------------------------------------------------------------------------------------
 redis_data_dir: '/data01/redis'

@@ -1,17 +1,3 @@
-- name: uninstall rocketmq console
-  hosts: rocketmq-console
-  gather_facts: false
-  tasks:
-    - name: check docker container running
-      stat:
-        path: "{{ rocketmq_root_dir }}/docker-compose.yml"
-      register: docker_compose_file
-    - name: stop rocketmq console
-      shell: docker-compose down
-      when: docker_compose_file.stat.exists == true
-      args:
-        chdir: "{{ rocketmq_root_dir }}"
-
 - name: uninstall rocketmq namesrv
   gather_facts: false
   hosts: rocketmq-namesrv
