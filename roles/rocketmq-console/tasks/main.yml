@@ -1,11 +1,12 @@
 - name: create root dir
-  command: mkdir -p {{ rocketmq_root_dir }}
+  file:
+    path: '{{ component_manifest_dir }}/rocketmq'
+    state: directory
 
-- name: send docker-compose.yml
-  template: src=docker-compose.yml.j2 dest={{ rocketmq_root_dir }}/docker-compose.yml
+- name: send rocketmq yaml
+  template:
+    src: rocketmq-console.yaml.j2
+    dest: '{{ component_manifest_dir }}/rocketmq/rocketmq-console.yaml'
 
-- name: stop rocketmq-console
-  command: docker-compose -f {{ rocketmq_root_dir }}/docker-compose.yml down
-
-- name: start up rocketmq-console
-  command: docker-compose -f {{ rocketmq_root_dir }}/docker-compose.yml up -d
+- name: apply rocketmq yaml
+  shell: 'kubectl apply -f {{ component_manifest_dir }}/rocketmq/rocketmq-console.yaml'

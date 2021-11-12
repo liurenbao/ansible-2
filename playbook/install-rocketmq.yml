@@ -51,12 +51,6 @@
   roles:
     - rocketmq-broker
 
-- name: install rocketmq console
-  gather_facts: false
-  hosts: rocketmq-console
-  roles:
-    - rocketmq-console
-
 - name: create topic
   gather_facts: false
   hosts: rocketmq-namesrv
@@ -83,3 +77,9 @@
         - spc-mes-save-param
         - spc-rpt-excute-calculate
         - spc-rpt-execute-calculate
+
+- name: install rocketmq console
+  gather_facts: false
+  hosts: k8s-master-init
+  roles:
+    - rocketmq-console
