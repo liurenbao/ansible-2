@@ -30,8 +30,6 @@
 10.12.107.141 host_name=jdfap-k8sw21 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" label="zone=dc2"
 10.12.107.142 host_name=jdfap-k8sw22 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" label="zone=dc2"
 10.12.107.143 host_name=jdfap-k8sw23 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" label="zone=dc2"
-[rocketmq-console]
-10.12.107.231 host_name=jdfap-rocketmq01 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
 [rocketmq-namesrv]
 10.12.107.231 host_name=jdfap-rocketmq01 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
 10.12.107.232 host_name=jdfap-rocketmq02 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
@@ -47,16 +45,16 @@
 10.12.107.171 host_name=jdfap-elkes01 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
 10.12.107.172 host_name=jdfap-elkes02 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
 10.12.107.173 host_name=jdfap-elkes03 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
-10.12.107.174 host_name=jdfap-elkes04 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
-10.12.107.175 host_name=jdfap-elkes05 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
-10.12.107.176 host_name=jdfap-elkes06 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
-10.12.107.221 host_name=jdfap-elkfk07 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
-10.12.107.222 host_name=jdfap-elkfk08 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
-10.12.107.223 host_name=jdfap-elkfk09 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
+#10.12.107.174 host_name=jdfap-elkes04 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
+#10.12.107.175 host_name=jdfap-elkes05 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
+#10.12.107.176 host_name=jdfap-elkes06 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
+#10.12.107.224 host_name=jdfap-elkfk04 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
+#10.12.107.225 host_name=jdfap-elkfk05 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
+#10.12.107.226 host_name=jdfap-elkfk06 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
 [kafka]
-10.12.107.224 host_name=jdfap-elkfk04 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
-10.12.107.225 host_name=jdfap-elkfk05 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
-10.12.107.226 host_name=jdfap-elkfk06 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
+10.12.107.221 host_name=jdfap-elkfk01 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
+10.12.107.222 host_name=jdfap-elkfk02 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
+10.12.107.223 host_name=jdfap-elkfk03 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
 [redis]
 10.12.107.211 host_name=jdfap-redis01 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
 10.12.107.212 host_name=jdfap-redis02 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
@@ -70,23 +68,91 @@
 [ravencast-eis]
 10.12.107.206 host_name=jdfap-eismq01 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
 10.12.107.207 host_name=jdfap-eismq02 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
-[ravencast-fdc-1]
-10.12.107.181 host_name=jdfap-fdcmq01 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
-10.12.107.182 host_name=jdfap-fdcmq02 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
-[ravencast-fdc-2]
-10.12.107.183 host_name=jdfap-fdcmq03 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
-10.12.107.184 host_name=jdfap-fdcmq04 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
-[ravencast-apc]
-10.12.107.185 host_name=jdfap-apcmq01 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
-10.12.107.186 host_name=jdfap-apcmq02 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
-
+#[ravencast-fdc-1]
+#10.12.107.181 host_name=jdfap-fdcmq01 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
+#10.12.107.182 host_name=jdfap-fdcmq02 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
+#[ravencast-fdc-2]
+#10.12.107.183 host_name=jdfap-fdcmq03 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
+#10.12.107.184 host_name=jdfap-fdcmq04 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
+#[ravencast-apc]
+#10.12.107.185 host_name=jdfap-apcmq01 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
+#10.12.107.186 host_name=jdfap-apcmq02 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
 [ravencast-mes:vars]
 ravencast_tcphosts=10.12.107.201[7800],10.12.107.202[7800]
-[ravencast-fdc-1:vars]
-ravencast_tcphosts=10.12.107.181[7800],10.12.107.182[7800]
-[ravencast-fdc-2:vars]
-ravencast_tcphosts=10.12.107.183[7800],10.12.107.184[7800]
 [ravencast-eis:vars]
 ravencast_tcphosts=10.12.107.206[7800],10.12.107.207[7800]
-[ravencast-apc:vars]
-ravencast_tcphosts=10.12.107.185[7800],10.12.107.186[7800]
+#[ravencast-fdc-1:vars]
+#ravencast_tcphosts=10.12.107.181[7800],10.12.107.182[7800]
+#[ravencast-fdc-2:vars]
+#ravencast_tcphosts=10.12.107.183[7800],10.12.107.184[7800]
+#[ravencast-apc:vars]
+#ravencast_tcphosts=10.12.107.185[7800],10.12.107.186[7800]
+[nas]
+#10.12.115.10    ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
+[eap]
+10.12.107.31    host_name=jdfap-eap01   ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
+10.12.107.32    host_name=jdfap-eap02   ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
+10.12.107.33    host_name=jdfap-eap03   ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
+10.12.107.34    host_name=jdfap-eap04   ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
+10.12.107.35    host_name=jdfap-eap05   ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
+10.12.107.36    host_name=jdfap-eap06   ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
+10.12.107.37    host_name=jdfap-eap07   ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
+#10.12.107.38    host_name=jdfap-eap08   ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
+#10.12.107.39    host_name=jdfap-eap09   ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
+#10.12.107.40    host_name=jdfap-eap10   ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
+#10.12.107.41    host_name=jdfap-eap11   ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
+#10.12.107.42    host_name=jdfap-eap12   ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
+#10.12.107.43    host_name=jdfap-eap13   ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
+#10.12.107.44    host_name=jdfap-eap14   ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
+#10.12.107.45    host_name=jdfap-eap15   ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
+#10.12.107.46    host_name=jdfap-eap16   ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
+#10.12.107.47    host_name=jdfap-eap17   ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
+#10.12.107.48    host_name=jdfap-eap18   ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
+#10.12.107.49    host_name=jdfap-eap19   ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
+#10.12.107.50    host_name=jdfap-eap20   ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
+#10.12.107.51    host_name=jdfap-eap21   ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
+#10.12.107.52    host_name=jdfap-eap22   ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
+#10.12.107.53    host_name=jdfap-eap23   ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
+#10.12.107.54    host_name=jdfap-eap24   ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
+#10.12.107.55    host_name=jdfap-eap25   ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
+#10.12.107.56    host_name=jdfap-eap26   ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
+#10.12.107.57    host_name=jdfap-eap27   ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
+#10.12.107.58    host_name=jdfap-eap28   ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
+#10.12.107.59    host_name=jdfap-eap29   ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
+#10.12.107.60    host_name=jdfap-eap30   ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
+#10.12.107.61    host_name=jdfap-eap31   ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
+#10.12.107.62    host_name=jdfap-eap32   ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
+#10.12.107.63    host_name=jdfap-eap33   ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
+#10.12.107.64    host_name=jdfap-eap34   ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
+#10.12.107.65    host_name=jdfap-eap35   ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
+#10.12.107.66    host_name=jdfap-eap36   ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
+#10.12.107.67    host_name=jdfap-eap37   ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
+#10.12.107.68    host_name=jdfap-eap38   ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
+#10.12.107.69    host_name=jdfap-eap39   ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
+#10.12.107.70    host_name=jdfap-eap40   ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
+#10.12.107.71    host_name=jdfap-eap41   ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
+#10.12.107.72    host_name=jdfap-eap42   ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
+#10.12.107.73    host_name=jdfap-eap43   ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
+#10.12.107.74    host_name=jdfap-eap44   ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
+#10.12.107.75    host_name=jdfap-eap45   ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
+#10.12.107.76    host_name=jdfap-eap46   ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
+#10.12.107.77    host_name=jdfap-eap47   ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
+#10.12.107.78    host_name=jdfap-eap48   ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
+#10.12.107.79    host_name=jdfap-eap49   ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
+#10.12.107.80    host_name=jdfap-eap50   ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
+#10.12.107.81    host_name=jdfap-eap51   ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
+#10.12.107.82    host_name=jdfap-eap52   ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
+#10.12.107.83    host_name=jdfap-eap53   ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
+#10.12.107.84    host_name=jdfap-eap54   ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
+#10.12.107.85    host_name=jdfap-eap55   ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
+#10.12.107.86    host_name=jdfap-eap56   ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
+#10.12.107.87    host_name=jdfap-eap57   ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
+#10.12.107.88    host_name=jdfap-eap58   ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
+#10.12.107.89    host_name=jdfap-eap59   ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
+#10.12.107.90    host_name=jdfap-eap60   ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
+#10.12.107.91    host_name=jdfap-eap61   ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
+#10.12.107.92    host_name=jdfap-eap62   ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
+#10.12.107.93    host_name=jdfap-eap63   ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
+#10.12.107.94    host_name=jdfap-eap64   ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
+#10.12.107.95    host_name=jdfap-eap65   ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
+#10.12.107.96    host_name=jdfap-eap66   ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"

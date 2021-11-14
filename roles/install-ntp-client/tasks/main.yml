@@ -44,6 +44,12 @@
     state: present
     mode: 0774
 
+- name: clear old ntp conf
+  lineinfile:
+    regexp: ".*ntpd.*ntpdate.*"
+    state: absent
+    path: /var/spool/cron/root
+
 - name: crontab ntp -d -u
   cron:
     name: "ntpdate"
