@@ -7,7 +7,7 @@ spec:
   entryPoints:
     - web
   routes:
-    - match: Host(`rms-uat.cicem.fa`)
+    - match: Host(`rms.cicem.fa`)
       kind: Rule
       services:
         - name: rms-ui

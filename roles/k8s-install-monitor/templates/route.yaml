@@ -8,7 +8,7 @@ spec:
     - web
   routes:
     - kind: Rule
-      match: Host(`alertmanager-uat.cicem.fa`)
+      match: Host(`alertmanager.cicem.fa`)
       services:
         - name: alertmanager-main
           port: 9093
@@ -23,7 +23,7 @@ spec:
     - web
   routes:
     - kind: Rule
-      match: Host(`prometheus-uat.cicem.fa`)
+      match: Host(`prometheus.cicem.fa`)
       services:
         - name: prometheus-k8s
           port: 9090
@@ -38,7 +38,7 @@ spec:
     - web
   routes:
     - kind: Rule
-      match: Host(`blackbox-uat.cicem.fa`)
+      match: Host(`blackbox.cicem.fa`)
       services:
         - name: blackbox
           port: 9115
@@ -53,7 +53,7 @@ spec:
     - web
   routes:
     - kind: Rule
-      match: Host(`grafana-uat.cicem.fa`)
+      match: Host(`grafana.cicem.fa`)
       services:
         - name: grafana
           port: 3000
