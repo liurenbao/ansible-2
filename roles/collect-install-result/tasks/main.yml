@@ -5,33 +5,33 @@
   register: this
   failed_when: "'Client sent an HTTP request to an HTTPS server' not in this.content"
 
-- name: check traefik dashboard url
-  uri:
-    url: 'http://{{ nginx_keepalived_vip }}:31000/dashboard'
-    return_content: yes
-  register: this
-  failed_when: this.status != 200
-
-- name: check grafana dashboard url
-  uri:
-    url: 'http://{{ nginx_keepalived_vip }}:30004'
-    return_content: yes
-  register: this
-  failed_when: this.status != 200
-
-- name: check prometheus dashboard url
-  uri:
-    url: 'http://{{ nginx_keepalived_vip }}:30002'
-    return_content: yes
-  register: this
-  failed_when: this.status != 200
-
-- name: check kibana dashboard url
-  uri:
-    url: 'http://{{ nginx_keepalived_vip }}:30001'
-    return_content: yes
-  register: this
-  failed_when: this.status != 200
+#- name: check traefik dashboard url
+#  uri:
+#    url: 'http://{{ nginx_keepalived_vip }}:31000/dashboard'
+#    return_content: yes
+#  register: this
+#  failed_when: this.status != 200
+#
+#- name: check grafana dashboard url
+#  uri:
+#    url: 'http://{{ nginx_keepalived_vip }}:30004'
+#    return_content: yes
+#  register: this
+#  failed_when: this.status != 200
+#
+#- name: check prometheus dashboard url
+#  uri:
+#    url: 'http://{{ nginx_keepalived_vip }}:30002'
+#    return_content: yes
+#  register: this
+#  failed_when: this.status != 200
+#
+#- name: check kibana dashboard url
+#  uri:
+#    url: 'http://{{ nginx_keepalived_vip }}:30001'
+#    return_content: yes
+#  register: this
+#  failed_when: this.status != 200
 
 - name: check traefik dashboard url
   uri:

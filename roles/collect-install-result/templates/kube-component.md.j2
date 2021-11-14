@@ -1,13 +1,13 @@
-| component        | url                                               | auth                             |
-|------------------|---------------------------------------------------|----------------------------------|
-| harbor           | http://{{ image_repository }}                     |                                  |
-| nginx            | http://{{ nginx_keepalived_vip }}                 |                                  |
-| kibana           | http://{{ nginx_keepalived_vip }}:30001           |                                  |
-| prometheus       | http://{{ nginx_keepalived_vip }}:30002           |                                  |
-| blackbox         | http://{{ nginx_keepalived_vip }}:30003           |                                  |
-| grafana          | http://{{ nginx_keepalived_vip }}:30004           |                                  |
-| alertmanager     | http://{{ nginx_keepalived_vip }}:30005           |                                  |
-| traefik          | http://{{ nginx_keepalived_vip }}:31000/dashboard |                                  |
-| redis            | {{ redis_connect_string.stdout }}                 |                                  |
-| rocketmq-namesrv | {{ rocketmq_namesrv.stdout }}                     |                                  |
-| rocketmq-console | http://{{ nginx_keepalived_vip }}:8080            | admin/admin                      |
+| component        | url                               | auth        |
+|------------------|-----------------------------------|-------------|
+| harbor           | http://{{ image_repository }}     |             |
+| nginx            | http://{{ nginx_keepalived_vip }} |             |
+| kibana           | http://kibana.cicem.fa            |             |
+| prometheus       | http://prometheus.cicem.fa        |             |
+| blackbox         | http://blackbox.cicem.fa          |             |
+| grafana          | http://grafana.cicem.fa           |             |
+| alertmanager     | http://alertmanager.cicem.fa      |             |
+| traefik          | http://traefik-dashboard.cicem.fa |             |
+| redis            | {{ redis_connect_string.stdout }} |             |
+| rocketmq-namesrv | {{ rocketmq_namesrv.stdout }}     |             |
+| rocketmq-console | http://rocketmq-console.cicem.fa  | admin/admin |

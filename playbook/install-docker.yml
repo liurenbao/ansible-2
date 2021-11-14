@@ -1,7 +1,6 @@
 - name: install docker
   gather_facts: false
   hosts:
-    - harbor
     - k8s-master-init
     - k8s-master-join
     - k8s-worker
