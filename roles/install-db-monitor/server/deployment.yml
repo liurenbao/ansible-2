@@ -47,7 +47,7 @@ data:
         namespace: monitoring
         cluster:
           max-redirects: 3
-          nodes: 192.168.160.110:6379,192.168.160.114:6379,192.168.160.109:6379,192.168.160.112:6379,192.168.160.108:6379,192.168.160.113:6379
+          nodes: 10.12.107.211:6379,10.12.107.212:6379,10.12.107.213:6379,10.12.107.214:6379,10.12.107.215:6379,10.12.107.216:6379
         #password:
         lettuce:
           pool:
@@ -66,7 +66,7 @@ data:
 
     elasticsearch:
       schema: http
-      address: 192.168.163.50:9200,192.168.161.200:9200,192.168.161.242:9200
+      address: 10.12.107.171:9200,10.12.107.172:9200,10.12.107.173:9200
       connectTimeout: 5000
       socketTimeout: 5000
       connectionRequestTimeout: 5000
@@ -106,7 +106,7 @@ data:
         #按集群设置告警配置，default表示默认配置，
         clusterHostInfo: default
         #收件人邮件地址，多个用分号隔开
-        toMailAddress: lujinzhu@huawei.com;tangjizhou@huawei.com;mouyongde@huawei.com
+        toMailAddress: lujinzhu@icrd.com;tangjizhou@icrd.com;mouyongde@icrd.com
         #告警邮件总开关，yes开启，no关闭
         allWarnMail: yes
 
@@ -1068,12 +1068,12 @@ spec:
       volumes:
         - name: monitordata-wsr
           nfs:
-            server: 192.168.160.35
-            path: /data01/db_monitor/wsr
+            server: 10.12.115.10
+            path: /FS_Prod_INFRA_Kubernetes/db_monitor/wsr
         - name: monitordata-config
           nfs:
-            server: 192.168.160.35
-            path: /data01/db_monitor/config
+            server: 10.12.115.10
+            path: /FS_Prod_INFRA_Kubernetes/db_monitor/config
         - name: monitor-server-application-yaml
           configMap:
             name: monitor-server-application-yaml
@@ -1105,7 +1105,7 @@ spec:
         zone: dc1
       containers:
         - name: monitor-server
-          image: '192.168.160.47:8888/public/monitor-server:20211028-dev'
+          image: '10.12.107.150:80/public/monitor-server:20211028-dev'
           ports:
             - containerPort: 9990
               protocol: TCP

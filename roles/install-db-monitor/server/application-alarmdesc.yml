@@ -9,7 +9,7 @@ extalert:
     #按集群设置告警配置，default表示默认配置，
     clusterHostInfo: default
     #收件人邮件地址，多个用分号隔开
-    toMailAddress: lujinzhu@huawei.com;tangjizhou@huawei.com;mouyongde@huawei.com
+    toMailAddress: lujinzhu@icrd.com;tangjizhou@icrd.com;mouyongde@icrd.com
     #告警邮件总开关，yes开启，no关闭
     allWarnMail: yes
 

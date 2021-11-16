@@ -24,7 +24,7 @@ filebeat.inputs:
     fields:
       kafka_topic: 'gaussdb-alarm'
 output.kafka:
-  hosts: [ "192.168.161.194:9092", "192.168.161.193:9092", "192.168.161.195:9092" ]
+  hosts: [ "10.12.107.221:9092", "10.12.107.222:9092", "10.12.107.223:9092" ]
   topic: '%{[fields.kafka_topic]}'
   worker: 8
   required_acks: 1
