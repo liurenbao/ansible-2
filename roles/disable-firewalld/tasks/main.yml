@@ -1,0 +1,17 @@
+- name: disable firewalld
+    systemd:
+      name: firewalld
+      state: stopped
+      enabled: no
+- name: close selinux
+  shell: setenforce 0 || true
+
+- name: disable selinux
+  lineinfile:
+    state: present
+    path: /etc/selinux/config
+    regexp: '^SELINUX='
+    line: SELINUX=disabled
+
+- name: disable firewalld
+  shell: systemctl disable firewalld

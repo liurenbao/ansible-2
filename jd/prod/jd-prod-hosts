@@ -1,6 +1,6 @@
 [harbor]
-10.12.107.146 host_name=jdfap-harb01 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" MASTER_BACKUP=MASTER
-10.12.107.147 host_name=jdfap-harb02 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" MASTER_BACKUP=BACKUP
+#10.12.107.146 host_name=jdfap-harb01 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" MASTER_BACKUP=MASTER
+#10.12.107.147 host_name=jdfap-harb02 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" MASTER_BACKUP=BACKUP
 [k8s-master-init]
 10.12.107.116 host_name=jdfap-k8sm01 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" MASTER_BACKUP=MASTER label="zone=dc1"
 [k8s-master-join]
@@ -88,7 +88,7 @@ ravencast_tcphosts=10.12.107.206[7800],10.12.107.207[7800]
 #[ravencast-apc:vars]
 #ravencast_tcphosts=10.12.107.185[7800],10.12.107.186[7800]
 [nas]
-#10.12.115.10    ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
+10.12.115.10    ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
 [eap]
 10.12.107.31    host_name=jdfap-eap01   ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
 10.12.107.32    host_name=jdfap-eap02   ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"

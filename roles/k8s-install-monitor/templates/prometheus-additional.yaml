@@ -46,7 +46,7 @@ stringData:
         - action: replace
           source_labels: [ nodename, instance ]
           regex: ([^.]+)(?::\d+)?;([^:]+)(?::\d+)?
-          replacement: $1($2)
+          replacement: $1@$2
           target_label: instance
         - action: labeldrop
           regex: __meta_kubernetes_.+

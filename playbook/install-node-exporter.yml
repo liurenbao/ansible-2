@@ -1,5 +1,5 @@
 - name: install node exporter
   gather_facts: false
-  hosts: all,!k8s-master-init,!k8s-master-join,!k8s-worker
+  hosts: all,!k8s-master-init,!k8s-master-join,!k8s-worker,!nas
   roles:
     - install-node-exporter

@@ -2,7 +2,7 @@
 - import_playbook: playbook/disable-firewalld.yaml
 - import_playbook: playbook/change-hostname.yml
 - import_playbook: playbook/change-sysconf.yml
-- import_playbook: playbook/install-yum.yml
+#- import_playbook: playbook/install-yum.yml
 - import_playbook: playbook/install-time.yml
 - import_playbook: playbook/install-software.yml
 - import_playbook: playbook/install-docker.yml

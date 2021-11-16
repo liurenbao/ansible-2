@@ -89,7 +89,7 @@ kube_component_file: '{{ component_manifest_dir }}/kube-component.md'
 etcd_backup_root_dir: '/data01/etcd-backup'
 
 # monitor--------------------------------------------------------------------------------------
-nfs_root_dir: '/FS-Prod-INFRA-Kubernetes'
+nfs_root_dir: '/FS_Prod_INFRA_Kubernetes'
 nfs_server: "{{ groups['nas'][0] }}"
 monitor_nfs_path: '{{ nfs_root_dir }}/monitoring'
 monitor_manifest_root_dir: '{{ component_manifest_dir }}/monitoring'

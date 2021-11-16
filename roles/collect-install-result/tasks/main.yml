@@ -52,12 +52,6 @@
     echo $rocketmq_namesrv
   register: rocketmq_namesrv
 
-- name: rocketmq console
-  shell: |
-    rocketmq_console="{{ groups['rocketmq-console'] | map('regex_replace', '^(.*)$','http://\1:8080') | join(' ') }}"
-    echo $rocketmq_console
-  register: rocketmq_console
-
 - name: copy kube-component file
   template:
     src: kube-component.md.j2

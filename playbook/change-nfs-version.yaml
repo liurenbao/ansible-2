@@ -1,0 +1,28 @@
+- name: change nfs version
+  hosts: k8s-master-init,k8s-master-join,k8s-worker
+  gather_facts: false
+  tasks:
+    - name: change nfs version
+      lineinfile:
+        regexp: "^# Defaultvers=4"
+        line: 'Defaultvers=3'
+        path: /etc/nfsmount.conf
+    - name: change nfs server version
+      lineinfile:
+        regexp: "^# Nfsvers=4"
+        line: 'Nfsvers=3'
+        path: /etc/nfsmount.conf
+
+    - name: change nfs mount version
+      lineinfile:
+        regexp: "# mountvers=3"
+        line: 'mountvers=3'
+        path: /etc/nfsmount.conf
+    - name: restart nfs
+      systemd:
+        name: nfs
+        state: stopped
+    - name: create nfs dir
+      file:
+        path: /nfs
+        state: absent
