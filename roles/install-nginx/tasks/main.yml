@@ -64,11 +64,6 @@
     src: docker-compose.yml.j2
     dest: '{{ nginx_root_dir }}/docker-compose.yml'
 
-- name: send filebeat config
-  template:
-    src: filebeat.yml.j2
-    dest: '{{ nginx_root_dir }}/filebeat.yml'
-
 - name: create nginx conf dir
   file:
     path: '{{ nginx_root_dir }}/conf.d'
@@ -85,10 +80,8 @@
     dest: "{{ nginx_root_dir }}/{{ item | regex_replace('.j2$', '') }}"
   with_items:
     - conf.d/plantu.conf.j2
-    - conf.d/rms.conf.j2
     - conf.d/traefik.conf.j2
-    - conf.d/ams.conf.j2
-#    - conf.d/apc.conf.j2
+    - conf.d/apc.conf.j2
 
 - name: start nginx
   shell: docker-compose up -d

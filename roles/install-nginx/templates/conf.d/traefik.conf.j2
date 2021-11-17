@@ -10,7 +10,7 @@ server {
     server_name  localhost;
 
     location / {
-        proxy_read_timeout  60s;
+        proxy_read_timeout  300s;
         proxy_next_upstream_timeout 1s;
         proxy_pass http://traefik;
         proxy_set_header X-Real-IP $remote_addr;
