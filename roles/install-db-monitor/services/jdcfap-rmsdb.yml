@@ -1,0 +1,60 @@
+apiVersion: v1
+kind: Endpoints
+metadata:
+  name: jdcfap-rmsdb-client
+  namespace: gaussdb-monitoring
+subsets:
+  - addresses:
+      - ip: 10.12.114.21
+        nodeName: jdc1fap-rmsdb01
+      - ip: 10.12.114.121
+        nodeName: jdc2fap-rmsdb02
+    ports:
+      - port: 9998
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: jdcfap-rmsdb-client
+  namespace: gaussdb-monitoring
+  annotations:
+    maintainer: "lujinzhu@icrd.com"
+    prometheus.io/http-probe: "true"
+    prometheus.io/http-probe-port: "9998"
+    prometheus.io/http-probe-path: "/monitor-client-agent/metrics"
+    prometheus.io/scrape: "true"
+    prometheus.io/port: '9998'
+    prometheus.io/scheme: "http"
+    prometheus.io/path: '/monitor-client-agent/metrics'
+spec:
+  ports:
+    - port: 9998
+---
+apiVersion: v1
+kind: Endpoints
+metadata:
+  name: jdcfap-rmsdb-node-exporter
+  namespace: gaussdb-monitoring
+subsets:
+  - addresses:
+      - ip: 10.12.114.21
+        nodeName: jdc1fap-rmsdb01
+      - ip: 10.12.114.121
+        nodeName: jdc2fap-rmsdb02
+    ports:
+      - port: 9100
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: jdcfap-rmsdb-node-exporter
+  namespace: gaussdb-monitoring
+  annotations:
+    maintainer: "lujinzhu@icrd.com"
+    prometheus.io/scrape: "true"
+    prometheus.io/port: '9100'
+    prometheus.io/scheme: "http"
+    prometheus.io/path: '/metrics'
+spec:
+  ports:
+    - port: 9100
