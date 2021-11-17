@@ -25,12 +25,12 @@ metadata:
   namespace: elk
   name: autodelete-es-index-pattern
 spec:
-  failedJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 1
   successfulJobsHistoryLimit: 1
   concurrencyPolicy: Replace
   startingDeadlineSeconds: 20
   #每天2点执行
-  schedule: "0 2 * * *"
+  schedule: "*/10 * * * *"
   jobTemplate:
     spec:
       template:
