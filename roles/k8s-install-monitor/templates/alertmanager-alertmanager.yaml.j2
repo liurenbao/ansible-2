@@ -16,7 +16,7 @@ spec:
           requests:
             storage: '{{ alertmanager_storage }}'
   image: '{{ image_repository }}/public/alertmanager:v0.20.0'
-  externalUrl: "http://{{ nginx_keepalived_vip }}:30005"
+  externalUrl: "http://alertmanager.cicem.fa"
   logLevel: debug
   retention: '{{ alertmanager_data_retention }}'
   nodeSelector:
@@ -24,10 +24,10 @@ spec:
   replicas: 3
   resources:
     limits:
-      cpu: 100m
-      memory: 100Mi
+      cpu: '2'
+      memory: 300Mi
     requests:
-      cpu: 4m
+      cpu: 400m
       memory: 100Mi
   securityContext:
     fsGroup: 2000
