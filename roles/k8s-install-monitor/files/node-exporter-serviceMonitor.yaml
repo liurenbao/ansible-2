@@ -28,7 +28,7 @@ spec:
             - instance
             - addr
           regex: ([^.]+)(?::\d+)?;([^:]+)(?::\d+)?
-          replacement: $1($2)
+          replacement: $1@$2
           targetLabel: instance
         - action: labeldrop
           regex: "addr"
