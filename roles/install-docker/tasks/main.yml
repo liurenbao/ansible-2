@@ -78,14 +78,12 @@
     dest: /etc/docker/daemon.json
     force: yes
 
-- name: enable docker
-  shell: systemctl enable docker.service
-
-- name: daemon-reload
-  shell: systemctl daemon-reload
-
 - name: restart docker
-  shell: systemctl restart docker
+  systemd:
+    name: docker
+    daemon_reload: yes
+    state: restarted
+    enabled: yes
 
 - name: add docker clean cron
   cron:
