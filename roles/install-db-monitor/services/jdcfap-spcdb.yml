@@ -18,7 +18,7 @@ metadata:
   name: jdcfap-spcdb-client
   namespace: gaussdb-monitoring
   annotations:
-    maintainer: "lujinzhu@icrd.com"
+    maintainer: "lujinzhu@cicem.fa"
     prometheus.io/http-probe: "true"
     prometheus.io/http-probe-port: "9998"
     prometheus.io/http-probe-path: "/monitor-client-agent/metrics"
@@ -50,7 +50,7 @@ metadata:
   name: jdcfap-spcdb-node-exporter
   namespace: gaussdb-monitoring
   annotations:
-    maintainer: "lujinzhu@icrd.com"
+    maintainer: "lujinzhu@cicem.fa"
     prometheus.io/scrape: "true"
     prometheus.io/port: '9100'
     prometheus.io/scheme: "http"
