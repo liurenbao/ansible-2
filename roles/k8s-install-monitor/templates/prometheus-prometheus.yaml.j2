@@ -27,6 +27,25 @@ spec:
     kubernetes.io/os: linux
   podMonitorNamespaceSelector: { }
   podMonitorSelector: { }
+  affinity:
+    podAntiAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        - topologyKey: kubernetes.io/hostname
+          labelSelector:
+            matchExpressions:
+              - key: app
+                operator: In
+                values:
+                  - alertmanager
+  tolerations:
+    - key: node.kubernetes.io/not-ready
+      operator: Exists
+      effect: NoExecute
+      tolerationSeconds: 2
+    - key: node.kubernetes.io/unreachable
+      operator: Exists
+      effect: NoExecute
+      tolerationSeconds: 2
   retention: '{{ prometheus_data_retention }}'
   replicas: 2
   resources:
