@@ -1106,6 +1106,8 @@ spec:
       containers:
         - name: monitor-server
           image: '10.12.107.150:80/public/monitor-server:20211028-dev'
+          args:
+            - "--spring.config.location=/app/uoamp/config/application.yml,/app/uoamp/config/application-alarmdesc.yml"
           ports:
             - containerPort: 9990
               protocol: TCP
@@ -1115,16 +1117,16 @@ spec:
           resources:
             limits:
               cpu: '2'
-              memory: 2Gi
+              memory: 3Gi
             requests:
               cpu: 50m
               memory: 300m
           volumeMounts:
             - name: monitor-server-application-yaml
-              mountPath: /app/uoamp/application.yml
+              mountPath: /app/uoamp/config/application.yml
               subPath: application.yml
             - name: monitor-server-application-alarmdesc-yaml
-              mountPath: /app/uoamp/application-alarmdesc.yml
+              mountPath: /app/uoamp/config/application-alarmdesc.yml
               subPath: application-alarmdesc.yml
             - name: monitordata-wsr
               mountPath: /monitorgsdata/wsr
