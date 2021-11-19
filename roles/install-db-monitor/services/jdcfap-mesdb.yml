@@ -33,7 +33,7 @@ spec:
 apiVersion: v1
 kind: Endpoints
 metadata:
-  name: jdcfap-mesdb-node-exporter
+  name: jdcfap-mesdb
   namespace: gaussdb-monitoring
 subsets:
   - addresses:
@@ -42,19 +42,20 @@ subsets:
       - ip: 10.12.114.116
         nodeName: jdc2fap-mesdb02
     ports:
-      - port: 9100
+      - port: 15400
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: jdcfap-mesdb-node-exporter
+  name: jdcfap-mesdb
   namespace: gaussdb-monitoring
   annotations:
     maintainer: "lujinzhu@cicem.fa"
+    prometheus.io/tcp-probe: "true"
     prometheus.io/scrape: "true"
     prometheus.io/port: '9100'
     prometheus.io/scheme: "http"
     prometheus.io/path: '/metrics'
 spec:
   ports:
-    - port: 9100
+    - port: 15400

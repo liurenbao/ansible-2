@@ -51,8 +51,8 @@ mail:
   socketConnectionTimeout: 60000
   socketTimeout: 200000
   #发件人邮箱地址
-  fromMailAddress: alertmanager@icrd.com
+  fromMailAddress: dbalert@cicem.fa
   #邮件服务器用户名(发件人)
-  mailUser: alertmanager@icrd.com
+  mailUser: dbalert@cicem.fa
   #邮件服务器登录密码(发件人)
-  mailPassword: Nd/7Sui8Mnh+PqIMPMZHQA==
+  mailPassword: CEIIsFXKP/ipkkXi+70qbg==
