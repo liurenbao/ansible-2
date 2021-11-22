@@ -18,7 +18,7 @@
     path: '{{ es_root_dir }}/data'
     mode: 0776
     state: directory
-    recurse: yes
+    recurse: no
 
 - name: docker-compose down
   shell: docker-compose -f {{ es_root_dir }}/docker-compose.yml down

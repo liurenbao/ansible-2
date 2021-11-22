@@ -37,6 +37,7 @@ metadata:
   name: blackbox
   namespace: monitoring
 spec:
+  replicas: 2
   selector:
     matchLabels:
       app: blackbox
@@ -45,6 +46,10 @@ spec:
       labels:
         app: blackbox
     spec:
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: zone
+          whenUnsatisfiable: ScheduleAnyway
       containers:
         - image: "{{ image_repository }}/public/blackbox-exporter:v0.19.0"
           name: blackbox
