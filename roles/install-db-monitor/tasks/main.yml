@@ -26,6 +26,16 @@
     dest: '{{ gaussdb_monitor_agent_root_dir }}/{{ gaussdb_user }}/start-agent.sh'
     mode: 0755
 
+- name: stop old agent process
+  become: yes
+  become_user: '{{ gaussdb_user }}'
+  shell: "{{ gaussdb_monitor_agent_root_dir }}/{{ gaussdb_user }}/start-agent.sh stop"
+
+- name: remove old agent logs
+  file:
+    path: "{{ gaussdb_monitor_agent_root_dir }}/{{ gaussdb_user }}/logs"
+    state: absent
+
 - name: create cron job for db agent
   become_user: '{{ gaussdb_user }}'
   become: yes
