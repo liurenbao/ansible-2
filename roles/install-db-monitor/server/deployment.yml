@@ -42,7 +42,7 @@ data:
         namespace: monitoring
         cluster:
           max-redirects: 3
-          nodes: 10.12.117.151:6379,10.12.117.152:6379,10.12.117.153:6379,10.12.117.154:6379,10.12.117.155:6379,10.12.117.156:6379
+          nodes: 10.12.107.211:6379,10.12.107.212:6379,10.12.107.213:6379,10.12.107.214:6379,10.12.107.215:6379,10.12.107.216:6379
         #password:
         lettuce:
           pool:
@@ -61,7 +61,7 @@ data:
 
     elasticsearch:
       schema: http
-      address: 10.12.117.121:9200,10.12.117.122:9200,10.12.117.123:9200
+      address: 10.12.107.171:9200,10.12.107.172:9200,10.12.107.173:9200
       connectTimeout: 5000
       socketTimeout: 5000
       connectionRequestTimeout: 5000
@@ -101,7 +101,7 @@ data:
         #按集群设置告警配置，default表示默认配置，
         clusterHostInfo: default
         #收件人邮件地址，多个用分号隔开
-        toMailAddress: lujinzhu@cicem.fa;tangjizhou@cicem.fa;mouyongde@cicem.fa;zhangwei@cicem.fa;linfei@cicme.fa
+        toMailAddress: lujinzhu@cicem.fa;tangjizhou@cicem.fa;mouyongde@cicem.fa;zhangwei@cicem.fa;linfei@cicem.fa
         #告警邮件总开关，yes开启，no关闭
         allWarnMail: yes
 
@@ -1043,6 +1043,58 @@ data:
          alarmHandle: "查看roach备份日志，定位解决备份失败原因。"
          alarmSwitch: "ON"
 ---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: wsr-nginx-conf
+  namespace: gaussdb-monitoring
+data:
+  default.conf: |
+    server {
+        listen       80;
+        server_name  localhost;
+
+        #access_log  /var/log/nginx/host.access.log  main;
+
+        location / {
+            root   /usr/share/nginx/html;
+            index  index.html index.htm;
+            autoindex on;
+        }
+
+        #error_page  404              /404.html;
+
+        # redirect server error pages to the static page /50x.html
+        #
+        error_page   500 502 503 504  /50x.html;
+        location = /50x.html {
+            root   /usr/share/nginx/html;
+        }
+
+        # proxy the PHP scripts to Apache listening on 127.0.0.1:80
+        #
+        #location ~ \.php$ {
+        #    proxy_pass   http://127.0.0.1;
+        #}
+
+        # pass the PHP scripts to FastCGI server listening on 127.0.0.1:9000
+        #
+        #location ~ \.php$ {
+        #    root           html;
+        #    fastcgi_pass   127.0.0.1:9000;
+        #    fastcgi_index  index.php;
+        #    fastcgi_param  SCRIPT_FILENAME  /scripts$fastcgi_script_name;
+        #    include        fastcgi_params;
+        #}
+
+        # deny access to .htaccess files, if Apache's document root
+        # concurs with nginx's one
+        #
+        #location ~ /\.ht {
+        #    deny  all;
+        #}
+    }
+---
 kind: Deployment
 apiVersion: apps/v1
 metadata:
@@ -1053,28 +1105,36 @@ spec:
   selector:
     matchLabels:
       app: monitor-server
-      zone: dc1
   template:
     metadata:
       labels:
         app: monitor-server
-        zone: dc1
     spec:
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: zone
+          whenUnsatisfiable: DoNotSchedule
+          labelSelector:
+            matchLabels:
+              app: monitor-server
       volumes:
         - name: monitordata-wsr
           nfs:
-            server: 10.12.117.172
-            path: /data01/db_monitor/wsr
+            server: 10.12.115.10
+            path: /FS_Prod_INFRA_Kubernetes/db_monitor/wsr
         - name: monitordata-config
           nfs:
-            server: 10.12.117.172
-            path: /data01/db_monitor/config
+            server: 10.12.115.10
+            path: /FS_Prod_INFRA_Kubernetes/db_monitor/config
         - name: monitor-server-application-yaml
           configMap:
             name: monitor-server-application-yaml
         - name: monitor-server-application-alarmdesc-yaml
           configMap:
             name: monitor-server-application-alarmdesc-yaml
+        - name: wsr-nginx-conf
+          configMap:
+            name: wsr-nginx-conf
       tolerations:
         - key: "node.kubernetes.io/unreachable"
           operator: "Exists"
@@ -1096,9 +1156,15 @@ spec:
                       values:
                         - monitor-server
               weight: 100
-      nodeSelector:
-        zone: dc1
       containers:
+        - name: nginx
+          image: 10.12.107.150:80/public/nginx:1.21.1
+          volumeMounts:
+            - mountPath: /usr/share/nginx/html/wsr
+              name: monitordata-wsr
+            - name: wsr-nginx-conf
+              mountPath: /etc/nginx/conf.d/default.conf
+              subPath: default.conf
         - name: monitor-server
           image: '10.12.107.150:80/public/monitor-server:20211028-dev'
           args:
@@ -1179,6 +1245,9 @@ spec:
       protocol: TCP
       port: 9990
       targetPort: 9990
+    - name: wsr
+      port: 80
+      targetPort: 80
   selector:
     app: monitor-server
 ---
@@ -1196,3 +1265,8 @@ spec:
       services:
         - name: monitor-server
           port: 9990
+    - kind: Rule
+      match: PathPrefix(`/wsr/`)
+      services:
+        - name: monitor-server
+          port: 80
