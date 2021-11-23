@@ -1,27 +1,51 @@
-[es]
-192.168.161.200
-192.168.161.199
-192.168.161.242
-192.168.163.194
-192.168.163.69
-192.168.163.82
+[prod]
+10.12.114.16 host_name=jdc1fap-mesdb01 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" DB_NAME=MES MEM=512G DB_ROLE=MASTER FloatIP=10.12.114.20 STORAGE=10500G ARCHIVE=500G SHAREDISK=/dev/sdc DB_TYPE=DOUBLE
+10.12.114.116 host_name=jdc2fap-mesdb02 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" DB_NAME=MES MEM=512G DB_ROLE=SLAVE FloatIP=10.12.114.20 STORAGE=10500G ARCHIVE=500G SHAREDISK=/dev/sdc DB_TYPE=DOUBLE
 
-[kafka]
-192.168.161.194
-192.168.161.193
-192.168.161.195
+10.12.114.11 host_name=jdc1fap-spcdb01 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" DB_NAME=SPC MEM=512G DB_ROLE=MASTER FloatIP=10.12.114.10 STORAGE=2250G ARCHIVE=200G SHAREDISK=/dev/sdc DB_TYPE=DOUBLE
+10.12.114.111 host_name=jdc2fap-spcdb02 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" DB_NAME=SPC MEM=512G DB_ROLE=SLAVE FloatIP=10.12.114.10 STORAGE=2250G ARCHIVE=200G SHAREDISK=/dev/sdc DB_TYPE=DOUBLE
 
-[gaussdb]
-#192.168.160.250 ansible_ssh_user=root host_name=sittdb03     ansible_ssh_pass=Huawei11445@Huawei..  gaussdb_user=omm3
-#192.168.160.251 ansible_ssh_user=root host_name=sittdb04      ansible_ssh_pass=Huawei11445@Huawei.. gaussdb_user=omm3
-192.168.163.46 ansible_ssh_user=root  host_name=gaussdb-test-3 ansible_ssh_pass=Huawei@777.com
-192.168.163.53 ansible_ssh_user=root  host_name=gaussdb-test-4 ansible_ssh_pass=Huawei@777.com
-192.168.163.155 ansible_ssh_user=root host_name=gaussdb-test-5  ansible_ssh_pass=Huawei@777.com
-192.168.163.47 ansible_ssh_user=root  host_name=gaussdb-test-6 ansible_ssh_pass=Huawei@777.com
-192.168.160.12 ansible_ssh_user=root  host_name=gaussdb-test-1 ansible_ssh_pass=Huawei@777.com
-192.168.160.30 ansible_ssh_user=root  host_name=gaussdb-test-2 ansible_ssh_pass=Huawei@777.com
+10.12.114.21 host_name=jdc1fap-rmsdb01 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" DB_NAME=RMS MEM=512G DB_ROLE=MASTER FloatIP=10.12.114.30 STORAGE=900G ARCHIVE=50G SHAREDISK=/dev/sdc DB_TYPE=DOUBLE
+10.12.114.121 host_name=jdc2fap-rmsdb02 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" DB_NAME=RMS MEM=512G DB_ROLE=SLAVE FloatIP=10.12.114.30 STORAGE=900G ARCHIVE=50G SHAREDISK=/dev/sdc DB_TYPE=DOUBLE
 
-[gaussdbnew]
-192.168.160.2   ansible_ssh_user=root   ansible_ssh_pass=Huawei@777.com
-192.168.163.145 ansible_ssh_user=root   ansible_ssh_pass=Huawei@777.com
-192.168.163.158 ansible_ssh_user=root   ansible_ssh_pass=Huawei@777.com
+10.12.114.31 host_name=jdc1fap-apcdb01 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" DB_NAME=APC MEM=512G DB_ROLE=MASTER FloatIP=10.12.114.50 STORAGE=6000G ARCHIVE=500G SHAREDISK=/dev/sda DB_TYPE=DOUBLE
+10.12.114.131 host_name=jdc2fap-apcdb02 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" DB_NAME=APC MEM=512G DB_ROLE=SLAVE FloatIP=10.12.114.50 STORAGE=6000G ARCHIVE=500G SHAREDISK=/dev/sda DB_TYPE=DOUBLE
+
+10.12.111.21 host_name=jdc1fap-fdcdb101 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" DB_NAME=FDC MEM=512G DB_ROLE=MASTER FloatIP=10.12.111.10 STORAGE=22500G ARCHIVE=500G SHAREDISK=/dev/sda DB_TYPE=DOUBLE
+10.12.111.121 host_name=jdc2fap-fdcdb102 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" DB_NAME=FDC MEM=512G DB_ROLE=SLAVE FloatIP=10.12.111.10 STORAGE=22500G ARCHIVE=500G SHAREDISK=/dev/sda DB_TYPE=DOUBLE
+
+10.12.111.22 host_name=jdc1fap-fdcdb201 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" DB_NAME=FDC1 MEM=512G DB_ROLE=MASTER FloatIP=10.12.111.30 STORAGE=22500G ARCHIVE=500G SHAREDISK=/dev/sda DB_TYPE=DOUBLE
+10.12.111.122 host_name=jdc2fap-fdcdb202 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" DB_NAME=FDC1 MEM=512G DB_ROLE=SLAVE FloatIP=10.12.111.30 STORAGE=22500G ARCHIVE=500G SHAREDISK=/dev/sda DB_TYPE=DOUBLE
+
+10.12.114.36 host_name=jdc1fap-rtd_sdrdb01 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" DB_NAME=RTD MEM=512G DB_ROLE=MASTER FloatIP=10.12.114.60 STORAGE=4000G ARCHIVE=400G SHAREDISK=/dev/sda DB_TYPE=DOUBLE
+10.12.114.136 host_name=jdc2fap-rtd_sdrdb02 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" DB_NAME=RTD MEM=512G DB_ROLE=SLAVE FloatIP=10.12.114.60 STORAGE=4000G ARCHIVE=400G SHAREDISK=/dev/sda DB_TYPE=DOUBLE
+
+10.12.112.16 host_name=jdc1fap-mcsdb01 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" DB_NAME=MCS MEM=256G DB_ROLE=MASTER FloatIP=10.12.112.10 STORAGE=150G ARCHIVE=10G SHAREDISK=/dev/sda DB_TYPE=DOUBLE
+10.12.112.116 host_name=jdc2fap-mcsdb02 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" DB_NAME=MCS MEM=256G DB_ROLE=SLAVE FloatIP=10.12.112.10 STORAGE=150G ARCHIVE=10G SHAREDISK=/dev/sda DB_TYPE=DOUBLE
+
+10.12.107.161 host_name=jdfap-rtd01 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" DB_NAME=REDO MEM=64G DB_ROLE=MASTER FloatIP=10.12.107.20 STORAGE=300G ARCHIVE=30G SHAREDISK=/dev/sda DB_TYPE=DOUBLE
+10.12.107.162 host_name=jdfap-rtd02 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" DB_NAME=REDO MEM=64G DB_ROLE=SLAVE FloatIP=10.12.107.20 STORAGE=300G ARCHIVE=30G SHAREDISK=/dev/sda DB_TYPE=DOUBLE
+
+10.12.114.46 host_name=jdc1fap-amsdb01 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" DB_NAME=AMS MEM=512G DB_ROLE=MASTER FloatIP=10.12.114.80 STORAGE=1000G ARCHIVE=50G SHAREDISK=/dev/sda DB_TYPE=DOUBLE
+10.12.114.146 host_name=jdc2fap-amsdb02 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" DB_NAME=AMS MEM=512G DB_ROLE=SLAVE FloatIP=10.12.114.80 STORAGE=1000G ARCHIVE=50G SHAREDISK=/dev/sda DB_TYPE=DOUBLE
+
+#10.12.114.26 host_name=jdc1fap-reptdb01 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" DB_NAME=REPORT MEM=1024G DB_ROLE=MASTER FloatIP=10.12.114.40 STORAGE=10500G ARCHIVE=500G SHAREDISK=/dev/sda DB_TYPE=DOUBLE
+#10.12.114.126 host_name=jdc2fap-reptdb02 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" DB_NAME=REPORT MEM=1024G DB_ROLE=SLAVE FloatIP=10.12.114.40 STORAGE=10500G ARCHIVE=500G SHAREDISK=/dev/sda DB_TYPE=DOUBLE
+
+#10.12.114.41 host_name=jdc1fap-mes_fdcdb01 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" DB_NAME=ARCHIVE MEM=512G DB_ROLE=MASTER FloatIP=10.12.114.70 STORAGE=56000G ARCHIVE=500G SHAREDISK=/dev/sda DB_TYPE=DOUBLE
+#10.12.114.141 host_name=jdc2fap-mes_fdcdb02 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" DB_NAME=ARCHIVE MEM=512G DB_ROLE=SLAVE FloatIP=10.12.114.70 STORAGE=56000G ARCHIVE=500G SHAREDISK=/dev/sda DB_TYPE=DOUBLE
+
+[uat]
+10.12.117.36 host_name=jdc1fau-mesdb01 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" DB_NAME=MESUAT MEM=512G DB_ROLE=MASTER FloatIP=10.12.117.10 STORAGE=10500G ARCHIVE=50G SHAREDISK=/dev/sda DB_TYPE=DOUBLE
+10.12.117.136 host_name=jdc2fau-mesdb02 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" DB_NAME=MESUAT MEM=512G DB_ROLE=SLAVE FloatIP=10.12.117.10  STORAGE=10500G ARCHIVE=50G SHAREDISK=/dev/sda DB_TYPE=DOUBLE
+10.12.117.66 host_name=jdfau-spcdb01 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" DB_NAME=SPCUAT MEM=64G DB_ROLE=MASTER FloatIP=10.12.117.66 STORAGE=750G ARCHIVE=50G SHAREDISK= DB_TYPE=SIGNLE
+10.12.117.131 host_name=jdfau-rept01 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" DB_NAME=REPORTUAT MEM=64G DB_ROLE=MASTER FloatIP=10.12.117.131 STORAGE=1000G ARCHIVE=50G SHAREDISK= DB_TYPE=SIGNLE
+10.12.117.106 host_name=jdfau-rtdfam01 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" DB_NAME=RTDUAT MEM=64G DB_ROLE=MASTER FloatIP=10.12.117.106 STORAGE=500G ARCHIVE=50G SHAREDISK= DB_TYPE=SIGNLE
+10.12.117.107 host_name=jdfau-rtdredodb01 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" DB_NAME=RTDREDOUAT MEM=32G DB_ROLE=MASTER FloatIP=10.12.117.107 STORAGE=200G ARCHIVE=20G SHAREDISK= DB_TYPE=SIGNLE
+10.12.117.114 host_name=jdfau-sdrdb01 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" DB_NAME=SDRUAT MEM=32G DB_ROLE=MASTER FloatIP=10.12.117.114 STORAGE=200G ARCHIVE=20G SHAREDISK= DB_TYPE=SIGNLE
+10.12.117.13 host_name=jdfau-fdc_apcdb01 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" DB_NAME=FDCAPCUAT MEM=128G DB_ROLE=MASTER FloatIP=10.12.117.13 STORAGE=2800G ARCHIVE=200G SHAREDISK= DB_TYPE=SIGNLE
+10.12.117.31 host_name=jdfau-mcsdb01 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" DB_NAME=MCSUAT MEM=64G DB_ROLE=MASTER FloatIP=10.12.117.31 STORAGE=200G ARCHIVE=20G SHAREDISK= DB_TYPE=SIGNLE
+
+
+
+
