@@ -22,7 +22,6 @@ spec:
         port: web
   image: "{{ image_repository }}/public/prometheus:v2.15.2"
   externalUrl: 'http://prometheus.cicem.fa'
-  logLevel: debug
   nodeSelector:
     kubernetes.io/os: linux
   podMonitorNamespaceSelector: { }
