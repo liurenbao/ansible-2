@@ -104,7 +104,7 @@ alertmanager_smtp_server: 10.12.107.121:587
 alertmanager_smtp_from: alertmanager@cicem.fa
 alertmanager_smtp_username: alertmanager@cicem.fa
 alertmanager_smtp_password: Icrd@777.com
-alertmanager_app_email_to: tangjizhou@cicem.fa
+alertmanager_app_email_to: tangjizhou@cicem.fa, mouyongde@cicem.fa
 node_exporter_root_dir: /data01/node-exporter
 
 # redis---------------------------------------------------------------------------------------

@@ -23,6 +23,15 @@ spec:
   replicas: 3
   affinity:
     podAntiAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+        - podAffinityTerm:
+            topologyKey: zone
+            labelSelector:
+              - key: app
+                operator: In
+                values:
+                  - alertmanager
+          weight: 100
       requiredDuringSchedulingIgnoredDuringExecution:
         - topologyKey: kubernetes.io/hostname
           labelSelector:

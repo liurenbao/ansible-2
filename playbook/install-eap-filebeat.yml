@@ -1,6 +1,9 @@
 - name: install eap filebeat
   hosts: eap
   gather_facts: false
+  vars:
+    paths:
+      - /data01/pressure-eap/PressureTest/EAPLog/**/*.log
   roles:
     - install-filebeat
     - install-eap-filbeat

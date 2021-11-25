@@ -28,6 +28,15 @@ spec:
   podMonitorSelector: { }
   affinity:
     podAntiAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+        - podAffinityTerm:
+            topologyKey: zone
+            labelSelector:
+              - key: app
+                operator: In
+                values:
+                  - prometheus
+          weight: 100
       requiredDuringSchedulingIgnoredDuringExecution:
         - topologyKey: kubernetes.io/hostname
           labelSelector:
@@ -35,7 +44,7 @@ spec:
               - key: app
                 operator: In
                 values:
-                  - alertmanager
+                  - prometheus
   tolerations:
     - key: node.kubernetes.io/not-ready
       operator: Exists

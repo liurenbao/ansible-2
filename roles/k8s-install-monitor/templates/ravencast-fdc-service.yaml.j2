@@ -5,7 +5,11 @@ metadata:
   namespace: monitoring
 subsets:
   - addresses:
-{% for host in groups['ravencast-fdc'] %}
+{% for host in groups['ravencast-fdc-1'] %}
+      - ip: {{ host }}
+        nodeName: {{ hostvars[host].host_name }}
+{% endfor %}
+{% for host in groups['ravencast-fdc-2'] %}
       - ip: {{ host }}
         nodeName: {{ hostvars[host].host_name }}
 {% endfor %}
@@ -36,7 +40,11 @@ metadata:
   namespace: monitoring
 subsets:
   - addresses:
-{% for host in groups['ravencast-fdc'] %}
+{% for host in groups['ravencast-fdc-1'] %}
+    - ip: {{ host }}
+      nodeName: {{ hostvars[host].host_name }}
+{% endfor %}
+{% for host in groups['ravencast-fdc-2'] %}
     - ip: {{ host }}
       nodeName: {{ hostvars[host].host_name }}
 {% endfor %}
