@@ -20,7 +20,7 @@ spec:
       - name: alertmanager-main
         namespace: monitoring
         port: web
-  image: "{{ image_repository }}/public/prometheus:v2.15.2"
+  image: '{{ image_repository }}/public/prometheus:v2.20.0'
   externalUrl: 'http://prometheus.cicem.fa'
   nodeSelector:
     kubernetes.io/os: linux
@@ -30,12 +30,13 @@ spec:
     podAntiAffinity:
       preferredDuringSchedulingIgnoredDuringExecution:
         - podAffinityTerm:
-            topologyKey: zone
             labelSelector:
-              - key: app
-                operator: In
-                values:
-                  - prometheus
+              matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                    - prometheus
+            topologyKey: zone
           weight: 100
       requiredDuringSchedulingIgnoredDuringExecution:
         - topologyKey: kubernetes.io/hostname
@@ -77,4 +78,4 @@ spec:
   serviceAccountName: prometheus-k8s
   serviceMonitorNamespaceSelector: { }
   serviceMonitorSelector: { }
-  version: 2.29.2
+  version: v2.20.0

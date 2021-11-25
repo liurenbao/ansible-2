@@ -15,7 +15,7 @@ spec:
         resources:
           requests:
             storage: '{{ alertmanager_storage }}'
-  image: '{{ image_repository }}/public/alertmanager:v0.20.0'
+  image: '{{ image_repository }}/public/alertmanager:v0.21.0'
   externalUrl: "http://alertmanager.cicem.fa"
   retention: '{{ alertmanager_data_retention }}'
   nodeSelector:
@@ -27,19 +27,17 @@ spec:
         - podAffinityTerm:
             topologyKey: zone
             labelSelector:
-              - key: app
-                operator: In
-                values:
-                  - alertmanager
+              matchLabels:
+                app: alertmanager
           weight: 100
       requiredDuringSchedulingIgnoredDuringExecution:
-        - topologyKey: kubernetes.io/hostname
-          labelSelector:
+        - labelSelector:
             matchExpressions:
               - key: app
                 operator: In
                 values:
                   - alertmanager
+          topologyKey: kubernetes.io/hostname
   tolerations:
     - key: node.kubernetes.io/not-ready
       operator: Exists
