@@ -5,9 +5,9 @@ upstream traefik {
 }
 
 server {
-    listen       80 backlog=65534   default_server;
-    listen  [::]:80 backlog=65534   default_server;
-    server_name  localhost;
+    listen       80 backlog=65534 default_server;
+    listen  [::]:80 backlog=65534 default_server;
+    server_name  *.cicem.fa;
 
     location / {
         proxy_read_timeout  300s;

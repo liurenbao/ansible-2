@@ -1,14 +1,10 @@
 upstream FR.com {
-    server 192.168.163.172:8080 max_fails=0;
+    server 10.12.107.22:8080 max_fails=0;
 }
 
-upstream WBS.com {
-    server 192.168.163.172:38888 max_fails=0;
-    ip_hash;
-}
 server {
-    listen       38080;
-    server_name  localhost;
+    listen       80;
+    server_name  adc.cicem.fa;
     underscores_in_headers on;
     location / {
         proxy_http_version 1.1;
@@ -23,17 +19,4 @@ server {
         proxy_read_timeout       400;
         proxy_send_timeout       400;
     }
-}
-server {
-    listen 38888;
-    server_name localhost;
-    location / {
-        proxy_http_version 1.1;
-        proxy_next_upstream_timeout 1s;
-        proxy_pass http://WBS.com;
-        proxy_read_timeout 400;
-        proxy_send_timeout 400;
-	    proxy_set_header Upgrade $http_upgrade;
-	    proxy_set_header Connection "upgrade";
-     }
 }

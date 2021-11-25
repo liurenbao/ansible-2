@@ -82,6 +82,7 @@
     - conf.d/plantu.conf.j2
     - conf.d/traefik.conf.j2
     - conf.d/apc.conf.j2
+    - conf.d/report.conf.j2
 
 - name: start nginx
   shell: docker-compose up -d
