@@ -1,5 +1,13 @@
 - name: change k8s node label
   hosts: k8s-master-init
   gather_facts: false
-  roles:
-    - k8s-label-node
+  tasks:
+    - name: label k8s master init
+      shell: kubectl label node {{ hostvars[item].host_name }} {{ hostvars[item].label }} --overwrite
+      loop: "{{ query('inventory_hostnames', 'k8s-master-init') }}"
+    - name: label k8s master join
+      shell: kubectl label node {{ hostvars[item].host_name }} {{ hostvars[item].label }} --overwrite
+      loop: "{{ query('inventory_hostnames', 'k8s-master-join') }}"
+    - name: label k8s worker
+      shell: kubectl label node {{ hostvars[item].host_name }} {{ hostvars[item].label }} --overwrite
+      loop: "{{ query('inventory_hostnames', 'k8s-worker') }}"

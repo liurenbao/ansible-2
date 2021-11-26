@@ -22,8 +22,11 @@ spec:
         port: web
   image: '{{ image_repository }}/public/prometheus:v2.20.0'
   externalUrl: 'http://prometheus.cicem.fa'
+  logLevel: debug
   nodeSelector:
     kubernetes.io/os: linux
+    node-role.kubernetes.io/master: ""
+    prometheus: "true"
   podMonitorNamespaceSelector: { }
   podMonitorSelector: { }
   affinity:
@@ -38,14 +41,6 @@ spec:
                     - prometheus
             topologyKey: zone
           weight: 100
-      requiredDuringSchedulingIgnoredDuringExecution:
-        - topologyKey: kubernetes.io/hostname
-          labelSelector:
-            matchExpressions:
-              - key: app
-                operator: In
-                values:
-                  - prometheus
   tolerations:
     - key: node.kubernetes.io/not-ready
       operator: Exists
@@ -55,6 +50,8 @@ spec:
       operator: Exists
       effect: NoExecute
       tolerationSeconds: 2
+    - key: node-role.kubernetes.io/master
+      effect: NoSchedule
   retention: '{{ prometheus_data_retention }}'
   replicas: 2
   resources:

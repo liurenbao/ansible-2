@@ -18,18 +18,13 @@ spec:
   image: '{{ image_repository }}/public/alertmanager:v0.21.0'
   externalUrl: "http://alertmanager.cicem.fa"
   retention: '{{ alertmanager_data_retention }}'
+  logLevel: debug
   nodeSelector:
     kubernetes.io/os: linux
+    node-role.kubernetes.io/master: ""
   replicas: 3
   affinity:
     podAntiAffinity:
-      preferredDuringSchedulingIgnoredDuringExecution:
-        - podAffinityTerm:
-            topologyKey: zone
-            labelSelector:
-              matchLabels:
-                app: alertmanager
-          weight: 100
       requiredDuringSchedulingIgnoredDuringExecution:
         - labelSelector:
             matchExpressions:
@@ -47,6 +42,8 @@ spec:
       operator: Exists
       effect: NoExecute
       tolerationSeconds: 2
+    - key: node-role.kubernetes.io/master
+      effect: NoSchedule
   resources:
     limits:
       cpu: '2'
