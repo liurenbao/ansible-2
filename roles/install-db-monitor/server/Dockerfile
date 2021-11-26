@@ -1,4 +1,4 @@
-FROM 192.168.160.47:8888/public/primetoninc/jdk:1.8
+FROM 10.12.107.150:80/public/primetoninc/jdk:1.8
 LABEL maintainer="mouyongde"
 RUN mkdir -p /app/uoamp
 #COPY application.yml /app/uoamp/application.yml

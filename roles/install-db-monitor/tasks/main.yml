@@ -1,54 +1,79 @@
+#- name: stop existed monitor process
+#  become: yes
+#  become_user: '{{ gaussdb_user }}'
+#  shell: "{{ gaussdb_monitor_agent_root_dir }}/{{ gaussdb_user }}/start-agent.sh stop"
+#
+- name: remove existed monitor app files
+  file:
+    path: "{{ gaussdb_monitor_agent_root_dir }}/{{ gaussdb_user }}"
+    state: absent
+
+- name: ensure monitor user exist
+  user:
+    name: '{{ gaussdb_monitor_user }}'
+    group: '{{ gaussdb_user_group }}'
+    password: '{{ gaussdb_monitor_user }}'
+    state: present
+
+- name: ensure monitor user's permission
+  lineinfile:
+    path: /etc/sudoers
+    insertafter: "%wheel  ALL=(ALL)       ALL"
+    regexp: "^db_monitor"
+    line: "db_monitor ALL=({{ gaussdb_user }}) NOPASSWD: ALL"
+    state: present
+
 - name: create agent root dir
   file:
-    path: '{{ gaussdb_monitor_agent_root_dir }}/{{ gaussdb_user }}'
+    path: '{{ gaussdb_monitor_agent_root_dir }}'
     state: directory
 
 - name: create wsr dir
   file:
     path: /wsr
     state: directory
-    owner: '{{ gaussdb_user }}'
+    owner: '{{ gaussdb_monitor_user }}'
     group: '{{ gaussdb_user_group }}'
 
 - name: send agent application.yml
   template:
     src: agent/application.yml.j2
-    dest: '{{ gaussdb_monitor_agent_root_dir }}/{{ gaussdb_user }}/application.yml'
+    dest: '{{ gaussdb_monitor_agent_root_dir }}/application.yml'
 
 - name: send agent jar
   copy:
     src: agent/hisi-uoamp-monitor-agent-1.0-SNAPSHOT.jar
-    dest: '{{ gaussdb_monitor_agent_root_dir }}/{{ gaussdb_user }}/agent.jar'
+    dest: '{{ gaussdb_monitor_agent_root_dir }}/agent.jar'
 
 - name: copy gaussdb agent startup shell
   template:
     src: start-agent.sh.j2
-    dest: '{{ gaussdb_monitor_agent_root_dir }}/{{ gaussdb_user }}/start-agent.sh'
+    dest: '{{ gaussdb_monitor_agent_root_dir }}/start-agent.sh'
     mode: 0755
 
 - name: stop old agent process
   become: yes
-  become_user: '{{ gaussdb_user }}'
-  shell: "{{ gaussdb_monitor_agent_root_dir }}/{{ gaussdb_user }}/start-agent.sh stop"
+  become_user: '{{ gaussdb_monitor_user }}'
+  shell: "{{ gaussdb_monitor_agent_root_dir }}/start-agent.sh stop"
 
 - name: remove old agent logs
   file:
-    path: "{{ gaussdb_monitor_agent_root_dir }}/{{ gaussdb_user }}/logs"
+    path: "{{ gaussdb_monitor_agent_root_dir }}/logs"
     state: absent
 
-- name: create cron job for db agent
-  become_user: '{{ gaussdb_user }}'
-  become: yes
-  cron:
-    name: gaussdb agent job
-    job: 'source ~/.bashrc && {{ gaussdb_monitor_agent_root_dir }}/{{ gaussdb_user }}/start-agent.sh check'
-    minute: "*/1"
+#- name: create cron job for db agent
+#  become_user: '{{ gaussdb_monitor_user }}'
+#  become: yes
+#  cron:
+#    name: gaussdb agent job
+#    job: 'source ~/.bashrc && {{ gaussdb_monitor_agent_root_dir }}/start-agent.sh check'
+#    minute: "*/1"
 
 - name: chmod agent dir
   file:
-    path: '{{ gaussdb_monitor_agent_root_dir }}/{{ gaussdb_user }}'
+    path: '{{ gaussdb_monitor_agent_root_dir }}'
     state: directory
-    owner: '{{ gaussdb_user }}'
+    owner: '{{ gaussdb_monitor_user }}'
     group: '{{ gaussdb_user_group }}'
     recurse: yes
 
@@ -60,7 +85,7 @@
 - name: chmod filebeat dir
   file:
     path: '{{ item }}'
-    owner: '{{ gaussdb_user }}'
+    owner: '{{ gaussdb_monitor_user }}'
     group: '{{ gaussdb_user_group }}'
     recurse: yes
   with_items:
@@ -71,7 +96,7 @@
 - name: chmod filebeat file
   file:
     path: '{{ item }}'
-    owner: '{{ gaussdb_user }}'
+    owner: '{{ gaussdb_monitor_user }}'
     group: '{{ gaussdb_user_group }}'
   with_items:
     - /usr/bin/filebeat

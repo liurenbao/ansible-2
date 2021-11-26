@@ -5,7 +5,7 @@ Wants=network-online.target
 After=network-online.target
 
 [Service]
-User={{ gaussdb_user }}
+User={{ gaussdb_monitor_user }}
 Group={{ gaussdb_user_group }}
 Environment="GODEBUG='madvdontneed=1'"
 Environment="BEAT_LOG_OPTS="

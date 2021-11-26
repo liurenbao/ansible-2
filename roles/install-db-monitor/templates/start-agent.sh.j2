@@ -11,7 +11,7 @@ if [ -z $command ]; then
 fi
 
 JAVA_HOME={{ gaussdb_jdk_dir }}
-WORK_DIR={{ gaussdb_monitor_agent_root_dir }}/{{ gaussdb_user }}
+WORK_DIR={{ gaussdb_monitor_agent_root_dir }}
 SPRING_CONFIG_PATH=$WORK_DIR/application.yml
 JAR_PATH=$WORK_DIR/agent.jar
 CHECK_URL=http://127.0.0.1:9998/monitor-client-agent/metrics

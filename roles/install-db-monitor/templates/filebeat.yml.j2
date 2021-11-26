@@ -1,7 +1,7 @@
 filebeat.inputs:
   - type: log
     paths:
-      - /data01/gaussdb-monitor-agent/omm/logs/gscheck/*.log
+      - "{{ gaussdb_monitor_agent_root_dir }}/logs/gscheck/*.log"
     include_lines: [ '^{','^Check' ]
     #合并多行数据
     multiline.pattern: '^Check'
@@ -16,9 +16,15 @@ filebeat.inputs:
     fields:
       kafka_topic: 'gaussdb-gs-check-result'
   - type: log
+    enabled: true
+    #filebeat将从新文件的最后位置开始读取,而不是从开头读取新文件
+    tail_files: true
+    processors:
+      - add_host_metadata:
+          netinfo.enabled: true
     paths:
       - /var/log/gaussdb/omm/alarm/*/*.log
-    multiline.pattern: '^\d{4}-\d{1,2}-\d{1,2}'
+    multiline.pattern: '\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2}'
     multiline.negate: true
     multiline.match: after
     fields:

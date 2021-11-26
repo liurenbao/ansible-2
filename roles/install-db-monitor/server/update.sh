@@ -1,9 +1,9 @@
 #!/bin/sh
 
-docker build . -t 192.168.160.47:8888/public/uoamp:20211028-dev
-docker push 192.168.160.47:8888/public/uoamp:20211028-dev
-docker rmi 192.168.160.47:8888/public/uoamp:20211028-dev
+docker build . -t 10.12.107.150:80/public/monitor-server:20211125-dev
+docker push 10.12.107.150:80/public/monitor-server:20211125-dev
+docker rmi 10.12.107.150:80/public/monitor-server:20211125-dev
 
-kubectl set image deployment/uoamp uoamp=192.168.160.47:8888/public/uoamp:20211028-dev -n monitoring
-kubectl rollout restart deployment/uoamp -n monitoring
-kubectl rollout status deployment/uoamp -n monitoring
+kubectl set image deployment/monitor-server monitor-server=10.12.107.150:80/public/monitor-server:20211125-dev -n gaussdb-monitoring
+kubectl rollout restart deployment/monitor-server -n gaussdb-monitoring
+kubectl rollout status deployment/monitor-server -n gaussdb-monitoring
