@@ -1,0 +1,18 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: prometheus-ext-rules
+  namespace: monitoring
+  labels:
+    prometheus: k8s
+    role: alert-rules
+spec:
+  groups:
+    - name: prometheus-ext-rules
+      rules:
+        - alert: PrometheusMetricsScrapeFailed
+          expr: up == 0
+          annotations:
+            message: Prometheus target down, prometheus failed to scrape metrics
+          labels:
+            severity: critical
