@@ -1,8 +1,23 @@
-#- name: stop existed monitor process
-#  become: yes
-#  become_user: '{{ gaussdb_user }}'
-#  shell: "{{ gaussdb_monitor_agent_root_dir }}/{{ gaussdb_user }}/start-agent.sh stop"
-#
+- name: check if old process exists
+  stat:
+    path: "{{ gaussdb_monitor_agent_root_dir }}/{{ gaussdb_user }}/start-agent.sh"
+  register: old_monitor
+
+- name: stop existed monitor process
+  become: yes
+  become_user: '{{ gaussdb_user }}'
+  shell: "{{ gaussdb_monitor_agent_root_dir }}/{{ gaussdb_user }}/start-agent.sh stop"
+  when: old_monitor.stat.exists == true
+
+- name: remove omm old crontab line
+  lineinfile:
+    path: /var/spool/cron/omm
+    line: "{{ item }}"
+    state: absent
+  with_items:
+    - "#Ansible: gaussdb agent job"
+    - "*/1 * * * * source ~/.bashrc && /data01/gaussdb-monitor-agent/omm/start-agent.sh check"
+
 - name: remove existed monitor app files
   file:
     path: "{{ gaussdb_monitor_agent_root_dir }}/{{ gaussdb_user }}"
@@ -21,6 +36,12 @@
     insertafter: "%wheel  ALL=(ALL)       ALL"
     regexp: "^db_monitor"
     line: "db_monitor ALL=({{ gaussdb_user }}) NOPASSWD: ALL"
+    state: present
+
+- name: ensure monitor cron permission
+  lineinfile:
+    path: /etc/cron.allow
+    line: "db_monitor"
     state: present
 
 - name: create agent root dir
@@ -61,13 +82,13 @@
     path: "{{ gaussdb_monitor_agent_root_dir }}/logs"
     state: absent
 
-#- name: create cron job for db agent
-#  become_user: '{{ gaussdb_monitor_user }}'
-#  become: yes
-#  cron:
-#    name: gaussdb agent job
-#    job: 'source ~/.bashrc && {{ gaussdb_monitor_agent_root_dir }}/start-agent.sh check'
-#    minute: "*/1"
+- name: create cron job for db agent
+  become_user: '{{ gaussdb_monitor_user }}'
+  become: yes
+  cron:
+    name: gaussdb agent job
+    job: '{{ gaussdb_monitor_agent_root_dir }}/start-agent.sh check'
+    minute: "*/1"
 
 - name: chmod agent dir
   file:
@@ -85,7 +106,7 @@
 - name: chmod filebeat dir
   file:
     path: '{{ item }}'
-    owner: '{{ gaussdb_monitor_user }}'
+    owner: '{{ gaussdb_user }}'
     group: '{{ gaussdb_user_group }}'
     recurse: yes
   with_items:
@@ -96,7 +117,7 @@
 - name: chmod filebeat file
   file:
     path: '{{ item }}'
-    owner: '{{ gaussdb_monitor_user }}'
+    owner: '{{ gaussdb_user }}'
     group: '{{ gaussdb_user_group }}'
   with_items:
     - /usr/bin/filebeat
