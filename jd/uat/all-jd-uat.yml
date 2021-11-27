@@ -6,6 +6,8 @@ harbor_keepalived_vip: 10.12.107.150
 nginx_keepalived_vip: 10.12.117.60
 k8s_keepalived_vip: 10.12.117.80
 es_initial_master_nodes: '["10.12.117.121", "10.12.117.122", "10.12.117.123"]'
+monitor_nfs_path_existed: false
+nfs_client_cidr: 10.12.117.0/24
 
 cim_ops_uid: '9999'
 cim_ops_user: 'cimops'
@@ -14,9 +16,7 @@ docker_gid: '994'
 
 # 离线文件安装包所在目录-----------------------------------------------------------------------
 package_dir: '/data01/package'
-# 一主一备，都可以用
-ntp_server_addr: 10.12.117.251
-# fixme 现在只知道ip是187，yum源地址需要确认
+ntp_server_addr: '10.12.117.251'
 yum_base_url: 'ftp://10.12.107.187/pub/centos/7/'
 
 keepalived_root_dir: /data01/keepalived
@@ -71,7 +71,7 @@ jdk_dir: '/data01/jdk1.8.0_202'
 rocket_cluster_name: CIMCluster
 rocketmq_root_dir: '/data01/rocketmq'
 rocketmq_package_dir: '{{ package_dir }}/rocketmq'
-rocket_topic_list: test
+rocketmq_jvm_args: -Xms16g -Xmx16g -Xmn8g
 
 # ravencast-----------------------------------------------------------------------------------
 ravencast_xms_xmx_args: '-Xms24G -Xmx24G'
@@ -101,11 +101,10 @@ grafana_storage: '50Gi'
 alertmanager_storage: '50Gi'
 alertmanager_data_retention: '120h'
 alertmanager_smtp_server: 192.168.160.1:587
-alertmanager_smtp_from: alertmanager@icrd.com
-alertmanager_smtp_username: alertmanager@icrd.com
-alertmanager_smtp_password: alertmanager@icrd.com
-alertmanager_app_email_to: tangjizhou@icrd.com, mouyongde@icrd.com
-alertmanager_db_email_to: lujinzhu@icrd.com, tangjizhou@icrd.com
+alertmanager_smtp_from: alertmanager@cicem.fa
+alertmanager_smtp_username: alertmanager@cicem.fa
+alertmanager_smtp_password: alertmanager@cicem.fa
+alertmanager_app_email_to: tangjizhou@cicem.fa, mouyongde@cicem.fa
 node_exporter_root_dir: /data01/node-exporter
 
 # redis---------------------------------------------------------------------------------------

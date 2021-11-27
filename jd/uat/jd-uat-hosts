@@ -67,8 +67,8 @@ ravencast_tcphosts=10.12.117.168[7800],10.12.117.169[7800]
 ravencast_tcphosts=10.12.117.170[7800],10.12.117.171[7800]
 [nas]
 10.12.117.172 host_name=jdfau-ftp01 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
-#[eap]
-#10.12.117.41    host_name=jdfau-eap01   ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
-#10.12.117.42    host_name=jdfau-eap02   ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
-#10.12.117.43    host_name=jdfau-eap03   ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
-#10.12.117.44    host_name=jdfau-eap04   ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
+[eap]
+10.12.117.41    host_name=jdfau-eap01   ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
+10.12.117.42    host_name=jdfau-eap02   ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
+10.12.117.43    host_name=jdfau-eap03   ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
+10.12.117.44    host_name=jdfau-eap04   ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
