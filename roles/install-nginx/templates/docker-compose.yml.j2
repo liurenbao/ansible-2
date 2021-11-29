@@ -9,4 +9,5 @@ services:
       - ./nginx.conf:/etc/nginx/nginx.conf
       - ./log:/var/log/nginx
       - ./www:/var/www
+      - /etc/localtime:/etc/localtime
       - /etc/letsencrypt:/etc/letsencrypt
