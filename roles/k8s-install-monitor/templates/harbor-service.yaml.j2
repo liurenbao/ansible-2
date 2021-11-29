@@ -1,4 +1,4 @@
-{% for host in groups['ravencast-mes'] %}
+{% for host in groups['harbor'] %}
 apiVersion: v1
 kind: Endpoints
 metadata:
@@ -9,7 +9,8 @@ subsets:
       - ip: '{{ host }}'
         nodeName: '{{ hostvars[host].host_name }}'
     ports:
-      - port: 10103
+      - port: 80
+        name: web
 ---
 apiVersion: v1
 kind: Service
@@ -18,28 +19,26 @@ metadata:
   namespace: monitoring
   annotations:
     maintainer: mouyongde@cicem.fa
-    prometheus.io/tcp-probe: "true"
-    prometheus.io/scrape: "true"
-    prometheus.io/port: '9998'
-    prometheus.io/scheme: "http"
-    prometheus.io/path: '/'
+    prometheus.io/http-probe: "true"
+    prometheus.io/http-probe-port: "80"
+    prometheus.io/http-probe-path: "/c/log_out"
 spec:
   ports:
-    - port: 10103
-  type: ClusterIP
+    - port: 80
+      name: web
 ---
 {% endfor %}
 ---
 apiVersion: v1
 kind: Endpoints
 metadata:
-  name: jdfap-mesmq-node-exporter
+  name: harbor-node-exporter
   namespace: monitoring
 subsets:
   - addresses:
-{% for host in groups['ravencast-mes'] %}
-      - ip: {{ host }}
-        nodeName: {{ hostvars[host].host_name }}
+{% for host in groups['harbor'] %}
+    - ip: {{ host }}
+      nodeName: {{ hostvars[host].host_name }}
 {% endfor %}
     ports:
       - port: 9100
@@ -47,7 +46,7 @@ subsets:
 apiVersion: v1
 kind: Service
 metadata:
-  name: jdfap-mesmq-node-exporter
+  name: harbor-node-exporter
   namespace: monitoring
   annotations:
     maintainer: mouyongde@cicem.fa
@@ -57,4 +56,3 @@ metadata:
 spec:
   ports:
     - port: 9100
-  type: ClusterIP

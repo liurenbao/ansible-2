@@ -109,22 +109,6 @@ spec:
           annotations:
             summary: Host EDAC Uncorrectable Errors detected (instance {{ $labels.instance }})
             description: "Host {{ $labels.instance }} has had {{ printf \"%.0f\" $value }} uncorrectable memory errors reported by EDAC in the last 5 minutes..  VALUE = {{ $value }}"
-        - alert: HostNetworkReceiveErrors
-          expr: rate(node_network_receive_errs_total[2m]) / rate(node_network_receive_packets_total[2m]) > 0.01
-          for: 2m
-          labels:
-            severity: warning
-          annotations:
-            summary: Host Network Receive Errors (instance {{ $labels.instance }})
-            description: "Host {{ $labels.instance }} interface {{ $labels.device }} has encountered {{ printf \"%.0f\" $value }} receive errors in the last five minutes..  VALUE = {{ $value }}"
-        - alert: HostNetworkTransmitErrors
-          expr: rate(node_network_transmit_errs_total[2m]) / rate(node_network_transmit_packets_total[2m]) > 0.01
-          for: 2m
-          labels:
-            severity: warning
-          annotations:
-            summary: Host Network Transmit Errors (instance {{ $labels.instance }})
-            description: "Host {{ $labels.instance }} interface {{ $labels.device }} has encountered {{ printf \"%.0f\" $value }} transmit errors in the last five minutes..  VALUE = {{ $value }}"
         - alert: HostNetworkInterfaceSaturated
           expr: (rate(node_network_receive_bytes_total{device!~"^tap.*"}[1m]) + rate(node_network_transmit_bytes_total{device!~"^tap.*"}[1m])) / node_network_speed_bytes{device!~"^tap.*"} > 0.8 < 10000
           for: 1m
@@ -133,20 +117,3 @@ spec:
           annotations:
             summary: Host Network Interface Saturated (instance {{ $labels.instance }})
             description: "The network interface \"{{ $labels.device }}\" on \"{{ $labels.instance }}\" is getting overloaded..  VALUE = {{ $value }}"
-        - alert: HostConntrackLimit
-          expr: node_nf_conntrack_entries / node_nf_conntrack_entries_limit > 0.8
-          for: 5m
-          labels:
-            severity: warning
-          annotations:
-            summary: Host conntrack limit (instance {{ $labels.instance }})
-            description: "The number of conntrack is approching limit.  VALUE = {{ $value }}"
-        - alert: HostClockSkew
-          expr: (node_timex_offset_seconds > 0.05 and deriv(node_timex_offset_seconds[5m]) >= 0) or (node_timex_offset_seconds < -0.05 and deriv(node_timex_offset_seconds[5m]) <= 0)
-          for: 2m
-          labels:
-            severity: warning
-          annotations:
-            summary: Host clock skew (instance {{ $labels.instance }})
-            description: "Clock skew detected. Clock is out of sync..  VALUE = {{ $value }}"
-

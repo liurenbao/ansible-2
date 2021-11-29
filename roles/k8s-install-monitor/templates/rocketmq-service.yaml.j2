@@ -1,3 +1,57 @@
+{% for host in groups['rocketmq-namesrv'] %}
+apiVersion: v1
+kind: Endpoints
+metadata:
+  name: '{{ hostvars[host].host_name }}'
+  namespace: monitoring
+subsets:
+  - addresses:
+    - ip: '{{ host }}'
+      nodeName: '{{ hostvars[host].host_name }}'
+    ports:
+      - port: 9876
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: '{{ hostvars[host].host_name }}'
+  namespace: monitoring
+  annotations:
+    prometheus.io/tcp-probe: "true"
+    prometheus.io/port: '9876'
+spec:
+  ports:
+    - port: 9876
+---
+{% endfor %}
+---
+{% for host in groups['rocketmq-broker'] %}
+apiVersion: v1
+kind: Endpoints
+metadata:
+  name: '{{ hostvars[host].host_name }}'
+  namespace: monitoring
+subsets:
+  - addresses:
+      - ip: '{{ host }}'
+        nodeName: '{{ hostvars[host].host_name }}'
+    ports:
+      - port: 10911
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: '{{ hostvars[host].host_name }}'
+  namespace: monitoring
+  annotations:
+    prometheus.io/tcp-probe: "true"
+    prometheus.io/port: '10911'
+spec:
+  ports:
+    - port: 10911
+---
+{% endfor %}
+---
 apiVersion: v1
 kind: Endpoints
 metadata:
@@ -6,12 +60,12 @@ metadata:
 subsets:
   - addresses:
 {% for host in groups['rocketmq-namesrv'] %}
-    - ip: {{ host }}
-      nodeName: {{ hostvars[host].host_name }}
+      - ip: {{ host }}
+        nodeName: {{ hostvars[host].host_name }}
 {% endfor %}
 {% for host in groups['rocketmq-broker'] %}
-    - ip: {{ host }}
-      nodeName: {{ hostvars[host].host_name }}
+      - ip: {{ host }}
+        nodeName: {{ hostvars[host].host_name }}
 {% endfor %}
     ports:
       - port: 9100
@@ -30,55 +84,3 @@ spec:
   ports:
     - port: 9100
   type: ClusterIP
----
-apiVersion: v1
-kind: Endpoints
-metadata:
-  name: rocketmq-namesrv
-  namespace: monitoring
-subsets:
-  - addresses:
-{% for host in groups['rocketmq-namesrv'] %}
-      - ip: {{ host }}
-        nodeName: {{ hostvars[host].host_name }}
-{% endfor %}
-    ports:
-      - port: 9876
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: rocketmq-namesrv
-  namespace: monitoring
-  annotations:
-    prometheus.io/tcp-probe: "true"
-    prometheus.io/port: '9876'
-spec:
-  ports:
-    - port: 9876
----
-apiVersion: v1
-kind: Endpoints
-metadata:
-  name: rocketmq-node
-  namespace: monitoring
-subsets:
-  - addresses:
-{% for host in groups['rocketmq-broker'] %}
-      - ip: {{ host }}
-        nodeName: {{ hostvars[host].host_name }}
-{% endfor %}
-    ports:
-      - port: 10911
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: rocketmq-node
-  namespace: monitoring
-  annotations:
-    prometheus.io/tcp-probe: "true"
-    prometheus.io/port: '10911'
-spec:
-  ports:
-    - port: 10911

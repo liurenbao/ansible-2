@@ -1,21 +1,20 @@
+{% for host in groups['ravencast-apc'] %}
 apiVersion: v1
 kind: Endpoints
 metadata:
-  name: ravencast-apc
+  name: '{{ hostvars[host].host_name }}'
   namespace: monitoring
 subsets:
   - addresses:
-{% for host in groups['ravencast-apc'] %}
-      - ip: {{ host }}
-        nodeName: {{ hostvars[host].host_name }}
-{% endfor %}
+      - ip: '{{ host }}'
+        nodeName: '{{ hostvars[host].host_name }}'
     ports:
       - port: 10103
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: ravencast-apc
+  name: '{{ hostvars[host].host_name }}'
   namespace: monitoring
   annotations:
     maintainer: mouyongde@cicem.fa
@@ -29,10 +28,12 @@ spec:
     - port: 10103
   type: ClusterIP
 ---
+{% endfor %}
+---
 apiVersion: v1
 kind: Endpoints
 metadata:
-  name: ravencast-apc-node-exporter
+  name: jdfap-apcmq-node-exporter
   namespace: monitoring
 subsets:
   - addresses:
@@ -46,7 +47,7 @@ subsets:
 apiVersion: v1
 kind: Service
 metadata:
-  name: ravencast-apc-node-exporter
+  name: jdfap-apcmq-node-exporter
   namespace: monitoring
   annotations:
     maintainer: mouyongde@cicem.fa
