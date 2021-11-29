@@ -42,7 +42,7 @@ spec:
               command: [ "/bin/bash", "-c", "/es/autodelete-es-index-pattern.sh" ]
               env:
                 - name: ES_HOST
-                  value: "elasticsearch.monitoring:9200"
+                  value: "elasticsearch.elk:9200"
                 - name: ES_INDEX_KEEP
                   value: "{{ es_index_keep }}"
                 - name: ES_INDEX_KEEP_UNIT
