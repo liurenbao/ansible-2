@@ -20,7 +20,7 @@ services:
       DOCKER_API_VERSION: 1.22
       KAFKA_BROKER_ID: "{{ groups['kafka'].index(inventory_hostname) }}"
       KAFKA_ADVERTISED_HOST_NAME: "{{ ansible_ssh_host }}"
-      KAFKA_ZOOKEEPER_CONNECT: "{{ zk_hosts_str }}"
+      KAFKA_ZOOKEEPER_CONNECT: "{{ groups['kafka'] | map('regex_replace', '^(.*)$','\\1:2181') | join(',') }}"
       KAFKA_HEAP_OPTS: '{{ kafka_heap_opts }}'
       #5个logstash消费者,每个8个线程，40个partition
       KAFKA_NUM_PARTITIONS: 40

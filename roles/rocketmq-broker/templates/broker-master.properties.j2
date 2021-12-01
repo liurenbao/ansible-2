@@ -7,7 +7,7 @@ brokerRole=SYNC_MASTER
 flushDiskType=SYNC_FLUSH
 
 ##namesrvAddr
-namesrvAddr={{ rocketmq_namesrv }}
+namesrvAddr={{ groups["rocketmq-namesrv"] | map("regex_replace", "^(.*)$", "\\1:9876") | join(";") }}
 
 ##Broker
 listenPort=10911

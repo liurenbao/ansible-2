@@ -6,7 +6,7 @@
 
 - name: rocketmq namesrv
   shell: |
-    rocketmq_namesrv="{{ rocketmq_namesrv }}"
+    rocketmq_namesrv="{{ groups["rocketmq-namesrv"] | map("regex_replace", "^(.*)$", "\\1:9876") | join(";") }}"
     echo $rocketmq_namesrv
   register: rocketmq_namesrv
 

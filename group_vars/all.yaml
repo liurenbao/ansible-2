@@ -1,5 +1,0 @@
-kafka_hosts_arr: {{ groups['kafka'] | map('regex_replace', '^(.*)$','\\1:9092') | list | to_json }}
-kafka_hosts_str: {{ groups['kafka'] | map('regex_replace', '^(.*)$','\\1:9092') | list | join(',') }}
-zk_hosts_str: {{ groups['kafka'] | map('regex_replace', '^(.*)$','\\1:2181') | join(',') }}
-es_hosts_arr: {{ groups['es'] | map('regex_replace', '^(.*)$','\\1:9200') | list | to_json }}
-rocketmq_namesrv: {{ groups["rocketmq-namesrv"] | map("regex_replace", "^(.*)$", "\\1:9876") | join(";") }}
