@@ -11,7 +11,7 @@ data:
     filebeat.inputs:
       - type: log
         paths:
-          - "/var/lib/docker/overlay2/*/diff/opt/RMSServer_linux/Logs/*.log"
+          - "/var/lib/docker/overlay2/*/diff/opt/RMSServer_linux/Logs/*.log.*"
         multiline.pattern: '^\d{4}-\d{1,2}-\d{1,2}'
         multiline.negate: true
         multiline.match: after
@@ -57,11 +57,12 @@ data:
                   - equals:
                       kubernetes.namespace: rocketmq
     output.kafka:
-      hosts: {{ groups['kafka'] | map('regex_replace', '^(.*)$','\\1:9092') | list | to_json }}
+      hosts: {{ kafka_hosts_arr }}
       topic: log
-      required_acks: 0
-      worker: 8
-      keep_alive: 15
+      required_acks: 1
+      compression: gzip
+      worker: 32
+      keep_alive: 32
 ---
 apiVersion: apps/v1
 kind: DaemonSet
@@ -104,10 +105,11 @@ spec:
             privileged: true
           resources:
             limits:
-              memory: 800Mi
+              memory: 2Gi
+              cpu: '4'
             requests:
               cpu: 300m
-              memory: 100Mi
+              memory: 150Mi
           volumeMounts:
             - name: config
               mountPath: /usr/share/filebeat/filebeat.yml

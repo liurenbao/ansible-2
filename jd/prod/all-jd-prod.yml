@@ -16,7 +16,7 @@ docker_gid: '994'
 
 # 离线文件安装包所在目录-----------------------------------------------------------------------
 package_dir: '/data01/package'
-ntp_server_addr: '10.12.117.251'
+ntp_server_addr: '10.13.253.12'
 yum_base_url: 'ftp://10.12.107.187/pub/centos/7/'
 
 keepalived_root_dir: /data01/keepalived
