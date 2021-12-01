@@ -1,0 +1,19 @@
+filebeat.inputs:
+  - type: log
+    paths:
+      - "/data01/ravencast/temp/*.log"
+      - "/data01/ravencast/temp/*.out"
+    multiline.pattern: '\s*(INFO|WARN|ERROR)'
+    multiline.negate: true
+    multiline.match: after
+    processors:
+      - add_fields:
+          target: ''
+          fields:
+            kubernetes.labels.app: ravencast
+            kubernetes.namespace: "{{ group_names[0].split('-')[1] }}"
+output.kafka:
+  hosts: {{ groups['kafka'] | map('regex_replace', '^(.*)$','\\1:9092') | list | to_json }}
+  topic: log
+  required_acks: 1
+  worker: 8
