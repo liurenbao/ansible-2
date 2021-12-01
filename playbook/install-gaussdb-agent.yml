@@ -1,11 +1,12 @@
 - name: install gaussdb monitor agent
   gather_facts: false
-  hosts: gaussdb
+  hosts: prod,uat
   vars:
     gaussdb_monitor_agent_root_dir: /data01/gaussdb-monitor-agent
     gaussdb_user: omm
+    gaussdb_monitor_user: db_monitor
     gaussdb_user_group: dbgrp
-    gaussdb_jdk_dir: /opt/software/jdk1.8.0_252
+    gaussdb_jdk_dir: /opt/software/jdk1.8.0_302
   roles:
     - install-filebeat
     - install-db-monitor

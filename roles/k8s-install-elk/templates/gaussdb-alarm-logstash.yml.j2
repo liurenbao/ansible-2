@@ -13,43 +13,41 @@ data:
         "index.refresh_interval": "30s"
       },
       "mappings": {
-          "properties" : {
-    	   "@timestamp" : {
-              "type" : "date"
-            },
-            "alarm_content" : {
-              "type" : "text",
-              "fields" : {
-                "keyword" : {
-                  "type" : "keyword",
-                  "ignore_above" : 256
-                }
+        "properties": {
+          "@timestamp": {
+            "type": "date"
+          },
+          "alarm_content": {
+            "type": "text",
+            "fields": {
+              "keyword": {
+                "type": "keyword",
+                "ignore_above": 256
               }
-            },
-            "alarm_id" : {
-              "type" : "long"
-
-            },
-            "alarm_name" : {
-              "type" : "keyword"
-
-            },
-            "alarm_server" : {
-              "type" : "keyword"
-
-            },
-            "alarm_status" : {
-              "type" : "long"
-            },
-            "alarm_time" : {
-              "type" : "date"
-
-            },
-            "alarm_type" : {
-              "type" : "keyword"
             }
-
+          },
+          "alarm_id": {
+            "type": "long"
+          },
+          "alarm_name": {
+            "type": "keyword"
+          },
+          "alarm_server": {
+            "type": "keyword"
+          },
+          "alarm_status": {
+            "type": "long"
+          },
+          "alarm_time": {
+            "type": "date"
+          },
+          "alarm_type": {
+            "type": "keyword"
+          },
+          "alarm_ip": {
+            "type": "keyword"
           }
+        }
       }
     }
 
@@ -83,21 +81,26 @@ metadata:
 data:
   input_main.conf: |-
     input {
-        kafka {
+      kafka {
         bootstrap_servers => "{{ groups['kafka'] | map('regex_replace', '^(.*)$','\\1:9092') | list | join(',') }}"
         group_id => "gaussdb-alarm_group"
         topics => ["gaussdb-alarm"]
         consumer_threads => 12
         decorate_events => true
-        }
+      }
     }
   filter_main.conf: |-
     filter {
       grok {
-        match => {
-    	  "message" => "(?<alarm_time>(\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2}))\|(?<alarm_id>\d{1,})\|(?<alarm_name>\w{1,}.*)\|(?<alarm_type>\w{1,}.*)\|(?<alarm_server>\w{1,}.*)\|(?<alarm_content>[{A-Z].*)\|(?<alarm_status>\d{1,})"
-    	}
-       overwrite => ["message"]
+        break_on_match => true
+        match => { "message" => "(?<alarm_time>(\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2}))\|(?<alarm_id>\d{1,})\|(?<alarm_name>\w{1,}.*)\|(?<alarm_type>\w{1,}.*)\|(?<alarm_server>\w{0,}.*)\|(?<alarm_content>[{A-Z].*)\|(?<alarm_status>\d{1,}).{1,}(?<alarm_ip>\d{2,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})" }
+        match => { "message" => "(?<alarm_ip>\d{2,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}).{1,}(?<alarm_time>(\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2}))\|(?<alarm_id>\d{1,})\|(?<alarm_name>\w{0,}.*)\|(?<alarm_type>\w{1,}.*)\|(?<alarm_server>\w{1,}.*)\|(?<alarm_content>[{A-Z].*)\|(?<alarm_status>\d{1,})" }
+        overwrite => ["message"]
+      }
+
+      mutate {
+        remove_field => "message"
+        remove_field => "@version"
       }
 
       date {
@@ -107,19 +110,18 @@ data:
     }
   output_main.conf: |-
     output {
-      stdout {  codec => rubydebug}
+      stdout { codec => rubydebug }
       elasticsearch {
-           hosts => {{ groups['es'] | map('regex_replace', '^(.*)$','\\1:9200') | list | to_json}}
-           index => "gaussdb-alarm-%{+YYYY.MM}"
-           codec => "json"
-           manage_template => true
-           template_overwrite => true
-           template_name=> "gaussdb-alarm"
-           template => "/usr/share/logstash/mappings/alarm_mapping.json"
+        hosts => {{ groups['es'] | map('regex_replace', '^(.*)$','\\1:9200') | list | to_json}}
+        index => "gaussdb-alarm-%{+YYYY.MM}"
+        codec => "json"
+        manage_template => true
+        template_overwrite => true
+        template_name=> "gaussdb-alarm"
+        template => "/usr/share/logstash/mappings/alarm_mapping.json"
       }
     }
 ---
-
 apiVersion: apps/v1
 kind: Deployment
 metadata:

@@ -1,14 +1,13 @@
+{% for host in groups['es'] %}
 apiVersion: v1
 kind: Endpoints
 metadata:
-  name: elasticsearch
+  name: '{{ hostvars[host].host_name }}'
   namespace: monitoring
 subsets:
   - addresses:
-{% for host in groups['es'] %}
-      - ip: {{ host }}
-        nodeName: {{ hostvars[host].host_name }}
-{% endfor %}
+      - ip: '{{ host }}'
+        nodeName: '{{ hostvars[host].host_name }}'
     ports:
       - port: 9114
         name: metrics
@@ -18,9 +17,10 @@ subsets:
 apiVersion: v1
 kind: Service
 metadata:
-  name: elasticsearch
+  name: '{{ hostvars[host].host_name }}'
   namespace: monitoring
   annotations:
+    maintainer: mouyongde@cicem.fa
     prometheus.io/scrape: "true"
     prometheus.io/port: '9114'
     prometheus.io/scheme: "http"
@@ -33,6 +33,8 @@ spec:
       name: metrics
     - port: 9200
       name: web
+---
+{% endfor %}
 ---
 apiVersion: v1
 kind: Endpoints
@@ -54,6 +56,7 @@ metadata:
   name: elasticsearch-node-exporter
   namespace: monitoring
   annotations:
+    maintainer: mouyongde@cicem.fa
     prometheus.io/scrape: "true"
     prometheus.io/port: '9100'
     prometheus.io/scheme: "http"

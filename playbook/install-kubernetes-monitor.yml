@@ -6,6 +6,7 @@
       file:
         path: "{{ monitor_nfs_path }}"
         state: directory
+      when: monitor_nfs_path_existed is not defined or monitor_nfs_path_existed == false
 
 - name: install sync
   hosts: localhost

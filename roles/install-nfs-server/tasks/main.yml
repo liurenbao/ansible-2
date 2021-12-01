@@ -2,10 +2,18 @@
   shell: yum install rpcbind nfs-utils -y
 
 - name: start nfs server
-  shell: systemctl start rpcbind nfs-server
+  systemd:
+    name: rpcbind
+    state: restarted
+    enabled: yes
+    daemon_reload: yes
 
-- name: enable nfs server
-  shell: systemctl enable rpcbind nfs-server
+- name: start nfs server
+  systemd:
+    name: nfs-server
+    state: restarted
+    enabled: yes
+    daemon_reload: yes
 
 - name: firewalld status
   service:
@@ -28,19 +36,7 @@
 - name: config nfs permission
   lineinfile:
     path: /etc/exports
-    line: "{{ nfs_root_dir }} 192.168.0.0/16(insecure,rw,sync,no_root_squash,no_all_squash)"
-    state: present
-
-- name: config nfs permission
-  lineinfile:
-    path: /etc/exports
-    line: "{{ nfs_root_dir }} 10.12.117.0/24(insecure,rw,sync,no_root_squash,no_all_squash)"
-    state: present
-
-- name: config nfs permission
-  lineinfile:
-    path: /etc/exports
-    line: "{{ nfs_root_dir }} 10.12.118.0/24(insecure,rw,sync,no_root_squash,no_all_squash)"
+    line: "{{ nfs_root_dir }} {{ nfs_client_cidr }}(insecure,rw,sync,no_root_squash,no_all_squash)"
     state: present
 
 - name: re-export nfs dir

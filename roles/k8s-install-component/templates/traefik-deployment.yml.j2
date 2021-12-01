@@ -26,7 +26,8 @@ spec:
         - name: traefik
           image: "{{ image_repository }}/traefik/traefik:v2.4.9"
           args:
-            - --log.level=ERROR
+            - --log.level=DEBUG
+            - --accesslog
             - --api
             - --api.insecure
             - --entrypoints.web.address=:80

@@ -40,6 +40,11 @@ monitortask:
    taskDesc: gs_om巡检任务,Check数据库实例状态
    enabled: true
   -
+   taskGroup: GrpOmStatus
+   taskKey: alarmLogCheck
+   taskDesc: 告警日志巡检任务,Check告警日志
+   enabled: true
+  -
    taskGroup: GrpGsCheck
    taskKey: gsCheckCluster
    taskDesc: "gs_check巡检任务,Check Cluster"
@@ -115,5 +120,6 @@ monitortask:
 #自定义配置参数
 base:
   #monitor-server端访问地址
-  serverUrl: http://{{ nginx_keepalived_vip }}/monitor-server
-  
+  serverUrl: http://gaussdb.cicem.fa/monitor-server
+  #通信token，请和server端配置的hpcToken保持一致
+  hpcToken: hpcMonitor

@@ -1,0 +1,12 @@
+version: '3'
+services:
+  mail-server:
+    container_name: mail-server
+    hostname: 10.12.107.121
+    image: 10.12.107.150:80/public/poste.io:latest
+    network_mode: host
+    restart: always
+    environment:
+      - TZ=Asia/Shanghai
+    volumes:
+      - ./data:/data

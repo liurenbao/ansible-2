@@ -1,0 +1,58 @@
+{% for host in groups['harbor'] %}
+apiVersion: v1
+kind: Endpoints
+metadata:
+  name: '{{ hostvars[host].host_name }}'
+  namespace: monitoring
+subsets:
+  - addresses:
+      - ip: '{{ host }}'
+        nodeName: '{{ hostvars[host].host_name }}'
+    ports:
+      - port: 80
+        name: web
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: '{{ hostvars[host].host_name }}'
+  namespace: monitoring
+  annotations:
+    maintainer: mouyongde@cicem.fa
+    prometheus.io/http-probe: "true"
+    prometheus.io/http-probe-port: "80"
+    prometheus.io/http-probe-path: "/c/log_out"
+spec:
+  ports:
+    - port: 80
+      name: web
+---
+{% endfor %}
+---
+apiVersion: v1
+kind: Endpoints
+metadata:
+  name: harbor-node-exporter
+  namespace: monitoring
+subsets:
+  - addresses:
+{% for host in groups['harbor'] %}
+    - ip: {{ host }}
+      nodeName: {{ hostvars[host].host_name }}
+{% endfor %}
+    ports:
+      - port: 9100
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: harbor-node-exporter
+  namespace: monitoring
+  annotations:
+    maintainer: mouyongde@cicem.fa
+    prometheus.io/scrape: "true"
+    prometheus.io/port: '9100'
+    prometheus.io/scheme: "http"
+spec:
+  ports:
+    - port: 9100

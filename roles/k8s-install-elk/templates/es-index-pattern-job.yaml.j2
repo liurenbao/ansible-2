@@ -25,12 +25,12 @@ metadata:
   namespace: elk
   name: autodelete-es-index-pattern
 spec:
-  failedJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 1
   successfulJobsHistoryLimit: 1
   concurrencyPolicy: Replace
   startingDeadlineSeconds: 20
   #每天2点执行
-  schedule: "0 2 * * *"
+  schedule: "*/10 * * * *"
   jobTemplate:
     spec:
       template:
@@ -42,7 +42,7 @@ spec:
               command: [ "/bin/bash", "-c", "/es/autodelete-es-index-pattern.sh" ]
               env:
                 - name: ES_HOST
-                  value: "elasticsearch.monitoring:9200"
+                  value: "elasticsearch.elk:9200"
                 - name: ES_INDEX_KEEP
                   value: "{{ es_index_keep }}"
                 - name: ES_INDEX_KEEP_UNIT

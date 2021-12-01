@@ -1,11 +1,24 @@
 [harbor]
-10.12.107.146 host_name=jdfap-harb01 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" MASTER_BACKUP=MASTER
-10.12.107.147 host_name=jdfap-harb02 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" MASTER_BACKUP=BACKUP
-[nginx]
-10.12.117.61 host_name=jdfau-nginx01 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" MASTER_BACKUP=MASTER
-10.12.117.62 host_name=jdfau-nginx02 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" MASTER_BACKUP=BACKUP
-[rocketmq-console]
-10.12.117.141 host_name=jdfau-rocketmq01 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
+#10.12.107.146 host_name=jdfap-harb01 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" MASTER_BACKUP=MASTER
+#10.12.107.147 host_name=jdfap-harb02 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" MASTER_BACKUP=BACKUP
+[k8s-master-init]
+10.12.117.76 host_name=jdfau-k8sm01 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" MASTER_BACKUP=MASTER label="zone=dc1"
+[k8s-master-join]
+10.12.117.77 host_name=jdfau-k8sm02 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" MASTER_BACKUP=BACKUP label="zone=dc1"
+10.12.117.78 host_name=jdfau-k8sm03 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" MASTER_BACKUP=BACKUP label="zone=dc2"
+[k8s-worker]
+10.12.117.81 host_name=jdfau-k8sw01 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" label="zone=dc1"
+10.12.117.82 host_name=jdfau-k8sw02 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" label="zone=dc1"
+10.12.117.83 host_name=jdfau-k8sw03 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" label="zone=dc1"
+10.12.117.84 host_name=jdfau-k8sw04 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" label="zone=dc1"
+10.12.117.85 host_name=jdfau-k8sw05 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" label="zone=dc1"
+10.12.117.86 host_name=jdfau-k8sw06 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" label="zone=dc1"
+10.12.117.87 host_name=jdfau-k8sw07 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" label="zone=dc2"
+10.12.117.88 host_name=jdfau-k8sw08 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" label="zone=dc2"
+10.12.117.89 host_name=jdfau-k8sw09 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" label="zone=dc2"
+10.12.117.90 host_name=jdfau-k8sw10 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" label="zone=dc2"
+10.12.117.91 host_name=jdfau-k8sw11 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" label="zone=dc2"
+10.12.117.92 host_name=jdfau-k8sw12 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" label="zone=dc2"
 [rocketmq-namesrv]
 10.12.117.141 host_name=jdfau-rocketmq01 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
 10.12.117.142 host_name=jdfau-rocketmq02 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
@@ -14,6 +27,17 @@
 10.12.117.144 host_name=jdfau-rocketmq04 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" broker_name=broker-a role=master
 10.12.117.145 host_name=jdfau-rocketmq05 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" broker_name=broker-b role=slave
 10.12.117.146 host_name=jdfau-rocketmq06 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" broker_name=broker-a role=slave
+[nginx]
+10.12.117.61 host_name=jdfau-nginx01 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" MASTER_BACKUP=MASTER
+10.12.117.62 host_name=jdfau-nginx02 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" MASTER_BACKUP=BACKUP
+[es]
+10.12.117.121 host_name=jdfau-elkes01 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
+10.12.117.122 host_name=jdfau-elkes02 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
+10.12.117.123 host_name=jdfau-elkes03 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
+[kafka]
+10.12.117.126 host_name=jdfau-elkfk01 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
+10.12.117.127 host_name=jdfau-elkfk02 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
+10.12.117.128 host_name=jdfau-elkfk03 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
 [redis]
 10.12.117.151 host_name=jdfau-redis01 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
 10.12.117.152 host_name=jdfau-redis02 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
@@ -43,34 +67,8 @@ ravencast_tcphosts=10.12.117.168[7800],10.12.117.169[7800]
 ravencast_tcphosts=10.12.117.170[7800],10.12.117.171[7800]
 [nas]
 10.12.117.172 host_name=jdfau-ftp01 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
-[kafka]
-10.12.117.126 host_name=jdfau-elkfk01 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
-10.12.117.127 host_name=jdfau-elkfk02 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
-10.12.117.128 host_name=jdfau-elkfk03 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
-[k8s-worker]
-10.12.117.81 host_name=jdfau-k8sw01 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" label="zone=dc1"
-10.12.117.82 host_name=jdfau-k8sw02 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" label="zone=dc1"
-10.12.117.83 host_name=jdfau-k8sw03 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" label="zone=dc1"
-10.12.117.84 host_name=jdfau-k8sw04 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" label="zone=dc1"
-10.12.117.85 host_name=jdfau-k8sw05 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" label="zone=dc1"
-10.12.117.86 host_name=jdfau-k8sw06 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" label="zone=dc1"
-10.12.117.87 host_name=jdfau-k8sw07 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" label="zone=dc2"
-10.12.117.88 host_name=jdfau-k8sw08 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" label="zone=dc2"
-10.12.117.89 host_name=jdfau-k8sw09 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" label="zone=dc2"
-10.12.117.90 host_name=jdfau-k8sw10 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" label="zone=dc2"
-10.12.117.91 host_name=jdfau-k8sw11 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" label="zone=dc2"
-10.12.117.92 host_name=jdfau-k8sw12 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" label="zone=dc2"
-[k8s-master-init]
-10.12.117.76 host_name=jdfau-k8sm01 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" MASTER_BACKUP=MASTER label="zone=dc1"
-[k8s-master-join]
-10.12.117.77 host_name=jdfau-k8sm02 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" MASTER_BACKUP=BACKUP label="zone=dc1"
-10.12.117.78 host_name=jdfau-k8sm03 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" MASTER_BACKUP=BACKUP label="zone=dc2"
-[es]
-10.12.117.121 host_name=jdfau-elkes01 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
-10.12.117.122 host_name=jdfau-elkes02 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
-10.12.117.123 host_name=jdfau-elkes03 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
-#[eap]
-#10.12.117.41    host_name=jdfau-eap01   ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
-#10.12.117.42    host_name=jdfau-eap02   ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
-#10.12.117.43    host_name=jdfau-eap03   ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
-#10.12.117.44    host_name=jdfau-eap04   ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
+[eap]
+10.12.117.41    host_name=jdfau-eap01   ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
+10.12.117.42    host_name=jdfau-eap02   ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
+10.12.117.43    host_name=jdfau-eap03   ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
+10.12.117.44    host_name=jdfau-eap04   ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"

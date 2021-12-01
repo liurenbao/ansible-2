@@ -8,7 +8,7 @@ spec:
     - web
   routes:
     - kind: Rule
-      match: Host(`ams.cicem.fa`)
+      match: Host(`ams.cicem.fa`) && PathPrefix(`/`)
       services:
         - name: ams-ui
           port: 80
@@ -16,10 +16,12 @@ spec:
 apiVersion: traefik.containo.us/v1alpha1
 kind: Middleware
 metadata:
-  name: ams-api-replacepath
+  name: ams-api-stripprefix
+  namespace: ams
 spec:
-  replacePath:
-    path: /
+  stripPrefix:
+    prefixes:
+      - /apis
 ---
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
@@ -33,7 +35,7 @@ spec:
     - kind: Rule
       match: Host(`ams.cicem.fa`) && PathPrefix(`/apis/`)
       middlewares:
-        - name: ams-api-replacepath
+        - name: ams-api-stripprefix
       services:
         - name: ams-api
           port: 8100

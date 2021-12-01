@@ -15,19 +15,41 @@ spec:
         resources:
           requests:
             storage: '{{ alertmanager_storage }}'
-  image: '{{ image_repository }}/public/alertmanager:v0.20.0'
-  externalUrl: "http://{{ nginx_keepalived_vip }}:30005"
-  logLevel: debug
+  image: '{{ image_repository }}/public/alertmanager:v0.21.0'
+  externalUrl: "http://alertmanager.cicem.fa"
   retention: '{{ alertmanager_data_retention }}'
+  logLevel: debug
   nodeSelector:
     kubernetes.io/os: linux
+    node-role.kubernetes.io/master: ""
   replicas: 3
+  affinity:
+    podAntiAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        - labelSelector:
+            matchExpressions:
+              - key: app
+                operator: In
+                values:
+                  - alertmanager
+          topologyKey: kubernetes.io/hostname
+  tolerations:
+    - key: node.kubernetes.io/not-ready
+      operator: Exists
+      effect: NoExecute
+      tolerationSeconds: 2
+    - key: node.kubernetes.io/unreachable
+      operator: Exists
+      effect: NoExecute
+      tolerationSeconds: 2
+    - key: node-role.kubernetes.io/master
+      effect: NoSchedule
   resources:
     limits:
-      cpu: 100m
-      memory: 100Mi
+      cpu: '2'
+      memory: 300Mi
     requests:
-      cpu: 4m
+      cpu: 400m
       memory: 100Mi
   securityContext:
     fsGroup: 2000

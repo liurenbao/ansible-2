@@ -28,7 +28,7 @@ spec:
             - instance
             - addr
           regex: ([^.]+)(?::\d+)?;([^:]+)(?::\d+)?
-          replacement: $1($2)
+          replacement: $1@$2
           targetLabel: instance
         - action: labeldrop
           regex: "addr"
@@ -39,4 +39,3 @@ spec:
   selector:
     matchLabels:
       app.kubernetes.io/name: node-exporter
-      app.kubernetes.io/version: v0.18.1

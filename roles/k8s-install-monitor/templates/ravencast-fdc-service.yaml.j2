@@ -1,23 +1,23 @@
+{% for host in groups['ravencast-fdc-1'] %}
 apiVersion: v1
 kind: Endpoints
 metadata:
-  name: ravencast-fdc
+  name: '{{ hostvars[host].host_name }}'
   namespace: monitoring
 subsets:
   - addresses:
-{% for host in groups['ravencast-fdc'] %}
-      - ip: {{ host }}
-        nodeName: {{ hostvars[host].host_name }}
-{% endfor %}
+      - ip: '{{ host }}'
+        nodeName: '{{ hostvars[host].host_name }}'
     ports:
       - port: 10103
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: ravencast-fdc
+  name: '{{ hostvars[host].host_name }}'
   namespace: monitoring
   annotations:
+    maintainer: mouyongde@cicem.fa
     prometheus.io/tcp-probe: "true"
     prometheus.io/scrape: "true"
     prometheus.io/port: '9998'
@@ -28,14 +28,52 @@ spec:
     - port: 10103
   type: ClusterIP
 ---
+{% endfor %}
+---
+{% for host in groups['ravencast-fdc-2'] %}
 apiVersion: v1
 kind: Endpoints
 metadata:
-  name: ravencast-fdc-node-exporter
+  name: '{{ hostvars[host].host_name }}'
   namespace: monitoring
 subsets:
   - addresses:
-{% for host in groups['ravencast-fdc'] %}
+      - ip: '{{ host }}'
+        nodeName: '{{ hostvars[host].host_name }}'
+    ports:
+      - port: 10103
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: '{{ hostvars[host].host_name }}'
+  namespace: monitoring
+  annotations:
+    maintainer: mouyongde@cicem.fa
+    prometheus.io/tcp-probe: "true"
+    prometheus.io/scrape: "true"
+    prometheus.io/port: '9998'
+    prometheus.io/scheme: "http"
+    prometheus.io/path: '/'
+spec:
+  ports:
+    - port: 10103
+  type: ClusterIP
+---
+{% endfor %}
+---
+apiVersion: v1
+kind: Endpoints
+metadata:
+  name: jdfap-fdcmq-node-exporter
+  namespace: monitoring
+subsets:
+  - addresses:
+{% for host in groups['ravencast-fdc-1'] %}
+    - ip: {{ host }}
+      nodeName: {{ hostvars[host].host_name }}
+{% endfor %}
+{% for host in groups['ravencast-fdc-2'] %}
     - ip: {{ host }}
       nodeName: {{ hostvars[host].host_name }}
 {% endfor %}
@@ -45,9 +83,10 @@ subsets:
 apiVersion: v1
 kind: Service
 metadata:
-  name: ravencast-fdc-node-exporter
+  name: jdfap-fdcmq-node-exporter
   namespace: monitoring
   annotations:
+    maintainer: mouyongde@cicem.fa
     prometheus.io/scrape: "true"
     prometheus.io/port: '9100'
     prometheus.io/scheme: "http"

@@ -20,13 +20,38 @@ spec:
       - name: alertmanager-main
         namespace: monitoring
         port: web
-  image: "{{ image_repository }}/public/prometheus:v2.15.2"
-  externalUrl: 'http://{{ nginx_keepalived_vip }}:30002'
+  image: '{{ image_repository }}/public/prometheus:v2.20.0'
+  externalUrl: 'http://prometheus.cicem.fa'
   logLevel: debug
   nodeSelector:
     kubernetes.io/os: linux
+    node-role.kubernetes.io/master: ""
+    prometheus: "true"
   podMonitorNamespaceSelector: { }
   podMonitorSelector: { }
+  affinity:
+    podAntiAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+        - podAffinityTerm:
+            labelSelector:
+              matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                    - prometheus
+            topologyKey: zone
+          weight: 100
+  tolerations:
+    - key: node.kubernetes.io/not-ready
+      operator: Exists
+      effect: NoExecute
+      tolerationSeconds: 2
+    - key: node.kubernetes.io/unreachable
+      operator: Exists
+      effect: NoExecute
+      tolerationSeconds: 2
+    - key: node-role.kubernetes.io/master
+      effect: NoSchedule
   retention: '{{ prometheus_data_retention }}'
   replicas: 2
   resources:
@@ -50,4 +75,4 @@ spec:
   serviceAccountName: prometheus-k8s
   serviceMonitorNamespaceSelector: { }
   serviceMonitorSelector: { }
-  version: 2.29.2
+  version: v2.20.0

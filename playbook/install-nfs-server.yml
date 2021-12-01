@@ -2,4 +2,10 @@
   hosts: nas
   gather_facts: false
   roles:
+    - disable-firewalld
     - install-nfs-server
+  tasks:
+    - name: create nas dir
+      file:
+        path: "{{ monitor_nfs_path }}"
+        state: directory
