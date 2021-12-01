@@ -1,4 +1,4 @@
-[prod]
+[db]
 10.12.114.16 host_name=jdc1fap-mesdb01 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" DB_NAME=MES MEM=512G DB_ROLE=MASTER FloatIP=10.12.114.20 STORAGE=10500G ARCHIVE=500G SHAREDISK=/dev/sdc DB_TYPE=DOUBLE
 10.12.114.116 host_name=jdc2fap-mesdb02 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" DB_NAME=MES MEM=512G DB_ROLE=SLAVE FloatIP=10.12.114.20 STORAGE=10500G ARCHIVE=500G SHAREDISK=/dev/sdc DB_TYPE=DOUBLE
 
@@ -39,3 +39,6 @@
 10.12.107.221 host_name=jdfap-elkfk01 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
 10.12.107.222 host_name=jdfap-elkfk02 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
 10.12.107.223 host_name=jdfap-elkfk03 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
+
+[k8s-master-init]
+10.12.107.116 host_name=jdfap-k8sm01 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"

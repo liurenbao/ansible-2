@@ -1,6 +1,6 @@
 - name: install gaussdb monitor agent
   gather_facts: false
-  hosts: prod,uat
+  hosts: db
   vars:
     gaussdb_monitor_agent_root_dir: /data01/gaussdb-monitor-agent
     gaussdb_user: omm
@@ -10,3 +10,9 @@
   roles:
     - install-filebeat
     - install-db-monitor
+
+- name: install gaussdb monitor service
+  gather_facts: false
+  hosts: k8s-master-init
+  roles:
+    - install-db-monitor-service

@@ -1,0 +1,4 @@
+- name: copy gaussdb service to k8s master
+  template:
+    src: gaussdb-monitor-service.yaml.j2
+    dest: '{{ component_manifest_dir }}/gaussdb-monitoring/gaussdb-monitor-service.yaml'
