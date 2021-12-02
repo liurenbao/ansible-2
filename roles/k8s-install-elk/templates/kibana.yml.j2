@@ -6,7 +6,7 @@ metadata:
 data:
   kibana.yml: |
     server.host: "0"
-    elasticsearch.hosts: {{ groups['es'] | map('regex_replace', '^(.*)$','\\1:9200') | list | to_json }}
+    elasticsearch.hosts: {{ es_hosts_arr }}
     monitoring.ui.container.elasticsearch.enabled: true
 ---
 apiVersion: apps/v1

@@ -13,7 +13,7 @@ filebeat.inputs:
             kubernetes.labels.app: ravencast
             kubernetes.namespace: "{{ group_names[0].split('-')[1] }}"
 output.kafka:
-  hosts: {{ groups['kafka'] | map('regex_replace', '^(.*)$','\\1:9092') | list | to_json }}
+  hosts: {{ kafka_hosts_arr }}
   topic: log
   required_acks: 1
   worker: 8
