@@ -37,6 +37,11 @@
   args:
     chdir: "{{ redis_data_dir }}"
 
+- name: rm redis data
+  shell: rm -rf data
+  args:
+    chdir: "{{ redis_data_dir }}"
+
 - name: start redis
   shell: docker-compose up -d
   args:
