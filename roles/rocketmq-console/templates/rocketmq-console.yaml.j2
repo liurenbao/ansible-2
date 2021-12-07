@@ -43,7 +43,7 @@ spec:
           imagePullPolicy: IfNotPresent
           env:
             - name: NAMESRV_ADDR
-              value: '{{ groups["rocketmq-namesrv"] | map("regex_replace", "^(.*)$", "\\1:9876") | join(";") }}'
+              value: '{{ rocketmq_namesrv_str }}'
             - name: DATA_PATH
               value: "/var/lib/rocketmq-console/data"
           resources:
@@ -131,7 +131,7 @@ spec:
           image: '{{ image_repository }}/public/rocketmq-exporter:0.0.2'
           imagePullPolicy: IfNotPresent
           args:
-            - '--rocketmq.config.namesrvAddr={{ groups["rocketmq-namesrv"] | map("regex_replace", "^(.*)$", "\\1:9876") | join(";") }}'
+            - '--rocketmq.config.namesrvAddr={{ rocketmq_namesrv_str }}'
           resources:
             requests:
               cpu: 200m

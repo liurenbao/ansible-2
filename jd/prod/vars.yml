@@ -59,12 +59,16 @@ es_index_keep: 9
 es_index_keep_unit: month
 es_log_replicas: 1
 es_log_shards: 60
+es_hosts_arr: '{{ groups["es"] | map("regex_replace", "^(.*)$","\1:9200") | list | to_json }}'
 
 # kafka---------------------------------------------------------------------------------------
 # kafka数据目录
 kafka_root_dir: '/data01/kafka'
 # kafka jvm信息
 kafka_heap_opts: '-Xmx16G -Xms16G'
+zk_hosts_str: '{{ groups["kafka"] | map("regex_replace", "^(.*)$","\1:2181") | join(",") }}'
+kafka_hosts_arr: '{{ groups["kafka"] | map("regex_replace", "^(.*)$","\1:9092") | list | to_json }}'
+kafka_hosts_str: '{{ groups["kafka"] | map("regex_replace", "^(.*)$","\1:9092") | list | join(",") }}'
 
 # roketmq------------------------------------------------------------------------------------
 jdk_dir: '/data01/jdk1.8.0_202'
@@ -72,6 +76,7 @@ rocket_cluster_name: CIMCluster
 rocketmq_root_dir: '/data01/rocketmq'
 rocketmq_package_dir: '{{ package_dir }}/rocketmq'
 rocketmq_jvm_args: -Xms16g -Xmx16g -Xmn8g
+rocketmq_namesrv_str: '{{ groups["rocketmq-namesrv"] | map("regex_replace", "^(.*)$", "\1:9876") | join(";") }}'
 
 # ravencast-----------------------------------------------------------------------------------
 ravencast_xms_xmx_args: '-Xms24G -Xmx24G'

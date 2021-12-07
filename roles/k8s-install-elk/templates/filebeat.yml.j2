@@ -57,7 +57,7 @@ data:
                   - equals:
                       kubernetes.namespace: rocketmq
     output.kafka:
-      hosts: {{ groups["kafka"] | map("regex_replace", "^(.*)$","\\1:9092") | list | to_json }}
+      hosts: {{ kafka_hosts_arr }}
       topic: log
       required_acks: 1
       compression: gzip

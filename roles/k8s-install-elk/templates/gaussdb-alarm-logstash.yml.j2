@@ -71,7 +71,7 @@ data:
     path.data: /usr/share/logstash/data
     pipeline.workers: 4
     xpack.monitoring.enabled: true
-    xpack.monitoring.elasticsearch.hosts: {{ groups["es"] | map("regex_replace", "^(.*)$","\\1:9200") | list | to_json }}
+    xpack.monitoring.elasticsearch.hosts: {{ es_hosts_arr }}
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -82,7 +82,7 @@ data:
   input_main.conf: |-
     input {
       kafka {
-        bootstrap_servers => '{{ groups["kafka"] | map("regex_replace", "^(.*)$","\\1:9092") | list | join(",") }}'
+        bootstrap_servers => '{{ kafka_hosts_str }}'
         group_id => "gaussdb-alarm_group"
         topics => ["gaussdb-alarm"]
         consumer_threads => 12
@@ -112,7 +112,7 @@ data:
     output {
       stdout { codec => rubydebug }
       elasticsearch {
-        hosts => {{ groups["es"] | map("regex_replace", "^(.*)$","\\1:9200") | list | to_json }}
+        hosts => {{ es_hosts_arr }}
         index => "gaussdb-alarm-%{+YYYY.MM}"
         codec => "json"
         manage_template => true
