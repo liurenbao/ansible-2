@@ -11,7 +11,7 @@ data:
     filebeat.inputs:
       - type: log
         paths:
-          - "/var/lib/docker/overlay2/*/diff/opt/RMSServer_linux/Logs/*.log.*"
+          - "/var/lib/docker/overlay2/*/diff/opt/RMSServer_linux/Logs/*.log"
         multiline.pattern: '^\d{4}-\d{1,2}-\d{1,2}'
         multiline.negate: true
         multiline.match: after
@@ -57,7 +57,7 @@ data:
                   - equals:
                       kubernetes.namespace: rocketmq
     output.kafka:
-      hosts: {{ kafka_hosts_arr }}
+      hosts: {{ groups["kafka"] | map("regex_replace", "^(.*)$","\\1:9092") | list | to_json }}
       topic: log
       required_acks: 1
       compression: gzip

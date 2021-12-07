@@ -30,7 +30,7 @@ filebeat.inputs:
     fields:
       kafka_topic: 'gaussdb-alarm'
 output.kafka:
-  hosts: {{ kafka_hosts_arr }}
+  hosts: {{ groups["kafka"] | map("regex_replace", "^(.*)$","\\1:9092") | list | to_json }}
   topic: '%{[fields.kafka_topic]}'
   worker: 8
   required_acks: 1

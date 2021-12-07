@@ -12,7 +12,7 @@ filebeat.inputs:
             kubernetes.labels.app: nginx
             kubernetes.namespace: nginx
 output.kafka:
-  hosts: {{ kafka_hosts_arr }}
+  hosts: {{ groups["kafka"] | map("regex_replace", "^(.*)$","\\1:9092") | list | to_json }}
   topic: log
   required_acks: 1
   worker: 8

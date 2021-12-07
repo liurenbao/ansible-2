@@ -1,0 +1,9 @@
+- name: show bash time
+  hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: show bash time
+      lineinfile:
+        path: /root/.bash_profile
+        line: "export PS1='[\d \t - \u@\h \W]$ '"
+        state: present
