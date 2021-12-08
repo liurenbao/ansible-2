@@ -1,0 +1,5 @@
+- name: copy file
+  hosts: '{{ groups | select("match","ravencast-.*") | list }}'
+  gather_facts: false
+  roles:
+    - copy-file

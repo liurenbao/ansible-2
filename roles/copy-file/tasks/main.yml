@@ -1,0 +1,5 @@
+- name: copy file
+  copy:
+    src: license.key
+    dest: /data01/ravencast/licenses/license.key
+    mode: 0644
