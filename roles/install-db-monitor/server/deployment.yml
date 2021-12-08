@@ -93,27 +93,29 @@ data:
     #告警配置, 按集群设置告警配置,未设置则使用默认项
     extalert:
       extGroups:
-        - #按集群设置告警配置，default表示默认配置，
+        -
+          #按集群设置告警配置，default表示默认配置，
           clusterHostInfo: default
           #收件人邮件地址，多个用分号隔开
           toMailAddress: lujinzhu@cicem.fa;tangjizhou@cicem.fa;mouyongde@cicem.fa;linfei@cicem.fa;zhangwei@cicem.fa
           #告警邮件总开关，yes开启，no关闭
           allWarnMail: yes
-
+          
           gscheckWarnMail:
             #按照检查项关闭告警，关闭后不发送告警通知, 多个项用逗号隔开, All表示关闭组内所有项
             #例如： CheckDirPermissions, CheckClusterVer, CheckNodes
-            excludeItems: CheckAccess, CheckLogLogicalLimit, CheckSucTransUsage, CheckTableCount, CheckConnCount, CheckFirewall, CheckSysParams, CheckNetPort, CheckMaxSize, CheckIOScheduler, CheckTuningFile, CheckPhyMem, CheckLongTranc, CheckNodes
-
+            excludeItems: CheckAccess, CheckLogLogicalLimit, CheckSucTransUsage, CheckTableCount, CheckConnCount, CheckFirewall, CheckSysParams, CheckNetPort
+          
           #监控gaussDB数据库连接数使用率%报警值，超过此值即发送邮件报警
           connectionUsageVal: 80
           #执行监控gaussDB数据库命令的用户名(一般为omm, 配置后客户端可以用非omm用户部署)，为空时表示客户端使用数据库用户(如：omm)部署
-          gsAccessUser: omm
+          gsAccessUser:
           #按照taskKey关闭任务项，关闭后对应任务项不执行, 多个项用逗号隔开
           #例如：sqlCheckLongTransaction, sqlCheckLogicRep
           switchOffTasks:
-
-
+    
+    
+    
     #wsr报告, outDir为报告归档目录，time为生成周期(单位:分钟，值为30的倍数: 30,60,90),enable为false时不生成报告
     wsr:
       outDir: /monitorgsdata/wsr
@@ -123,83 +125,101 @@ data:
     #默认定时任务
     monitortask:
       scheduledGroups:
-        - groupName: GrpOmStatus
+        -
+          groupName: GrpOmStatus
           groupDesc: 数据库实例状态检查任务组
           groupCron: "0 */5 * * * ?"
           enabled: true
-        - groupName: GrpGsCheck
+        -
+          groupName: GrpGsCheck
           groupDesc: gs_check巡检任务组
           groupCron: "0 */30 * * * ?"
           enabled: true
-        - groupName: GrpSqlCheck
+        -
+          groupName: GrpSqlCheck
           groupDesc: SQL检查任务组
           groupCron: "0 */5 * * * ?"
           enabled: true
 
       subTasks:
-        - taskGroup: GrpOmStatus
+        -
+          taskGroup: GrpOmStatus
           taskKey: gsOmStatus
           taskDesc: gs_om巡检任务,Check数据库实例状态
           enabled: true
-        - taskGroup: GrpOmStatus
+        -
+          taskGroup: GrpOmStatus
           taskKey: alarmLogCheck
           taskDesc: 告警日志巡检任务,Check告警日志
           enabled: true
-        - taskGroup: GrpGsCheck
+        -
+          taskGroup: GrpGsCheck
           taskKey: gsCheckCluster
           taskDesc: "gs_check巡检任务,Check Cluster"
           enabled: true
-        - taskGroup: GrpGsCheck
+        -
+          taskGroup: GrpGsCheck
           taskKey: gsCheckDbInst
           taskDesc: "gs_check巡检任务,Check DB instances"
           enabled: true
-        - taskGroup: GrpGsCheck
+        -
+          taskGroup: GrpGsCheck
           taskKey: gsCheckDbStatus
           taskDesc: "gs_check巡检任务,Check DB Status"
           enabled: true
-        - taskGroup: GrpGsCheck
+        -
+          taskGroup: GrpGsCheck
           taskKey: gsCheckInstStatus
           taskDesc: "gs_check巡检任务,Check Inst Status"
           enabled: true
-        - taskGroup: GrpGsCheck
+        -
+          taskGroup: GrpGsCheck
           taskKey: gsCheckOs
           taskDesc: "gs_check巡检任务,Check OS"
           enabled: true
-        - taskGroup: GrpGsCheck
+        -
+          taskGroup: GrpGsCheck
           taskKey: gsCheckPeriod
           taskDesc: "gs_check巡检任务,Check Period"
           enabled: true
-        - taskGroup: GrpSqlCheck
+        -
+          taskGroup: GrpSqlCheck
           taskKey: sqlCheckClusterRunMode
           taskDesc: "SQL check巡检任务,集群状态是否最大可用模式"
           enabled: true
-        - taskGroup: GrpSqlCheck
+        -
+          taskGroup: GrpSqlCheck
           taskKey: sqlCheckSyncInfo
           taskDesc: "SQL check巡检任务,主备之间的物理复制是否同步"
           enabled: true
-        - taskGroup: GrpSqlCheck
+        -
+          taskGroup: GrpSqlCheck
           taskKey: sqlCheckLogicRep
           taskDesc: "SQL check巡检任务,主备之间的逻辑复制延迟是否超过指定时间(秒)"
           #主备之间的逻辑复制延迟时间(秒)
           queryParam1: 10
           enabled: true
-        - taskGroup: GrpSqlCheck
+        -
+          taskGroup: GrpSqlCheck
           taskKey: sqlCheckFailOver
           taskDesc: "SQL check巡检任务,主备之间是否发生FailOver"
           enabled: true
-        - taskGroup: GrpSqlCheck
+        -
+          taskGroup: GrpSqlCheck
           taskKey: sqlCheckLongSQL
           taskDesc: "SQL check巡检任务,查询执行时间超过指定时间(秒)的长sql"
           #执行时间超过时间(秒)
           queryParam1: 30
           enabled: true
-        - taskGroup: GrpSqlCheck
+        -
+          taskGroup: GrpSqlCheck
           taskKey: sqlCheckLockTableSQL
           taskDesc: "SQL check巡检任务,查询被锁影响超过指定时间(秒)的sql"
           #被锁影响超过指定时间(秒)
           queryParam1: 30
           enabled: true
-        - taskGroup: GrpSqlCheck
+        -
+          taskGroup: GrpSqlCheck
           taskKey: sqlCheckLongTransaction
           taskDesc: "SQL check巡检任务,查询超过指定时间(秒)的事务"
           #执行时间超过时间(秒)
@@ -208,7 +228,8 @@ data:
 
     alarmdesc:
       alarmList:
-        - alarmId: "1001010001"
+        -
+          alarmId: "1001010001"
           alarmName: "InsufficientDataInstFileDesc"
           alarmMeans: "数据库集群组件[component-name]，数据库节点[datanode-name]，实
                       例[instance-name]打开过多文件，导致句柄数不足。发生该告警时，运行日志里一般
@@ -224,7 +245,8 @@ data:
                        修改以后保存，注销当前用户，重新登录，执行ulimit -a。
                        4. 以上方法均不能解决，请联系华为工程师处理。"
           alarmSwitch: "ON"
-        - alarmId: "1001060001"
+        -
+          alarmId: "1001060001"
           alarmName: "FileMonitor"
           alarmMeans: "数据库集群组件[component-name]，数据库节点[datanode-name]的[file-name]文件通过rm或mv命令被物理删除或移动。"
           alarmPrinciple: "数据库文件（数据文件、redo日志）通过rm或mv命令被物理删除或移动。"
@@ -232,14 +254,16 @@ data:
                         1. 通过lsof | grep FILE_NAME查询误删文件对应的pid和fd。
                         2. 通过cp /proc/PID/fd/FD FILE_NAME恢复文件。
                         3. 执行alter database convert to readwrite或重启以恢复数据库状态。"
-        - alarmId: "1001060002"
+        -
+          alarmId: "1001060002"
           alarmName: "PageCorrupt"
           alarmMeans: "数据库集群组件[component-name]，数据库节点[datanode-name]的表
                       空间[space-name]里的文件[file-name]的文件损坏，页面类型[page-type],具体可以查看错误信息。"
           alarmPrinciple: "服务器掉电或者磁盘发生物理损坏。"
           alarmHandle: "告警产生后，需要用户手动页面修复，或者将表空间offline，或者重新建表。"
           alarmSwitch: "ON"
-        - alarmId: "1002050001"
+        -
+          alarmId: "1002050001"
           alarmName: "Deadlock"
           alarmMeans: "数据库集群组件[component-name]，数据库节点[datanode-name]，实
                       例[instance-name]的业务在执行过程中产生了死锁，可以在trace日志里查看具体死锁的语句、session、类型等等。"
@@ -249,7 +273,8 @@ data:
                        3. 具体死锁处理可以参考资料管理员指南第三章节-管理日志-TRACE日志。
                        4. 以上方法均不能解决，请联系华为工程师处理。"
           alarmSwitch: "ON"
-        - alarmId: "1003050001"
+        -
+          alarmId: "1003050001"
           alarmName: "Degrade"
           alarmMeans: "数据库集群组件[component-name]，数据库节点[datanode-name]发生
                       降备，往LNS发送线程的日志缓冲区里刷日志[process]，如果没有刷成功，则节点[host]:[port]从同步备降为异步备。"
@@ -257,7 +282,8 @@ data:
                           2*REPL_WAIT_TIMEOUT时间内还未收到备机的回复，则会从同步状态降备临时异步状态。"
           alarmHandle: "告警的产生可能是由于网络异常或备机负载过高造成的。如果不是人为的故障测试，一般会自愈，再次从临时异步变成同步。"
           alarmSwitch: "ON"
-        - alarmId: "1003050002"
+        -
+          alarmId: "1003050002"
           alarmName: "ReplPasswd"
           alarmMeans: "数据库集群组件[component-name]，数据库节点[datanode-name]的主
                       机或备机[database-role]保存复制用户密码时发生异常，需要用户手动通过工具去生成用户密码和密钥。"
@@ -266,21 +292,24 @@ data:
                           保存密码及key文件。如果磁盘空间不足或其它异常，则可能会造成文件保存失败。"
           alarmHandle: "告警产生后，需要用户手动通过工具去生成用户密码和密钥。"
           alarmSwitch: "ON"
-        - alarmId: "1004060001"
+        -
+          alarmId: "1004060001"
           alarmName: "Archive"
           alarmMeans: "数据库集群组件[component-name]，数据库节点[datanode-name]的[file-name]文件归档失败，可以在运行日志中查看进一步原因"
           alarmPrinciple: "在数据库实例DN进行Redo日志归档时进行判断，归档失败则上报告
                           警，是一般性错误告警。出现告警时，会造成日志无法归档，最终会导致数据库挂起，无法提供业务。"
           alarmHandle: "检查归档日志文件权限/属性、所在磁盘状况，检查运行日志具体的报错信息。"
           alarmSwitch: "ON"
-        - alarmId: "1004060002"
+        -
+          alarmId: "1004060002"
           alarmName: "FlushRedo"
           alarmMeans: "数据库集群组件[component-name]，数据库节点[datanode-name]在做redo日志刷盘时，[file-name]文件刷盘失败。"
           alarmPrinciple: "在数据库实例DN上进行redo写盘时进行判断，写盘失败则上报告警，
                           是比较严重的错误告警。出现该告警时，数据库会立即停止客户端请求，主进程立即退出。"
           alarmHandle: "检查Redo日志文件权限/属性、所在磁盘状况，检查运行日志具体的报错信息。"
           alarmSwitch: "ON"
-        - alarmId: "1004060003"
+        -
+          alarmId: "1004060003"
           alarmName: "AuditLog"
           alarmMeans: "数据库集群组件[component-name]，数据库节点[datanode-name]的实例[instance-name] 发生了无法写审计日志的告警。"
           alarmPrinciple: "检查审计日志异常。数据库表空间不够，无法写审计日志。"
@@ -288,14 +317,16 @@ data:
                        方法一：将表空间扩展。
                        方法二：其他的表删除，空余空间给审计日志。"
           alarmSwitch: "ON"
-        - alarmId: "1005060001"
+        -
+          alarmId: "1005060001"
           alarmName: "FlushBuffer"
           alarmMeans: "数据库集群组件[component-name]，数据库节点[datanode-name]，实例[instance-name]的dbwr线程发生写盘失败。"
           alarmPrinciple: "在数据库实例DN上进行buffer写盘时进行判断，写盘失败则上报告
                           警，是比较严重的错误告警。出现该告警时，数据库会立即停止客户端请求，主进程立即退出。"
           alarmHandle: "检查数据日志文件权限/属性、所在磁盘状况，检查运行日志具体的报错信息。"
           alarmSwitch: "ON"
-        - alarmId: "1006060001"
+        -
+          alarmId: "1006060001"
           alarmName: "TablespaceUsage"
           alarmMeans: "数据库集群组件[component-name]，数据库节点[datanode-name]的[tablespace-name]表空间的使用率已经超过了总空间的[threshold]。"
           alarmPrinciple: "检查数据库实例DN表空间使用率。如果存在表空间使用率达到用户指
@@ -308,19 +339,22 @@ data:
                        方法三：为当前表空间添加新的数据文件。
                        方法四：执行table shrink操作，释放空间。"
           alarmSwitch: "ON"
-        - alarmId: "1007050001"
+        -
+          alarmId: "1007050001"
           alarmName: "AttachAgent"
           alarmMeans: "数据库集群组件[component-name]，数据库节点[datanode-name]连接会话[session-id]失败。"
           alarmPrinciple: "会话连接响应客户端消息失败。"
           alarmHandle: "检查当前Session连接数是否存在大量并发，系统配置Session大小是否合理，当前操作系统内存是否有余量。"
           alarmSwitch: "ON"
-        - alarmId: "1007050002"
+        -
+          alarmId: "1007050002"
           alarmName: "MaxConnections"
           alarmMeans: "数据库集群组件[component-name]，数据库节点[datanode-name]会话连接失败，连接数过多，最大连接数为[max_sessions]。"
           alarmPrinciple: "会话连接数过多。"
           alarmHandle: "在运行日志中查看具体失败原因。"
           alarmSwitch: "ON"
-        - alarmId: "1007050003"
+        -
+          alarmId: "1007050003"
           alarmName: "MaliciousLogin"
           alarmMeans: "数据库集群组件[component-name]，数据库节点[node-name]的1min内
                       某个IP[ip]连续登录失败超过10次，则告警。每分钟相同告警最多打印6条。集群内各
@@ -329,37 +363,43 @@ data:
           alarmPrinciple: "错误登录次数过多。"
           alarmHandle: "从告警日志中查看恶意IP。"
           alarmSwitch: "ON"
-        - alarmId: "1007050004"
+        -
+          alarmId: "1007050004"
           alarmName: "Parameter"
           alarmMeans: "数据库集群组件[component-name]，数据库节点[node-name]的参数被修改。"
           alarmPrinciple: "数据库的参数被修改，这些参数若未经过专业评估，修改后可能影响全局性能和存储空间等。"
           alarmHandle: "从运行日志中查看是否为恶意修改。"
           alarmSwitch: "ON"
-        - alarmId: "1007050005"
+        -
+          alarmId: "1007050005"
           alarmName: "Password"
           alarmMeans: "数据库集群组件[component-name]，数据库节点[node-name]的用户密码被修改。"
           alarmPrinciple: "数据库的用户密码被修改，可能会导致某些业务使用原密码登录不上数据库。"
           alarmHandle: "从运行日志中查看是否为恶意修改。"
           alarmSwitch: "ON"
-        - alarmId: "1007050006"
+        -
+          alarmId: "1007050006"
           alarmName: "Profile"
           alarmMeans: "数据库集群组件[component-name]，数据库节点[node-name]的配置档案被修改。"
           alarmPrinciple: "数据库的配置档案被修改，可能会导致某些业务密码过期登录不上数据库或无法修改密码等。"
           alarmHandle: "从运行日志中查看是否为恶意修改。"
           alarmSwitch: "ON"
-        - alarmId: "1007060001"
+        -
+          alarmId: "1007060001"
           alarmName: "Job"
           alarmMeans: "数据库集群组件[component-name]，数据库节点[datanode-name]的定时任务[job-id]运行失败，具体可以查看错误信息为[err-msg]。"
           alarmPrinciple: "根据具体的报错信息决定。"
           alarmHandle: "检查当前Job任务是否正常执行，可以通过查询Job系统视图表。"
           alarmSwitch: "ON"
-        - alarmId: "1007060001"
+        -
+          alarmId: "1007060001"
           alarmName: "Job"
           alarmMeans: "数据库集群组件[component-name]，数据库节点[datanode-name]的定时任务[job-id]运行失败，具体可以查看错误信息为[err-msg]。"
           alarmPrinciple: "根据具体的报错信息决定。"
           alarmHandle: "检查当前Job任务是否正常执行，可以通过查询Job系统视图表。"
           alarmSwitch: "ON"
-        - alarmId: "1006060002"
+        -
+          alarmId: "1006060002"
           alarmName: "UndospaceUsage"
           alarmMeans: "数据库集群组件[component-name]，数据库节点[datanode-name]的[tablespace-name]表空间的使用率已经超过了总空间的[threshold]。"
           alarmPrinciple: "1. 事务阈值告警，事务执行过程中申请undo page页面超过阈值会记录告警，事务
@@ -372,80 +412,93 @@ data:
                        方法二：为undo表空间添加新的数据文件。
                        方法三：适当减少超大事务，以及超大事务的高并发。"
           alarmSwitch: "ON"
-        - alarmId: "1007060002"
+        -
+          alarmId: "1007060002"
           alarmName: "NologgingInsertObejct"
           alarmMeans: "数据库集群组件[component-name]，数据库节点[datanode-name]，实例[instance-name]包含nolog对象。"
           alarmPrinciple: "系统曾经调用过alter table xxx enable [partition | subpartition yyy]nologging开启了表或者分区的nologging insert属性。"
           alarmHandle: "调用alter table xxx disable [ partition | subpartition yyy ] nologging关闭所有表或者分区的nologging insert属性。"
           alarmSwitch: "ON"
-        - alarmId: "1020021001"
+        -
+          alarmId: "1020021001"
           alarmName: "Main Thread Aborted"
           alarmMeans: "逻辑复制工具在运行的过程中可能因为其他线程异常而退出。"
           alarmPrinciple: "回放SQL失败：目的端可能不存在需要操作的表；目的端表列字段数和源端列字段数不一致；目的端表列字段名称和源端列字段名称不一致。"
           alarmHandle: "查看逻辑复制的run日志，定位解决逻辑复制异常退出的原因。"
           alarmSwitch: "ON"
-        - alarmId: "1020021002"
+        -
+          alarmId: "1020021002"
           alarmName: "Write Checkpoint Failed"
           alarmMeans: "逻辑复制工具在运行过程中写回放进度失败。"
           alarmPrinciple: "源端数据库异常：源端数据库进程退出；源端数据库发生主备切换。"
           alarmHandle: "查看逻辑复制的run日志，定位查看具体异常原因。"
           alarmSwitch: "ON"
-        - alarmId: "1020021003"
+        -
+          alarmId: "1020021003"
           alarmName: "Write Checkpoint Thread Aborted"
           alarmMeans: "逻辑复制工具在运行过程中写回放进度线程异常退出。"
           alarmPrinciple: "1. 源数据库进程退出；源端数据库发生主备切换。
                           2. 写磁盘文件失败：磁盘无空间。"
           alarmHandle: "查看逻辑复制的run日志，定位查看具体异常原因。"
           alarmSwitch: "ON"
-        - alarmId: "1020021004"
+        -
+          alarmId: "1020021004"
           alarmName: "LogCatcher Thread Aborted"
           alarmMeans: "逻辑复制工具抽取解析在线日志或者归档日志线程异常退出。"
           alarmPrinciple: "解析日志数据出错：元数据信息发生变更；日志格式和目前的逻辑复制工具解析代码不配套。"
           alarmHandle: "查看逻辑复制的run日志，定位查看具体异常原因。"
           alarmSwitch: "ON"
-        - alarmId: "1020021005"
+        -
+          alarmId: "1020021005"
           alarmName: "Replayer Thread Aborted"
           alarmMeans: "逻辑复制工具sql回放线程异常退出。"
           alarmPrinciple: "执行SQL失败：目的端可能不存在需要操作的表；目的端表列字段数和源端列字段数不一致；目的端表列字段名称和源端列字段名称不一致。"
           alarmHandle: "查看逻辑复制的run日志，定位查看具体异常原因。"
           alarmSwitch: "ON"
-        - alarmId: "1020021006"
+        -
+          alarmId: "1020021006"
           alarmName: "Switch Primary to Standby"
           alarmMeans: "逻辑复制检测源端数据库主备状态。"
           alarmPrinciple: "源端数据库发生主备切换：数据库出现异常，需要查看数据库日志。"
           alarmHandle: "查看逻辑复制的run日志，定位查看具体异常原因。"
           alarmSwitch: "ON"
-        - alarmId: "1020021007"
+        -
+          alarmId: "1020021007"
           alarmName: "Transaction Dispatch Thread Aborted"
           alarmMeans: "逻辑复制工具事务分发线程异常退出。"
           alarmPrinciple: "分发事务异常：管理事务的队列出现bug。"
           alarmHandle: "查看逻辑复制的run日志，定位查看具体异常原因。"
           alarmSwitch: "ON"
-        - alarmId: "1020021008"
+        -
+          alarmId: "1020021008"
           alarmName: "Destination Database Exception"
           alarmMeans: "逻辑复制工具使用的目标数据库异常。"
           alarmPrinciple: "与目标数据库断连：目标数据库进程挂掉。"
           alarmHandle: "查看目的端数据库是否异常，根据情况处理目的端数据库。"
           alarmSwitch: "ON"
-        - alarmId: "1020021009"
+        -
+          alarmId: "1020021009"
           alarmName: "Archive log may be cleaned"
           alarmMeans: "逻辑复制工具需要解析使用的归档日志文件丢失，可能已经被清除掉了。"
           alarmPrinciple: "由于磁盘空间不足，导致人为清除了还没有回放到的归档日志或者数据库利用自动清理机制清理了归档日志。"
           alarmHandle: "查看逻辑复制的run日志，看报错的归档日志是否存在，如果不存在，则需要重新给逻辑复制工具指定复制数据的起始点，然后再次启动逻辑复制工具。"
           alarmSwitch: "ON"
-        - alarmId: "1020021010"
+        -
+          alarmId: "1020021010"
           alarmName: "Database failover exception"
           alarmMeans: "数据库发生failover异常事件。"
           alarmPrinciple: "数据库异常导致failover事件，导致部分归档日志文件丢失。"
           alarmHandle: "查看主备数据库的归档日志是否一致，如果不一致，则需要给逻辑复制工具重新指定数据复制的起始点，然后再次启动逻辑复制工具。"
           alarmSwitch: "ON"
-        - alarmId: "1020021011"
+        -
+          alarmId: "1020021011"
           alarmName: "SSL CERTIFICATE EXPIRED"
           alarmMeans: "SSL证书文件即将过期"
           alarmPrinciple: "逻辑复制工具配置了SSL证书即将到期需要告警的阈值（默认7天），如果当前时间点包含在告警时段则记录告警日志。"
           alarmHandle: "及时更换即将到期的SSL证书，然后重启逻辑复制工具。"
           alarmSwitch: "ON"
-        - alarmId: "1201020001"
+        -
+          alarmId: "1201020001"
           alarmName: "CheckTimeZone"
           alarmMeans: "各物理节点时区一致。"
           alarmPrinciple: "节点的时区配置不一致。"
@@ -453,14 +506,16 @@ data:
                        2. 在profile,bash_profile或者/etc/profile中设置正确的TZ环境变量并通过source使其生效。
                        例如：在/etc/profile末行添加TZ='Asia/Shanghai'; export TZ保存退出并通过source使其生效。"
           alarmSwitch: "ON"
-        - alarmId: "1201020002"
+        -
+          alarmId: "1201020002"
           alarmName: "CheckEncoding"
           alarmMeans: "各物理节点编码格式一致。"
           alarmPrinciple: "部分接节点的编码格式发生变化。"
           alarmHandle: "1. 查看etc/profile是否有设置环境变量LANG的值。
                        2. 有则修改、没有则添加'export LANG=en_US.UTF-8'。"
           alarmSwitch: "ON"
-        - alarmId: "1201020003"
+        -
+          alarmId: "1201020003"
           alarmName: "CheckFirewall"
           alarmMeans: "各物理节点防火墙状态。"
           alarmPrinciple: "1. 防火墙处于开启状态，配置了过滤规则。
@@ -471,27 +526,31 @@ data:
                        2. 未安装时，需要手动执行防火墙的安装。
                        3. SuSE使用service iptables start，其他使用systemctl start firewalld.service开启防火墙。"
           alarmSwitch: "ON"
-        - alarmId: "1201020004"
+        -
+          alarmId: "1201020004"
           alarmName: "CheckKernelVer"
           alarmMeans: "各物理节点内核版本一致。"
           alarmPrinciple: "OS内核版本发生变更。"
           alarmHandle: "1. 各节点使用uname -r查看内核版本号。
                        2. 需要更换内核版本一致的设备。"
           alarmSwitch: "ON"
-        - alarmId: "1201020005"
+        -
+          alarmId: "1201020005"
           alarmName: "CheckMaxHandle"
           alarmMeans: "操作系统最大句柄数配置大于1000000。"
           alarmPrinciple: "句柄数的配置有发生过人为修改或者其他工具的篡改。"
           alarmHandle: "1. 使用ulimit -n命令查看当前最大句柄。
                        2. root下在script目录执行./gs_checkos -i B2 -h plat1,plat2,...,platn进行设置。"
           alarmSwitch: "ON"
-        - alarmId: "1201020006"
+        -
+          alarmId: "1201020006"
           alarmName: "CheckSysParams"
           alarmMeans: "检查影响数据库性能的操作系统参数是否配置为建议值。"
           alarmPrinciple: "OS的配置参数有发生过人为修改或者其他程序的篡改。"
           alarmHandle: "root下在script目录执行./gs_checkos -i B1 -h plat1,plat2,...,platn进行设置。"
           alarmSwitch: "ON"
-        - alarmId: "1201020007"
+        -
+          alarmId: "1201020007"
           alarmName: "CheckNTPD"
           alarmMeans: "检查NTPD服务是否已打开。"
           alarmPrinciple: "NTPD服务有人为修改或者其他工具篡改。"
@@ -499,19 +558,22 @@ data:
                        2. 未安装时需要手动执行NTP服务的安装。
                        3. 使用systemctl start ntpd.service开启NTP服务。"
           alarmSwitch: "ON"
-        - alarmId: "1201020008"
+        -
+          alarmId: "1201020008"
           alarmName: "CheckPing"
           alarmMeans: "检查节点网络。"
           alarmPrinciple: "网卡宽带过低或者网络连接不通畅。"
           alarmHandle: "联系管理员。"
           alarmSwitch: "ON"
-        - alarmId: "1201020009"
+        -
+          alarmId: "1201020009"
           alarmName: "CheckDirPermissions"
           alarmMeans: "检查数据库目录权限。"
           alarmPrinciple: "数据库文件发生过人为的权限修改或者其他程序的篡改。"
           alarmHandle: "集群文件被破坏，联系管理员重新安装集群。"
           alarmSwitch: "ON"
-        - alarmId: "1201020010"
+        -
+          alarmId: "1201020010"
           alarmName: "CheckEnvProfile"
           alarmMeans: "检查集群环境变量。"
           alarmPrinciple: "没有进行环境变量文件的加载，环境变量发生了人为修改或者其他程
@@ -520,7 +582,8 @@ data:
                        2. source安装用户的.bashrc文件，变量分离安装情况需要再source分离环境文件。
                        3. 联系管理员。"
           alarmSwitch: "ON"
-        - alarmId: "1201020011"
+        -
+          alarmId: "1201020011"
           alarmName: "CheckProcessCount"
           alarmMeans: "检查进程数。"
           alarmPrinciple: "运行了其他包含大量进程的程序，或者系统运行的软件过多。"
@@ -530,26 +593,30 @@ data:
                        2. 手动清理当前用户下的无用进程。
                        3. 增加当前用户的最大进程数限制。"
           alarmSwitch: "ON"
-        - alarmId: "1201020012"
+        -
+          alarmId: "1201020012"
           alarmName: "CheckClusterVer"
           alarmMeans: "检查集群版本。"
           alarmPrinciple: "数据库文件发生了人为的修改或者其他程序的篡改。"
           alarmHandle: "集群文件被破坏，联系管理员重新安装集群。"
           alarmSwitch: "ON"
-        - alarmId: "1201020013"
+        -
+          alarmId: "1201020013"
           alarmName: "CheckCpuUsage"
           alarmMeans: "检查CPU使用率。"
           alarmPrinciple: "环境配置过低，磁盘占用过高或者启动程序过多。"
           alarmHandle: "1. 升级硬件。
                        2. 使用top命令查看占用CPU较高的进程PID，删除无用进程。"
           alarmSwitch: "ON"
-        - alarmId: "1201020014"
+        -
+          alarmId: "1201020014"
           alarmName: "CheckDiskUsage"
           alarmMeans: "检查磁盘使用率。"
           alarmPrinciple: "人为或者其他程序添加了大量占用磁盘空间的文件。"
           alarmHandle: "扩展磁盘。"
           alarmSwitch: "ON"
-        - alarmId: "1201020015"
+        -
+          alarmId: "1201020015"
           alarmName: "CheckHandleUsage"
           alarmMeans: "检查句柄使用率。"
           alarmPrinciple: "最大句柄配置不合理或者存在占用大量句柄的其他程序。"
@@ -559,14 +626,16 @@ data:
                        2. 使用lsof -n | awk '{print $2}' | sort | uniq -c | sort -n查看当前用户打开的句柄数
                        和进程号，针对较多的逐一排查，删除无用进程。"
           alarmSwitch: "ON"
-        - alarmId: "1201020016"
+        -
+          alarmId: "1201020016"
           alarmName: "CheckMemUsage"
           alarmMeans: "检查内存使用率。"
           alarmPrinciple: "系统运行软件过多或者存在占用大量内存空间的程序。"
           alarmHandle: "1. 扩展内存。
                        2. 使用top命令查看占用内存较高的进程PID，删除无用进程。"
           alarmSwitch: "ON"
-        - alarmId: "1201020017"
+        -
+          alarmId: "1201020017"
           alarmName: "CheckProcessStatus"
           alarmMeans: "高可用集群状态异常或进程不存在。"
           alarmPrinciple: "发生了人为或者其他程序的删除。"
@@ -574,13 +643,15 @@ data:
                        的父进程进程号PPID，如果存在则清理PPID。
                        2. 重启机器。"
           alarmSwitch: "ON"
-        - alarmId: "1201020018"
+        -
+          alarmId: "1201020018"
           alarmName: "CheckSwapUsage"
           alarmMeans: "检查Swap使用率。"
           alarmPrinciple: "其他程序占用过高。"
           alarmHandle: "扩展swap分区。"
           alarmSwitch: "ON"
-        - alarmId: "1201020019"
+        -
+          alarmId: "1201020019"
           alarmName: "CheckSyslog"
           alarmMeans: "检查syslog协议状态是否开启。"
           alarmPrinciple: "syslog服务未安装或者未启动。"
@@ -588,7 +659,8 @@ data:
                        2. 未安装时需要手动执行syslog服务的安装。
                        3. 使用systemctl start syslog.service开启syslog服务。"
           alarmSwitch: "ON"
-        - alarmId: "1201020020"
+        -
+          alarmId: "1201020020"
           alarmName: "CheckTime"
           alarmMeans: "检查时间差异是否不超过两秒。"
           alarmPrinciple: "系统未配置时间同步服务或者系统时间人为修改。"
@@ -597,25 +669,29 @@ data:
                        注：生效需要10分钟，实际时间会根据网络情况及机器性能等产生变化。
                        2. 可手动或者使用其他工具对集群节点进行时间同步。"
           alarmSwitch: "ON"
-        - alarmId: "1201020021"
+        -
+          alarmId: "1201020021"
           alarmName: "CheckNetPort"
           alarmMeans: "检查网络端口状态。"
           alarmPrinciple: "网络故障或者人为原因。"
           alarmHandle: "联系管理员。"
           alarmSwitch: "ON"
-        - alarmId: "1201020022"
+        -
+          alarmId: "1201020022"
           alarmName: "CheckMemConsistency"
           alarmMeans: "检查内存是否一致性。"
           alarmPrinciple: "存在外部使用节点或者初始设计疏忽。"
           alarmHandle: "更换不一致的内存使一致。"
           alarmSwitch: "ON"
-        - alarmId: "1201020023"
+        -
+          alarmId: "1201020023"
           alarmName: "CheckNodes"
           alarmMeans: "检查节点状态是否正常。"
           alarmPrinciple: "网卡宽带过低或者网络连接不通畅。"
           alarmHandle: "联系管理员。"
           alarmSwitch: "ON"
-        - alarmId: "1201020024"
+        -
+          alarmId: "1201020024"
           alarmName: "CheckPhyMem"
           alarmMeans: "检查物理内存使用率。"
           alarmPrinciple: "内存发生异常。"
@@ -623,55 +699,64 @@ data:
                        1. 更换内存。
                        2. 更换主板。"
           alarmSwitch: "ON"
-        - alarmId: "1201030001"
+        -
+          alarmId: "1201030001"
           alarmName: "CheckClusterState"
           alarmMeans: "检查集群状态。"
           alarmPrinciple: "人为修改或者系统原因都可能造成，需要根据报错进行处理。"
           alarmHandle: "集群异常修复。"
           alarmSwitch: "ON"
-        - alarmId: "1201030002"
+        -
+          alarmId: "1201030002"
           alarmName: "CheckDnVersion"
           alarmMeans: "主备数据库版本是否一致。"
           alarmPrinciple: "部分节点发生过升级或安装时版本不一致。"
           alarmHandle: "建议切换主备节点为同一个版本。"
           alarmSwitch: "ON"
-        - alarmId: "1201030003"
+        -
+          alarmId: "1201030003"
           alarmName: "CheckClusterBalance"
           alarmMeans: "检查集群主备平衡。"
           alarmPrinciple: "主备间网络有异常、主机有异常宕机等问题，导致触发倒换。"
           alarmHandle: "找到发生切换的主备实例，手动将其切换回原始状态。"
           alarmSwitch: "ON"
-        - alarmId: "1201030004"
+        -
+          alarmId: "1201030004"
           alarmName: "CheckAppFile"
           alarmMeans: "检查app目录下文件是否缺失。"
           alarmPrinciple: "发生了人为或者其他程序的删除。"
           alarmHandle: "重新安装集群。"
           alarmSwitch: "ON"
-        - alarmId: "1201030006"
+        -
+          alarmId: "1201030006"
           alarmName: "CheckRedoFile"
           alarmMeans: "redo文件存在且权限为600。"
           alarmPrinciple: "发生了人为或者其他程序的删除。"
           alarmHandle: "重新安装集群。"
           alarmSwitch: "ON"
-        - alarmId: "1201030007"
+        -
+          alarmId: "1201030007"
           alarmName: "CheckLogFiles"
           alarmMeans: "检查run/cm日志中是否存在告警日志。"
           alarmPrinciple: "run/cm日志中存在告警。"
           alarmHandle: "人工排查告警原因。"
           alarmSwitch: "ON"
-        - alarmId: "1201050001"
+        -
+          alarmId: "1201050001"
           alarmName: "CheckTableCount"
           alarmMeans: "检查数据库最大表数。"
           alarmPrinciple: "业务层创建了过多的表。"
           alarmHandle: "适当减少表的个数，控制在合理范围。"
           alarmSwitch: "ON"
-        - alarmId: "1201050002"
+        -
+          alarmId: "1201050002"
           alarmName: "CheckUncommXacts"
           alarmMeans: "数据库有待处理的事务。"
           alarmPrinciple: "数据库存在死锁或者发生过异常重启。"
           alarmHandle: "根据系统表中未决事务的状态，分析未决事务的原因。"
           alarmSwitch: "ON"
-        - alarmId: "1201050003"
+        -
+          alarmId: "1201050003"
           alarmName: "CheckBufferUsage"
           alarmMeans: "缓冲池命中率小于阈值。"
           alarmPrinciple: "缓冲值设置不合理。"
@@ -680,25 +765,29 @@ data:
                        2. 清理dentries（目录缓存）和inodes # echo 2 > /proc/sys/vm/drop_caches。
                        3. 清理pagecache、dentries和inodes # echo 3 > /proc/sys/vm/drop_caches。"
           alarmSwitch: "ON"
-        - alarmId: "1201050004"
+        -
+          alarmId: "1201050004"
           alarmName: "CheckBackup"
           alarmMeans: "检查数据库备份。"
           alarmPrinciple: "没有定时对数据库做备份。"
           alarmHandle: "检查定时备份任务是否正常，及时备份数据库。"
           alarmSwitch: "ON"
-        - alarmId: "1201050005"
+        -
+          alarmId: "1201050005"
           alarmName: "CheckDBConn"
           alarmMeans: "检查数据库连接。"
           alarmPrinciple: "网络异常或者访问密码被修改。"
           alarmHandle: "根据连接异常的信息进一步分析，确保网络状态正常且访问密码正确。"
           alarmSwitch: "ON"
-        - alarmId: "1201050006"
+        -
+          alarmId: "1201050006"
           alarmName: "CheckDBStatus"
           alarmMeans: "检查数据库状态。"
           alarmPrinciple: "数据库正常状态是normal。备机异常状态一般有need repair和disconnected。Need repair可能是异常的主备倒换或主备日志异常所致；disconnected则可能是主备网络有异常，或者主机异常终止。"
           alarmHandle: "如果备机是need repair，则要重建备机；如果是disconnected，则要检查主备网络是否正常。"
           alarmSwitch: "ON"
-        - alarmId: "1201050007"
+        -
+          alarmId: "1201050007"
           alarmName: "CheckDBUser"
           alarmMeans: "检查用户状态。"
           alarmPrinciple: "未定期修改密码。"
@@ -709,13 +798,15 @@ data:
                        PASSWORD_LIFE_TIME 60。
                        3. 如果已经过期，解除用户锁定状态：ALTER USER Tom ACCOUNT UNLOCK。"
           alarmSwitch: "ON"
-        - alarmId: "1201060001"
+        -
+          alarmId: "1201060001"
           alarmName: "CheckTablespaceUsage"
           alarmMeans: "表空间用量超过告警阈值。"
           alarmPrinciple: "表空间未打开自动扩展或扩展上限太小。"
           alarmHandle: "通过打开表空间的自动扩展或添加数据文件进行表空间扩容。"
           alarmSwitch: "ON"
-        - alarmId: "1201060002"
+        -
+          alarmId: "1201060002"
           alarmName: "CheckLockNum"
           alarmMeans: "检查数据库锁的数量。"
           alarmPrinciple: "1. SHARED_POOL_SIZE参数过小。
@@ -725,201 +816,234 @@ data:
                        3. 查看业务语句是否没有及时提交，或者一个事务中涉及了过多行的操作，可以适
                        当调整这种大事务的实现。"
           alarmSwitch: "ON"
-        - alarmId: "1201060003"
+        -
+          alarmId: "1201060003"
           alarmName: "CheckInstMemUsage"
           alarmMeans: "检查实例内存使用率。"
           alarmPrinciple: "初始化内存限制不合理。"
           alarmHandle: "修改内存限定最大值SHARED_POOL_SIZE, TEMP_BUFFER_SIZE,DATA_BUFFER_SIZE。"
           alarmSwitch: "ON"
-        - alarmId: "1201060004"
+        -
+          alarmId: "1201060004"
           alarmName: "CheckLogLogicalLimit"
           alarmMeans: "检查数据库日志逻辑限制。"
           alarmPrinciple: "日志限定值不合理。"
           alarmHandle: "重新设置日志限定大小。"
           alarmSwitch: "ON"
-        - alarmId: "1201060005"
+        -
+          alarmId: "1201060005"
           alarmName: "CheckArchiveLogSpace"
           alarmMeans: "检查归档日志空间设置。"
           alarmPrinciple: "归档日志大小设置不合理。"
           alarmHandle: "重新配置归档日志大小。"
           alarmSwitch: "ON"
-        - alarmId: "1101020001"
+        -
+          alarmId: "1101020001"
           alarmName: "FloatIPSetFailed"
           alarmMeans: "组件[component-name]的实例[datanode-name]没有配置浮动IP。该异常节点所在的主机名称为([node-HostName])，主机IP为：[node-HostIp]。"
           alarmPrinciple: "浮动IP没有正确配置。"
           alarmHandle: "检查节点上浮动IP的配置。"
           alarmSwitch: "ON"
-        - alarmId: "1101020002"
+        -
+          alarmId: "1101020002"
           alarmName: "AbnormalNTPService"
           alarmMeans: "组件[component-name]的[datanode-name]状态异常，所在主机名称为[node-HostName]。"
           alarmPrinciple: "节点和NTP服务的网络不通。"
           alarmHandle: "检查集群中节点的网络。"
           alarmSwitch: "ON"
-        - alarmId: "1101020003"
+        -
+          alarmId: "1101020003"
           alarmName: "AbnormalNTPConnection"
           alarmMeans: "组件[component-name]的[datanode-name]连接异常，所在主机名称为[node-HostName]。"
           alarmPrinciple: "节点和NTP服务的网络不通。"
           alarmHandle: "检查集群中节点的网络。"
           alarmSwitch: "ON"
-        - alarmId: "1101020004"
+        -
+          alarmId: "1101020004"
           alarmName: "NTPTimeDiffToolLarge"
           alarmMeans: "组件[component-name]的[datanode-name]和客户端不同步，所在主机名称为[node-HostName]。"
           alarmPrinciple: "NTP服务异常。"
           alarmHandle: "检查NTP服务是否能正常提供服务。"
           alarmSwitch: "ON"
-        - alarmId: "1101030001"
+        -
+          alarmId: "1101030001"
           alarmName: "UnbalancedCluster"
           alarmMeans: "集群[cluster-name]状态异常，上报告警。"
           alarmPrinciple: "集群中的某些主节点状态异常，且主备切换可能有问题。"
           alarmHandle: "检查etcd的配置以及集群中节点的状态。"
           alarmSwitch: "ON"
-        - alarmId: "1101040007"
+        -
+          alarmId: "1101040007"
           alarmName: "NoNTPServer"
           alarmMeans: "组件[component-name]的[datanode-name]不存在，所在主机名称为[node-HostName]。"
           alarmPrinciple: "NTP地址没有配置。"
           alarmHandle: "检查集群中每个节点上的NTP地址是否配置正确。"
           alarmSwitch: "ON"
-        - alarmId: "1101040009"
+        -
+          alarmId: "1101040009"
           alarmName: "PeerNodeNetworkUnreachable"
           alarmMeans: "组件（[component-name]）的节点[datanode-name]的网络不可达，该节点所在的主机名称为([node-HostName]),主机IP为：[node-HostIp]。"
           alarmPrinciple: "节点的网络设置是否有问题。"
           alarmHandle: "检查该节点的网络设置。"
           alarmSwitch: "ON"
-        - alarmId: "1101040010"
+        -
+          alarmId: "1101040010"
           alarmName: "GatewayNetworkUnreachable"
           alarmMeans: "组件[component-name]的节点[datanode-name]的网关不可达，该节点所在的主机名称为[node-HostName]，主机IP为：[node-HostIp]。"
           alarmPrinciple: "节点的网络设置和网关的设置是否有问题。"
           alarmHandle: "检查该节点的网络设置以及网关之间的网络设置。"
           alarmSwitch: "ON"
-        - alarmId: "1103020015"
+        -
+          alarmId: "1103020015"
           alarmName: "NetWorkPortDown"
           alarmMeans: "网络端口[network-port]处于down已经很长时间了，检测策略可参考网络亚健康参数。"
           alarmPrinciple: "网卡坏掉，端口异常，或者是不正确操作导致。"
           alarmHandle: "检查网络端口。"
           alarmSwitch: "ON"
-        - alarmId: "1103020016"
+        -
+          alarmId: "1103020016"
           alarmName: "NetWorkPortFlash"
           alarmMeans: "网络端口[network-port]检测到有存在闪断，检测策略可参考网络亚健康参数。"
           alarmPrinciple: "网卡坏掉，端口异常，或者是不正确操作导致。"
           alarmHandle: "检查网络端口。"
           alarmSwitch: "ON"
-        - alarmId: "1103020017"
+        -
+          alarmId: "1103020017"
           alarmName: "ProtocolStackDrop"
           alarmMeans: "网络端口[network-port]有丢包的统计数据。"
           alarmPrinciple: "网卡坏掉，端口异常。协议栈大量有异常数据包。"
           alarmHandle: "检查网络端口。"
           alarmSwitch: "ON"
-        - alarmId: "1103020018"
+        -
+          alarmId: "1103020018"
           alarmName: "ProtocolStackError"
           alarmMeans: "网络端口[network-port]有错包的统计数据。"
           alarmPrinciple: "网卡坏掉，端口异常。协议栈大量有异常数据包。"
           alarmHandle: "检查网络端口。"
           alarmSwitch: "ON"
-        - alarmId: "1103020019"
+        -
+          alarmId: "1103020019"
           alarmName: "NetWorkPortSpeedSlow"
           alarmMeans: "网络端口[network-port]的速率降低或者不是双工模式（dulpex FULL）。"
           alarmPrinciple: "网卡原因，或者是不正确操作导致。"
           alarmHandle: "检查网络端口。"
           alarmSwitch: "ON"
-        - alarmId: "1103020020"
+        -
+          alarmId: "1103020020"
           alarmName: "NetWorkDataLinkDrop"
           alarmMeans: "当前主机[node-HostIp] ping其他主机存在丢包现象。"
           alarmPrinciple: "数据链路，交换机等不稳定，网络阻塞严重。"
           alarmHandle: "检查网络端口，检查交换机，检查链路稳定性。"
           alarmSwitch: "ON"
-        - alarmId: "1103020021"
+        -
+          alarmId: "1103020021"
           alarmName: "NetWorkDataLinkDelay"
           alarmMeans: "当前主机[node-HostIp] ping其他主机有较高的延迟。"
           alarmPrinciple: "数据链路，交换机等不稳定，网络阻塞严重。"
           alarmHandle: "检查网络端口，检查交换机，检查链路稳定性。"
           alarmSwitch: "ON"
-        - alarmId: "1103020022"
+        -
+          alarmId: "1103020022"
           alarmName: "PcieSpeedSlowDown"
           alarmMeans: "网络端口[network-port]检测到有PCIe降速，Pcie速率未达到支持的速率。"
           alarmPrinciple: "网卡不匹配。"
           alarmHandle: "检查网卡规格。"
           alarmSwitch: "ON"
-        - alarmId: "1103030002"
+        -
+          alarmId: "1103030002"
           alarmName: "AbnormalETCDProcess"
           alarmMeans: "组件[component-name]的节点[datanode-name]有异常，该异常节点所在的主机名称为[node-HostName]，主机IP为：[node-HostIp]。"
           alarmPrinciple: "ETCD集群状态异常。"
           alarmHandle: "检查ETCD集群状态。"
           alarmSwitch: "ON"
-        - alarmId: "1103040002"
+        -
+          alarmId: "1103040002"
           alarmName: "AbnormalDatanodeInst"
           alarmMeans: "组件[component-name]的节点[datanode-name]的心跳丢失或者状态异常。该异常节点所在的主机名称为[node-HostName]，主机IP为：[node-HostIp]。"
           alarmPrinciple: "DN节点状态异常，或者进程退出了。"
           alarmHandle: "通过ps -ef | grep dn 来查看该进程是否存在且正常。"
           alarmSwitch: "ON"
-        - alarmId: "1103040003"
+        -
+          alarmId: "1103040003"
           alarmName: "DatanodeSwitchOver"
           alarmMeans: "组件[component-name]发生主备切换，主节点降为备节点，备节点[datanode-name]升为主节点，新主节点所在主机名称[node-HostName]，所在IP为[node-HostIp]，原主实例名称为[oldPrimaryName]。"
           alarmPrinciple: "主DN异常导致自动切换。"
           alarmHandle: "故障引起切换，需要查看主DN的状态。"
           alarmSwitch: "ON"
-        - alarmId: "1103040004"
+        -
+          alarmId: "1103040004"
           alarmName: "DatanodeFailOver"
           alarmMeans: "组件名称[component-name]的主节点出现故障，经过仲裁后，备节点[datanode-name]升为主节点。新主节点所在主机名称[node-HostName]，所在IP为[node-HostIp]，原主实例名称为[oldPrimaryName]。"
           alarmPrinciple: "人工操作导致主备切换，或者主DN异常导致自动切换。"
           alarmHandle: "如果是人工切换，则不需要特殊处理；如果是故障引起切换，需要查看主
                       DN的状态。"
           alarmSwitch: "ON"
-        - alarmId: "1103040005"
+        -
+          alarmId: "1103040005"
           alarmName: "StandbyDataNodeNeedCatchUp"
           alarmMeans: "组件[component-name]的节点[datanode-name]的备节点日志同步延迟过大，需catchup，该节点所在的主机名称为[node-HostName]，主机IP为：[node-HostIp]。"
           alarmPrinciple: "备DN节点日志同步延迟过大。"
           alarmHandle: "确认该备DN节点日志同步延迟。"
           alarmSwitch: "ON"
-        - alarmId: "1103040006"
+        -
+          alarmId: "1103040006"
           alarmName: "AbnormalLogicalReplicationInst"
           alarmMeans: "组件[component-name]的实例[datanode-name]有异常。该异常节点所在的主机名称为[node-HostName]，主机IP为：[node-HostIp]。"
           alarmPrinciple: "Logical Replication实例状态异常。"
           alarmHandle: "检查Logical Replication进程状态。"
           alarmSwitch: "ON"
-        - alarmId: "1103040013"
+        -
+          alarmId: "1103040013"
           alarmName: "EtcdCredentialsExpired"
           alarmMeans: "组件[component-name]的节点[datanode-name]的心跳丢失或者状态异常，该异常节点所在的主机名称为[node-HostName]，主机IP为：[node-HostIp]。"
           alarmPrinciple: "集群中ETCD的证书90天之后即将过期。"
           alarmHandle: "可以通过openssl x509 -text -noout -in $ETCD_CERT_SERVER_FILE来查看ETCD证书过期时间。"
           alarmSwitch: "ON"
-        - alarmId: "1103040015"
+        -
+          alarmId: "1103040015"
           alarmName: "ShareDiskLockFailed"
           alarmMeans: "cm共享盘访问失败。"
           alarmPrinciple: "双机高可用集群已配置共享盘，但访问失败。"
           alarmHandle: "检查集群所配置共享盘的访问权限和配置路径等状况。"
           alarmSwitch: "ON"
-        - alarmId: "1103040016"
+        -
+          alarmId: "1103040016"
           alarmName: "ClientCertIsRevoked"
           alarmMeans: "连接本cm的ssl客户端证书在吊销列表里。"
           alarmPrinciple: "客户端证书已被吊销。"
           alarmHandle: "检查对应客户端证书。"
           alarmSwitch: "ON"
-        - alarmId: "1103040017"
+        -
+          alarmId: "1103040017"
           alarmName: "ServerCertIsRevoked"
           alarmMeans: "本cm访问的服务端证书在吊销列表里。"
           alarmPrinciple: "客户端证书已被吊销。"
           alarmHandle: "检查对应客户端证书。"
           alarmSwitch: "ON"
-        - alarmId: "1103050001"
+        -
+          alarmId: "1103050001"
           alarmName: "AbnormalCMSProcess"
           alarmMeans: "组件[component-name]的节点[datanode-name]的状态异常。该异常节点所在的主机名称为[node-HostName]，主机IP为：[node-HostIp]。"
           alarmPrinciple: "CM Server进程状态异常。"
           alarmHandle: "查看对应单板上的CM server 进程状态。"
           alarmSwitch: "ON"
-        - alarmId: "1103050002"
+        -
+          alarmId: "1103050002"
           alarmName: "AbnormalCMAProcess"
           alarmMeans: "守护进程监测不到[component-name]实例agent的心跳，会上报告警，提
                      示实例agent状态异常；agent所在主机名称[node-HostName]。"
           alarmPrinciple: "CM Agent进程状态异常。"
           alarmHandle: "查看对应单板上的CM agent进程状态。"
           alarmSwitch: "ON"
-        - alarmId: "1103050003"
+        -
+          alarmId: "1103050003"
           alarmName: "DataNodeNeedBuild"
           alarmMeans: "关闭组件[component-name]的节点[datanode-name]的自动build功能，该节点所在的主机名称为[node-HostName]，主机IP为：[node-HostIp]。"
           alarmPrinciple: "DN节点缺少build能力。"
           alarmHandle: "确认DN节点是否具有build能力。"
           alarmSwitch: "ON"
-        - alarmId: "1301050001"
+        -
+          alarmId: "1301050001"
           alarmName: "Backup Failed"
           alarmMeans: "备份失败，需要更多告警信息，请查看日志。"
           alarmPrinciple: "集群状态以及实例进程状态不正常。"
@@ -1019,7 +1143,7 @@ spec:
               mountPath: /etc/nginx/conf.d/default.conf
               subPath: default.conf
         - name: monitor-server
-          image: '10.12.107.150:80/public/monitor-server:20211125-dev'
+          image: '10.12.107.150:80/public/monitor-server:20211207-dev'
           args:
             - "--spring.config.location=/app/uoamp/config/application.yml,/app/uoamp/config/application-alarmdesc.yml"
           ports:
