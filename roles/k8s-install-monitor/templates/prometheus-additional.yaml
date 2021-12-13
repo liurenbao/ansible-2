@@ -50,8 +50,6 @@ stringData:
           target_label: instance
         - action: labeldrop
           regex: __meta_kubernetes_.+
-        - action: labeldrop
-          regex: nodename
 
     - job_name: 'kubernetes-http-services'
       scrape_interval: 15s
