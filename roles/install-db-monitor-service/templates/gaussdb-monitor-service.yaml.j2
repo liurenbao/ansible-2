@@ -1,4 +1,4 @@
-{% for host in groups['prod'] %}
+{% for host in groups['db'] %}
 apiVersion: v1
 kind: Endpoints
 metadata:
@@ -29,7 +29,7 @@ spec:
 ---
 {% endfor %}
 ---
-{% for host in groups['prod'] %}
+{% for host in groups['db'] %}
 apiVersion: v1
 kind: Endpoints
 metadata:
