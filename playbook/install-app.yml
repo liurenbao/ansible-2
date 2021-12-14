@@ -21,5 +21,9 @@
     spc_harbor_account: spc
     spc_harbor_password: SPC@d906
     spc_haror_auth_plaintext: '{{ spc_harbor_account }}:{{ spc_harbor_password }}'
+
+    pcs_harbor_account: pcs
+    pcs_harbor_password: PCS@c7r4
+    pcs_haror_auth_plaintext: '{{ pcs_harbor_account }}:{{ pcs_harbor_password }}'
   roles:
     - install-app

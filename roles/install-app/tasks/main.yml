@@ -10,13 +10,13 @@
   with_filetree: templates/
   when: item.state == 'file'
 
-- name: apply template manifest
-  shell: "kubectl apply -f {{ component_manifest_dir }}/app/"
+#- name: apply template manifest
+#  shell: "kubectl apply -f {{ component_manifest_dir }}/app/"
 
-- name: copy app manifest file
-  synchronize:
-    src: files/
-    dest: "{{ component_manifest_dir }}/app/"
+#- name: copy app manifest file
+#  synchronize:
+#    src: files/
+#    dest: "{{ component_manifest_dir }}/app/"
 
 
 #- name: apply mes manifest

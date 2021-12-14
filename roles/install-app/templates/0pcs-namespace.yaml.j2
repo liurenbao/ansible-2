@@ -1,0 +1,125 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: pcs
+---
+apiVersion: settings.k8s.io/v1alpha1
+kind: PodPreset
+metadata:
+  name: change-timezone
+  namespace: pcs
+spec:
+  selector:
+    matchLabels: {}
+  env:
+    - name: TZ
+      value: "Asia/Shanghai"
+  volumeMounts:
+    - name: timezone
+      mountPath: /etc/localtime
+  volumes:
+    - name: timezone
+      hostPath:
+        path: /etc/localtime
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: pcs-admin
+  namespace: pcs
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: pcs-admin-rolebinding
+  namespace: pcs
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: admin
+subjects:
+  - kind: ServiceAccount
+    name: pcs-admin
+    namespace: pcs
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: pcs-admin-view-namespace
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: view-namespaces
+subjects:
+  - kind: ServiceAccount
+    name: pcs-admin
+    namespace: pcs
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: pcs-admin-view-crd-resources
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: view-crd-resources
+subjects:
+  - kind: ServiceAccount
+    name: pcs-admin
+    namespace: pcs
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: crd-object-admin
+  namespace: pcs
+rules:
+  - verbs:
+      - create
+      - delete
+      - update
+      - list
+      - get
+      - watch
+    apiGroups:
+      - '*'
+    resources:
+      - ingressroutes
+      - ingressroutetcps
+      - ingressrouteudps
+      - middlewares
+      - servicemonitors
+      - alertmanagers
+      - prometheusrules
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: pcs-crd-object-admin
+  namespace: pcs
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: crd-object-admin
+subjects:
+  - kind: ServiceAccount
+    name: pcs-admin
+    namespace: pcs
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: harbor
+  namespace: pcs
+stringData:
+  .dockerconfigjson: |
+    {
+      "auths": {
+        "{{ image_repository }}": {
+          "username": "{{ pcs_harbor_account }}",
+          "password": "{{ pcs_harbor_password }}",
+          "auth": "{{ pcs_haror_auth_plaintext | b64encode }}"
+        }
+      }
+    }
+type: kubernetes.io/dockerconfigjson
