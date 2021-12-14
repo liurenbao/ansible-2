@@ -161,6 +161,8 @@ spec:
               value: '100'
             - name: spc.default-import-limit
               value: '20000'
+            - name: spc.s2m-self-consume
+              value: "false"
           ports:
             - containerPort: 8080
           resources:
