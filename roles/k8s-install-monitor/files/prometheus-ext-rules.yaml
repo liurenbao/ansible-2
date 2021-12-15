@@ -12,6 +12,7 @@ spec:
       rules:
         - alert: PrometheusMetricsScrapeFailed
           expr: up == 0
+          for: 1m
           annotations:
             message: Prometheus target down, prometheus failed to scrape metrics
           labels:

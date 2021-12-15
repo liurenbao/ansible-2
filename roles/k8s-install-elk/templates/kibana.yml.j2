@@ -6,7 +6,7 @@ metadata:
 data:
   kibana.yml: |
     server.host: "0"
-    elasticsearch.hosts: {{ es_hosts_arr }}
+    elasticsearch.hosts: {{ es_hosts_arr_http }}
     monitoring.ui.container.elasticsearch.enabled: true
 ---
 apiVersion: apps/v1
