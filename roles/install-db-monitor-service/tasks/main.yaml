@@ -2,3 +2,6 @@
   template:
     src: gaussdb-monitor-service.yaml.j2
     dest: '{{ component_manifest_dir }}/gaussdb-monitoring/gaussdb-monitor-service.yaml'
+
+- name: apply gaussdb service
+  shell: 'kubectl apply -f {{ component_manifest_dir }}/gaussdb-monitoring/gaussdb-monitor-service.yaml'
