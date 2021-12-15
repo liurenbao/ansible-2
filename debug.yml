@@ -17,3 +17,6 @@
     - name: echo var
       debug:
         msg: '{{ rocketmq_namesrv_str }}'
+    - name: echo var
+      debug:
+        msg: '{{ es_hosts_arr_http }}'

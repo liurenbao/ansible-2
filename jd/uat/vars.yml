@@ -60,6 +60,7 @@ es_index_keep_unit: month
 es_log_replicas: 1
 es_log_shards: 60
 es_hosts_arr: '{{ groups["es"] | map("regex_replace", "^(.*)$","\1:9200") | list | to_json }}'
+es_hosts_arr_http: '{{ groups["es"] | map("regex_replace", "^(.*)$","http://\1:9200") | list | to_json }}'
 
 # kafka---------------------------------------------------------------------------------------
 # kafka数据目录
@@ -97,7 +98,7 @@ etcd_backup_root_dir: '/data01/etcd-backup'
 
 # monitor--------------------------------------------------------------------------------------
 nfs_root_dir: '/data01'
-nfs_server: "{{ groups['nas'][0] }}"
+nfs_server: '{{ groups["nas"][0] }}'
 monitor_nfs_path: '{{ nfs_root_dir }}/monitoring'
 monitor_manifest_root_dir: '{{ component_manifest_dir }}/monitoring'
 prometheus_storage: '200Gi'

@@ -77,6 +77,9 @@
 [ravencast-apc]
 10.12.107.185 host_name=jdfap-apcmq01 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
 10.12.107.186 host_name=jdfap-apcmq02 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
+[ravencast-fdc:children]
+ravencast-fdc-1
+ravencast-fdc-2
 [ravencast-mes:vars]
 ravencast_tcphosts=10.12.107.201[7800],10.12.107.202[7800]
 [ravencast-eis:vars]

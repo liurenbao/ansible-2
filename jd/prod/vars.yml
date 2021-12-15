@@ -60,6 +60,7 @@ es_index_keep_unit: month
 es_log_replicas: 1
 es_log_shards: 60
 es_hosts_arr: '{{ groups["es"] | map("regex_replace", "^(.*)$","\1:9200") | list | to_json }}'
+es_hosts_arr_http: '{{ groups["es"] | map("regex_replace", "^(.*)$","http://\1:9200") | list | to_json }}'
 
 # kafka---------------------------------------------------------------------------------------
 # kafka数据目录
