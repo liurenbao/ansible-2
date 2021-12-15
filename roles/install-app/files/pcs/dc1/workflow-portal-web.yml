@@ -1,0 +1,120 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: workflow-portal-web
+  namespace: pcs
+spec:
+  ports:
+    - name: http
+      port: 80
+      targetPort: 80
+  selector:
+    app: workflow-portal-web
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: workflow-portal-web
+  namespace: pcs
+spec:
+  entryPoints:
+    - web
+  routes:
+    - match: Host(`pcs-uat.cicem.fa`) && PathPrefix(`/workflow`)
+      kind: Rule
+      services:
+        - name: workflow-portal-web
+          port: 80
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: workflow-portal-web-dc1
+  namespace: pcs
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: workflow-portal-web
+      zone: dc1
+  template:
+    metadata:
+      labels:
+        app: workflow-portal-web
+        zone: dc1
+    spec:
+      imagePullSecrets:
+        - name: harbor
+      hostNetwork: false
+      tolerations:
+        - key: "node.kubernetes.io/unreachable"
+          operator: "Exists"
+          effect: "NoExecute"
+          tolerationSeconds: 2
+        - key: "node.kubernetes.io/not-ready"
+          operator: "Exists"
+          effect: "NoExecute"
+          tolerationSeconds: 2
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                topologyKey: "kubernetes.io/hostname"
+                labelSelector:
+                  matchExpressions:
+                    - key: app
+                      operator: In
+                      values:
+                        - workflow-portal-web
+              weight: 100
+      nodeSelector:
+        zone: dc1
+      volumes:
+        - name: tz-config
+          hostPath:
+           path: /usr/share/zoneinfo/Asia/Shanghai
+      containers:
+        - name: workflow-portal-web
+          image: 10.12.107.150:80/pcs-test/workflow-portal-web:1.0.0-2021121078977
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+          - name: tz-config
+            mountPath: /etc/localtime
+          ports:
+            - containerPort: 80
+          resources:
+            limits:
+              cpu: "2"
+              memory: 2048Mi
+            requests:
+              cpu: "0.05"
+              memory: 100Mi
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /
+              port: 80
+              scheme: HTTP
+            initialDelaySeconds: 60
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 10
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /
+              port: 80
+              scheme: HTTP
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 10
+          startupProbe:
+            httpGet:
+              port: 80
+              path: /
+            initialDelaySeconds: 30
+            timeoutSeconds: 5
+            periodSeconds: 3
+            successThreshold: 1
+            failureThreshold: 3
