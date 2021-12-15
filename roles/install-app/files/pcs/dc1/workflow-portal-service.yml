@@ -87,10 +87,7 @@ spec:
         - name: config
           configMap:
             name: filebeat-portal-config
-            items:
-              - key: filebeat.yml
-                path: filebeat.yml
-            defaultMode: 420
+            defaultMode: 0744
         - name: tz-config
           hostPath:
            path: /usr/share/zoneinfo/Asia/Shanghai
@@ -139,6 +136,8 @@ spec:
           volumeMounts:
           - name: tz-config
             mountPath: /etc/localtime
+          - name: logdata
+            mountPath: /data
           env:
             - name: SPRING_PROFILES_ACTIVE
               value: "prod_i"
@@ -225,9 +224,8 @@ spec:
               memory: 100Mi
           volumeMounts:
             - name: config
-              mountPath: /opt/filebeat/
-            - name: data
-              mountPath: /usr/share/filebeat/data
+              mountPath: /opt/filebeat/filebeat.yml
+              subPath: filebeat.yml
             - name: logdata
               mountPath: /data
           terminationMessagePath: /dev/termination-log
