@@ -30,11 +30,12 @@ services:
       #cpu的两倍
       KAFKA_NUM_IO_THREADS: 16
       #partition*2=log文件个数80， 80/3=28每台broker文件夹个数，每个segament默认1G，每个文件夹大小为(当前值+1)G,总大小不超过磁盘80%，2000G盘
-      KAFKA_LOG_RETENTION_BYTES: 55000000000
+      KAFKA_LOG_RETENTION_BYTES: 21474836480
       KAFKA_DEFAULT_REPLICATION_FACTOR: 2
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock"
       - "{{ kafka_root_dir }}/kafka:/kafka"
+      - "{{ kafka_root_dir }}/logs:/opt/kafka/logs"
   kafka-exporter:
     image: '{{ image_repository }}/public/kafka-exporter:1.3.1'
     restart: always
