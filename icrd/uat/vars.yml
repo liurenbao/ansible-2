@@ -3,8 +3,11 @@
 # 注意修改VIP地址
 #---------------------
 harbor_keepalived_vip: 192.168.160.47
-nginx_keepalived_vip: 192.168.160.140
-k8s_keepalived_vip: 192.168.160.253
+nginx_keepalived_vip: 192.168.160.5
+k8s_keepalived_vip: 192.168.160.78
+es_initial_master_nodes: '["192.168.163.162", "192.168.163.170", "192.168.163.159"]'
+monitor_nfs_path_existed: false
+nfs_client_cidr: 192.168.0.0/16
 
 cim_ops_uid: '9999'
 cim_ops_user: 'cimops'
@@ -24,7 +27,7 @@ harbor_keepalived_virtual_router_id: '{{ harbor_keepalived_vip.split(".")[3] }}'
 harbor_keepalived_vrrp_instance_interface: eth0
 harbor_root_dir: '/data01/harbor'
 # harbor压缩包
-harbor_tar: '{{ package_dir }}/harbor.tar.gz'
+harbor_tar: '{{ package_dir }}/harbor/harbor.tar.gz'
 harbor_password: 'admin123Admin'
 # harbor安装数据目录
 harbor_data_volume: '{{ harbor_root_dir }}/harbor-data'
@@ -48,21 +51,25 @@ nginx_keepalived_vrrp_instance_interface: eth0
 # es数据盘
 es_root_dir: '/data01/es'
 # es集群名
-es_cluster_name: 'es-pirun-cluster-7.3.2'
-es_initial_master_nodes: '["192.168.160.224", "192.168.160.225", "192.168.160.226"]'
+es_cluster_name: 'es-uat-cluster-7.3.2'
 # es jvm信息
 es_java_opts: '-Xms16G -Xmx16G'
 es_index_keep: 3
 # week或者month
-es_index_keep_unit: month
+es_index_keep_unit: week
 es_log_replicas: 1
 es_log_shards: 60
+es_hosts_arr: '{{ groups["es"] | map("regex_replace", "^(.*)$","\1:9200") | list | to_json }}'
+es_hosts_arr_http: '{{ groups["es"] | map("regex_replace", "^(.*)$","http://\1:9200") | list | to_json }}'
 
 # kafka---------------------------------------------------------------------------------------
 # kafka数据目录
 kafka_root_dir: '/data01/kafka'
 # kafka jvm信息
 kafka_heap_opts: '-Xmx16G -Xms16G'
+zk_hosts_str: '{{ groups["kafka"] | map("regex_replace", "^(.*)$","\1:2181") | join(",") }}'
+kafka_hosts_arr: '{{ groups["kafka"] | map("regex_replace", "^(.*)$","\1:9092") | list | to_json }}'
+kafka_hosts_str: '{{ groups["kafka"] | map("regex_replace", "^(.*)$","\1:9092") | list | join(",") }}'
 
 # roketmq------------------------------------------------------------------------------------
 jdk_dir: '/data01/jdk1.8.0_202'
@@ -70,6 +77,7 @@ rocket_cluster_name: CIMCluster
 rocketmq_root_dir: '/data01/rocketmq'
 rocketmq_package_dir: '{{ package_dir }}/rocketmq'
 rocketmq_jvm_args: -Xms16g -Xmx16g -Xmn8g
+rocketmq_namesrv_str: '{{ groups["rocketmq-namesrv"] | map("regex_replace", "^(.*)$", "\1:9876") | join(";") }}'
 
 # ravencast-----------------------------------------------------------------------------------
 ravencast_xms_xmx_args: '-Xms24G -Xmx24G'
@@ -90,7 +98,7 @@ etcd_backup_root_dir: '/data01/etcd-backup'
 
 # monitor--------------------------------------------------------------------------------------
 nfs_root_dir: '/data01'
-nfs_server: "{{ groups['nas'][0] }}"
+nfs_server: '{{ groups["nas"][0] }}'
 monitor_nfs_path: '{{ nfs_root_dir }}/monitoring'
 monitor_manifest_root_dir: '{{ component_manifest_dir }}/monitoring'
 prometheus_storage: '50Gi'
@@ -103,9 +111,7 @@ alertmanager_smtp_from: alertmanager@icrd.com
 alertmanager_smtp_username: alertmanager@icrd.com
 alertmanager_smtp_password: Huawei@777.com
 alertmanager_app_email_to: tangjizhou@huawei.com, mouyongde@huawei.com
-alertmanager_db_email_to: lujinzhu@huawei.com, tangjizhou@huawei.com
 node_exporter_root_dir: /data01/node-exporter
-process_exporter_root_dir: /data01/process-exporter
 
 # redis---------------------------------------------------------------------------------------
 redis_data_dir: '/data01/redis'
