@@ -1,0 +1,132 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: monitor-server
+  namespace: gaussdb-monitoring
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: monitor-server
+  template:
+    metadata:
+      labels:
+        app: monitor-server
+    spec:
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: zone
+          whenUnsatisfiable: DoNotSchedule
+          labelSelector:
+            matchLabels:
+              app: monitor-server
+      volumes:
+        - name: monitordata-wsr
+          nfs:
+            server: '{{ nfs_server }}'
+            path: '{{ nfs_root_dir }}/db_monitor/wsr'
+        - name: monitordata-config
+          nfs:
+            server: '{{ nfs_server }}'
+            path: '{{ nfs_root_dir }}/db_monitor/config'
+        - name: monitor-server-application-yaml
+          configMap:
+            name: monitor-server-application-yaml
+        - name: monitor-server-application-alarmdesc-yaml
+          configMap:
+            name: monitor-server-application-alarmdesc-yaml
+        - name: wsr-nginx-conf
+          configMap:
+            name: wsr-nginx-conf
+      tolerations:
+        - key: "node.kubernetes.io/unreachable"
+          operator: "Exists"
+          effect: "NoExecute"
+          tolerationSeconds: 2
+        - key: "node.kubernetes.io/not-ready"
+          operator: "Exists"
+          effect: "NoExecute"
+          tolerationSeconds: 2
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                topologyKey: "kubernetes.io/hostname"
+                labelSelector:
+                  matchExpressions:
+                    - key: app
+                      operator: In
+                      values:
+                        - monitor-server
+              weight: 100
+      containers:
+        - name: nginx
+          image: '{{ image_repository }}/public/nginx:1.21.1'
+          volumeMounts:
+            - mountPath: /usr/share/nginx/html/wsr
+              name: monitordata-wsr
+            - name: wsr-nginx-conf
+              mountPath: /etc/nginx/conf.d/default.conf
+              subPath: default.conf
+        - name: monitor-server
+          image: '{{ image_repository }}/public/monitor-server:20211221-dev'
+          args:
+            - "--spring.config.location=/app/uoamp/config/application.yml,/app/uoamp/config/application-alarmdesc.yml"
+          ports:
+            - containerPort: 9990
+              protocol: TCP
+          env:
+            - name: TZ
+              value: Asia/Shanghai
+          resources:
+            limits:
+              cpu: '2'
+              memory: 8Gi
+            requests:
+              cpu: 50m
+              memory: 300m
+          volumeMounts:
+            - name: monitor-server-application-yaml
+              mountPath: /app/uoamp/config/application.yml
+              subPath: application.yml
+            - name: monitor-server-application-alarmdesc-yaml
+              mountPath: /app/uoamp/config/application-alarmdesc.yml
+              subPath: application-alarmdesc.yml
+            - name: monitordata-wsr
+              mountPath: /monitorgsdata/wsr
+            - name: monitordata-config
+              mountPath: /monitorgsdata/config
+          # 存活性探针 和 准备就绪探针
+          startupProbe:
+            httpGet:
+              port: 9990
+              path: /monitor-server/actuator/health
+            initialDelaySeconds: 30
+            timeoutSeconds: 5
+            periodSeconds: 3
+            successThreshold: 1
+            failureThreshold: 3
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /monitor-server/actuator/health
+              port: 9990
+              scheme: HTTP
+            initialDelaySeconds: 120
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 20
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /monitor-server/actuator/health
+              port: 9990
+              scheme: HTTP
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 10
+          # 0宕机(zero-downtime)更新
+          lifecycle:
+            preStop:
+              exec:
+                command: [ "sleep", "30" ]

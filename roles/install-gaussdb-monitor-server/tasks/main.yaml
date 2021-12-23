@@ -1,0 +1,14 @@
+- name: copy config files to master
+  copy:
+    src: files/
+    dest: '{{ component_manifest_dir }}/gaussdb-monitoring/'
+
+- name: copy config templates to master
+  template:
+    src: '{{ item.src }}'
+    dest: "{{ component_manifest_dir }}/gaussdb-monitoring/{{ item.path | regex_replace('\\.j2$', '') }}"
+  with_filetree: templates/
+  when: item.state == 'file'
+
+- name: apply gaussdb manifest
+  shell: 'kubectl apply -f {{ component_manifest_dir }}/gaussdb-monitoring/'

@@ -10,10 +10,10 @@
     gausslog: /var/log/gaussdb/omm
   roles:
     - install-filebeat
-    - install-db-monitor
+    - install-gaussdb-monitor-agent
 
 - name: install gaussdb monitor service
   gather_facts: false
   hosts: k8s-master-init
   roles:
-    - install-db-monitor-service
+    - install-gaussdb-monitor-server

@@ -1,0 +1,21 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: monitor-server
+  namespace: gaussdb-monitoring
+  annotations:
+    # 使用http检测应用可用性，手动提供支持http检测的端口
+    prometheus.io/http-probe: "true"
+    prometheus.io/http-probe-port: "9990"
+    prometheus.io/http-probe-path: "/monitor-server/actuator/health"
+spec:
+  ports:
+    - name: http
+      protocol: TCP
+      port: 9990
+      targetPort: 9990
+    - name: wsr
+      port: 80
+      targetPort: 80
+  selector:
+    app: monitor-server

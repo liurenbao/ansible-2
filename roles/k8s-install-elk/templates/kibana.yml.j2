@@ -5,7 +5,7 @@ metadata:
   namespace: elk
 data:
   kibana.yml: |
-    server.host: "0"
+    server.host: "0.0.0.0"
     elasticsearch.hosts: {{ es_hosts_arr_http }}
     monitoring.ui.container.elasticsearch.enabled: true
 ---

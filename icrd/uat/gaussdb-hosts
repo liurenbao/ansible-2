@@ -1,0 +1,39 @@
+[k8s-master-init]
+192.168.160.121	ansible_ssh_user=root	ansible_ssh_pass="Qiandao@999.com"	host_name=k8s-uat-master-1  MASTER_BACKUP=MASTER	label="zone=dc1"
+
+[kafka]
+192.168.161.194	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name=kafka-uat-2
+192.168.161.193	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name=kafka-uat-1
+192.168.161.195	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name=kafka-uat-3
+
+[db]
+192.168.160.250	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	gaussdb_user=omm3	gaussdb_user_group=dbgrp3	gausslog=/data04/gaussdb3/data/log/omm3	gaussdb_jdk_dir=/opt/software/jdk1.8.0_252	host_name="sittdb03"
+192.168.160.251	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	gaussdb_user=omm3	gaussdb_user_group=dbgrp3	gausslog=/data04/gaussdb3/data/log/omm3	gaussdb_jdk_dir=/opt/software/jdk1.8.0_252	host_name="sittdb04"
+192.168.163.46	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	gaussdb_user=omm	gaussdb_user_group=dbgrp	gausslog=/var/log/gaussdb/omm	gaussdb_jdk_dir=/opt/software/jdk1.8.0_252	host_name="gaussdb-test-3"
+192.168.163.53	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	gaussdb_user=omm	gaussdb_user_group=dbgrp	gausslog=/var/log/gaussdb/omm	gaussdb_jdk_dir=/opt/software/jdk1.8.0_252	host_name="gaussdb-test-4"
+192.168.163.155	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	gaussdb_user=omm	gaussdb_user_group=dbgrp	gausslog=/var/log/gaussdb/omm	gaussdb_jdk_dir=/opt/software/jdk1.8.0_252	host_name="gaussdb-test-5"
+192.168.163.47	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	gaussdb_user=omm	gaussdb_user_group=dbgrp	gausslog=/var/log/gaussdb/omm	gaussdb_jdk_dir=/opt/software/jdk1.8.0_252	host_name="gaussdb-test-6"
+192.168.160.12	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	gaussdb_user=omm	gaussdb_user_group=dbgrp	gausslog=/var/log/gaussdb/omm	gaussdb_jdk_dir=/opt/software/jdk1.8.0_252	host_name="gaussdb-test-1"
+192.168.160.30	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	gaussdb_user=omm	gaussdb_user_group=dbgrp	gausslog=/var/log/gaussdb/omm	gaussdb_jdk_dir=/opt/software/jdk1.8.0_252	host_name="gaussdb-test-2"
+192.168.160.70	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	gaussdb_user=omm	gaussdb_user_group=dbgrp	gausslog=/var/log/gaussdb/omm	gaussdb_jdk_dir=/opt/software/jdk1.8.0_252	host_name="mymes"
+192.168.160.89	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	gaussdb_user=omm	gaussdb_user_group=dbgrp	gausslog=/var/log/gaussdb/omm	gaussdb_jdk_dir=/opt/software/jdk1.8.0_252	host_name="mymes-1"
+192.168.163.179	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	gaussdb_user=omm	gaussdb_user_group=dbgrp	gausslog=/var/log/gaussdb/omm	gaussdb_jdk_dir=/opt/software/jdk1.8.0_252	host_name="uat-spc-db-1"
+192.168.163.86	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	gaussdb_user=omm	gaussdb_user_group=dbgrp	gausslog=/var/log/gaussdb/omm	gaussdb_jdk_dir=/opt/software/jdk1.8.0_252	host_name="uat-spc-db-2"
+192.168.160.6	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	gaussdb_user=omm	gaussdb_user_group=dbgrp	gausslog=/data01/gaussdb/data/log/omm	gaussdb_jdk_dir=/opt/software/jdk1.8.0_252	host_name="rtd-uat-db-1"
+192.168.160.45	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	gaussdb_user=omm	gaussdb_user_group=dbgrp	gausslog=/data01/gaussdb/data/log/omm	gaussdb_jdk_dir=/opt/software/jdk1.8.0_252	host_name="rtd-uat-db-2"
+192.168.160.132	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	gaussdb_user=omm	gaussdb_user_group=dbgrp	gausslog=/data01/gaussdb/data/log/omm	gaussdb_jdk_dir=/software/jdk1.8.0_252	host_name="fdcdb-pirun-1"
+192.168.160.133	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	gaussdb_user=omm	gaussdb_user_group=dbgrp	gausslog=/data01/gaussdb/data/log/omm	gaussdb_jdk_dir=/software/jdk1.8.0_252	host_name="fdcdb-pirun-2"
+192.168.160.193	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	gaussdb_user=omm	gaussdb_user_group=dbgrp	gausslog=/data01/gaussdb/data/log/omm	gaussdb_jdk_dir=/opt/software/jdk1.8.0_252	host_name="gaussdb-mes-pirun"
+192.168.160.67	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	gaussdb_user=omm	gaussdb_user_group=dbgrp	gausslog=/data01/gaussdb/data/log/omm	gaussdb_jdk_dir=/software/jdk1.8.0_252	host_name="mes-uat-test-db-1"
+#192.168.160.60	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	gaussdb_user=omm	gaussdb_user_group=dbgrp	gausslog=/var/log/gaussdb/omm	gaussdb_jdk_dir=/opt/software/jdk1.8.0_252	host_name="mes-dev-test-1"
+192.168.160.24	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	gaussdb_user=omm	gaussdb_user_group=dbgrp	gausslog=/gaussdb/data/log/omm	gaussdb_jdk_dir=/opt/software/jdk1.8.0_252	host_name="rmspocdb01"
+192.168.160.7	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	gaussdb_user=omm	gaussdb_user_group=dbgrp	gausslog=/data01/gaussdb/data/log/omm	gaussdb_jdk_dir=/opt/software/jdk1.8.0_252	host_name="report-uat-db-1"
+#192.168.160.41	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	gaussdb_user=omm	gaussdb_user_group=dbgrp	gausslog=/var/log/gaussdb/omm	gaussdb_jdk_dir=/opt/software/jdk1.8.0_252	host_name="SPCTDB001"
+#192.168.160.111	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	gaussdb_user=omm	gaussdb_user_group=dbgrp	gausslog=/var/log/gaussdb/omm	gaussdb_jdk_dir=/opt/software/jdk1.8.0_252	host_name="spc-sit-db-01"
+192.168.160.192	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	gaussdb_user=omm	gaussdb_user_group=dbgrp	gausslog=/var/log/gaussdb/omm	gaussdb_jdk_dir=/opt/software/jdk1.8.0_252	host_name="gaussdb-spc-pirun-1"
+192.168.160.241	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	gaussdb_user=omm	gaussdb_user_group=dbgrp	gausslog=/var/log/gaussdb/omm	gaussdb_jdk_dir=/opt/software/jdk1.8.0_252	host_name="gaussdb-spc-pirun-2"
+#192.168.160.69	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	gaussdb_user=omm	gaussdb_user_group=dbgrp	gausslog=/var/log/gaussdb/omm	gaussdb_jdk_dir=/opt/software/jdk1.8.0_252	host_name="db_mes_mgr_dev"
+#192.168.163.144	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	gaussdb_user=omm	gaussdb_user_group=dbgrp	gausslog=/var/log/gaussdb/omm	gaussdb_jdk_dir=/opt/software/jdk1.8.0_252	host_name="db_report_test_qa"
+192.168.160.239	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	gaussdb_user=omm1	gaussdb_user_group=dbgrp	gausslog=/data01/omm1/log/omm1	gaussdb_jdk_dir=/software/jdk1.8.0_252	host_name="gaussdb_01"
+192.168.160.43	ansible_ssh_user=root	ansible_ssh_pass="Huawei@888.com"	gaussdb_user=omm	gaussdb_user_group=dbgrp	gausslog=/data01/omm/log/omm	gaussdb_jdk_dir=/software/jdk1.8.0_252	host_name="gaussdb-mes-uat2"
+192.168.160.20	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	gaussdb_user=omm	gaussdb_user_group=dbgrp	gausslog=/data01/omm/log/omm	gaussdb_jdk_dir=/software/jdk1.8.0_252	host_name="rtd-dry-run01"

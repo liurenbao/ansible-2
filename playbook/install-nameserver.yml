@@ -5,5 +5,8 @@
     - name: ensure nameserver line exists
       lineinfile:
         path: /etc/resolv.conf
-        line: "nameserver 192.168.160.1"
+        line: "{{ item }}"
         state: present
+      with_items:
+        - "nameserver 10.12.101.11"
+        - "nameserver 10.12.101.12"

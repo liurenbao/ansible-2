@@ -1,0 +1,20 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: monitor-server
+  namespace: gaussdb-monitoring
+spec:
+  entryPoints:
+    - web
+  routes:
+    - kind: Rule
+      match: PathPrefix(`/monitor-server/`)
+      services:
+        - name: monitor-server
+          port: 9990
+    - kind: Rule
+      match: PathPrefix(`/wsr/`)
+      services:
+        - name: monitor-server
+          port: 80
+

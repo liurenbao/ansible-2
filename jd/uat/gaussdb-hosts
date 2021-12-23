@@ -8,10 +8,3 @@
 10.12.117.31 host_name=jdfau-mcsdb01 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" DB_NAME=MCSUAT MEM=64G DB_ROLE=MASTER FloatIP=10.12.117.31 STORAGE=200G ARCHIVE=20G SHAREDISK= DB_TYPE=SIGNLE
 10.12.117.13 host_name=jdfau-fdc_apcd01 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" DB_NAME=FDCAPCUAT MEM=128G DB_ROLE=MASTER FloatIP=10.12.117.13 STORAGE=2800G ARCHIVE=200G SHAREDISK= DB_TYPE=SIGNLE
 10.12.117.106 host_name=jdfau-rtdfam01 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" DB_NAME=RTDUAT MEM=64G DB_ROLE=MASTER FloatIP=10.12.117.106 STORAGE=500G ARCHIVE=50G SHAREDISK= DB_TYPE=SIGNLE
-[kafka]
-10.12.117.126 host_name=jdfau-elkfk01 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
-10.12.117.127 host_name=jdfau-elkfk02 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
-10.12.117.128 host_name=jdfau-elkfk03 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
-
-[k8s-master-init]
-10.12.117.76 host_name=jdfau-k8sm01 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" MASTER_BACKUP=MASTER label="zone=dc1"

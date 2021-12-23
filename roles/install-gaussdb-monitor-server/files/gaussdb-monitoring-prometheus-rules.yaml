@@ -1,0 +1,187 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  labels:
+    prometheus: k8s
+    role: alert-rules
+  name: gaussdb-rules
+  namespace: monitoring
+spec:
+  groups:
+    - name: gaussdb-monitor-prometheus-rules
+      rules:
+        - alert: "gaussAlarmLog-warning"
+          expr: gauss_db_alarm_log_status < 1
+          for: 2m
+          labels:
+            severity: warning
+            category: gsAlarmLog
+          annotations:
+            summary: "【告警】GAUSS数据库存在异常日志告警，请及时处理"
+            description: "Found alarm log: alarm_id='{{$labels.alarm_id}}',alarm_name='{{$labels.alarm_name}}',component_name='{{ $labels.alarm_server }}, alarm_type={{$labels.alarm_type}}'"
+            DbIpAndPort: "{{$labels.DbIpAndPort}}"
+
+        - alert: "gaussGsCheck-warning"
+          expr: gauss_db_gs_check_status < 1
+          for: 10m
+          labels:
+            severity: warning
+            category: gsCheck
+          annotations:
+            summary: "【告警】GAUSS数据库定期巡检发现异常，请及时处理"
+            description: "{GS_CHECK result: sceneName='{{$labels.sceneName}}', itemName='{{ $labels.itemName}}', value='{{ $value }}', description='{{ $labels.description }}'}"
+            DbIpAndPort: "{{$labels.DbIpAndPort}}"
+
+        - alert: "gaussConnectionUsage-warning"
+          expr: gauss_db_gs_check_conn_usage >= 80.0
+          for: 10m
+          labels:
+            severity: warning
+            category: gsConnUsage
+          annotations:
+            summary: "【告警】数据库连接数已超过80.0%，请及时处理"
+            description: "{GS_CHECK connections: sceneName='{{$labels.sceneName}}', itemName='{{ $labels.itemName}}', usage='{{ $value }}%', description='{{ $labels.description }}'}"
+            DbIpAndPort: "{{$labels.DbIpAndPort}}"
+
+        - alert: "gaussGsOm-HostStatus-warning"
+          expr: gauss_db_gs_om_host_status < 1
+          for: 2m
+          labels:
+            severity: warning
+            category: gsOmStatus
+          annotations:
+            summary: "【告警】数据库状态出现异常，请尽快处理"
+            description: "{Host Status: AZ='{{$labels.AZ}}', HOST='{{ $labels.HOST}}', IP='{{ $labels.IP }}', description='The host status should be ONLINE.'}"
+            DbIpAndPort: "{{$labels.DbIpAndPort}}"
+
+        - alert: "gaussGsOm-AZStatus-warning"
+          expr: gauss_db_gs_om_az_status < 1
+          for: 2m
+          labels:
+            severity: warning
+            category: gsOmStatus
+          annotations:
+            summary: "【告警】数据库状态出现异常，请尽快处理"
+            description: "{AZ status: AZ='{{$labels.AZ}}', Priority='{{ $labels.Priority}}', REGION='{{ $labels.REGION }}', description='The AZ status should be ONLINE.'}"
+            DbIpAndPort: "{{$labels.DbIpAndPort}}"
+
+        - alert: "gaussGsOm-ClusterStatus-warning"
+          expr: gauss_db_gs_om_cluster_status < 1
+          for: 2m
+          labels:
+            severity: warning
+            category: gsOmStatus
+          annotations:
+            summary: "【告警】数据库状态出现异常，请尽快处理"
+            description: "{Cluster Status: description='The AZ status should be Normal.'}"
+            DbIpAndPort: "{{$labels.DbIpAndPort}}"
+
+        - alert: "gaussGsOm-ETCDInstanceStatus-warning"
+          expr: gauss_db_gs_om_instance_status_etcd < 1
+          for: 2m
+          labels:
+            severity: warning
+            category: gsOmStatus
+          annotations:
+            summary: "【告警】数据库状态出现异常，请尽快处理"
+            description: "{ETCD Status: INSTANCE='{{$labels.INSTANCE}}', PORT='{{ $labels.PORT}}', HOST='{{ $labels.HOST }}', DataDir='{{ $labels.DataDir}}', description='The ETCD status should be ONLINE.'}"
+            DbIpAndPort: "{{$labels.DbIpAndPort}}"
+
+        - alert: "gaussGsOm-CMInstanceStatus-warning"
+          expr: gauss_db_gs_om_instance_status_cluster_manager < 1
+          for: 2m
+          labels:
+            severity: warning
+            category: gsOmStatus
+          annotations:
+            summary: "【告警】数据库状态出现异常，请尽快处理"
+            description: "{Cluster Manager Status: INSTANCE='{{$labels.INSTANCE}}', HOST='{{ $labels.HOST }}', description='The cluster manager status should be ONLINE.'}"
+            DbIpAndPort: "{{$labels.DbIpAndPort}}"
+
+        - alert: "gaussGsOm-DBInGroupInstanceStatus-warning"
+          expr: gauss_db_gs_om_instance_status_db_in_group < 1
+          for: 2m
+          labels:
+            severity: warning
+            category: gsOmStatus
+          annotations:
+            summary: "【告警】数据库状态出现异常，请尽快处理"
+            description: "{DB in group status: INSTANCE='{{$labels.INSTANCE}}', PORT='{{ $labels.PORT}}', HOST='{{ $labels.HOST }}', DataDir='{{ $labels.DataDir}}', description='The DB in group status should be ONLINE.'}"
+            DbIpAndPort: "{{$labels.DbIpAndPort}}"
+
+        - alert: "gaussSqlCheck-SyncInfoFlush-warning"
+          expr: gauss_db_check_sync_info_flush_lag < 1
+          for: 2m
+          labels:
+            severity: warning
+            category: gsSqlCheck
+          annotations:
+            summary: "【告警】主备之间的物理复制不同步，有丢失数据风险，请及时处理"
+            description: "{sceneName='{{$labels.sceneName}}', description='{{$labels.description}}'}"
+            DbIpAndPort: "{{$labels.DbIpAndPort}}"
+
+        - alert: "gaussSqlCheck-LogicRepProgress-warning"
+          expr: gauss_db_check_logicrep_progress_delay < 1
+          for: 2m
+          labels:
+            severity: warning
+            category: gsSqlCheck
+          annotations:
+            summary: "【告警】主备之间的逻辑复制延迟超过指定时间，请及时处理"
+            description: "{sceneName='{{$labels.sceneName}}', description='{{$labels.description}}'}"
+            DbIpAndPort: "{{$labels.DbIpAndPort}}"
+
+        - alert: "gaussSqlCheck-ClusterRunMode-warning"
+          expr: gauss_db_check_run_mode < 1
+          for: 2m
+          labels:
+            severity: warning
+            category: gsSqlCheck
+          annotations:
+            summary: "【告警】数据库集群运行模式不是最大可用，请及时处理"
+            description: "{sceneName='{{$labels.sceneName}}', description='{{$labels.description}}'}"
+            DbIpAndPort: "{{$labels.DbIpAndPort}}"
+
+        - alert: "gaussSqlCheck-FailOver-warning"
+          expr: gauss_db_check_fail_over < 1
+          for: 2m
+          labels:
+            severity: warning
+            category: gsSqlCheck
+          annotations:
+            summary: "【告警】数据库出现异常导致FAILOVER，请及时处理"
+            description: "{sceneName='{{$labels.sceneName}}', description='{{$labels.description}}'}"
+            DbIpAndPort: "{{$labels.DbIpAndPort}}"
+
+        - alert: "gaussSqlCheck-LongSQL-warning"
+          expr: gauss_db_check_long_sql < 1
+          for: 2m
+          labels:
+            severity: warning
+            category: gsSqlCheck
+          annotations:
+            summary: "【告警】数据库存在Long SQL，请及时处理"
+            description: "{sceneName='{{$labels.sceneName}}', description='{{$labels.description}}'}"
+            DbIpAndPort: "{{$labels.DbIpAndPort}}"
+
+        - alert: "gaussSqlCheck-LongTransaction-warning"
+          expr: gauss_db_check_long_transaction < 1
+          for: 2m
+          labels:
+            severity: warning
+            category: gsSqlCheck
+          annotations:
+            summary: "【告警】数据库出现长事务，请及时处理"
+            description: "{sceneName='{{$labels.sceneName}}', description='{{$labels.description}}'}"
+            DbIpAndPort: "{{$labels.DbIpAndPort}}"
+
+        - alert: "gaussSqlCheck-LockTableSQL-warning"
+          expr: gauss_db_check_lock_table_sql < 1
+          for: 2m
+          labels:
+            severity: warning
+            category: gsSqlCheck
+          annotations:
+            summary: "【告警】数据库出现锁表SQL，请及时处理"
+            description: "{sceneName='{{$labels.sceneName}}', description='{{$labels.description}}'}"
+            DbIpAndPort: "{{$labels.DbIpAndPort}}"
