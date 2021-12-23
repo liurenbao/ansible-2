@@ -8,6 +8,7 @@ data:
     server {
         listen       80;
         server_name  localhost;
+        autoindex_localtime on;
         location / {
             root   /usr/share/nginx/html;
             index  index.html index.htm;
