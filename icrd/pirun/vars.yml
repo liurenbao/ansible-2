@@ -107,10 +107,10 @@ grafana_storage: '50Gi'
 alertmanager_storage: '20Gi'
 alertmanager_data_retention: '120h'
 alertmanager_smtp_server: 192.168.160.1:587
-alertmanager_smtp_from: alertmanager@icrd.com
-alertmanager_smtp_username: alertmanager@icrd.com
-alertmanager_smtp_password: Huawei@777.com
-alertmanager_app_email_to: tangjizhou@huawei.com, mouyongde@huawei.com
+alertmanager_smtp_from: alertmanager@cicem.fa
+alertmanager_smtp_username: alertmanager@cicem.fa
+alertmanager_smtp_password: Icrd@777.com
+alertmanager_app_email_to: tangjizhou@cicem.fa, mouyongde@cicem.fa
 node_exporter_root_dir: /data01/node-exporter
 
 # redis---------------------------------------------------------------------------------------

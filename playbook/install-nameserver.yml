@@ -1,0 +1,9 @@
+- name: install internal nameserver
+  gather_facts: false
+  hosts: all
+  tasks:
+    - name: ensure nameserver line exists
+      lineinfile:
+        path: /etc/resolv.conf
+        line: "nameserver 192.168.160.1"
+        state: present

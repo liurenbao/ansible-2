@@ -1,5 +1,6 @@
 [harbor]
-
+192.168.160.37	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name=harbor-test-1
+192.168.160.97	ansible_ssh_user=root	ansible_ssh_pass="Huawei@777.com"	host_name=harbor-test-2
 
 [k8s-master-init]
 192.168.160.235	ansible_ssh_user=root	ansible_ssh_pass="mouyongde123.."	host_name=k8s-master-pirun-1    label="zone=dc1"
