@@ -11,12 +11,13 @@
 
 - name: remove omm old crontab line
   lineinfile:
-    path: /var/spool/cron/omm
+    path: '/var/spool/cron/{{ gaussdb_user }}'
     line: "{{ item }}"
     state: absent
   with_items:
     - "#Ansible: gaussdb agent job"
-    - "*/1 * * * * source ~/.bashrc && /data01/gaussdb-monitor-agent/omm/start-agent.sh check"
+    - "*/1 * * * * source ~/.bashrc && /data01/gaussdb-monitor-agent/{{ gaussdb_user }}/start-agent.sh check"
+    - "*/2 * * * * /data01/filebeat/filebeat_monitor.sh"
 
 - name: remove existed monitor app files
   file:

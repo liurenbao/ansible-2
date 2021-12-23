@@ -17,7 +17,7 @@ extalert:
       #监控gaussDB数据库连接数使用率%报警值，超过此值即发送邮件报警
       connectionUsageVal: 80
       #执行监控gaussDB数据库命令的用户名(一般为omm, 配置后客户端可以用非omm用户部署)，为空时表示客户端使用数据库用户(如：omm)部署
-      gsAccessUser:
+      gsAccessUser: omm
       #按照taskKey关闭任务项，关闭后对应任务项不执行, 多个项用逗号隔开
       #例如：sqlCheckLongTransaction, sqlCheckLogicRep
       switchOffTasks:

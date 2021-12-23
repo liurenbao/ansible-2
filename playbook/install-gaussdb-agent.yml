@@ -7,6 +7,7 @@
     gaussdb_monitor_user: db_monitor
     gaussdb_user_group: dbgrp
     gaussdb_jdk_dir: /opt/software/jdk1.8.0_302
+    gausslog: /var/log/gaussdb/omm
   roles:
     - install-filebeat
     - install-db-monitor
