@@ -85,7 +85,7 @@ spec:
       dnsPolicy: ClusterFirstWithHostNet
       containers:
         - name: filebeat
-          image: "{{ image_repository }}/public/elastic/filebeat:7.13.2"
+          image: "{{ image_repository }}/public/filebeat:7.16.2"
           args:
             - '-e'
             - '-E'

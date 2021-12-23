@@ -29,7 +29,7 @@ data:
     index_prefix=${index%${current_month}*}
     pattern=$index_prefix$current_month*
 
-    curl -X POST -H "Content-Type: application/json" -H "kbn-version: 7.13.2" -d@- --url http://$kibana_host/api/index_patterns/index_pattern << EOF
+    curl -X POST -H "Content-Type: application/json" -H "kbn-version: 7.16.2" -d@- --url http://$kibana_host/api/index_patterns/index_pattern << EOF
     {
       "index_pattern": {
         "title": "$pattern",
@@ -51,7 +51,7 @@ data:
     # 删除过期的pattern
     index_pattern_ids=$(curl -XGET http://$kibana_host/api/saved_objects/_find?type=index-pattern | jq  -r --arg last_month $last_month '.saved_objects | .[] | select(.attributes.title | contains($last_month)) | .id')
     for index_pattern_id in $index_pattern_ids ; do
-    curl -X DELETE -H "kbn-version: 7.13.2" http://$kibana_host/api/index_patterns/index_pattern/$index_pattern_id
+    curl -X DELETE -H "kbn-version: 7.16.2" http://$kibana_host/api/index_patterns/index_pattern/$index_pattern_id
     done
 ---
 apiVersion: batch/v1beta1

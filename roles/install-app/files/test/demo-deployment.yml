@@ -53,7 +53,7 @@ spec:
                       - demo-monitoring
       containers:
         - name: demo-monitoring
-          image: "{{ image_repository }}/public/demo-monitoring:1.0"
+          image: "10.12.107.150:80/public/demo-monitoring:1.0"
           imagePullPolicy: Always
           startupProbe:
             httpGet:
