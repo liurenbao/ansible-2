@@ -8,7 +8,7 @@ spec:
     - web
   routes:
     - kind: Rule
-      match: Host(`kibana.cicem.fa`)
+      match: Host(`kibana{{ domain_suffix }}.cicem.fa`)
       services:
         - name: kibana
           port: 5601

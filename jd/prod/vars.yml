@@ -2,6 +2,7 @@
 # 注意修改内存配置
 # 注意修改VIP地址
 #---------------------
+domain_suffix: ""
 harbor_keepalived_vip: 10.12.107.150
 nginx_keepalived_vip: 10.12.107.100
 k8s_keepalived_vip: 10.12.107.120
