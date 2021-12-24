@@ -2,7 +2,6 @@
   hosts: svn
   gather_facts: false
   vars:
-    svn_root_dir: '{{ svn_data_root_dir }}'
-    svn_image: '{{ svn_image_url }}'
+    svn_root_dir: '/data01/svn'
   roles:
     - install-svn

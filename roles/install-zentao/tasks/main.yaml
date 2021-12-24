@@ -1,0 +1,21 @@
+- name: create zentao root dir
+  file:
+    path: '{{ zentao_dir }}'
+    state: directory
+
+- name: cp docker-compose
+  template:
+    src: docker-compose.yml.j2
+    dest: '{{ zentao_dir }}/docker-compose.yml'
+
+- name: start zentao
+  shell: docker-compose up -d
+  args:
+    chdir: "{{ zentao_dir }}"
+
+- name: wait zentao ready
+  wait_for:
+    port: 80
+    delay: 10
+    timeout: 120
+    msg: 'Timeout waiting for zentao respond'

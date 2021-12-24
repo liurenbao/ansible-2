@@ -2,7 +2,6 @@
   hosts: jenkins
   gather_facts: false
   vars:
-    jenkins_dir: "{{ jenkins_root_dir }}"
-    jenkins_image: "{{ jenkins_image_url }}"
+    jenkins_dir: "/data01/jenkins"
   roles:
     - install-jenkins

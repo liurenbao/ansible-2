@@ -1,0 +1,9 @@
+version: '3'
+services:
+  zentao:
+    image: '{{ image_repository }}/public/zentao:15.0.3'
+    restart: always
+    network_mode: host
+    volumes:
+      - "./zentaopms:/www/zentaopms"
+      - "./mysqldata:/var/lib/mysql"

@@ -8,5 +8,8 @@
     - es
     - kafka
     - redis
+    - svn
+    - jenkins
+    - zentao
   roles:
     - install-docker

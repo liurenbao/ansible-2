@@ -1,0 +1,7 @@
+- name: install zentao
+  gather_facts: true
+  hosts: zentao
+  vars:
+    zentao_dir: /data01/zentao
+  roles:
+    - install-zentao
