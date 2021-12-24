@@ -26,14 +26,6 @@ spec:
           annotations:
             summary: Blackbox probe slow ping (instance {{ $labels.instance }})
             description: "Blackbox ping took more than 1s.  VALUE = {{ $value }}"
-        - alert: BlackboxProbeHttpFailure
-          expr: probe_http_status_code <= 199 OR probe_http_status_code >= 400
-          for: 0m
-          labels:
-            severity: critical
-          annotations:
-            summary: Blackbox probe HTTP failure (instance {{ $labels.instance }})
-            description: "HTTP status code is not 200-399. VALUE = {{ $value }}"
         - alert: BlackboxSslCertificateWillExpireSoon
           expr: probe_ssl_earliest_cert_expiry - time() < 86400 * 30
           for: 0m
