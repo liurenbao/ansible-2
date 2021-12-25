@@ -16,7 +16,7 @@ spec:
           requests:
             storage: '{{ alertmanager_storage }}'
   image: '{{ image_repository }}/public/alertmanager:v0.21.0'
-  externalUrl: "http://alertmanager.cicem.fa"
+  externalUrl: "http://alertmanager{{ domain_suffix }}.cicem.fa"
   retention: '{{ alertmanager_data_retention }}'
   logLevel: debug
   nodeSelector:
