@@ -9,3 +9,9 @@ xpack.monitoring.collection.enabled: true
 cluster.initial_master_nodes: {{ es_initial_master_nodes }}
 xpack.license.self_generated.type: basic
 xpack.security.enabled: false
+cluster.routing.allocation.same_shard.host: true
+cluster.routing.allocation.disk.watermark.low: "85%"
+cluster.routing.allocation.disk.watermark.high: "90%"
+cluster.info.update.interval: "30s"
+cluster.routing.allocation.disk.include_relocations: true
+cluster.routing.allocation.disk.threshold_enabled: true
