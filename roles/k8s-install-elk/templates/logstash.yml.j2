@@ -116,6 +116,13 @@ spec:
       labels:
         app: logstash
     spec:
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: zone
+          whenUnsatisfiable: DoNotSchedule
+          labelSelector:
+            matchLabels:
+              app: logstash
       containers:
         - name: logstash
           image: "{{ image_repository }}/public/logstash:7.16.2"

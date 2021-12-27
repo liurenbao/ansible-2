@@ -8,7 +8,7 @@ spec:
     - web
   routes:
     - kind: Rule
-      match: Host(`traefik-dashboard.cicem.fa`)
+      match: Host(`traefik-dashboard{{ domain_suffix }}.cicem.fa`)
       services:
         - name: traefik
           port: 8080
