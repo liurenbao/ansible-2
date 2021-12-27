@@ -13,13 +13,3 @@
 192.168.160.31
 
 163网段VIP: 238~253
-
-curl http://10.144.197.103:9093/api/v1/alerts -XPOST -d'@alert.json'
-curl http://10.144.157.46:9093/api/v1/alerts -XPOST -d'@alert.json'
-curl http://10.144.46.236:9093/api/v1/alerts -XPOST -d'@alert.json'
-
-rms RMS@cec5
-plantu PLANTU@6f8c
-spc SPC@d906
-ams AMS@034b
-rtd RTD@6abe
