@@ -18,7 +18,7 @@
 
 - name: kubernetes dashboard
   vars:
-    dashboard_url: 'https://k8s-dashboard.cicem.fa:30000'
+    dashboard_url: 'https://k8s-dashboard{{ domain_suffix }}.cicem.fa:30000'
   shell: |
     namespaces=$(kubectl get secret -A | grep admin | awk '{print $1}')
     for namespace in ${namespaces[@]} ; do
