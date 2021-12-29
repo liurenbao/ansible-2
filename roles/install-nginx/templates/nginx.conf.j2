@@ -17,7 +17,7 @@ http {
   include       /etc/nginx/mime.types;
   default_type  application/octet-stream;
 
-  log_format  main  '[$time_local] - $remote_addr - $request_time - $upstream_response_time - $upstream_status - $upstream_addr - $remote_user $request '
+  log_format  main  '$time_iso8601 - $remote_addr - $request_time - $upstream_response_time - $upstream_status - $upstream_addr - $remote_user $request '
   '$status $body_bytes_sent $http_referer - $http_user_agent - $http_x_forwarded_for';
 
   access_log  /var/log/nginx/access.log  main;

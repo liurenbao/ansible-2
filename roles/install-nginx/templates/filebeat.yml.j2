@@ -2,7 +2,7 @@ filebeat.inputs:
   - type: log
     paths:
       - "/data01/nginx/log/*.log"
-    multiline.pattern: '(^\d{4}-\d{1,2}-\d{1,2}|^\[)'
+    multiline.pattern: '^\d{4}[-/]\d{1,2}[-/]\d{1,2}'
     multiline.negate: true
     multiline.match: after
     processors:
