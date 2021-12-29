@@ -20,7 +20,7 @@ spec:
             description: "Probe failed. Please check status of all service instances"
         - alert: BlackboxProbeSlowPing
           expr: avg_over_time(probe_icmp_duration_seconds[1m]) > 1
-          for: 0m
+          for: 1m
           labels:
             severity: warning
           annotations:
@@ -52,7 +52,7 @@ spec:
             description: "SSL certificate has expired already. VALUE = {{ $value }}."
         - alert: BlackboxProbeSlowHttp
           expr: avg_over_time(probe_http_duration_seconds[1m]) > 5
-          for: 0m
+          for: 1m
           labels:
             severity: warning
           annotations:
@@ -60,7 +60,7 @@ spec:
             description: "HTTP request took more than 5s. VALUE = {{ $value }}."
         - alert: BlackboxSlowProbe
           expr: avg_over_time(probe_duration_seconds[1m]) > 5
-          for: 0m
+          for: 1m
           labels:
             severity: warning
           annotations:
