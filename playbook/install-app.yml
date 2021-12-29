@@ -25,5 +25,9 @@
     pcs_harbor_account: pcs
     pcs_harbor_password: PCS@c7r4
     pcs_haror_auth_plaintext: '{{ pcs_harbor_account }}:{{ pcs_harbor_password }}'
+
+    atms_harbor_account: atms
+    atms_harbor_password: ATMS@r3d4
+    atms_haror_auth_plaintext: '{{ atms_harbor_account }}:{{ atms_harbor_password }}'
   roles:
     - install-app
