@@ -33,16 +33,26 @@ metadata:
 data:
   filter_main.conf: |-
     filter {
-      # format message
       grok {
         break_on_match => true
-        patterns_dir => ["/usr/share/logstash/patterns"]
-        match => { "message" => "%{TIMESTAMP:timestamp}(:)?%{SPACE}\[%{PROG:program}\|%{LOGLEVEL:level}\]" }
-        match => { "message" => "%{TIMESTAMP:timestamp}%{SPACE}%{LOGLEVEL:level}%{SPACE}-%{SPACE}\[%{DATA:trace_id}\]%{SPACE}\[%{DATA:thread_id}\]" }
-        match => { "message" => "\[%{MES_SOURCE:SOURCE}\]%{SPACE}%{DATA:kv_message}\n%{GREEDYDATA:content}" }
-        match => { "message" => "%{TIMESTAMP:timestamp}%{SPACE}%{LOGLEVEL:level}" }
+        tag_on_failure => []
+        match => { "[log][file][path]" => "/var/log/gaussdb/omm/%{DATA:logDir}/%{GREEDYDATA}" }
       }
-
+    }
+    filter {
+      grok {
+        break_on_match => true
+        tag_on_failure => ["_grokparsefailure"]
+        tag_on_timeout => ["_groktimeout"]
+        patterns_dir => ["/usr/share/logstash/patterns"]
+        match => { "message" => "%{TIMESTAMP:timestamp}%{SPACE}%{LOGLEVEL:level}%{SPACE}-%{SPACE}\[%{DATA:trace_id}\]%{SPACE}\[%{DATA:thread_id}\]" }
+        match => { "message" => "%{TIMESTAMP:timestamp}(:)?%{SPACE}\[%{PROG:program}\|%{LOGLEVEL:level}\]" }
+        match => { "message" => "\[%{MES_SOURCE:SOURCE}\]%{SPACE}%{DATA:kv_message}\n%{GREEDYDATA:content}" }
+        match => { "message" => "%{TIMESTAMP:timestamp}%{SPACE}%?\[?{LOGLEVEL:level}\]?" }
+        match => { "message" => "%{TIMESTAMP:timestamp}%{GREEDYDATA}" }
+        match => { "message" => "%{TIMESTAMP_ISO8601:timestamp}%{GREEDYDATA}" }
+        match => { "message" => "%{NGINX_ERROR_TIMESTAMP:timestamp}%{SPACE}%{LOGLEVEL:level}%{SPACE}%{GREEDYDATA}" }
+      }
       kv {
         source => "kv_message"
         allow_duplicate_values => false
@@ -52,17 +62,22 @@ data:
         trim_key => "\s+"
         field_split_pattern => "\]"
       }
-
       date {
         match => [ "TIME", "yyyy-MM-dd HH:mm:ss.SSS" ]
         target => "@timestamp"
+        tag_on_failure => ["_dateparsefailure"]
       }
-
+      date {
+        match => [ "timestamp", "yyyy-MM-dd HH:mm:ss.SSS", "yyyy-MM-dd HH:mm:ss", "yyyy-MM-dd HH:mm:ss:SSS",
+                  "yyyy-MM-dd HH:mm:ss,SSS", "yyyy-MM-dd HH:mm:ss'+08:00'", "yyyy-MM-dd'T'HH:mm:ss.SSS'+0800'",
+                  "yyyy-MM-dd'T'HH:mm:ss'+08:00'", "yyyy-MM-dd HH:mm:ss.SSSSS", "yyyy/MM/dd HH:mm:ss", "ISO8601"]
+        target => "@timestamp"
+        tag_on_failure => ["_dateparsefailure"]
+      }
       mutate {
         remove_field => [ "kv_message", "content", "[kubernetes][node][uid]", "[kubernetes][labels][pod-template-hash]",
             "[kubernetes][pod][uid]", "[kubernetes][pod][ip]", "[kubernetes][namespace_uid]","[kubernetes][node][labels]", "stream"  ]
       }
-
     }
   input_main.conf: |-
     input {
@@ -102,6 +117,7 @@ data:
   main: |-
     FULLYEAR (?>\d\d){2}
     TIMESTAMP %{FULLYEAR}-%{MONTHNUM}-%{MONTHDAY}[T ]%{HOUR}:?%{MINUTE}(?::?%{SECOND})?%{ISO8601_TIMEZONE}?
+    NGINX_ERROR_TIMESTAMP %{FULLYEAR}/%{MONTHNUM}/%{MONTHDAY} %{HOUR}:%{MINUTE}:%{SECOND}
     MES_SOURCE (SQL|SYSTEM|SERVICE)
 ---
 apiVersion: apps/v1

@@ -3,21 +3,17 @@ filebeat.inputs:
     paths:
       - "{{ gaussdb_monitor_agent_root_dir }}/logs/gscheck/*.log"
     include_lines: [ '^{','^Check' ]
-    #合并多行数据
     multiline.pattern: '^Check'
     multiline.negate: false
     multiline.match: before
     multiline.flush_pattern: '{'
-    #将采集的数据转json, false 表示不提取的根目录
     json.keys_under_root: false
-    #如果字段存在是否覆盖
     json_overwrite_keys: true
     json.message_key: message_key
     fields:
       kafka_topic: 'gaussdb-gs-check-result'
   - type: log
     enabled: true
-    #filebeat将从新文件的最后位置开始读取,而不是从开头读取新文件
     tail_files: true
     processors:
       - add_host_metadata:
@@ -29,6 +25,22 @@ filebeat.inputs:
     multiline.match: after
     fields:
       kafka_topic: 'gaussdb-alarm'
+  - type: log
+    paths:
+      - "{{ gausslog }}/**/*.log"
+      - "{{ gausslog }}/**/*.rlog"
+      - "{{ gausslog }}/**/*.olog"
+    multiline.pattern: '(^\d{4}-\d{2}-\d{2}|^\[|^\{|^UTC)'
+    multiline.negate: true
+    multiline.match: after
+    fields:
+      kafka_topic: 'log'
+    processors:
+      - add_fields:
+          target: ''
+          fields:
+            kubernetes.labels.app: gaussdb
+            kubernetes.namespace: gaussdb
 output.kafka:
   hosts: {{ kafka_hosts_arr }}
   topic: '%{[fields.kafka_topic]}'
