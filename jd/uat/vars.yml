@@ -103,16 +103,16 @@ nfs_root_dir: '/data01'
 nfs_server: '{{ groups["nas"][0] }}'
 monitor_nfs_path: '{{ nfs_root_dir }}/monitoring'
 monitor_manifest_root_dir: '{{ component_manifest_dir }}/monitoring'
-prometheus_storage: '200Gi'
+prometheus_storage: '140Gi'
 prometheus_data_retention: '35d'
-grafana_storage: '50Gi'
-alertmanager_storage: '50Gi'
+grafana_storage: '200Mi'
+alertmanager_storage: '200Mi'
 alertmanager_data_retention: '120h'
 alertmanager_smtp_host: 10.12.107.121
 alertmanager_smtp_port: 587
 alertmanager_smtp_server: '{{ alertmanager_smtp_host }}:{{ alertmanager_smtp_port }}'
-alertmanager_smtp_from: alertmanager@cicem.fa
-alertmanager_smtp_username: alertmanager@cicem.fa
+alertmanager_smtp_from: alertmanager-uat@cicem.fa
+alertmanager_smtp_username: alertmanager-uat@cicem.fa
 alertmanager_smtp_password: Icrd@777.com
 alertmanager_app_email_to: tangjizhou@cicem.fa, mouyongde@cicem.fa
 alertmanager_db_email_to: lujinzhu@cicem.fa;tangjizhou@cicem.fa;mouyongde@cicem.fa;linfei@cicem.fa;zhangwei@cicem.fa
