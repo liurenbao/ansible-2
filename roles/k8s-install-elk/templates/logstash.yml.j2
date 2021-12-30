@@ -48,10 +48,11 @@ data:
         match => { "message" => "%{TIMESTAMP:timestamp}%{SPACE}%{LOGLEVEL:level}%{SPACE}-%{SPACE}\[%{DATA:trace_id}\]%{SPACE}\[%{DATA:thread_id}\]" }
         match => { "message" => "%{TIMESTAMP:timestamp}(:)?%{SPACE}\[%{PROG:program}\|%{LOGLEVEL:level}\]" }
         match => { "message" => "\[%{MES_SOURCE:SOURCE}\]%{SPACE}%{DATA:kv_message}\n%{GREEDYDATA:content}" }
-        match => { "message" => "%{TIMESTAMP:timestamp}%{SPACE}%?\[?{LOGLEVEL:level}\]?" }
-        match => { "message" => "%{TIMESTAMP:timestamp}%{GREEDYDATA}" }
-        match => { "message" => "%{TIMESTAMP_ISO8601:timestamp}%{GREEDYDATA}" }
         match => { "message" => "%{NGINX_ERROR_TIMESTAMP:timestamp}%{SPACE}%{LOGLEVEL:level}%{SPACE}%{GREEDYDATA}" }
+        match => { "message" => "%{TIMESTAMP:timestamp}%{SPACE}%?\[?{LOGLEVEL:level}\]?" }
+        match => { "message" => "%{IMPRECISE_TIMESTAMP:timestamp}%{GREEDYDATA}" }
+        match => { "message" => "%{TIMESTAMP_ISO8601:timestamp}%{GREEDYDATA}" }
+        match => { "message" => "%{TIMESTAMP:timestamp}%{GREEDYDATA}" }
       }
       kv {
         source => "kv_message"
@@ -119,6 +120,7 @@ data:
     TIMESTAMP %{FULLYEAR}-%{MONTHNUM}-%{MONTHDAY}[T ]%{HOUR}:?%{MINUTE}(?::?%{SECOND})?%{ISO8601_TIMEZONE}?
     NGINX_ERROR_TIMESTAMP %{FULLYEAR}/%{MONTHNUM}/%{MONTHDAY} %{HOUR}:%{MINUTE}:%{SECOND}
     MES_SOURCE (SQL|SYSTEM|SERVICE)
+    IMPRECISE_TIMESTAMP %{FULLYEAR}-%{MONTHNUM}-%{MONTHDAY}[T ]%{HOUR}:%{MINUTE}:%{SECOND}\.\d{3}
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -132,6 +134,18 @@ spec:
       labels:
         app: logstash
     spec:
+      tolerations:
+        -
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - topologyKey: kubernetes.io/hostname
+              labelSelector:
+                matchExpressions:
+                  - key: app
+                    operator: In
+                    values:
+                      - logstash
       topologySpreadConstraints:
         - maxSkew: 1
           topologyKey: zone
@@ -146,10 +160,10 @@ spec:
           resources:
             limits:
               memory: '4Gi'
-              cpu: '8'
+              cpu: '4'
             requests:
               memory: '500Mi'
-              cpu: '1'
+              cpu: '200m'
           volumeMounts:
             - name: logstash-pipeline
               mountPath: /usr/share/logstash/pipeline
@@ -158,6 +172,10 @@ spec:
               subPath: logstash.yml
             - name: logstash-patterns
               mountPath: /usr/share/logstash/patterns
+          lifecycle:
+            preStop:
+              exec:
+                command: [ "sleep", "30" ]
       volumes:
         - name: logstash-config
           configMap:
@@ -174,3 +192,23 @@ spec:
   selector:
     matchLabels:
       app: logstash
+---
+apiVersion: autoscaling/v2beta2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: logstash
+  namespace: elk
+spec:
+  maxReplicas: 10
+  minReplicas: 5
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: logstash
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 80

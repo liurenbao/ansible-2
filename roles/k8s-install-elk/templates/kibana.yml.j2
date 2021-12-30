@@ -6,6 +6,7 @@ metadata:
 data:
   kibana.yml: |
     server.host: "0.0.0.0"
+    server.publicBaseUrl: "http://kibana{{ domain_suffix }}.cicem.fa"
     elasticsearch.hosts: {{ es_hosts_arr_http }}
     monitoring.ui.container.elasticsearch.enabled: true
 ---
