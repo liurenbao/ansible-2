@@ -1,0 +1,25 @@
+- name: ensure nexus dir exist
+  file:
+    path: '{{ nexus_root_dir }}'
+    state: directory
+
+- name: copy nexus docker-compose file
+  template:
+    src: docker-compose.yaml.j2
+    dest: '{{ nexus_root_dir }}/docker-compose.yaml'
+
+- name: ensure nexus data dir exist
+  file:
+    path: '{{ nexus_root_dir }}/nexus-data'
+    state: directory
+    mode: 0777
+
+- name: start up nexus
+  shell: docker-compose up -d
+  args:
+    chdir: '{{ nexus_root_dir }}'
+
+- name: wait nexus ready
+  wait_for:
+    port: 80
+    timeout: 60

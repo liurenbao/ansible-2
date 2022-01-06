@@ -1,0 +1,12 @@
+version: '3'
+services:
+  nexus:
+    user: nexus
+    container_name: nexus
+    image: '{{ image_repository }}/public/nexus3:3.37.3'
+    network_mode: host
+    restart: always
+    environment:
+      NEXUS_CONTEXT: "/"
+    volumes:
+      - "./nexus-data:/nexus-data"

@@ -1,5 +1,7 @@
 [svn]
 10.12.117.51    host_name=jdfau-svn01   ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
+[nexus]
+10.12.118.51    host_name=jdfau-jks01   ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
 [jenkins]
 10.12.117.56    host_name=jdfau-jks01   ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
 [zentao]
