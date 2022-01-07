@@ -16,6 +16,12 @@ services:
     network_mode: host
     restart: always
     environment:
+      #producer ack为all时，最少的同步个数(replica为3，insync为2,可以达到最大高可用)
+      KAFKA_MIN_INSYNC_REPLICAS: 2
+      KAFKA_COMPRESSION_TYPE: gzip
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 3
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 2
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 3
       KAFKA_ADVERTISED_PORT: 9092
       DOCKER_API_VERSION: 1.22
       KAFKA_BROKER_ID: "{{ groups['kafka'].index(inventory_hostname) }}"
@@ -31,7 +37,7 @@ services:
       KAFKA_NUM_IO_THREADS: 16
       #partition*2=log文件个数80， 80/3=28每台broker文件夹个数，每个segament默认1G，每个文件夹大小为(当前值+1)G,总大小不超过磁盘80%，2000G盘
       KAFKA_LOG_RETENTION_BYTES: 21474836480
-      KAFKA_DEFAULT_REPLICATION_FACTOR: 2
+      KAFKA_DEFAULT_REPLICATION_FACTOR: 3
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock"
       - "{{ kafka_root_dir }}/kafka:/kafka"
