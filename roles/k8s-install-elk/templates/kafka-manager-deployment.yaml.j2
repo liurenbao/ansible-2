@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kafka-manager
+  namespace: elk
+  labels:
+    app: kafka-manager
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: kafka-manager
+      labels:
+        app: kafka-manager
+    spec:
+      containers:
+        - name: kafka-manager
+          image: '{{ image_repository }}/public/sheepkiller/kafka-manager:latest'
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: ZK_HOSTS
+              value: '{{ zk_hosts_str }}'
+            - name: APPLICATION_SECRET
+              value: letmein
+      restartPolicy: Always
+  selector:
+    matchLabels:
+      app: kafka-manager
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kafka-manager
+  namespace: elk
+spec:
+  selector:
+    app: kafka-manager
+  ports:
+    - port: 9000
+  type: ClusterIP
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: kafka-manager
+  namespace: elk
+spec:
+  entryPoints:
+    - web
+  routes:
+    - kind: Rule
+      match: Host(`kafka-manager{{ domain_suffix }}.cicem.fa`)
+      services:
+        - name: kafka-manager
+          port: 9000

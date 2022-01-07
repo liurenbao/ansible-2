@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: autocreate-kibana-pattern
-  namespace: elk
+  namespace: gaussdb-monitoring
   labels:
     app: autocreate-kibana-pattern
 data:
@@ -21,10 +21,10 @@ data:
         exit 1
     fi
 
-    current_month=$(date '+%Y-%m')
-    last_month=$(date +%Y-%m -d "$pattern_keep_months month ago")
+    current_month=$(date '+%Y.%m')
+    last_month=$(date +%Y.%m -d "$pattern_keep_months month ago")
     # 查询es的index,创建kibana的pattern
-    indices=$(curl http://$es_host/_cat/indices/log-*$current_month* | cut -d ' ' -f3)
+    indices=$(curl http://$es_host/_cat/indices/gaussdb-*$current_month* | cut -d ' ' -f3)
     for index in $indices;do
     index_prefix=${index%${current_month}*}
     pattern=$index_prefix$current_month*
@@ -58,7 +58,7 @@ data:
 apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
-  namespace: elk
+  namespace: gaussdb-monitoring
   name: autocreate-kibana-pattern
 spec:
   failedJobsHistoryLimit: 1
