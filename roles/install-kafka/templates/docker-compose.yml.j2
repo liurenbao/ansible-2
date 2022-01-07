@@ -16,6 +16,12 @@ services:
     network_mode: host
     restart: always
     environment:
+      #producer ack为all时，最少的同步个数(replica为3，insync为2,可以达到最大高可用)
+      KAFKA_MIN_INSYNC_REPLICAS: 2
+      KAFKA_COMPRESSION_TYPE: gzip
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 3
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 2
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 3
       KAFKA_ADVERTISED_PORT: 9092
       DOCKER_API_VERSION: 1.22
       KAFKA_BROKER_ID: "{{ groups['kafka'].index(inventory_hostname) }}"
