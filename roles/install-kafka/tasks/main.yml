@@ -32,35 +32,5 @@
   wait_for:
     port: 9092
     delay: 20
-    timeout: 60
+    timeout: 120
     msg: 'Timeout waiting for kafka respond'
-
-- name: create topic
-  command: docker-compose exec -T kafka kafka-topics.sh --zookeeper localhost:2181 --create --topic test --partitions 5 --replication-factor 1
-  args:
-    chdir: "{{ kafka_root_dir }}"
-  register: create_result
-  when: ansible_ssh_host == groups['kafka'][0]
-
-- name: show result
-  debug:
-    msg: "{{ create_result.stdout }}"
-  when: ansible_ssh_host == groups['kafka'][0]
-
-- name: list topic
-  command: docker-compose exec -T kafka  kafka-topics.sh  --zookeeper localhost:2181 --list
-  args:
-    chdir: "{{ kafka_root_dir }}"
-  register: list_result
-  when: ansible_ssh_host == groups['kafka'][0]
-
-- name: show result
-  debug:
-    msg: "{{ list_result.stdout }}"
-  when: ansible_ssh_host == groups['kafka'][0]
-
-- name: assert list result
-  assert:
-    that:
-      - "'test' in list_result.stdout_lines"
-  when: ansible_ssh_host == groups['kafka'][0]

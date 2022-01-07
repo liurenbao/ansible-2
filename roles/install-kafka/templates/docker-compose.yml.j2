@@ -14,8 +14,11 @@ services:
   kafka:
     image: '{{ image_repository }}/public/kafka:2.13-2.7.0'
     network_mode: host
+    extra_hosts:
+      - '{{ hostvars[ansible_ssh_host].host_name }}:{{ ansible_ssh_host }}'
     restart: always
     environment:
+      JMX_PORT: 9998
       #producer ack为all时，最少的同步个数(replica为3，insync为2,可以达到最大高可用)
       KAFKA_MIN_INSYNC_REPLICAS: 2
       KAFKA_COMPRESSION_TYPE: gzip
