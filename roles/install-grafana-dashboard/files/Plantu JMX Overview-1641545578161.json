@@ -23,7 +23,7 @@
   "gnetId": 3457,
   "graphTooltip": 0,
   "id": 30,
-  "iteration": 1637048328552,
+  "iteration": 1641545570575,
   "links": [],
   "panels": [
     {
@@ -91,6 +91,7 @@
       "targets": [
         {
           "dsType": "influxdb",
+          "exemplar": true,
           "expr": "100 - (java_lang_operatingsystem_freephysicalmemorysize{instance=~\"$instance\"} / on(instance) java_lang_operatingsystem_totalphysicalmemorysize{instance=~\"$instance\"} *100)",
           "format": "time_series",
           "groupBy": [
@@ -107,7 +108,9 @@
               "type": "fill"
             }
           ],
+          "interval": "",
           "intervalFactor": 2,
+          "legendFormat": "",
           "orderByTime": "ASC",
           "policy": "default",
           "refId": "A",
@@ -171,7 +174,7 @@
       },
       "gridPos": {
         "h": 4,
-        "w": 2,
+        "w": 3,
         "x": 3,
         "y": 0
       },
@@ -278,8 +281,8 @@
       },
       "gridPos": {
         "h": 4,
-        "w": 3,
-        "x": 5,
+        "w": 4,
+        "x": 6,
         "y": 0
       },
       "id": 19,
@@ -385,8 +388,8 @@
       },
       "gridPos": {
         "h": 4,
-        "w": 2,
-        "x": 8,
+        "w": 3,
+        "x": 10,
         "y": 0
       },
       "id": 20,
@@ -452,63 +455,6 @@
         }
       ],
       "title": "Total SWAP",
-      "type": "stat"
-    },
-    {
-      "datasource": "prometheus",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "semi-dark-green",
-                "value": null
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 4,
-        "w": 3,
-        "x": 10,
-        "y": 0
-      },
-      "id": 22,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "none",
-        "justifyMode": "center",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "text": {},
-        "textMode": "auto"
-      },
-      "pluginVersion": "8.1.2",
-      "targets": [
-        {
-          "exemplar": true,
-          "expr": "ravencast_expire_days_total{instance=~\"$instance\"}",
-          "interval": "",
-          "legendFormat": "",
-          "queryType": "randomWalk",
-          "refId": "A"
-        }
-      ],
-      "title": "License Days",
-      "transformations": [],
       "type": "stat"
     },
     {
@@ -836,261 +782,6 @@
       "type": "gauge"
     },
     {
-      "datasource": "prometheus",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "lineInterpolation": "linear",
-            "lineWidth": 2,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 7,
-        "w": 8,
-        "x": 0,
-        "y": 4
-      },
-      "id": 24,
-      "options": {
-        "legend": {
-          "calcs": [],
-          "displayMode": "hidden",
-          "placement": "bottom"
-        },
-        "tooltip": {
-          "mode": "single"
-        }
-      },
-      "pluginVersion": "8.1.2",
-      "targets": [
-        {
-          "exemplar": true,
-          "expr": "ravencast_session_count_total{instance=~\"$instance\"}",
-          "instant": false,
-          "interval": "",
-          "intervalFactor": 1,
-          "legendFormat": "",
-          "queryType": "randomWalk",
-          "refId": "A"
-        }
-      ],
-      "title": "Session Count Total",
-      "type": "timeseries"
-    },
-    {
-      "datasource": "prometheus",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "lineInterpolation": "linear",
-            "lineWidth": 2,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 7,
-        "w": 8,
-        "x": 8,
-        "y": 4
-      },
-      "id": 25,
-      "options": {
-        "legend": {
-          "calcs": [],
-          "displayMode": "hidden",
-          "placement": "bottom"
-        },
-        "tooltip": {
-          "mode": "single"
-        }
-      },
-      "pluginVersion": "8.1.2",
-      "targets": [
-        {
-          "exemplar": true,
-          "expr": "ravencast_queue_wait_count_total{instance=~\"$instance\"}",
-          "instant": false,
-          "interval": "",
-          "intervalFactor": 1,
-          "legendFormat": "",
-          "queryType": "randomWalk",
-          "refId": "A"
-        }
-      ],
-      "title": "Queue Wait Total",
-      "type": "timeseries"
-    },
-    {
-      "datasource": "prometheus",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "lineInterpolation": "linear",
-            "lineWidth": 2,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 7,
-        "w": 8,
-        "x": 16,
-        "y": 4
-      },
-      "id": 26,
-      "options": {
-        "legend": {
-          "calcs": [],
-          "displayMode": "hidden",
-          "placement": "bottom"
-        },
-        "tooltip": {
-          "mode": "single"
-        }
-      },
-      "pluginVersion": "8.1.2",
-      "targets": [
-        {
-          "exemplar": true,
-          "expr": "ravencast_queue_over_count_total{instance=~\"$instance\"}",
-          "instant": false,
-          "interval": "",
-          "intervalFactor": 1,
-          "legendFormat": "",
-          "queryType": "randomWalk",
-          "refId": "A"
-        }
-      ],
-      "title": "Queue Over Count Total",
-      "type": "timeseries"
-    },
-    {
       "aliasColors": {},
       "bars": false,
       "dashLength": 10,
@@ -1102,7 +793,7 @@
         "h": 7,
         "w": 8,
         "x": 0,
-        "y": 11
+        "y": 4
       },
       "hiddenSeries": false,
       "id": 10,
@@ -1230,7 +921,7 @@
         "h": 7,
         "w": 8,
         "x": 8,
-        "y": 11
+        "y": 4
       },
       "hiddenSeries": false,
       "id": 2,
@@ -1328,7 +1019,7 @@
         "h": 7,
         "w": 8,
         "x": 16,
-        "y": 11
+        "y": 4
       },
       "hiddenSeries": false,
       "id": 3,
@@ -1431,7 +1122,7 @@
         "h": 6,
         "w": 8,
         "x": 0,
-        "y": 18
+        "y": 11
       },
       "hiddenSeries": false,
       "id": 4,
@@ -1526,7 +1217,7 @@
         "h": 6,
         "w": 8,
         "x": 8,
-        "y": 18
+        "y": 11
       },
       "hiddenSeries": false,
       "id": 7,
@@ -1651,7 +1342,7 @@
         "h": 6,
         "w": 8,
         "x": 16,
-        "y": 18
+        "y": 11
       },
       "hiddenSeries": false,
       "id": 8,
@@ -1682,8 +1373,10 @@
       "steppedLine": false,
       "targets": [
         {
+          "exemplar": true,
           "expr": "java_lang_operatingsystem_systemcpuload{instance=~\"$instance\"} * 100",
           "format": "time_series",
+          "interval": "",
           "intervalFactor": 2,
           "legendFormat": "system",
           "refId": "B",
@@ -1691,6 +1384,7 @@
         },
         {
           "dsType": "influxdb",
+          "exemplar": true,
           "expr": "java_lang_operatingsystem_processcpuload{instance=~\"$instance\"} * 100",
           "format": "time_series",
           "groupBy": [
@@ -1707,6 +1401,7 @@
               "type": "fill"
             }
           ],
+          "interval": "",
           "intervalFactor": 2,
           "legendFormat": "process",
           "orderByTime": "ASC",
@@ -1784,7 +1479,7 @@
         "h": 8,
         "w": 8,
         "x": 0,
-        "y": 24
+        "y": 17
       },
       "hiddenSeries": false,
       "id": 5,
@@ -1878,7 +1573,7 @@
         "h": 8,
         "w": 8,
         "x": 8,
-        "y": 24
+        "y": 17
       },
       "hiddenSeries": false,
       "id": 9,
@@ -2011,7 +1706,7 @@
         "h": 8,
         "w": 8,
         "x": 16,
-        "y": 24
+        "y": 17
       },
       "hiddenSeries": false,
       "id": 6,
@@ -2107,7 +1802,7 @@
         "h": 7,
         "w": 8,
         "x": 0,
-        "y": 32
+        "y": 25
       },
       "hiddenSeries": false,
       "id": 13,
@@ -2245,7 +1940,7 @@
         "h": 7,
         "w": 8,
         "x": 8,
-        "y": 32
+        "y": 25
       },
       "hiddenSeries": false,
       "id": 14,
@@ -2378,7 +2073,7 @@
         "h": 7,
         "w": 8,
         "x": 16,
-        "y": 32
+        "y": 25
       },
       "hiddenSeries": false,
       "id": 15,
@@ -2492,24 +2187,48 @@
       }
     }
   ],
-  "refresh": "30s",
+  "refresh": "",
   "schemaVersion": 30,
   "style": "dark",
-  "tags": [
-    "JVM",
-    "prometheus"
-  ],
+  "tags": [],
   "templating": {
     "list": [
       {
-        "allValue": "",
+        "allValue": null,
         "current": {
-          "selected": false,
-          "text": "jdfap-eismq01@10.12.107.206",
-          "value": "jdfap-eismq01@10.12.107.206"
+          "selected": true,
+          "text": "plantu-batch-service",
+          "value": "plantu-batch-service"
         },
         "datasource": "prometheus",
-        "definition": "label_values(java_lang_runtime_uptime{service=~\"ravencast-.*\"}, instance)",
+        "definition": "label_values(java_lang_runtime_uptime{namespace=~\"plantu.*\"}, service)",
+        "description": null,
+        "error": null,
+        "hide": 0,
+        "includeAll": false,
+        "label": "service",
+        "multi": false,
+        "name": "service",
+        "options": [],
+        "query": {
+          "query": "label_values(java_lang_runtime_uptime{namespace=~\"plantu.*\"}, service)",
+          "refId": "StandardVariableQuery"
+        },
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
+      },
+      {
+        "allValue": "",
+        "current": {
+          "selected": true,
+          "text": "jdfap-k8sw03@10.244.185.85",
+          "value": "jdfap-k8sw03@10.244.185.85"
+        },
+        "datasource": "prometheus",
+        "definition": "label_values(java_lang_runtime_uptime{service=\"$service\"}, instance)",
         "description": null,
         "error": null,
         "hide": 0,
@@ -2519,10 +2238,10 @@
         "name": "instance",
         "options": [],
         "query": {
-          "query": "label_values(java_lang_runtime_uptime{service=~\"ravencast-.*\"}, instance)",
+          "query": "label_values(java_lang_runtime_uptime{service=\"$service\"}, instance)",
           "refId": "StandardVariableQuery"
         },
-        "refresh": 1,
+        "refresh": 2,
         "regex": "",
         "skipUrlSync": false,
         "sort": 0,
@@ -2563,7 +2282,7 @@
     ]
   },
   "timezone": "",
-  "title": "Ravencast Overview",
-  "uid": "EQhgzBcnk",
-  "version": 7
+  "title": "Plantu JMX Overview",
+  "uid": "QtotlIAnz",
+  "version": 1
 }
