@@ -27,6 +27,7 @@
   vars:
     keepalived_vip: '{{ harbor_keepalived_vip }}'
     keepalived_virtual_router_id: '{{ harbor_keepalived_virtual_router_id }}'
+    keepalived_vip_gateway: '{{ harbor_keepalived_vip_gateway }}'
     keepalived_vrrp_instance_interface:
       - '{{ harbor_keepalived_vrrp_instance_interface }}'
     health_check_local_script: harbor_healthcheck.sh
