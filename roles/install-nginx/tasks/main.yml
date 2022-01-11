@@ -3,7 +3,6 @@
     line: "{{ item }}"
     path: /etc/sysctl.conf
   with_items:
-    - "fs.file-max = 65000"
     - "net.ipv4.ip_local_port_range = 1024 65000"
     - "net.ipv4.tcp_window_scaling = 1"
     - "net.core.somaxconn = 262144"

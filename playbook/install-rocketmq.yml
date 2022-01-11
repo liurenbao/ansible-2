@@ -9,6 +9,7 @@
         dest: /etc/sysctl.conf
         line: "{{ item }}"
       with_items:
+        - "fs.file-max = 2097152"
         - "vm.drop_caches = 1"
         - "vm.zone_reclaim_mode = 0"
         - "vm.dirty_background_ratio = 50"
@@ -22,7 +23,7 @@
       lineinfile:
         path: /etc/profile
         regexp: "^ulimit"
-        line: "ulimit -n 655350"
+        line: "ulimit -n 1048576"
         state: present
     - name: change /etc/security/limits.conf
       lineinfile:
@@ -30,6 +31,9 @@
         regexp: ".* memlock .*"
         line: "* - memlock      unlimited"
         state: present
+
+    - name: source /etc/profile
+      shell: source /etc/profile
 
 - name: install jdk
   gather_facts: false

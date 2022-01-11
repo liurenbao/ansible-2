@@ -8,6 +8,7 @@ After=multi-user.target
 
 [Service]
 Type=simple
+LimitNOFILE=1048576
 Environment="JAVA_OPT_EXT={{ rocketmq_jvm_args }}"
 ExecStart={{ rocketmq_root_dir }}/bin/mqbroker -c {{ rocketmq_root_dir }}/conf/2m-2s-sync/{{ broker_name }}.properties {{ broker_name }} start
 ExecStop={{ rocketmq_root_dir }}/bin/mqshutdown broker
