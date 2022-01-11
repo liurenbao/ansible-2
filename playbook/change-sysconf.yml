@@ -34,12 +34,6 @@
         state: present
       when: nf_conntrack.stat.exists == true
 
-    - name: change nf_conntrack sysconf
-      lineinfile:
-        path: /etc/sysctl.conf
-        line: "net.netfilter.nf_conntrack_tcp_timeout_established = 172800"
-        state: present
+    - name: reboot after nf_conntrack changed
+      shell: reboot now
       when: nf_conntrack.stat.exists == true
-
-    - name: sysctl /etc/sysctl.conf for nf_conntrack
-      shell: sysctl -p /etc/sysctl.conf
