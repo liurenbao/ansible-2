@@ -39,8 +39,8 @@
     state: directory
 
 - name: install health check script
-  copy:
-    src: '{{ health_check_local_script }}'
+  template:
+    src: '{{ health_check_local_script }}.j2'
     dest: '{{ keepalived_root_dir }}/{{ health_check_local_script }}'
     mode: 0744
 
