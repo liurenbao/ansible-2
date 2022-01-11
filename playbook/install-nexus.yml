@@ -1,0 +1,7 @@
+- name: install nexus
+  gather_facts: false
+  hosts: nexus
+  vars:
+    nexus_root_dir: /data01/nexus
+  roles:
+    - install-nexus

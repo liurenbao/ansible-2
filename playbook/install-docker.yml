@@ -11,5 +11,6 @@
     - svn
     - jenkins
     - zentao
+    - nexus
   roles:
     - install-docker

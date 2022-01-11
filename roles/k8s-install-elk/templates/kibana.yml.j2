@@ -63,3 +63,18 @@ spec:
   ports:
     - port: 5601
   type: ClusterIP
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: kibana
+  namespace: elk
+spec:
+  entryPoints:
+    - web
+  routes:
+    - kind: Rule
+      match: Host(`kibana{{ domain_suffix }}.cicem.fa`)
+      services:
+        - name: kibana
+          port: 5601
