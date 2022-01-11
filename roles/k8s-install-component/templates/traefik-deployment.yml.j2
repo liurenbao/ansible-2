@@ -5,7 +5,7 @@ metadata:
   namespace: traefik
 
 ---
-kind: DaemonSet
+kind: Deployment
 apiVersion: apps/v1
 metadata:
   name: traefik
@@ -13,6 +13,10 @@ metadata:
   labels:
     app: traefik
 spec:
+  replicas: 8
+  strategy:
+    rollingUpdate:
+      maxUnavailable: 1
   selector:
     matchLabels:
       app: traefik
@@ -21,6 +25,25 @@ spec:
       labels:
         app: traefik
     spec:
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: zone
+          whenUnsatisfiable: DoNotSchedule
+          labelSelector:
+            matchLabels:
+              app: traefik
+      nodeSelector:
+        traefik: 'true'
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - topologyKey: "kubernetes.io/hostname"
+              labelSelector:
+                matchExpressions:
+                  - key: app
+                    operator: In
+                    values:
+                      - traefik
       serviceAccountName: traefik-ingress-controller
       containers:
         - name: traefik
@@ -92,7 +115,6 @@ metadata:
     prometheus.io/port: '8082'
     prometheus.io/scheme: "http"
     prometheus.io/path: '/metrics'
-
 spec:
   selector:
     app: traefik

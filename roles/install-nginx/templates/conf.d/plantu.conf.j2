@@ -1,16 +1,22 @@
 upstream mesadmin {
 {% for host in groups['k8s-worker'] %}
+{% if 'traefik=true' in hostvars[host].label %}
     server {{ host }}:32701  max_fails=0;
+{% endif %}
 {% endfor %}
 }
 upstream plantuservers {
 {% for host in groups['k8s-worker'] %}
+{% if 'traefik=true' in hostvars[host].label %}
     server {{ host }}:32700  max_fails=0;
+{% endif %}
 {% endfor %}
 }
 upstream plantupirunservers {
 {% for host in groups['k8s-worker'] %}
+{% if 'traefik=true' in hostvars[host].label %}
     server {{ host }}:32700  max_fails=0;
+{% endif %}
 {% endfor %}
 }
 server {
