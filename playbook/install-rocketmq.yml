@@ -19,12 +19,7 @@
         - "vm.swappiness = 1"
         - "vm.max_map_count = 655360"
         - "vm.overcommit_memory=1"
-    - name: change /etc/profile
-      lineinfile:
-        path: /etc/profile
-        regexp: "^ulimit"
-        line: "ulimit -n 1048576"
-        state: present
+
     - name: change /etc/security/limits.conf
       lineinfile:
         path: /etc/security/limits.conf

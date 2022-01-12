@@ -106,7 +106,7 @@ spec:
     - web
   routes:
     - kind: Rule
-      match: Host(`rocketmq-console.cicem.fa`)
+      match: Host(`rocketmq-console{{ domain_suffix }}.cicem.fa`)
       services:
         - name: rocketmq-console
           port: 8080

@@ -3,7 +3,7 @@
     path: "{{ rocketmq_root_dir }}"
     state: directory
 
-- name: send rocketmq to remote
+- name: send rocketmq to remote for broker
   unarchive:
     src: "{{ rocketmq_package_dir }}/rocketmq-all-4.7.1-bin-release.tar.gz"
     dest: "{{ rocketmq_root_dir }}"
