@@ -78,7 +78,15 @@ spec:
             failureThreshold: 3
             periodSeconds: 10
             timeoutSeconds: 5
-
+      tolerations:
+        - key: node.kubernetes.io/not-ready
+          operator: Exists
+          effect: NoExecute
+          tolerationSeconds: 2
+        - key: node.kubernetes.io/unreachable
+          operator: Exists
+          effect: NoExecute
+          tolerationSeconds: 2
       restartPolicy: Always
   selector:
     matchLabels:
@@ -165,6 +173,15 @@ spec:
             periodSeconds: 10
             timeoutSeconds: 5
       restartPolicy: Always
+      tolerations:
+        - key: node.kubernetes.io/not-ready
+          operator: Exists
+          effect: NoExecute
+          tolerationSeconds: 2
+        - key: node.kubernetes.io/unreachable
+          operator: Exists
+          effect: NoExecute
+          tolerationSeconds: 2
   selector:
     matchLabels:
       app: rocketmq-exporter
