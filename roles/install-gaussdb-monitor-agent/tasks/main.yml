@@ -91,6 +91,11 @@
     job: '{{ gaussdb_monitor_agent_root_dir }}/start-agent.sh check'
     minute: "*/1"
 
+- name: wait client ready
+  wait_for:
+    port: 9998
+    timeout: 120
+
 - name: chmod agent dir
   file:
     path: '{{ gaussdb_monitor_agent_root_dir }}'
