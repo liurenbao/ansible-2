@@ -71,6 +71,7 @@
       args:
         chdir: "{{ rocketmq_root_dir }}/bin"
       with_items:
+        - test
         - spc-calc-service-chartCalc-topic
         - spc-job-check-post-process
         - spc-mes-save-param
