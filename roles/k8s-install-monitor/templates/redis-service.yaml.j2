@@ -19,6 +19,9 @@ metadata:
   annotations:
     maintainer: mouyongde@cicem.fa
     prometheus.io/tcp-probe: "true"
+    prometheus.io/scrape: "true"
+    prometheus.io/port: '9121'
+    prometheus.io/scheme: "http"
 spec:
   ports:
     - port: 6379
