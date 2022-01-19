@@ -57,12 +57,10 @@ metadata:
   namespace: monitoring
 subsets:
   - addresses:
-      - ip: 10.12.107.211
-      - ip: 10.12.107.212
-      - ip: 10.12.107.213
-      - ip: 10.12.107.214
-      - ip: 10.12.107.215
-      - ip: 10.12.107.216
+{% for host in groups['redis'] %}
+      - ip: {{ host }}
+        nodeName: {{ hostvars[host].host_name }}
+{% endfor %}
     ports:
       - port: 6379
         name: redis
@@ -100,6 +98,10 @@ spec:
           targetLabel: instance
         - targetLabel: __address__
           replacement: redis-exporter.monitoring:9121
+        - sourceLabels: [ __meta_kubernetes_pod_name ]
+          action: replace
+          targetLabel: instance
+          regex: (.*redis.*)
   selector:
     matchLabels:
       app: redis
