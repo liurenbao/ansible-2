@@ -1,0 +1,105 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis-exporter
+  namespace: monitoring
+  labels:
+    app: redis-exporter
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: redis-exporter
+      namespace: monitoring
+      labels:
+        app: redis-exporter
+    spec:
+      containers:
+        - name: redis-exporter
+          image: '{{ image_repository }}/public/redis_exporter:v1.27.0-alpine'
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: REDIS_EXPORTER_INCL_SYSTEM_METRICS
+              value: "true"
+      restartPolicy: Always
+      tolerations:
+        - key: node.kubernetes.io/not-ready
+          operator: Exists
+          effect: NoExecute
+          tolerationSeconds: 2
+        - key: node.kubernetes.io/unreachable
+          operator: Exists
+          effect: NoExecute
+          tolerationSeconds: 2
+      terminationGracePeriodSeconds: 120
+  selector:
+    matchLabels:
+      app: redis-exporter
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis-exporter
+  namespace: monitoring
+  labels:
+    app: redis-exporter
+spec:
+  selector:
+    app: redis-exporter
+  ports:
+    - port: 9121
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Endpoints
+metadata:
+  name: redis
+  namespace: monitoring
+subsets:
+  - addresses:
+      - ip: 10.12.107.211
+      - ip: 10.12.107.212
+      - ip: 10.12.107.213
+      - ip: 10.12.107.214
+      - ip: 10.12.107.215
+      - ip: 10.12.107.216
+    ports:
+      - port: 6379
+        name: redis
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis
+  labels:
+    app: redis
+spec:
+  ports:
+    - port: 6379
+      name: redis
+  type: ClusterIP
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: redis-exporter
+  namespace: monitoring
+  labels:
+    k8s-app: redis-exporter
+spec:
+  endpoints:
+    - interval: 15s
+      port: redis
+      scrapeTimeout: 10s
+      scheme: http
+      path: /scrape
+      relabelings:
+        - sourceLabels: [ __address__ ]
+          targetLabel: __param_target
+        - sourceLabels: [ __param_target ]
+          targetLabel: instance
+        - targetLabel: __address__
+          replacement: redis-exporter.monitoring:9121
+  selector:
+    matchLabels:
+      app: redis
