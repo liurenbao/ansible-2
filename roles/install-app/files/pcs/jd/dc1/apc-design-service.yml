@@ -1,0 +1,150 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: apc-design-service
+  namespace: pcs
+  annotations:
+    prometheus.io/http-probe: "true"
+    prometheus.io/http-probe-port: "true"
+    prometheus.io/http-probe-path: "/apc-design-service/api/v1/health"
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "8080"
+    prometheus.io/scheme: "http"
+    prometheus.io/path: "/apc-design-service/api/v1/actuator/prometheus"
+spec:
+  ports:
+    - name: http
+      port: 8080
+      targetPort: 8080
+  selector:
+    app: apc-design-service
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: apc-design-service
+  namespace: pcs
+spec:
+  entryPoints:
+    - web
+  routes:
+    - kind: Rule
+      match: PathPrefix(`/apc-design-service`) && Host(`pcs-uat.cicem.fa`)
+      services:
+        - name: apc-design-service
+          port: 8080
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: apc-design-service
+  namespace: pcs
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: apc-design-service
+      zone: dc1
+  template:
+    metadata:
+      labels:
+        app: apc-design-service
+        zone: dc1
+    spec:
+      imagePullSecrets:
+        - name: regcred
+      hostNetwork: false
+      tolerations:
+        - key: "node.kubernetes.io/unreachable"
+          operator: "Exists"
+          effect: "NoExecute"
+          tolerationSeconds: 2
+        - key: "node.kubernetes.io/not-ready"
+          operator: "Exists"
+          effect: "NoExecute"
+          tolerationSeconds: 2
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                topologyKey: "kubernetes.io/hostname"
+                labelSelector:
+                  matchExpressions:
+                    - key: app
+                      operator: In
+                      values:
+                        - apc-design-service
+              weight: 100
+      nodeSelector:
+        zone: dc1
+      initContainers:
+        - command:
+          - sysctl
+          - -w
+          - net.ipv4.tcp_keepalive_time=10
+          - net.ipv4.tcp_keepalive_probes=2
+          - net.ipv4.tcp_keepalive_intvl=5
+          image: 10.12.107.150:80/public/busybox:1.34
+          imagePullPolicy: Always
+          name: setsysctl
+          securityContext:
+            privileged: true   
+      volumes:
+        - name: tz-config
+          hostPath:
+          path: /usr/share/zoneinfo/Asia/Shanghai            
+      containers:
+        - name: apc-design-service
+          image: $app.image$
+          imagePullPolicy: Always
+          volumeMounts:
+          - name: tz-config
+            mountPath: /etc/localtime
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: "prod_jd"
+            - name: SERVER_PORT
+              value: "8080"
+            - name: DB_HOST
+              value: "$DB_HOST$"
+            - name: DB_PORT
+              value: "15400"
+            - name: DB_USER
+              value: "$DB_USER$"
+            - name: DB_PWD
+              value: "$DB_PWD$"
+            - name: REDIS_NODES
+              value: "$REDIS_NODES$"
+            - name: REDIS_PWD
+              value: "$REDIS_PWD$"
+          ports:
+            - containerPort: 8080
+          resources:
+            limits:
+              cpu: "1"
+              memory: 1000Mi
+            requests:
+              cpu: "0.5"
+              memory: 500Mi
+          livenessProbe:
+            httpGet:
+              path: /apc-design-service/api/v1/actuator/health/liveness
+              port: 8080
+              scheme: HTTP
+            periodSeconds: 5
+            successThreshold: 1
+            timeoutSeconds: 1
+            initialDelaySeconds: 30
+            failureThreshold: 10
+          readinessProbe:
+            httpGet:
+              path: /apc-design-service/api/v1/actuator/health/readiness
+              port: 8080
+              scheme: HTTP
+            periodSeconds: 5
+            successThreshold: 1
+            timeoutSeconds: 1
+            initialDelaySeconds: 30
+            failureThreshold: 10
+      
