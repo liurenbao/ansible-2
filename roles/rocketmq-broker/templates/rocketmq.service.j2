@@ -8,6 +8,8 @@ After=multi-user.target
 
 [Service]
 Type=simple
+User={{ rocketmq_user }}
+Group={{ rocketmq_group }}
 LimitNOFILE=1048576
 LimitMEMLOCK=infinity
 Environment="JAVA_OPT_EXT={{ rocketmq_jvm_args }}"

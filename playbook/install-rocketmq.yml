@@ -1,4 +1,4 @@
-- name: change sys conf
+- name: change sys conf for rocketmq
   gather_facts: false
   hosts:
     - rocketmq-namesrv
@@ -19,16 +19,24 @@
         - "vm.swappiness = 1"
         - "vm.max_map_count = 655360"
         - "vm.overcommit_memory=1"
-
     - name: change /etc/security/limits.conf
       lineinfile:
         path: /etc/security/limits.conf
         regexp: ".* memlock .*"
         line: "* - memlock      unlimited"
         state: present
-
     - name: source /etc/profile
       shell: source /etc/profile
+    - name: create group for rocketmq
+      group:
+        name: '{{ rocketmq_group }}'
+        state: present
+
+    - name: create user for rocketmq
+      user:
+        name: '{{ rocketmq_user }}'
+        group: '{{ rocketmq_group }}'
+        state: present
 
 - name: install jdk
   gather_facts: false

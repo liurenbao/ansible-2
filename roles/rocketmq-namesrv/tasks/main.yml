@@ -49,6 +49,13 @@
     src: rocketmq.service.j2
     dest: /usr/lib/systemd/system/rocketmq.service
 
+- name: chown rocketmq dir
+  file:
+    path: '{{ rocketmq_root_dir }}'
+    owner: '{{ rocketmq_user }}'
+    group: '{{ rocketmq_group }}'
+    recurse: yes
+
 - name: start rocketmq unit service
   systemd:
     name: rocketmq

@@ -10,9 +10,9 @@ es_initial_master_nodes: '["10.12.117.121", "10.12.117.122", "10.12.117.123"]'
 monitor_nfs_path_existed: false
 nfs_client_cidr: 10.12.117.0/24
 
-cim_ops_uid: '9999'
-cim_ops_user: 'cimops'
-cim_ops_user_pass: 'cimops_pass'
+rocketmq_user: 'rocketmq'
+rocketmq_group: 'rocketmq'
+rocketmq_user_pass: 'rocketmq'
 docker_gid: '994'
 
 # 离线文件安装包所在目录-----------------------------------------------------------------------
