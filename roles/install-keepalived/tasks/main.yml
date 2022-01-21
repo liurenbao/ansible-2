@@ -38,26 +38,40 @@
     path: '{{ keepalived_root_dir }}'
     state: directory
 
+- name: query gateway address
+  shell: grep "GATEWAY=" /etc/sysconfig/network-scripts/ifcfg-eth0
+  register: gatewayline
+
 - name: install health check script
+  vars:
+    gateway_addr: '{{ gatewayline.stdout.split("=")[1] }}'
   template:
     src: '{{ health_check_local_script }}.j2'
     dest: '{{ keepalived_root_dir }}/{{ health_check_local_script }}'
     mode: 0744
 
-- name: install cron for keepalived
-  copy:
-    src: keepalived_cron.sh
-    dest: '{{ keepalived_root_dir }}/keepalived_cron.sh'
-    mode: 0770
-
-- name: stop keepalived
-  shell: systemctl stop keepalived
+- name: copy keepalived.service
+  template:
+    src: keepalived.service
+    dest: /usr/lib/systemd/system/keepalived.service
 
 - name: start Keepalived
-  shell: systemctl restart keepalived && systemctl enable keepalived
-
-- name: add cron for keepalived
-  cron:
+  systemd:
     name: keepalived
-    minute: "*/1"
-    job: '{{ keepalived_root_dir }}/keepalived_cron.sh'
+    daemon_reload: yes
+    state: restarted
+    enabled: yes
+
+- name: remove cron shell
+  lineinfile:
+    path: /var/spool/cron/root
+    line: "{{ item }}"
+    state: absent
+  with_items:
+    - "#Ansible: keepalived"
+    - "*/1 * * * * /data01/keepalived/keepalived_cron.sh"
+
+- name: remove /data01/keepalived/keepalived_cron.sh
+  file:
+    path: /data01/keepalived/keepalived_cron.sh
+    state: absent

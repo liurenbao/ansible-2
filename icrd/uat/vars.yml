@@ -4,11 +4,8 @@
 #---------------------
 domain_suffix: "-uat"
 harbor_keepalived_vip: 192.168.160.47
-harbor_keepalived_vip_gateway: 192.168.160.126
 nginx_keepalived_vip: 192.168.160.5
-ngxin_keepalived_vip_gateway: 192.168.160.126
 k8s_keepalived_vip: 192.168.160.78
-k8s_keepalived_vip_gateway: 192.168.160.126
 es_initial_master_nodes: '["192.168.161.200", "192.168.161.199", "192.168.161.242"]'
 monitor_nfs_path_existed: false
 nfs_client_cidr: 192.168.0.0/16
