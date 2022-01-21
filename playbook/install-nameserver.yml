@@ -10,4 +10,3 @@
       with_items:
         - "nameserver 10.12.101.11"
         - "nameserver 10.12.101.12"
-        - "search cicem.fa"
