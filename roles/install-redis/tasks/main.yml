@@ -9,6 +9,14 @@
     path: '{{ redis_data_dir }}/data'
     state: directory
 
+- name: create redis logs dir
+  file:
+    path: '{{ redis_data_dir }}/logs'
+    state: directory
+
+- name: log permission
+  shell: chmod -R 777 {{ redis_data_dir }}/logs
+
 - name: copy docker compose
   template: src=docker-compose.yml.j2 dest={{ redis_data_dir }}/docker-compose.yml
 
