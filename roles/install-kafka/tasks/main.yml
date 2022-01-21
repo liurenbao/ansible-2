@@ -13,6 +13,11 @@
     path: '{{ kafka_root_dir }}'
     state: directory
 
+- name: stop existed kafka container
+  shell: docker-compose down
+  args:
+    chdir: "{{ kafka_root_dir }}"
+
 - name: install with docker compose
   template: src=docker-compose.yml.j2 dest={{ kafka_root_dir }}/docker-compose.yml
 
@@ -31,36 +36,5 @@
 - name: wait kafak ready
   wait_for:
     port: 9092
-    delay: 20
-    timeout: 60
+    timeout: 180
     msg: 'Timeout waiting for kafka respond'
-
-- name: create topic
-  command: docker-compose exec -T kafka kafka-topics.sh --zookeeper localhost:2181 --create --topic test --partitions 5 --replication-factor 1
-  args:
-    chdir: "{{ kafka_root_dir }}"
-  register: create_result
-  when: ansible_ssh_host == groups['kafka'][0]
-
-- name: show result
-  debug:
-    msg: "{{ create_result.stdout }}"
-  when: ansible_ssh_host == groups['kafka'][0]
-
-- name: list topic
-  command: docker-compose exec -T kafka  kafka-topics.sh  --zookeeper localhost:2181 --list
-  args:
-    chdir: "{{ kafka_root_dir }}"
-  register: list_result
-  when: ansible_ssh_host == groups['kafka'][0]
-
-- name: show result
-  debug:
-    msg: "{{ list_result.stdout }}"
-  when: ansible_ssh_host == groups['kafka'][0]
-
-- name: assert list result
-  assert:
-    that:
-      - "'test' in list_result.stdout_lines"
-  when: ansible_ssh_host == groups['kafka'][0]

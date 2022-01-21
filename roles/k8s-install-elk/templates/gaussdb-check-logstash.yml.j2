@@ -197,6 +197,15 @@ spec:
       securityContext:
         runAsUser: 0
         fsGroup: 1000
+      tolerations:
+        - key: node.kubernetes.io/not-ready
+          operator: Exists
+          effect: NoExecute
+          tolerationSeconds: 2
+        - key: node.kubernetes.io/unreachable
+          operator: Exists
+          effect: NoExecute
+          tolerationSeconds: 2
   selector:
     matchLabels:
       app: gaussdb-check-logstash

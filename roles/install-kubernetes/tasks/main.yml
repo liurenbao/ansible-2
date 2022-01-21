@@ -19,8 +19,16 @@
 - name: install rpm
   shell: sysctl --system
 
-- name: enable kubelet 
-  shell: systemctl enable --now kubelet
+- name: specify node ip
+  lineinfile:
+    path: /etc/sysconfig/kubelet
+    regexp: "^KUBELET_EXTRA_ARGS"
+    line: "KUBELET_EXTRA_ARGS=--node-ip={{ ansible_ssh_host }}"
+    state: present
 
 - name: restart kubelet 
-  shell: systemctl restart kubelet
+  systemd:
+    name: kubelet
+    daemon_reload: yes
+    enabled: yes
+    state: restarted

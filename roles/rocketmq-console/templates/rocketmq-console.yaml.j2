@@ -78,7 +78,15 @@ spec:
             failureThreshold: 3
             periodSeconds: 10
             timeoutSeconds: 5
-
+      tolerations:
+        - key: node.kubernetes.io/not-ready
+          operator: Exists
+          effect: NoExecute
+          tolerationSeconds: 2
+        - key: node.kubernetes.io/unreachable
+          operator: Exists
+          effect: NoExecute
+          tolerationSeconds: 2
       restartPolicy: Always
   selector:
     matchLabels:
@@ -106,7 +114,7 @@ spec:
     - web
   routes:
     - kind: Rule
-      match: Host(`rocketmq-console.cicem.fa`)
+      match: Host(`rocketmq-console{{ domain_suffix }}.cicem.fa`)
       services:
         - name: rocketmq-console
           port: 8080
@@ -165,6 +173,15 @@ spec:
             periodSeconds: 10
             timeoutSeconds: 5
       restartPolicy: Always
+      tolerations:
+        - key: node.kubernetes.io/not-ready
+          operator: Exists
+          effect: NoExecute
+          tolerationSeconds: 2
+        - key: node.kubernetes.io/unreachable
+          operator: Exists
+          effect: NoExecute
+          tolerationSeconds: 2
   selector:
     matchLabels:
       app: rocketmq-exporter

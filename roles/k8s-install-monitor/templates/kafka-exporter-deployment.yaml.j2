@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kafka-exporter
+  namespace: monitoring
+  labels:
+    app: kafka-exporter
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: kafka-exporter
+      labels:
+        app: kafka-exporter
+    spec:
+      containers:
+        - name: kafka-exporter
+          image: '{{ image_repository }}/public/kafka-exporter:1.3.1'
+          imagePullPolicy: IfNotPresent
+          args:
+            - --log.enable-sarama
+{% for host in groups['kafka'] %}
+            - --kafka.server={{ host }}:9092
+{% endfor %}
+          lifecycle:
+            preStop:
+              exec:
+                command:
+                  - sleep
+                  - "30"
+      tolerations:
+        - key: node.kubernetes.io/not-ready
+          operator: Exists
+          effect: NoExecute
+          tolerationSeconds: 2
+        - key: node.kubernetes.io/unreachable
+          operator: Exists
+          effect: NoExecute
+          tolerationSeconds: 2
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 120
+  selector:
+    matchLabels:
+      app: kafka-exporter
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kafka-exporter
+  namespace: monitoring
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: '9308'
+    prometheus.io/scheme: "http"
+spec:
+  selector:
+    app: kafka-exporter
+  ports:
+    - port: 9308
+  type: ClusterIP

@@ -70,10 +70,3 @@
   gather_facts: false
   roles:
     - install-etcd-backup-cron
-
-# 给节点打标签
-- name: label k8s node
-  hosts: k8s-master-init
-  gather_facts: false
-  roles:
-    - k8s-label-node

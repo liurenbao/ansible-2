@@ -5,7 +5,9 @@ deleteWhen=04
 fileReservedTime=168
 brokerRole=SLAVE
 flushDiskType=SYNC_FLUSH
-
+slaveReadEnable=true
+useReentrantLockWhenPutMessage=true
+sendMessageThreadPoolNums=9
 ##namesrvAddr
 namesrvAddr={{ rocketmq_namesrv_str }}
 

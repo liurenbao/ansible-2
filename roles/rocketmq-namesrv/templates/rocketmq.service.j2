@@ -8,6 +8,8 @@ After=multi-user.target
 
 [Service]
 Type=simple
+LimitNOFILE=1048576
+LimitMEMLOCK=infinity
 ExecStart={{ rocketmq_root_dir }}/bin/mqnamesrv namesrv start
 ExecStop={{ rocketmq_root_dir }}/bin/mqshutdown namesrv
 

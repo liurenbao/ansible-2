@@ -9,6 +9,7 @@
         dest: /etc/sysctl.conf
         line: "{{ item }}"
       with_items:
+        - "fs.file-max = 2097152"
         - "vm.drop_caches = 1"
         - "vm.zone_reclaim_mode = 0"
         - "vm.dirty_background_ratio = 50"
@@ -18,18 +19,16 @@
         - "vm.swappiness = 1"
         - "vm.max_map_count = 655360"
         - "vm.overcommit_memory=1"
-    - name: change /etc/profile
-      lineinfile:
-        path: /etc/profile
-        regexp: "^ulimit"
-        line: "ulimit -n 655350"
-        state: present
+
     - name: change /etc/security/limits.conf
       lineinfile:
         path: /etc/security/limits.conf
         regexp: ".* memlock .*"
         line: "* - memlock      unlimited"
         state: present
+
+    - name: source /etc/profile
+      shell: source /etc/profile
 
 - name: install jdk
   gather_facts: false
@@ -72,6 +71,7 @@
       args:
         chdir: "{{ rocketmq_root_dir }}/bin"
       with_items:
+        - test
         - spc-calc-service-chartCalc-topic
         - spc-job-check-post-process
         - spc-mes-save-param

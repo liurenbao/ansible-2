@@ -88,7 +88,7 @@ spec:
               path: /ready
               port: 8181
               scheme: HTTP
-            periodSeconds: 10
+            periodSeconds: 3
             successThreshold: 1
             timeoutSeconds: 1
           resources:
@@ -126,6 +126,14 @@ spec:
           operator: Exists
         - effect: NoSchedule
           key: node-role.kubernetes.io/master
+        - key: node.kubernetes.io/not-ready
+          operator: Exists
+          effect: NoExecute
+          tolerationSeconds: 2
+        - key: node.kubernetes.io/unreachable
+          operator: Exists
+          effect: NoExecute
+          tolerationSeconds: 2
       volumes:
         - configMap:
             defaultMode: 420

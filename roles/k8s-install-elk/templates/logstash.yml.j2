@@ -49,7 +49,7 @@ data:
         match => { "message" => "%{TIMESTAMP:timestamp}(:)?%{SPACE}\[%{PROG:program}\|%{LOGLEVEL:level}\]" }
         match => { "message" => "\[%{MES_SOURCE:SOURCE}\]%{SPACE}%{DATA:kv_message}\n%{GREEDYDATA:content}" }
         match => { "message" => "%{NGINX_ERROR_TIMESTAMP:timestamp}%{SPACE}%{LOGLEVEL:level}%{SPACE}%{GREEDYDATA}" }
-        match => { "message" => "%{TIMESTAMP:timestamp}%{SPACE}%?\[?{LOGLEVEL:level}\]?" }
+        match => { "message" => "%{TIMESTAMP:timestamp}%{SPACE}%?\[?%{LOGLEVEL:level}\]?" }
         match => { "message" => "%{IMPRECISE_TIMESTAMP:timestamp}%{GREEDYDATA}" }
         match => { "message" => "%{TIMESTAMP_ISO8601:timestamp}%{GREEDYDATA}" }
         match => { "message" => "%{TIMESTAMP:timestamp}%{GREEDYDATA}" }
@@ -182,7 +182,8 @@ spec:
           lifecycle:
             preStop:
               exec:
-                command: [ "sleep", "30" ]
+                command: [ "sleep", "40" ]
+      terminationGracePeriodSeconds: 120
       volumes:
         - name: logstash-config
           configMap:

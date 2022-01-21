@@ -41,6 +41,16 @@ spec:
               subPath: kibana.yml
               name: kibana-config
       restartPolicy: Always
+      tolerations:
+        - key: node.kubernetes.io/not-ready
+          operator: Exists
+          effect: NoExecute
+          tolerationSeconds: 2
+        - key: node.kubernetes.io/unreachable
+          operator: Exists
+          effect: NoExecute
+          tolerationSeconds: 2
+
       volumes:
         - name: kibana-config
           configMap:
