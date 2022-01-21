@@ -7,8 +7,10 @@ brokerRole=SLAVE
 flushDiskType=SYNC_FLUSH
 slaveReadEnable=true
 useReentrantLockWhenPutMessage=true
-sendMessageThreadPoolNums=9
-##namesrvAddr
+maxTransferCountOnMessageInMemory=500
+waitTimeMillsInSendQueue=3000
+osPageCacheBusyTimeOutMills=5000
+sendMessageThreadPoolNums=16
 namesrvAddr={{ rocketmq_namesrv_str }}
 
 ##Broker
@@ -18,7 +20,7 @@ autoCreateTopicEnable = false
 
 #default 4M
 maxMessageSize = 2097152
-defaultTopicQueueNums = 4
+defaultTopicQueueNums = 16
 
 #brokerIP1
 brokerIP1 = {{ ansible_ssh_host }}
