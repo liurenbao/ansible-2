@@ -1,0 +1,14 @@
+- name: ensure gitlab dir exist
+  file:
+    path: /data01/gitlab
+    state: directory
+
+- name: send gitlab docker-compose file
+  template:
+    src: docker-compose.yaml.j2
+    dest: /data01/gitlab/docker-compose.yaml
+
+- name: start gitlab docker container
+  shell: docker-compose up -d
+  args:
+    chdir: /data01/gitlab
