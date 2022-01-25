@@ -21,25 +21,6 @@ spec:
       labels:
         app: traefik
     spec:
-      topologySpreadConstraints:
-        - maxSkew: 1
-          topologyKey: zone
-          whenUnsatisfiable: DoNotSchedule
-          labelSelector:
-            matchLabels:
-              app: traefik
-      nodeSelector:
-        traefik: 'true'
-      affinity:
-        podAntiAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            - topologyKey: "kubernetes.io/hostname"
-              labelSelector:
-                matchExpressions:
-                  - key: app
-                    operator: In
-                    values:
-                      - traefik
       serviceAccountName: traefik-ingress-controller
       initContainers:
         - name: wait-api
