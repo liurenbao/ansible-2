@@ -13,3 +13,20 @@
 192.168.160.31
 
 163网段VIP: 238~253
+
+没开机的机器
+10.12.105.36               : ok=0    changed=0    unreachable=1    failed=0    skipped=0    rescued=0    ignored=0
+10.12.107.36               : ok=0    changed=0    unreachable=1    failed=0    skipped=0    rescued=0    ignored=0
+10.12.111.11               : ok=0    changed=0    unreachable=1    failed=0    skipped=0    rescued=0    ignored=0
+10.12.111.12               : ok=0    changed=0    unreachable=1    failed=0    skipped=0    rescued=0    ignored=0
+10.12.111.13               : ok=0    changed=0    unreachable=1    failed=0    skipped=0    rescued=0    ignored=0
+10.12.111.14               : ok=0    changed=0    unreachable=1    failed=0    skipped=0    rescued=0    ignored=0
+10.12.111.15               : ok=0    changed=0    unreachable=1    failed=0    skipped=0    rescued=0    ignored=0
+10.12.111.16               : ok=0    changed=0    unreachable=1    failed=0    skipped=0    rescued=0    ignored=0
+10.12.111.17               : ok=0    changed=0    unreachable=1    failed=0    skipped=0    rescued=0    ignored=0
+10.12.111.19               : ok=0    changed=0    unreachable=1    failed=0    skipped=0    rescued=0    ignored=0
+10.12.111.20               : ok=0    changed=0    unreachable=1    failed=0    skipped=0    rescued=0    ignored=0
+10.12.113.11               : ok=0    changed=0    unreachable=1    failed=0    skipped=0    rescued=0    ignored=0
+10.12.113.17               : ok=0    changed=0    unreachable=1    failed=0    skipped=0    rescued=0    ignored=0
+10.12.118.91               : ok=0    changed=0    unreachable=1    failed=0    skipped=0    rescued=0    ignored=0
+10.12.118.92               : ok=0    changed=0    unreachable=1    failed=0    skipped=0    rescued=0    ignored=0

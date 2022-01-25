@@ -5,7 +5,7 @@ metadata:
   namespace: traefik
 
 ---
-kind: Deployment
+kind: DaemonSet
 apiVersion: apps/v1
 metadata:
   name: traefik
@@ -13,10 +13,6 @@ metadata:
   labels:
     app: traefik
 spec:
-  replicas: 8
-  strategy:
-    rollingUpdate:
-      maxUnavailable: 1
   selector:
     matchLabels:
       app: traefik
@@ -45,6 +41,10 @@ spec:
                     values:
                       - traefik
       serviceAccountName: traefik-ingress-controller
+      initContainers:
+        - name: wait-api
+          image: "{{ image_repository }}/public/busybox:1.34"
+          command: [ 'sh', '-c', 'until [ $KUBERNETES_SERVICE_HOST ] && [ $KUBERNETES_SERVICE_PORT ] && test -d /var/run/secrets/kubernetes.io/serviceaccount; do echo "Waiting for precondition availability";sleep 1;done;' ]
       containers:
         - name: traefik
           image: "{{ image_repository }}/traefik/traefik:v2.4.9"

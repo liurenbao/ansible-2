@@ -1,0 +1,135 @@
+kind: ServiceAccount
+apiVersion: v1
+metadata:
+  name: elastalert2
+  namespace: monitoring
+  labels:
+    app: elastalert2
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: elastalert2-config
+  namespace: monitoring
+  labels:
+    app: elastalert2
+data:
+  elastalert_config: |-
+    rules_folder: /opt/elastalert/rules
+    scan_subdirectories: false
+    run_every:
+      minutes: 1
+    buffer_time:
+      minutes: 15
+    es_host: elasticsearch.elk
+    es_port: 9200
+    writeback_index: elastalert
+    use_ssl: False
+    verify_certs: True
+    alert_time_limit:
+      minutes: 2880
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: elastalert2-rules
+  namespace: monitoring
+  labels:
+    app: elastalert2
+data:
+  deadman_slack: |-
+    name: Deadman Switch Slack
+    type: frequency
+    index: log-redis-example-test-*
+    num_events: 3
+    timeframe:
+      minutes: 3
+    filter:
+      - term:
+          message: "ERROR"
+    alert:
+      - email:
+          from_addr: "log-alert@cicem.fa"
+          email: "tangjizhou@cicem.fa"
+          smtp_host: "10.12.107.211"
+          smtp_port: 587
+          smtp_ssl: false
+          smtp_auth_file: auth/email-auth.yaml
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: email-auth
+  namespace: monitoring
+data:
+  email-auth: |
+    user: log-alert@cicem.fa
+    password: Icrd@777.com
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: elastalert2
+  namespace: monitoring
+  labels:
+    app: elastalert2
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: elastalert2
+  template:
+    metadata:
+      labels:
+        app: elastalert2
+    spec:
+      volumes:
+        - name: email-auth
+          configMap:
+            name: email-auth
+            defaultMode: 420
+            items:
+              - key: email-auth
+                path: email-auth.yaml
+        - name: rules
+          configMap:
+            name: elastalert2-rules
+            defaultMode: 420
+        - name: config
+          configMap:
+            name: elastalert2-config
+            items:
+              - key: elastalert_config
+                path: config.yaml
+            defaultMode: 420
+      containers:
+        - name: elastalert
+          image: 10.12.107.150:80/public/elastalert2:2.2.3
+          resources:
+            requests:
+              cpu: '0.2'
+              memory: 300Mi
+            limits:
+              cpu: '2'
+              memory: 4Gi
+          volumeMounts:
+            - name: config
+              mountPath: /opt/elastalert/config.yaml
+              subPath: config.yaml
+            - name: rules
+              mountPath: /opt/elastalert/rules
+            - name: email-auth
+              mountPath: /opt/elastalert/rules/auth
+          imagePullPolicy: IfNotPresent
+          securityContext:
+            runAsUser: 1000
+            runAsNonRoot: true
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      dnsPolicy: ClusterFirst
+      serviceAccountName: elastalert2
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000

@@ -60,8 +60,6 @@
     - "#Ansible: ntpdate"
     - "@hourly /usr/sbin/service ntpd stop && /usr/sbin/ntpdate 10.13.253.12 && /usr/sbin/hwclock -w && /usr/sbin/service ntpd start"
 
-
-
 - name: overide ntpd systemd service
   template:
     src: ntpd.service.j2

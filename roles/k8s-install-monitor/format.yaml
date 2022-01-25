@@ -1,0 +1,17 @@
+name: Deadman Switch Slack
+type: frequency
+index: log-redis-example-test-*
+num_events: 3
+timeframe:
+  minutes: 3
+filter:
+  - term:
+      message: "ERROR"
+alert:
+  - email:
+      from_addr: "log-alert@cicem.fa"
+      email: "tangjizhou@cicem.fa"
+      smtp_host: "10.12.107.211"
+      smtp_port: 587
+      smtp_ssl: false
+      smtp_auth_file: auth/email-auth.yaml

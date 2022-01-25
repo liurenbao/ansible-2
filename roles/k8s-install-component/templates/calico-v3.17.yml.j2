@@ -3644,7 +3644,7 @@ spec:
             - name: CALICO_IPV4POOL_CIDR
               value: "{{ pod_network_cidr }}"
             - name: IP_AUTODETECTION_METHOD
-              value: can-reach=10.96.0.10      
+              value: interface=eth0
             # Disable file logging so `kubectl logs` works.
             - name: CALICO_DISABLE_FILE_LOGGING
               value: "true"
