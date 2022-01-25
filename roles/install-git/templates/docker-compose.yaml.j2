@@ -1,0 +1,15 @@
+version: '3'
+services:
+  gitlab:
+    container_name: gitlab
+    image: "{{ image_repository }}/public/gitlab/gitlab-ce:latest"
+    restart: always
+    environment:
+      external_url: http://gitlab.cicem.fa
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - "./config:/etc/gitlab"
+      - "./logs:/var/log/gitlab"
+      - "./data:/var/opt/gitlab"
