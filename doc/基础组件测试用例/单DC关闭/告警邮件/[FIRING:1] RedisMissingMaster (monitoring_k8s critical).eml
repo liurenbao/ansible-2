@@ -1,0 +1,189 @@
+Return-Path: <alertmanager@cicem.fa>
+Received: from cicem.fa
+	by cicem.fa with LMTP
+	id MM8mDMDq4GGLWwEA1AXqKw
+	(envelope-from <alertmanager@cicem.fa>); Fri, 14 Jan 2022 11:15:12 +0800
+Received: from localhost ([10.12.107.116])
+	by cicem.fa (Haraka/2.8.27) with ESMTP id D763659F-9581-460D-A404-CDA40391BEC0.1
+	envelope-from <alertmanager@cicem.fa>;
+	Fri, 14 Jan 2022 11:15:12 +0800
+To: tangjizhou@cicem.fa, mouyongde@cicem.fa
+From: alertmanager@cicem.fa
+Subject: [FIRING:1] RedisMissingMaster (monitoring/k8s critical)
+Message-Id: <1642130112125664769.14924677160730635304@alertmanager-main-0>
+Date: Fri, 14 Jan 2022 11:15:12 +0800
+Content-Type: multipart/alternative;  boundary=8dc3ae8820ead782da0019a077fd92c04eaca5e29a590f13bd63f2f6a60e
+MIME-Version: 1.0
+
+--8dc3ae8820ead782da0019a077fd92c04eaca5e29a590f13bd63f2f6a60e
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/html; charset=UTF-8
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.=
+w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns=3D"http://www.w3.org/1999/xhtml" xmlns=3D"http://www.w3.org/199=
+9/xhtml" style=3D"font-family: 'Helvetica Neue', Helvetica, Arial, sans-ser=
+if; box-sizing: border-box; font-size: 14px; margin: 0;">
+<head style=3D"font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;=
+ box-sizing: border-box; font-size: 14px; margin: 0;">
+<meta name=3D"viewport" content=3D"width=3Ddevice-width" style=3D"font-fami=
+ly: 'Helvetica Neue', Helvetica, Arial, sans-serif; box-sizing: border-box;=
+ font-size: 14px; margin: 0;" />
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3DUTF-8" st=
+yle=3D"font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; box-siz=
+ing: border-box; font-size: 14px; margin: 0;" />
+<title style=3D"font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif=
+; box-sizing: border-box; font-size: 14px; margin: 0;">[FIRING:1] RedisMiss=
+ingMaster (monitoring/k8s critical)</title>
+
+</head>
+
+<body itemscope=3D"" itemtype=3D"http://schema.org/EmailMessage" style=3D"f=
+ont-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; box-sizing: bor=
+der-box; font-size: 14px; -webkit-font-smoothing: antialiased; -webkit-text=
+-size-adjust: none; height: 100%; line-height: 1.6em; width: 100% !importan=
+t; background-color: #f6f6f6; margin: 0; padding: 0;" bgcolor=3D"#f6f6f6">
+
+<table style=3D"font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif=
+; box-sizing: border-box; font-size: 14px; width: 100%; background-color: #=
+f6f6f6; margin: 0;" bgcolor=3D"#f6f6f6">
+  <tr style=3D"font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;=
+ box-sizing: border-box; font-size: 14px; margin: 0;">
+    <td style=3D"font-family: 'Helvetica Neue', Helvetica, Arial, sans-seri=
+f; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0;=
+" valign=3D"top"></td>
+    <td width=3D"600" style=3D"font-family: 'Helvetica Neue', Helvetica, Ar=
+ial, sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: t=
+op; display: block !important; max-width: 600px !important; clear: both !im=
+portant; width: 100% !important; margin: 0 auto; padding: 0;" valign=3D"top=
+">
+      <div style=3D"font-family: 'Helvetica Neue', Helvetica, Arial, sans-s=
+erif; box-sizing: border-box; font-size: 14px; max-width: 600px; display: b=
+lock; margin: 0 auto; padding: 0;">
+        <table width=3D"100%" cellpadding=3D"0" cellspacing=3D"0" style=3D"=
+font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; box-sizing: bo=
+rder-box; font-size: 14px; border-radius: 3px; background-color: #fff; marg=
+in: 0; border: 1px solid #e9e9e9;" bgcolor=3D"#fff">
+          <tr style=3D"font-family: 'Helvetica Neue', Helvetica, Arial, san=
+s-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
+            <td style=3D"font-family: 'Helvetica Neue', Helvetica, Arial, s=
+ans-serif; box-sizing: border-box; font-size: 16px; vertical-align: top; co=
+lor: #fff; font-weight: 500; text-align: center; border-radius: 3px 3px 0 0=
+; background-color: #E6522C; margin: 0; padding: 20px;" align=3D"center" bg=
+color=3D"#E6522C" valign=3D"top">
+              1 alert for=20
+                alertname=3DRedisMissingMaster
+             =20
+            </td>
+          </tr>
+          <tr style=3D"font-family: 'Helvetica Neue', Helvetica, Arial, san=
+s-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
+            <td style=3D"font-family: 'Helvetica Neue', Helvetica, Arial, s=
+ans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; ma=
+rgin: 0; padding: 10px;" valign=3D"top">
+              <table width=3D"100%" cellpadding=3D"0" cellspacing=3D"0" sty=
+le=3D"font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; box-sizi=
+ng: border-box; font-size: 14px; margin: 0;">
+                <tr style=3D"font-family: 'Helvetica Neue', Helvetica, Aria=
+l, sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
+                  <td style=3D"font-family: 'Helvetica Neue', Helvetica, Ar=
+ial, sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: t=
+op; margin: 0; padding: 0 0 20px;" valign=3D"top">
+                    <a href=3D"http://alertmanager.cicem.fa/#/alerts?receiv=
+er=3Dapp-pager" style=3D"font-family: 'Helvetica Neue', Helvetica, Arial, s=
+ans-serif; box-sizing: border-box; font-size: 14px; color: #FFF; text-decor=
+ation: none; line-height: 2em; font-weight: bold; text-align: center; curso=
+r: pointer; display: inline-block; border-radius: 5px; text-transform: capi=
+talize; background-color: #348eda; margin: 0; border-color: #348eda; border=
+-style: solid; border-width: 10px 20px;">View in AlertManager</a>
+                  </td>
+                </tr>
+               =20
+                <tr style=3D"font-family: 'Helvetica Neue', Helvetica, Aria=
+l, sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
+                  <td style=3D"font-family: 'Helvetica Neue', Helvetica, Ar=
+ial, sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: t=
+op; margin: 0; padding: 0 0 20px;" valign=3D"top">
+                    <strong style=3D"font-family: 'Helvetica Neue', Helveti=
+ca, Arial, sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;"=
+>[1] Firing</strong>
+                  </td>
+                </tr>
+               =20
+               =20
+                <tr style=3D"font-family: 'Helvetica Neue', Helvetica, Aria=
+l, sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
+                  <td style=3D"font-family: 'Helvetica Neue', Helvetica, Ar=
+ial, sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: t=
+op; margin: 0; padding: 0 0 20px;" valign=3D"top">
+                    <strong style=3D"font-family: 'Helvetica Neue', Helveti=
+ca, Arial, sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;"=
+>Labels</strong><br style=3D"font-family: 'Helvetica Neue', Helvetica, Aria=
+l, sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;" />
+                    alertname =3D RedisMissingMaster<br style=3D"font-famil=
+y: 'Helvetica Neue', Helvetica, Arial, sans-serif; box-sizing: border-box; =
+font-size: 14px; margin: 0;" />prometheus =3D monitoring/k8s<br style=3D"fo=
+nt-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; box-sizing: bord=
+er-box; font-size: 14px; margin: 0;" />severity =3D critical<br style=3D"fo=
+nt-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; box-sizing: bord=
+er-box; font-size: 14px; margin: 0;" />
+                    <strong style=3D"font-family: 'Helvetica Neue', Helveti=
+ca, Arial, sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;"=
+>Annotations</strong><br style=3D"font-family: 'Helvetica Neue', Helvetica,=
+ Arial, sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;" />
+                    description =3D Redis cluster has too few master nodes.=
+  VALUE =3D 2<br style=3D"font-family: 'Helvetica Neue', Helvetica, Arial, =
+sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;" />summary =
+=3D Redis missing master (instance )<br style=3D"font-family: 'Helvetica Ne=
+ue', Helvetica, Arial, sans-serif; box-sizing: border-box; font-size: 14px;=
+ margin: 0;" />
+                    <a href=3D"http://prometheus.cicem.fa/graph?g0.expr=3D%=
+28count%28redis_instance_info%7Brole%3D%22master%22%7D%29&#43;or&#43;vector=
+%280%29%29&#43;%3C&#43;3&amp;g0.tab=3D1" style=3D"font-family: 'Helvetica N=
+eue', Helvetica, Arial, sans-serif; box-sizing: border-box; font-size: 14px=
+; color: #348eda; text-decoration: underline; margin: 0;">Source</a><br sty=
+le=3D"font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; box-sizi=
+ng: border-box; font-size: 14px; margin: 0;" />
+                  </td>
+                </tr>
+               =20
+
+               =20
+               =20
+              </table>
+            </td>
+          </tr>
+        </table>
+
+        <div style=3D"font-family: 'Helvetica Neue', Helvetica, Arial, sans=
+-serif; box-sizing: border-box; font-size: 14px; width: 100%; clear: both; =
+color: #999; margin: 0; padding: 20px;">
+          <table width=3D"100%" style=3D"font-family: 'Helvetica Neue', Hel=
+vetica, Arial, sans-serif; box-sizing: border-box; font-size: 14px; margin:=
+ 0;">
+            <tr style=3D"font-family: 'Helvetica Neue', Helvetica, Arial, s=
+ans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
+              <td style=3D"font-family: 'Helvetica Neue', Helvetica, Arial,=
+ sans-serif; box-sizing: border-box; font-size: 12px; vertical-align: top; =
+text-align: center; color: #999; margin: 0; padding: 0 0 20px;" align=3D"ce=
+nter" valign=3D"top"><a href=3D"http://alertmanager.cicem.fa" style=3D"font=
+-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; box-sizing: border=
+-box; font-size: 12px; color: #999; text-decoration: underline; margin: 0;"=
+>Sent by AlertManager</a></td>
+            </tr>
+          </table>
+        </div></div>
+    </td>
+    <td style=3D"font-family: 'Helvetica Neue', Helvetica, Arial, sans-seri=
+f; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0;=
+" valign=3D"top"></td>
+  </tr>
+</table>
+
+</body>
+</html>
+
+
+--8dc3ae8820ead782da0019a077fd92c04eaca5e29a590f13bd63f2f6a60e--

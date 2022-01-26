@@ -1,0 +1,213 @@
+Return-Path: <alertmanager@cicem.fa>
+Received: from cicem.fa
+	by cicem.fa with LMTP
+	id kPnPCiLt4GFmXgEA1AXqKw
+	(envelope-from <alertmanager@cicem.fa>); Fri, 14 Jan 2022 11:25:22 +0800
+Received: from localhost ([10.12.107.116])
+	by cicem.fa (Haraka/2.8.27) with ESMTP id 8BBDD741-32DD-4C07-88AE-B5441A85E596.1
+	envelope-from <alertmanager@cicem.fa>;
+	Fri, 14 Jan 2022 11:25:22 +0800
+Subject: [FIRING:1] PrometheusErrorSendingAlertsToSomeAlertmanagers (http://10.244.54.17:9093/api/v1/alerts prometheus web 10.244.22.16:9090 prometheus-k8s monitoring prometheus-k8s-0 monitoring/k8s prometheus-k8s warning)
+To: tangjizhou@cicem.fa, mouyongde@cicem.fa
+From: alertmanager@cicem.fa
+Message-Id: <1642130722123741101.13167361134247960641@alertmanager-main-0>
+Date: Fri, 14 Jan 2022 11:25:22 +0800
+Content-Type: multipart/alternative;  boundary=53abc8399390d69a772dfc710cd81556267d4b6eeb85e6cb1117c1c910b6
+MIME-Version: 1.0
+
+--53abc8399390d69a772dfc710cd81556267d4b6eeb85e6cb1117c1c910b6
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/html; charset=UTF-8
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.=
+w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns=3D"http://www.w3.org/1999/xhtml" xmlns=3D"http://www.w3.org/199=
+9/xhtml" style=3D"font-family: 'Helvetica Neue', Helvetica, Arial, sans-ser=
+if; box-sizing: border-box; font-size: 14px; margin: 0;">
+<head style=3D"font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;=
+ box-sizing: border-box; font-size: 14px; margin: 0;">
+<meta name=3D"viewport" content=3D"width=3Ddevice-width" style=3D"font-fami=
+ly: 'Helvetica Neue', Helvetica, Arial, sans-serif; box-sizing: border-box;=
+ font-size: 14px; margin: 0;" />
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3DUTF-8" st=
+yle=3D"font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; box-siz=
+ing: border-box; font-size: 14px; margin: 0;" />
+<title style=3D"font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif=
+; box-sizing: border-box; font-size: 14px; margin: 0;">[FIRING:1] Prometheu=
+sErrorSendingAlertsToSomeAlertmanagers (http://10.244.54.17:9093/api/v1/ale=
+rts prometheus web 10.244.22.16:9090 prometheus-k8s monitoring prometheus-k=
+8s-0 monitoring/k8s prometheus-k8s warning)</title>
+
+</head>
+
+<body itemscope=3D"" itemtype=3D"http://schema.org/EmailMessage" style=3D"f=
+ont-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; box-sizing: bor=
+der-box; font-size: 14px; -webkit-font-smoothing: antialiased; -webkit-text=
+-size-adjust: none; height: 100%; line-height: 1.6em; width: 100% !importan=
+t; background-color: #f6f6f6; margin: 0; padding: 0;" bgcolor=3D"#f6f6f6">
+
+<table style=3D"font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif=
+; box-sizing: border-box; font-size: 14px; width: 100%; background-color: #=
+f6f6f6; margin: 0;" bgcolor=3D"#f6f6f6">
+  <tr style=3D"font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;=
+ box-sizing: border-box; font-size: 14px; margin: 0;">
+    <td style=3D"font-family: 'Helvetica Neue', Helvetica, Arial, sans-seri=
+f; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0;=
+" valign=3D"top"></td>
+    <td width=3D"600" style=3D"font-family: 'Helvetica Neue', Helvetica, Ar=
+ial, sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: t=
+op; display: block !important; max-width: 600px !important; clear: both !im=
+portant; width: 100% !important; margin: 0 auto; padding: 0;" valign=3D"top=
+">
+      <div style=3D"font-family: 'Helvetica Neue', Helvetica, Arial, sans-s=
+erif; box-sizing: border-box; font-size: 14px; max-width: 600px; display: b=
+lock; margin: 0 auto; padding: 0;">
+        <table width=3D"100%" cellpadding=3D"0" cellspacing=3D"0" style=3D"=
+font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; box-sizing: bo=
+rder-box; font-size: 14px; border-radius: 3px; background-color: #fff; marg=
+in: 0; border: 1px solid #e9e9e9;" bgcolor=3D"#fff">
+          <tr style=3D"font-family: 'Helvetica Neue', Helvetica, Arial, san=
+s-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
+            <td style=3D"font-family: 'Helvetica Neue', Helvetica, Arial, s=
+ans-serif; box-sizing: border-box; font-size: 16px; vertical-align: top; co=
+lor: #fff; font-weight: 500; text-align: center; border-radius: 3px 3px 0 0=
+; background-color: #E6522C; margin: 0; padding: 20px;" align=3D"center" bg=
+color=3D"#E6522C" valign=3D"top">
+              1 alert for=20
+                alertname=3DPrometheusErrorSendingAlertsToSomeAlertmanagers
+             =20
+            </td>
+          </tr>
+          <tr style=3D"font-family: 'Helvetica Neue', Helvetica, Arial, san=
+s-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
+            <td style=3D"font-family: 'Helvetica Neue', Helvetica, Arial, s=
+ans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; ma=
+rgin: 0; padding: 10px;" valign=3D"top">
+              <table width=3D"100%" cellpadding=3D"0" cellspacing=3D"0" sty=
+le=3D"font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; box-sizi=
+ng: border-box; font-size: 14px; margin: 0;">
+                <tr style=3D"font-family: 'Helvetica Neue', Helvetica, Aria=
+l, sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
+                  <td style=3D"font-family: 'Helvetica Neue', Helvetica, Ar=
+ial, sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: t=
+op; margin: 0; padding: 0 0 20px;" valign=3D"top">
+                    <a href=3D"http://alertmanager.cicem.fa/#/alerts?receiv=
+er=3Dapp-pager" style=3D"font-family: 'Helvetica Neue', Helvetica, Arial, s=
+ans-serif; box-sizing: border-box; font-size: 14px; color: #FFF; text-decor=
+ation: none; line-height: 2em; font-weight: bold; text-align: center; curso=
+r: pointer; display: inline-block; border-radius: 5px; text-transform: capi=
+talize; background-color: #348eda; margin: 0; border-color: #348eda; border=
+-style: solid; border-width: 10px 20px;">View in AlertManager</a>
+                  </td>
+                </tr>
+               =20
+                <tr style=3D"font-family: 'Helvetica Neue', Helvetica, Aria=
+l, sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
+                  <td style=3D"font-family: 'Helvetica Neue', Helvetica, Ar=
+ial, sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: t=
+op; margin: 0; padding: 0 0 20px;" valign=3D"top">
+                    <strong style=3D"font-family: 'Helvetica Neue', Helveti=
+ca, Arial, sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;"=
+>[1] Firing</strong>
+                  </td>
+                </tr>
+               =20
+               =20
+                <tr style=3D"font-family: 'Helvetica Neue', Helvetica, Aria=
+l, sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
+                  <td style=3D"font-family: 'Helvetica Neue', Helvetica, Ar=
+ial, sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: t=
+op; margin: 0; padding: 0 0 20px;" valign=3D"top">
+                    <strong style=3D"font-family: 'Helvetica Neue', Helveti=
+ca, Arial, sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;"=
+>Labels</strong><br style=3D"font-family: 'Helvetica Neue', Helvetica, Aria=
+l, sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;" />
+                    alertname =3D PrometheusErrorSendingAlertsToSomeAlertma=
+nagers<br style=3D"font-family: 'Helvetica Neue', Helvetica, Arial, sans-se=
+rif; box-sizing: border-box; font-size: 14px; margin: 0;" />alertmanager =
+=3D http://10.244.54.17:9093/api/v1/alerts<br style=3D"font-family: 'Helvet=
+ica Neue', Helvetica, Arial, sans-serif; box-sizing: border-box; font-size:=
+ 14px; margin: 0;" />container =3D prometheus<br style=3D"font-family: 'Hel=
+vetica Neue', Helvetica, Arial, sans-serif; box-sizing: border-box; font-si=
+ze: 14px; margin: 0;" />endpoint =3D web<br style=3D"font-family: 'Helvetic=
+a Neue', Helvetica, Arial, sans-serif; box-sizing: border-box; font-size: 1=
+4px; margin: 0;" />instance =3D 10.244.22.16:9090<br style=3D"font-family: =
+'Helvetica Neue', Helvetica, Arial, sans-serif; box-sizing: border-box; fon=
+t-size: 14px; margin: 0;" />job =3D prometheus-k8s<br style=3D"font-family:=
+ 'Helvetica Neue', Helvetica, Arial, sans-serif; box-sizing: border-box; fo=
+nt-size: 14px; margin: 0;" />namespace =3D monitoring<br style=3D"font-fami=
+ly: 'Helvetica Neue', Helvetica, Arial, sans-serif; box-sizing: border-box;=
+ font-size: 14px; margin: 0;" />pod =3D prometheus-k8s-0<br style=3D"font-f=
+amily: 'Helvetica Neue', Helvetica, Arial, sans-serif; box-sizing: border-b=
+ox; font-size: 14px; margin: 0;" />prometheus =3D monitoring/k8s<br style=
+=3D"font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; box-sizing=
+: border-box; font-size: 14px; margin: 0;" />service =3D prometheus-k8s<br =
+style=3D"font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; box-s=
+izing: border-box; font-size: 14px; margin: 0;" />severity =3D warning<br s=
+tyle=3D"font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; box-si=
+zing: border-box; font-size: 14px; margin: 0;" />
+                    <strong style=3D"font-family: 'Helvetica Neue', Helveti=
+ca, Arial, sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;"=
+>Annotations</strong><br style=3D"font-family: 'Helvetica Neue', Helvetica,=
+ Arial, sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;" />
+                    description =3D 2.1% errors while sending alerts from P=
+rometheus monitoring/prometheus-k8s-0 to Alertmanager http://10.244.54.17:9=
+093/api/v1/alerts.<br style=3D"font-family: 'Helvetica Neue', Helvetica, Ar=
+ial, sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;" />sum=
+mary =3D Prometheus has encountered more than 1% errors sending alerts to a=
+ specific Alertmanager.<br style=3D"font-family: 'Helvetica Neue', Helvetic=
+a, Arial, sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;" =
+/>
+                    <a href=3D"http://prometheus.cicem.fa/graph?g0.expr=3D%=
+28rate%28prometheus_notifications_errors_total%7Bjob%3D%22prometheus-k8s%22=
+%2Cnamespace%3D%22monitoring%22%7D%5B5m%5D%29&#43;%2F&#43;rate%28prometheus=
+_notifications_sent_total%7Bjob%3D%22prometheus-k8s%22%2Cnamespace%3D%22mon=
+itoring%22%7D%5B5m%5D%29%29&#43;%2A&#43;100&#43;%3E&#43;1&amp;g0.tab=3D1" s=
+tyle=3D"font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; box-si=
+zing: border-box; font-size: 14px; color: #348eda; text-decoration: underli=
+ne; margin: 0;">Source</a><br style=3D"font-family: 'Helvetica Neue', Helve=
+tica, Arial, sans-serif; box-sizing: border-box; font-size: 14px; margin: 0=
+;" />
+                  </td>
+                </tr>
+               =20
+
+               =20
+               =20
+              </table>
+            </td>
+          </tr>
+        </table>
+
+        <div style=3D"font-family: 'Helvetica Neue', Helvetica, Arial, sans=
+-serif; box-sizing: border-box; font-size: 14px; width: 100%; clear: both; =
+color: #999; margin: 0; padding: 20px;">
+          <table width=3D"100%" style=3D"font-family: 'Helvetica Neue', Hel=
+vetica, Arial, sans-serif; box-sizing: border-box; font-size: 14px; margin:=
+ 0;">
+            <tr style=3D"font-family: 'Helvetica Neue', Helvetica, Arial, s=
+ans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
+              <td style=3D"font-family: 'Helvetica Neue', Helvetica, Arial,=
+ sans-serif; box-sizing: border-box; font-size: 12px; vertical-align: top; =
+text-align: center; color: #999; margin: 0; padding: 0 0 20px;" align=3D"ce=
+nter" valign=3D"top"><a href=3D"http://alertmanager.cicem.fa" style=3D"font=
+-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; box-sizing: border=
+-box; font-size: 12px; color: #999; text-decoration: underline; margin: 0;"=
+>Sent by AlertManager</a></td>
+            </tr>
+          </table>
+        </div></div>
+    </td>
+    <td style=3D"font-family: 'Helvetica Neue', Helvetica, Arial, sans-seri=
+f; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0;=
+" valign=3D"top"></td>
+  </tr>
+</table>
+
+</body>
+</html>
+
+
+--53abc8399390d69a772dfc710cd81556267d4b6eeb85e6cb1117c1c910b6--
