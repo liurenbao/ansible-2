@@ -131,6 +131,28 @@ spec:
             description: "{sceneName='{{$labels.sceneName}}', description='{{$labels.description}}'}"
             DbIpAndPort: "{{$labels.DbIpAndPort}}"
 
+        - alert: "gaussSqlCheck-LogicRepProgress2-warning"
+          expr: gauss_db_check_logicrep_progress2_delay < 1
+          for: 1m
+          labels:
+            severity: warning
+            category: gsSqlCheck
+          annotations:
+            summary: "【告警】主备之间的逻辑复制延迟超过指定时间，请及时处理"
+            description: "{sceneName='{{$labels.sceneName}}', description='{{$labels.description}}'}"
+            DbIpAndPort: "{{$labels.DbIpAndPort}}"
+
+        - alert: "gaussSqlCheck-LogicRepConsistencyComparison-warning"
+          expr: gauss_db_check_logicrep_consistency_comparison < 1
+          for: 1m
+          labels:
+            severity: warning
+            category: gsSqlCheck
+          annotations:
+            summary: "【告警】主备之间的逻辑复制数据不一致，请及时处理"
+            description: "{sceneName='{{$labels.sceneName}}', description='{{$labels.description}}'}"
+            DbIpAndPort: "{{$labels.DbIpAndPort}}"
+
         - alert: "gaussSqlCheck-ClusterRunMode-warning"
           expr: gauss_db_check_run_mode < 1
           for: 2m
