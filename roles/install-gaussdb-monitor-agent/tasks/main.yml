@@ -91,10 +91,25 @@
     job: '{{ gaussdb_monitor_agent_root_dir }}/start-agent.sh check'
     minute: "*/1"
 
+- name: chmod agent dir
+  file:
+    path: '{{ gaussdb_monitor_agent_root_dir }}'
+    state: directory
+    owner: '{{ gaussdb_monitor_user }}'
+    group: '{{ gaussdb_user_group }}'
+    recurse: yes
+
+- name: check logs dir exist
+  stat:
+    path: "{{ gaussdb_monitor_agent_root_dir }}/logs"
+  register: log_dir
+
+
 - name: wait client ready
   wait_for:
     port: 9998
     timeout: 120
+  failed_when: log_dir.stat.exists == false
 
 - name: chmod agent dir
   file:
