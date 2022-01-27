@@ -79,6 +79,7 @@
     dest: "{{ nginx_root_dir }}/{{ item | regex_replace('.j2$', '') }}"
   with_items:
     - conf.d/traefik.conf.j2
+    - conf.d/plantu.conf.j2
     - conf.d/report{{ domain_suffix }}.conf.j2
 
 - name: start nginx
