@@ -109,7 +109,7 @@ tcp-backlog 2048
 # unixsocketperm 700
 
 # Close the connection after a client is idle for N seconds (0 to disable)
-timeout 30
+timeout 0
 
 # TCP keepalive.
 #
@@ -126,7 +126,7 @@ timeout 30
 #
 # A reasonable value for this option is 300 seconds, which is the new
 # Redis default starting with Redis 3.2.1.
-tcp-keepalive 60
+tcp-keepalive 300
 
 ################################# TLS/SSL #####################################
 

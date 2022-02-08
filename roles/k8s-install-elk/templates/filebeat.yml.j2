@@ -42,6 +42,8 @@ data:
           - drop_event:
               when:
                 or:
+                  - not:
+                      has_fields: kubernetes.labels.app
                   - equals:
                       kubernetes.namespace: default
                   - equals:
@@ -105,11 +107,11 @@ spec:
             privileged: true
           resources:
             limits:
-              memory: 2Gi
+              memory: 4Gi
               cpu: '4'
             requests:
-              cpu: 300m
-              memory: 150Mi
+              cpu: 200m
+              memory: 100Mi
           volumeMounts:
             - name: config
               mountPath: /usr/share/filebeat/filebeat.yml

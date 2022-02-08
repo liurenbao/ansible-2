@@ -1,8 +1,6 @@
 upstream traefik {
 {% for host in groups['k8s-worker'] %}
-{% if 'traefik=true' in hostvars[host].label %}
     server {{ host }}:31001  max_fails=0;
-{% endif %}
 {% endfor %}
 }
 

@@ -1,25 +1,27 @@
 [db]
-10.12.114.16 host_name=jdc1fap-mesdb01 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" DB_NAME=MES MEM=512G DB_ROLE=MASTER FloatIP=10.12.114.20 STORAGE=10500G ARCHIVE=500G SHAREDISK=/dev/sdc DB_TYPE=DOUBLE
-10.12.114.116 host_name=jdc2fap-mesdb02 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" DB_NAME=MES MEM=512G DB_ROLE=SLAVE FloatIP=10.12.114.20 STORAGE=10500G ARCHIVE=500G SHAREDISK=/dev/sdc DB_TYPE=DOUBLE
-10.12.114.11 host_name=jdc1fap-spcdb01 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" DB_NAME=SPC MEM=512G DB_ROLE=MASTER FloatIP=10.12.114.10 STORAGE=2250G ARCHIVE=200G SHAREDISK=/dev/sdc DB_TYPE=DOUBLE
-10.12.114.111 host_name=jdc2fap-spcdb02 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" DB_NAME=SPC MEM=512G DB_ROLE=SLAVE FloatIP=10.12.114.10 STORAGE=2250G ARCHIVE=200G SHAREDISK=/dev/sdc DB_TYPE=DOUBLE
-10.12.114.21 host_name=jdc1fap-rmsdb01 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" DB_NAME=RMS MEM=512G DB_ROLE=MASTER FloatIP=10.12.114.30 STORAGE=900G ARCHIVE=50G SHAREDISK=/dev/sdc DB_TYPE=DOUBLE
-10.12.114.121 host_name=jdc2fap-rmsdb02 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" DB_NAME=RMS MEM=512G DB_ROLE=SLAVE FloatIP=10.12.114.30 STORAGE=900G ARCHIVE=50G SHAREDISK=/dev/sdc DB_TYPE=DOUBLE
-10.12.107.161 host_name=jdfap-rtd01 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" DB_NAME=RTDREDO MEM=64G DB_ROLE=MASTER FloatIP=10.12.107.20 STORAGE=300G ARCHIVE=30G SHAREDISK=/dev/vdc DB_TYPE=DOUBLE
-10.12.107.162 host_name=jdfap-rtd02 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" DB_NAME=RTDREDO MEM=64G DB_ROLE=SLAVE FloatIP=10.12.107.20 STORAGE=300G ARCHIVE=30G SHAREDISK=/dev/vdc DB_TYPE=DOUBLE
-10.12.114.46 host_name=jdc1fap-amsdb01 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" DB_NAME=AMS MEM=512G DB_ROLE=MASTER FloatIP=10.12.114.80 STORAGE=1500G ARCHIVE=50G SHAREDISK=/dev/sdc DB_TYPE=DOUBLE
-10.12.114.146 host_name=jdc2fap-amsdb02 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" DB_NAME=AMS MEM=512G DB_ROLE=SLAVE FloatIP=10.12.114.80 STORAGE=1500G ARCHIVE=50G SHAREDISK=/dev/sdc DB_TYPE=DOUBLE
-10.12.114.31 host_name=jdc1fap-apcdb01 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" DB_NAME=APC MEM=512G DB_ROLE=MASTER FloatIP=10.12.114.50 STORAGE=6000G ARCHIVE=500G SHAREDISK=/dev/sdc DB_TYPE=DOUBLE
-10.12.114.131 host_name=jdc2fap-apcdb02 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" DB_NAME=APC MEM=512G DB_ROLE=SLAVE FloatIP=10.12.114.50 STORAGE=6000G ARCHIVE=500G SHAREDISK=/dev/sdc DB_TYPE=DOUBLE
-10.12.111.21 host_name=jdc1fap-fdcdb101 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" DB_NAME=FDC MEM=512G DB_ROLE=MASTER FloatIP=10.12.111.10 STORAGE=22500G ARCHIVE=500G SHAREDISK=/dev/sdc DB_TYPE=DOUBLE
-10.12.111.121 host_name=jdc2fap-fdcdb102 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" DB_NAME=FDC MEM=512G DB_ROLE=SLAVE FloatIP=10.12.111.10 STORAGE=22500G ARCHIVE=500G SHAREDISK=/dev/sdc DB_TYPE=DOUBLE
-10.12.111.22 host_name=jdc1fap-fdcdb201 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" DB_NAME=FDC2 MEM=512G DB_ROLE=MASTER FloatIP=10.12.111.30 STORAGE=22500G ARCHIVE=500G SHAREDISK=/dev/sdc DB_TYPE=DOUBLE
-10.12.111.122 host_name=jdc2fap-fdcdb202 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" DB_NAME=FDC2 MEM=512G DB_ROLE=SLAVE FloatIP=10.12.111.30 STORAGE=22500G ARCHIVE=500G SHAREDISK=/dev/sdc DB_TYPE=DOUBLE
-10.12.112.16 host_name=jdc1fap-mcsdb01 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" DB_NAME=MCS MEM=256G DB_ROLE=MASTER FloatIP=10.12.112.10 STORAGE=150G ARCHIVE=10G SHAREDISK=/dev/sdd DB_TYPE=DOUBLE
-10.12.112.116 host_name=jdc2fap-mcsdb02 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" DB_NAME=MCS MEM=256G DB_ROLE=SLAVE FloatIP=10.12.112.10 STORAGE=150G ARCHIVE=10G SHAREDISK=/dev/sdd DB_TYPE=DOUBLE
-10.12.114.36 host_name=jdc1fap-rtd_sdrdb01 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" DB_NAME=RTD MEM=512G DB_ROLE=MASTER FloatIP=10.12.114.60 STORAGE=4000G ARCHIVE=400G SHAREDISK=/dev/sdc DB_TYPE=DOUBLE
-10.12.114.136 host_name=jdc2fap-rtd_sdrdb02 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" DB_NAME=RTD MEM=512G DB_ROLE=SLAVE FloatIP=10.12.114.60 STORAGE=4000G ARCHIVE=400G SHAREDISK=/dev/sdc DB_TYPE=DOUBLE
-10.12.114.26 host_name=jdc1fap-reptdb01 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" DB_NAME=REPORT MEM=1024G DB_ROLE=MASTER FloatIP=10.12.114.40 STORAGE=10500G ARCHIVE=500G SHAREDISK=/dev/sdc DB_TYPE=DOUBLE
-10.12.114.126 host_name=jdc2fap-reptdb02 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" DB_NAME=REPORT MEM=1024G DB_ROLE=SLAVE FloatIP=10.12.114.40 STORAGE=10500G ARCHIVE=500G SHAREDISK=/dev/sdc DB_TYPE=DOUBLE
-10.12.114.41 host_name=jdc1fap-mes_fdcdb01 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" DB_NAME=ARCHIVE MEM=512G DB_ROLE=MASTER FloatIP=10.12.114.70 STORAGE=56000G ARCHIVE=500G SHAREDISK=/dev/sdc DB_TYPE=DOUBLE
-10.12.114.141 host_name=jdc2fap-mes_fdcdb02 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" DB_NAME=ARCHIVE MEM=512G DB_ROLE=SLAVE FloatIP=10.12.114.70 STORAGE=56000G ARCHIVE=500G SHAREDISK=/dev/sdc DB_TYPE=DOUBLE
+10.12.114.16 host_name=jdc1fap-mesdb01 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" 
+10.12.114.116 host_name=jdc2fap-mesdb02 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" 
+10.12.114.11 host_name=jdc1fap-spcdb01 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" 
+10.12.114.111 host_name=jdc2fap-spcdb02 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" 
+10.12.114.21 host_name=jdc1fap-rmsdb01 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" 
+10.12.114.121 host_name=jdc2fap-rmsdb02 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" 
+10.12.107.161 host_name=jdfap-rtd01 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" 
+10.12.107.162 host_name=jdfap-rtd02 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" 
+10.12.114.46 host_name=jdc1fap-amsdb01 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" 
+10.12.114.146 host_name=jdc2fap-amsdb02 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" 
+10.12.114.31 host_name=jdc1fap-apcdb01 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" 
+10.12.114.131 host_name=jdc2fap-apcdb02 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" 
+10.12.111.21 host_name=jdc1fap-fdcdb101 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" 
+10.12.111.121 host_name=jdc2fap-fdcdb102 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" 
+10.12.111.22 host_name=jdc1fap-fdcdb201 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" 
+10.12.111.122 host_name=jdc2fap-fdcdb202 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" 
+10.12.112.16 host_name=jdc1fap-mcsdb01 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" 
+10.12.112.116 host_name=jdc2fap-mcsdb02 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" 
+10.12.114.36 host_name=jdc1fap-rtd_sdrdb01 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" 
+10.12.114.136 host_name=jdc2fap-rtd_sdrdb02 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" 
+10.12.114.26 host_name=jdc1fap-reptdb01 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" 
+10.12.114.126 host_name=jdc2fap-reptdb02 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" 
+10.12.114.41 host_name=jdc1fap-mes_fdcdb01 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" 
+10.12.114.141 host_name=jdc2fap-mes_fdcdb02 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com" 
+10.12.114.47    host_name=jdc2fap-mes_fdcdb02 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
+10.12.114.147   host_name=jdc2fap-mes_fdcdb02 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"

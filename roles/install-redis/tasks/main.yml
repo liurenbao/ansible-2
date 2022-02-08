@@ -45,11 +45,6 @@
   args:
     chdir: "{{ redis_data_dir }}"
 
-- name: rm redis data
-  shell: rm -rf data
-  args:
-    chdir: "{{ redis_data_dir }}"
-
 - name: start redis
   shell: docker-compose up -d
   args:
@@ -59,7 +54,7 @@
   wait_for:
     port: 6379
     delay: 5
-    timeout: 30
+    timeout: 60
     msg: 'Timeout waiting for redis respond'
 
 - name: check if redis cluster linked
@@ -71,7 +66,7 @@
   command: sh create-cluster.sh
   args:
     chdir: "{{ redis_data_dir }}"
-  when: ansible_ssh_host == groups['redis'][0]
+  when: ansible_ssh_host == groups['redis'][0] and redis_nodes_file.stat.exists == false
 
 - name: get cluster info
   shell: sleep 10 && docker exec -i redis-node01 /bin/sh -c 'redis-cli cluster info'

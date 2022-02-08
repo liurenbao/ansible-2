@@ -6,6 +6,8 @@
 10.12.117.56    host_name=jdfau-jks01   ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
 [zentao]
 10.12.118.46    host_name=jdfat-zt01    ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
+[git]
+10.12.118.36    host_name=jdfau-git01   ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
 [ams]
 10.12.117.161   host_name=jdfau-amsrv01 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
 10.12.117.162   host_name=jdfau-amsrv02 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"

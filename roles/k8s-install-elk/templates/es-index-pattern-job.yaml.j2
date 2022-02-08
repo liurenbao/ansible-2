@@ -24,6 +24,8 @@ kind: CronJob
 metadata:
   namespace: elk
   name: autodelete-es-index-pattern
+  labels:
+    app: autodelete-es-index-pattern
 spec:
   failedJobsHistoryLimit: 1
   successfulJobsHistoryLimit: 1
@@ -32,6 +34,9 @@ spec:
   #每天2点执行
   schedule: "*/10 * * * *"
   jobTemplate:
+    metadata:
+      labels:
+        app: autodelete-es-index-pattern
     spec:
       template:
         spec:
