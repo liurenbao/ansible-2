@@ -1,13 +1,13 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: sdr
+  name: plantu-qtest
 ---
 apiVersion: settings.k8s.io/v1alpha1
 kind: PodPreset
 metadata:
   name: change-timezone
-  namespace: sdr
+  namespace: plantu-qtest
 spec:
   selector:
     matchLabels: {}
@@ -25,54 +25,54 @@ spec:
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: sdr-admin
-  namespace: sdr
+  name: plantu-qtest-admin
+  namespace: plantu-qtest
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: sdr-admin-rolebinding
-  namespace: sdr
+  name: plantu-qtest-admin-rolebinding
+  namespace: plantu-qtest
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: admin
+  name: admin-upgrade-only
 subjects:
   - kind: ServiceAccount
-    name: sdr-admin
-    namespace: sdr
+    name: plantu-qtest-admin
+    namespace: plantu-qtest
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: sdr-admin-view-namespace
+  name: plantu-qtest-admin-view-namespace
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
   name: view-namespaces
 subjects:
   - kind: ServiceAccount
-    name: sdr-admin
-    namespace: sdr
+    name: plantu-qtest-admin
+    namespace: plantu-qtest
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: sdr-admin-view-crd-resources
+  name: plantu-qtest-admin-view-crd-resources
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
   name: view-crd-resources
 subjects:
   - kind: ServiceAccount
-    name: sdr-admin
-    namespace: sdr
+    name: plantu-qtest-admin
+    namespace: plantu-qtest
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
   name: crd-object-admin
-  namespace: sdr
+  namespace: plantu-qtest
 rules:
   - verbs:
       - create
@@ -102,30 +102,31 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: sdr-crd-object-admin
-  namespace: sdr
+  name: plantu-qtest-crd-object-admin
+  namespace: plantu-qtest
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
   name: crd-object-admin
 subjects:
   - kind: ServiceAccount
-    name: sdr-admin
-    namespace: sdr
+    name: plantu-qtest-admin
+    namespace: plantu-qtest
+
 ---
 apiVersion: v1
 kind: Secret
 metadata:
   name: harbor
-  namespace: sdr
+  namespace: plantu-qtest
 stringData:
   .dockerconfigjson: |
     {
       "auths": {
         "{{ image_repository }}": {
-          "username": "{{ sdr_harbor_account }}",
-          "password": "{{ sdr_harbor_password }}",
-          "auth": "{{ sdr_haror_auth_plaintext | b64encode }}"
+          "username": "{{ plantu_harbor_account }}",
+          "password": "{{ plantu_harbor_password }}",
+          "auth": "{{ plantu_haror_auth_plaintext | b64encode }}"
         }
       }
     }

@@ -1,6 +1,11 @@
-- name: create dir
+- name: create uat dir
   file:
-    path: "{{ component_manifest_dir }}/app"
+    path: "{{ component_manifest_dir }}/app/uat"
+    state: directory
+
+- name: create prod dir
+  file:
+    path: "{{ component_manifest_dir }}/app/prod"
     state: directory
 
 - name: copy app manifest template

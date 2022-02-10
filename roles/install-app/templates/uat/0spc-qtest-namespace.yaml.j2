@@ -1,13 +1,13 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: sdr-qtest
+  name: spc-qtest
 ---
 apiVersion: settings.k8s.io/v1alpha1
 kind: PodPreset
 metadata:
   name: change-timezone
-  namespace: sdr-qtest
+  namespace: spc-qtest
 spec:
   selector:
     matchLabels: {}
@@ -25,54 +25,54 @@ spec:
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: sdr-qtest-admin
-  namespace: sdr-qtest
+  name: spc-qtest-admin
+  namespace: spc-qtest
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: sdr-qtest-admin-rolebinding
-  namespace: sdr-qtest
+  name: spc-qtest-admin-rolebinding
+  namespace: spc-qtest
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: admin
+  name: admin-upgrade-only
 subjects:
   - kind: ServiceAccount
-    name: sdr-qtest-admin
-    namespace: sdr-qtest
+    name: spc-qtest-admin
+    namespace: spc-qtest
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: sdr-qtest-admin-view-namespace
+  name: spc-qtest-admin-view-namespace
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
   name: view-namespaces
 subjects:
   - kind: ServiceAccount
-    name: sdr-qtest-admin
-    namespace: sdr-qtest
+    name: spc-qtest-admin
+    namespace: spc-qtest
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: sdr-qtest-admin-view-crd-resources
+  name: spc-qtest-admin-view-crd-resources
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
   name: view-crd-resources
 subjects:
   - kind: ServiceAccount
-    name: sdr-qtest-admin
-    namespace: sdr-qtest
+    name: spc-qtest-admin
+    namespace: spc-qtest
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
   name: crd-object-admin
-  namespace: sdr-qtest
+  namespace: spc-qtest
 rules:
   - verbs:
       - create
@@ -102,30 +102,30 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: sdr-qtest-crd-object-admin
-  namespace: sdr-qtest
+  name: spc-qtest-crd-object-admin
+  namespace: spc-qtest
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
   name: crd-object-admin
 subjects:
   - kind: ServiceAccount
-    name: sdr-qtest-admin
-    namespace: sdr-qtest
+    name: spc-qtest-admin
+    namespace: spc-qtest
 ---
 apiVersion: v1
 kind: Secret
 metadata:
   name: harbor
-  namespace: sdr-qtest
+  namespace: spc-qtest
 stringData:
   .dockerconfigjson: |
     {
       "auths": {
         "{{ image_repository }}": {
-          "username": "{{ rtd_harbor_account }}",
-          "password": "{{ rtd_harbor_password }}",
-          "auth": "{{ rtd_haror_auth_plaintext | b64encode }}"
+          "username": "{{ spc_harbor_account }}",
+          "password": "{{ spc_harbor_password }}",
+          "auth": "{{ spc_haror_auth_plaintext | b64encode }}"
         }
       }
     }
