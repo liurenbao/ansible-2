@@ -59,9 +59,9 @@ rules:
       - services
       - services/proxy
   - verbs:
-      - create
-      - delete
-      - deletecollection
+      #- create
+      #- delete
+      #- deletecollection
       - patch
       - update
     apiGroups:
@@ -86,9 +86,9 @@ rules:
     resources:
       - horizontalpodautoscalers
   - verbs:
-      - create
-      - delete
-      - deletecollection
+      #- create
+      #- delete
+      #- deletecollection
       - patch
       - update
     apiGroups:
@@ -97,9 +97,9 @@ rules:
       - cronjobs
       - jobs
   - verbs:
-      - create
-      - delete
-      - deletecollection
+      #- create
+      #- delete
+      #- deletecollection
       - patch
       - update
     apiGroups:
@@ -115,9 +115,9 @@ rules:
       - replicasets/scale
       - replicationcontrollers/scale
   - verbs:
-      - create
-      - delete
-      - deletecollection
+      #- create
+      #- delete
+      #- deletecollection
       - patch
       - update
     apiGroups:
@@ -125,9 +125,9 @@ rules:
     resources:
       - poddisruptionbudgets
   - verbs:
-      - create
-      - delete
-      - deletecollection
+      #- create
+      #- delete
+      #- deletecollection
       - patch
       - update
     apiGroups:
@@ -269,13 +269,13 @@ rules:
     resources:
       - localsubjectaccessreviews
   - verbs:
-      - create
-      - delete
-      - deletecollection
+      #- create
+      #- delete
+      #- deletecollection
       - get
       - list
-      - patch
-      - update
+      #- patch
+      #- update
       - watch
     apiGroups:
       - rbac.authorization.k8s.io
