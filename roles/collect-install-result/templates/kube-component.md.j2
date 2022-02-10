@@ -1,13 +1,21 @@
-| component        | url                                                  | auth        |
-|------------------|------------------------------------------------------|-------------|
-| harbor           | http://{{ image_repository }}                        |             |
-| nginx            | http://{{ nginx_keepalived_vip }}                    |             |
-| kibana           | http://kibana{{ domain_suffix }}.cicem.fa            |             |
-| prometheus       | http://prometheus{{ domain_suffix }}.cicem.fa        |             |
-| blackbox         | http://blackbox{{ domain_suffix }}.cicem.fa          |             |
-| grafana          | http://grafana{{ domain_suffix }}.cicem.fa           |             |
-| alertmanager     | http://alertmanager{{ domain_suffix }}.cicem.fa      |             |
-| traefik          | http://traefik-dashboard{{ domain_suffix }}.cicem.fa |             |
-| redis            | {{ redis_connect_string.stdout }}                    |             |
-| rocketmq-namesrv | {{ rocketmq_namesrv.stdout }}                        |             |
-| rocketmq-console | http://rocketmq-console{{ domain_suffix }}.cicem.fa  | admin/admin |
+| component        | url                                                  | auth         |
+|------------------|------------------------------------------------------|--------------|
+| harbor           | http://{{ image_repository }}                        |              |
+| nginx            | http://{{ nginx_keepalived_vip }}                    |              |
+| kibana           | http://kibana{{ domain_suffix }}.cicem.fa            |              |
+| prometheus       | http://prometheus{{ domain_suffix }}.cicem.fa        |              |
+| blackbox         | http://blackbox{{ domain_suffix }}.cicem.fa          |              |
+| grafana          | http://grafana{{ domain_suffix }}.cicem.fa           |              |
+| alertmanager     | http://alertmanager{{ domain_suffix }}.cicem.fa      |              |
+| traefik          | http://traefik-dashboard{{ domain_suffix }}.cicem.fa |              |
+| redis            | {{ redis_connect_string.stdout }}                    |              |
+| rocketmq-namesrv | {{ rocketmq_namesrv.stdout }}                        |              |
+| rocketmq-console | http://rocketmq-console{{ domain_suffix }}.cicem.fa  | admin/admin  |
+| kafka-manager    | http://kafka-manager{{ domain_suffix }}.cicem.fa     |              |
+| kafka-manager    | http://kafka-manager{{ domain_suffix }}.cicem.fa     |              |
+| jenkins          | http://jenkins.cicem.fa:8080                         |              |
+| svn              | http://svn.cicem.fa                                  |              |
+| gitlab           | http://gitlab.cicem.fa                               |              |
+| zentao           | http://zentao.cicem.fa                               |              |
+| nexus            | http://nexus.cicem.fa:8081                           |admin/admin123|
+

@@ -1,16 +1,23 @@
-| component        | url                                                  | auth        |
-|------------------|------------------------------------------------------|-------------|
-| harbor           | http://10.12.107.150:80                        |             |
-| nginx            | http://10.12.117.60                    |             |
-| kibana           | http://kibana-uat.cicem.fa            |             |
-| prometheus       | http://prometheus-uat.cicem.fa        |             |
-| blackbox         | http://blackbox-uat.cicem.fa          |             |
-| grafana          | http://grafana-uat.cicem.fa           |             |
-| alertmanager     | http://alertmanager-uat.cicem.fa      |             |
-| traefik          | http://traefik-dashboard-uat.cicem.fa |             |
-| redis            | 10.12.117.151:6379,10.12.117.152:6379,10.12.117.153:6379,10.12.117.154:6379,10.12.117.155:6379,10.12.117.156:6379                    |             |
-| rocketmq-namesrv | 10.12.117.141:9876;10.12.117.142:9876                        |             |
-| rocketmq-console | http://rocketmq-console-uat.cicem.fa  | admin/admin |
+| component        | url                                                  | auth         |
+|------------------|------------------------------------------------------|--------------|
+| harbor           | http://10.12.107.150:80                        |              |
+| nginx            | http://10.12.117.60                    |              |
+| kibana           | http://kibana-uat.cicem.fa            |              |
+| prometheus       | http://prometheus-uat.cicem.fa        |              |
+| blackbox         | http://blackbox-uat.cicem.fa          |              |
+| grafana          | http://grafana-uat.cicem.fa           |              |
+| alertmanager     | http://alertmanager-uat.cicem.fa      |              |
+| traefik          | http://traefik-dashboard-uat.cicem.fa |              |
+| redis            | 10.12.117.151:6379,10.12.117.152:6379,10.12.117.153:6379,10.12.117.154:6379,10.12.117.155:6379,10.12.117.156:6379                    |              |
+| rocketmq-namesrv | 10.12.117.141:9876;10.12.117.142:9876                        |              |
+| rocketmq-console | http://rocketmq-console-uat.cicem.fa  | admin/admin  |
+| kafka-manager    | http://kafka-manager-uat.cicem.fa     |              |
+| kafka-manager    | http://kafka-manager-uat.cicem.fa     |              |
+| jenkins          | http://jenkins.cicem.fa:8080                         |              |
+| svn              | http://svn.cicem.fa                                  |              |
+| gitlab           | http://gitlab.cicem.fa                               |              |
+| zentao           | http://zentao.cicem.fa                               |              |
+| nexus            | http://nexus.cicem.fa:8081                           |admin/admin123|
 | k8s-dashboard-ams | https://k8s-dashboard-uat.cicem.fa:30000 | token:      eyJhbGciOiJSUzI1NiIsImtpZCI6IlVjN19QN25sTWwzc3YtY242X3ZoQlBhaG5MdWcyNmNnUU50NTBjVVY4RFUifQ.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJhbXMiLCJrdWJlcm5ldGVzLmlvL3NlcnZpY2VhY2NvdW50L3NlY3JldC5uYW1lIjoiYW1zLWFkbWluLXRva2VuLXZydnA4Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZXJ2aWNlLWFjY291bnQubmFtZSI6ImFtcy1hZG1pbiIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VydmljZS1hY2NvdW50LnVpZCI6ImIzOTVkZGQ4LWQ3ZTgtNDIxNS1hNmM1LTFlYzYxMTZjNjExZiIsInN1YiI6InN5c3RlbTpzZXJ2aWNlYWNjb3VudDphbXM6YW1zLWFkbWluIn0.E2cSIUVMa16k3obNXFCjXNeG_rV8bOWospq-8qgOPsnwQ7XeXOK6PCIJukXUmaJOT6Z5FLgMhQQkKV6MSx0sY-r4bYaCNW0T2sm96xXMMdr8RbJmixtBFEtvjvZagWDNwuxavHg6lWadLWHkYa2YM706JMZgdUlp__4kET-NtEbeNqvkED2cb_QJ1cxvFiG_RDyTfplg-4Y-9pPcB4CN4y9IlilGkMg-ITE3-rfBJoym-aZkVct5GBQQ8ftt6wNYwUETUFESifeL7vfzA5WV3evP20v5sWmxbZfirKBW3-pBJNXrLU3klwtaOUgEO2n51xVeCVlJolrShhBrZBN5VA |
 | k8s-dashboard-atms | https://k8s-dashboard-uat.cicem.fa:30000 | token:      eyJhbGciOiJSUzI1NiIsImtpZCI6IlVjN19QN25sTWwzc3YtY242X3ZoQlBhaG5MdWcyNmNnUU50NTBjVVY4RFUifQ.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJhdG1zIiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZWNyZXQubmFtZSI6ImF0bXMtYWRtaW4tdG9rZW4tcThmOW4iLCJrdWJlcm5ldGVzLmlvL3NlcnZpY2VhY2NvdW50L3NlcnZpY2UtYWNjb3VudC5uYW1lIjoiYXRtcy1hZG1pbiIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VydmljZS1hY2NvdW50LnVpZCI6IjYwOTkyOGMxLWQ2MWYtNDU2OS04NTE4LWNlNmViY2Y3OTQwOCIsInN1YiI6InN5c3RlbTpzZXJ2aWNlYWNjb3VudDphdG1zOmF0bXMtYWRtaW4ifQ.QGgci4ApE9CHCsCrdX2iqDs4dmiQd9FrDKp5Kd_UUi0jMkFsSvl3yi8CAZmBouvHfSjLuOozFLoEK96wXIpDIIh2PWR_WKX6OQVfVRdfzo5vv6sbV30tbXXmEzhclrysSrDS9yKu4V44AJl6QE2QtBBQCjy2yS3BQchMjjCAG86qq04k9MqSR1bPL0Jr2lHNfo8E-idqrHDz1G5mIW40X8fZK41H3wd9MrOX8t9wfmpuRC7qU-t3xHPawO6sKLVA6rZZNeQQ8agIDd8JEVnTUSdMKO1ANHWzkML1a7BLgC9RCR41SGt9UA2wRGJFZWFP9Oll-K59GpF-dL0r_7RvWA |
 | k8s-dashboard-gaussdb-monitoring | https://k8s-dashboard-uat.cicem.fa:30000 | token:      eyJhbGciOiJSUzI1NiIsImtpZCI6IlVjN19QN25sTWwzc3YtY242X3ZoQlBhaG5MdWcyNmNnUU50NTBjVVY4RFUifQ.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJnYXVzc2RiLW1vbml0b3JpbmciLCJrdWJlcm5ldGVzLmlvL3NlcnZpY2VhY2NvdW50L3NlY3JldC5uYW1lIjoiZ2F1c3NkYi1tb25pdG9yaW5nLWFkbWluLXRva2VuLThzNmJ6Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZXJ2aWNlLWFjY291bnQubmFtZSI6ImdhdXNzZGItbW9uaXRvcmluZy1hZG1pbiIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VydmljZS1hY2NvdW50LnVpZCI6ImJjY2Y3OTZlLWZhYTMtNGM0Yi04MWIxLTI4YzVlZjcyYmIzNiIsInN1YiI6InN5c3RlbTpzZXJ2aWNlYWNjb3VudDpnYXVzc2RiLW1vbml0b3Jpbmc6Z2F1c3NkYi1tb25pdG9yaW5nLWFkbWluIn0.aqsFWcwvWAy2qsbnfalNQuYVuwqWxzVi_QGPrD-Ck7G4vpijtqJ5b6AkYVMGt2HOAvzSSHFEJ-0NXZPrtxu_4WxSFZ5fH2hIGfiER3I4MBTXtGRV-G20Uko8LBM00-o0VmgTgZUYZT_mLzy0OIWNcAIDw5rKAeiP-plc5MhMNJAU4d3ilLV5x56duXJkpF2ynWmstG2ZTByE2-9wXbIAY5gomUD3AHFfAq-_SaSF6plNPc1fefmHK5dQxWAFnxWo5MrAHSq6tv0-zhILtIu82imdj49xAotlvuI_LwTRFSmZRbziBo2aORMNjH-uWXGI_zdMaXr0n31Ic6MhuY81TA |
