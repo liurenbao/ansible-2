@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ template "elastalert.fullname" . }}
+  namespace: {{ .Values.namespace }}
   labels:
     app: {{ template "elastalert.name" . }}
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"

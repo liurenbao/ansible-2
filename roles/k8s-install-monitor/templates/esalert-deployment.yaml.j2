@@ -1,0 +1,147 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: elastalert2
+  namespace: monitoring
+  labels:
+    app: elastalert2
+  annotations:
+    generate-at: "2022-02-14"
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: elastalert-config-secret
+  namespace: monitoring
+type: Opaque
+stringData:
+  elastalert_config: |-
+    rules_folder: /opt/elastalert/rules
+    scan_subdirectories: false
+    run_every:
+      minutes: 1
+    buffer_time:
+      minutes: 15
+    es_host: elasticsearch.elk
+    es_port: 9200
+    writeback_index: elastalert
+    use_ssl: False
+    verify_certs: True
+    alert_time_limit:
+      minutes: 2880
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: elastalert-smtp-auth
+  namespace: monitoring
+type: Opaque
+stringData:
+  smtp_auth.yaml: |-
+    user: alertmanager@cicem.fa
+    password: Icrd@777.com
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: elastalert2-rules
+  namespace: monitoring
+  labels:
+    app: elastalert2
+data:
+  nginx: |
+    name: nginx-rules
+    type: frequency
+    index: log-nginx-nginx-*
+    num_events: 3
+    timeframe:
+      minutes: 3
+    filter:
+      - term:
+          message: "ERROR"
+    alert:
+      - email:
+          from_addr: "alertmanager@cicem.fa"
+          email: "tangjizhou@cicem.fa"
+          smtp_host: "10.12.107.121"
+          smtp_port: 587
+          smtp_ssl: false
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: elastalert2
+  namespace: monitoring
+  labels:
+    app: elastalert2
+spec:
+  selector:
+    matchLabels:
+      app: elastalert2
+  replicas: 1
+  revisionHistoryLimit: 5
+  template:
+    metadata:
+      labels:
+        name: elastalert2-elastalert
+        app: elastalert2
+    spec:
+      serviceAccountName: elastalert2
+      securityContext:
+        fsGroup: 1000
+        runAsGroup: 1000
+        runAsUser: 1000
+      containers:
+        - name: elastalert
+          image: "{{ image_repository }}/public/elastalert2:2.2.3"
+          imagePullPolicy: IfNotPresent
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+          args:
+            - --verbose
+          volumeMounts:
+            - name: config
+              mountPath: '/opt/elastalert/config.yaml'
+              subPath: config.yaml
+            - name: rules
+              mountPath: '/opt/elastalert/rules'
+            - mountPath: /opt/elastalert/config-smtp/smtp_auth.yaml
+              name: smtp-auth
+              readOnly: true
+              subPath: smtp_auth.yaml
+          resources:
+            limits:
+              cpu: "2"
+              memory: 2048Mi
+            requests:
+              cpu: "0.2"
+              memory: 500Mi
+          env:
+      restartPolicy: Always
+      tolerations:
+        - effect: NoExecute
+          key: node.kubernetes.io/not-ready
+          operator: Exists
+          tolerationSeconds: 2
+        - effect: NoExecute
+          key: node.kubernetes.io/unreachable
+          operator: Exists
+          tolerationSeconds: 2
+      volumes:
+        - name: rules
+          configMap:
+            name: elastalert2-rules
+        - name: config
+          secret:
+            secretName: elastalert-config-secret
+            items:
+              - key: elastalert_config
+                path: config.yaml
+        - name: smtp-auth
+          secret:
+            items:
+              - key: smtp_auth.yaml
+                mode: 256
+                path: smtp_auth.yaml
+            secretName: elastalert-smtp-auth
