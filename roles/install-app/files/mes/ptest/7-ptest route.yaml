@@ -1,0 +1,14 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: plantu-mes-route-qtest
+  namespace: plantu-ptest
+spec:
+  entryPoints:
+    - web
+  routes:
+    - match: Host(`mes-ptest.cicem.fa`)
+      kind: Rule
+      services:
+        - name: plantu-mes-service-ptest
+          port: 8383

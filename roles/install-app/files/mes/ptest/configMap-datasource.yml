@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ptest-datasource
+  namespace: plantu-ptest
+data:
+  master.properties: |
+    jdbcUrl=jdbc:zenith:@10.12.107.203:15400?loginTimeout=6
+    username=mesmgr
+    password=Gauss_123
+    maximumPoolSize=320
+    minimumIdle=50
+    autoCommit=false
+    connectionTimeout=7000
+    poolName=hikariDbPool
+    connectionTestQuery=select 1
+    idleTimeout=180000
+    registerMbeans=true
+    
+  rpt_datasource.xml: |
+    <?xml version="1.0" encoding="utf-8" ?>
+    <Configs>
+      <CommandTimeout value = "30"/>
+      <Connection type="GAUSSDB" name="master" value="Dsn=zenith;Uid=mesmgr;Pwd=Gauss_123;Charset=UTF8;"/>
+    </Configs>
+
+
+
