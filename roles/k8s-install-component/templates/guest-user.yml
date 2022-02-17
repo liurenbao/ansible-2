@@ -7,8 +7,7 @@ metadata:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: guest-rolebinding
-  namespace: kubernetes-dashboard
+  name: namespace-resource-guest
 subjects:
   - kind: ServiceAccount
     name: guest
@@ -16,4 +15,17 @@ subjects:
 roleRef:
   kind: ClusterRole
   apiGroup: rbac.authorization.k8s.io
-  name: guest
+  name: namespace-resource-guest
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: cluster-resource-guest
+subjects:
+  - kind: ServiceAccount
+    name: guest
+    namespace: kube-system
+roleRef:
+  kind: ClusterRole
+  apiGroup: rbac.authorization.k8s.io
+  name: cluster-resource-guest
