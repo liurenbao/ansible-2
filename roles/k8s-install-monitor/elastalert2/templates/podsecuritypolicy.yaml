@@ -3,6 +3,7 @@ apiVersion: policy/v1beta1
 kind: PodSecurityPolicy
 metadata:
   name: {{ template "elastalert.fullname" . }}
+  namespace: {{ .Values.namespace }}
   labels:
     app: {{ template "elastalert.name" . }}
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"

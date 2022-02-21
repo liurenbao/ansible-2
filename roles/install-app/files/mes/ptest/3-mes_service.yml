@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: plantu-mes-service-ptest
+  namespace: plantu-ptest
+  annotations:
+    # 没有开放http服务，则使用tcp进行存活性探测
+    prometheus.io/tcp-probe: "true"
+    # jmx指标抓取的路径
+    prometheus.io/scrape: "true"
+    prometheus.io/port: '9998'
+    prometheus.io/scheme: "http"
+    prometheus.io/path: '/'
+spec:
+  ports:
+    #   提供http服务的这么配置
+    - name: http
+      # 服务端口号，spring boot的应用可以直接用默认的8080
+      port: 8383
+      targetPort: 8383
+      nodePort: 32703
+    - name: tcp
+      port: 29096
+      targetPort: 29096
+  selector:
+    # 此处不需要加zone的label，所以双机房可以共用一个service
+    app: plantu-mes-ptest
+  type: NodePort

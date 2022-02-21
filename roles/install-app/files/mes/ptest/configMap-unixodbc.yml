@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ptest-unixodbc
+  namespace: plantu-ptest
+data:
+  odbc.ini: |
+    [zenith]
+    Driver=GaussDB
+    Servername=10.12.107.203
+    port=15400

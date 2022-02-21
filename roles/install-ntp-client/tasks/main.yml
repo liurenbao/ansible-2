@@ -37,6 +37,12 @@
     state: restarted
     enabled: yes
 
+- name: remove old ntp conf ntp when bootstrap
+  lineinfile:
+    regex: "^/usr/sbin/ntpdate"
+    path: /etc/rc.d/rc.local
+    state: absent
+
 - name: add auto start ntp when bootstrap
   lineinfile:
     line: "/usr/sbin/ntpdate {{ ntp_server }} && /usr/sbin/hwclock -w"
@@ -45,20 +51,17 @@
     state: present
     mode: 0774
 
-- name: remove old ntp conf ntp when bootstrap
+- name: clear old ntp conf comment
   lineinfile:
-    line: "/usr/sbin/ntpdate 10.12.117.251 && /usr/sbin/hwclock -w && /usr/sbin/service ntpd start"
-    path: /etc/rc.d/rc.local
+    line: "#Ansible: ntpdate"
     state: absent
+    path: /var/spool/cron/root
 
 - name: clear old ntp conf
   lineinfile:
-    line: "{{ item }}"
     state: absent
+    regex: "^@hourly /usr/sbin/service ntpd stop"
     path: /var/spool/cron/root
-  with_items:
-    - "#Ansible: ntpdate"
-    - "@hourly /usr/sbin/service ntpd stop && /usr/sbin/ntpdate 10.13.253.12 && /usr/sbin/hwclock -w && /usr/sbin/service ntpd start"
 
 - name: overide ntpd systemd service
   template:

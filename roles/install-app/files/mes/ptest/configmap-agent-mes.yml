@@ -1,0 +1,21 @@
+apiVersion: v1
+data:
+  config.xml: |
+    <?xml version="1.0" encoding="utf-8" ?>
+    <config>
+        <http_port>9998</http_port>
+        <monitor_ravencast>no</monitor_ravencast>
+        <ravencast_port>10103</ravencast_port>
+        <monitor_ravencast_connection>no</monitor_ravencast_connection>
+        <monitor_jmx>yes</monitor_jmx>
+        <messerver>
+            <server ip="localhost" port="29096"/>
+        </messerver>
+    </config>
+  jmx_export.yml: "hostPort: localhost:29096\nusername: \npassword: \nssl: false\nwhitelistObjectNames:
+    [\"java.lang:type=GarbageCollector,*\",\"java.lang:type=Memory\",\"java.lang:type=OperatingSystem\",\"java.lang:type=Runtime\",\"PlantU.AdminServer:*\",\"tmesis.mesServer:*\"]\nrules:\n
+    \ - type: COUNTER\nlowercaseOutputLabelNames: true\nlowercaseOutputName: true\n"
+kind: ConfigMap
+metadata:
+  name: ptest-agent-mes
+  namespace: plantu-ptest

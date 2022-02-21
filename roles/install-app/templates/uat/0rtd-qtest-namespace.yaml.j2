@@ -1,0 +1,132 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: rtd-qtest
+---
+apiVersion: settings.k8s.io/v1alpha1
+kind: PodPreset
+metadata:
+  name: change-timezone
+  namespace: rtd-qtest
+spec:
+  selector:
+    matchLabels: {}
+  env:
+    - name: TZ
+      value: "Asia/Shanghai"
+  volumeMounts:
+    - name: timezone
+      mountPath: /etc/localtime
+  volumes:
+    - name: timezone
+      hostPath:
+        path: /etc/localtime
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: rtd-qtest-admin
+  namespace: rtd-qtest
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: rtd-qtest-admin-rolebinding
+  namespace: rtd-qtest
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: admin-upgrade-only
+subjects:
+  - kind: ServiceAccount
+    name: rtd-qtest-admin
+    namespace: rtd-qtest
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: rtd-qtest-admin-view-namespace
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: view-namespaces
+subjects:
+  - kind: ServiceAccount
+    name: rtd-qtest-admin
+    namespace: rtd-qtest
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: rtd-qtest-admin-view-crd-resources
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: view-crd-resources
+subjects:
+  - kind: ServiceAccount
+    name: rtd-qtest-admin
+    namespace: rtd-qtest
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: crd-object-admin
+  namespace: rtd-qtest
+rules:
+  - verbs:
+      - create
+      - delete
+      - update
+    apiGroups:
+      - '*'
+    resources:
+      - ingressroutes
+      - ingressroutetcps
+      - ingressrouteudps
+  - verbs:
+      - list
+      - get
+      - watch
+    apiGroups:
+      - '*'
+    resources:
+      - ingressroutes
+      - ingressroutetcps
+      - ingressrouteudps
+      - middlewares
+      - servicemonitors
+      - alertmanagers
+      - prometheusrules
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: rtd-qtest-crd-object-admin
+  namespace: rtd-qtest
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: crd-object-admin
+subjects:
+  - kind: ServiceAccount
+    name: rtd-qtest-admin
+    namespace: rtd-qtest
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: harbor
+  namespace: rtd-qtest
+stringData:
+  .dockerconfigjson: |
+    {
+      "auths": {
+        "{{ image_repository }}": {
+          "username": "{{ rtd_harbor_account }}",
+          "password": "{{ rtd_harbor_password }}",
+          "auth": "{{ rtd_haror_auth_plaintext | b64encode }}"
+        }
+      }
+    }
+type: kubernetes.io/dockerconfigjson

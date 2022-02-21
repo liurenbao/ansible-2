@@ -4,7 +4,7 @@ metadata:
   name: monitor-server
   namespace: gaussdb-monitoring
   annotations:
-    # 使用http检测应用可用性，手动提供支持http检测的端口
+    maintainer: lujinzhu@cicem.fa
     prometheus.io/http-probe: "true"
     prometheus.io/http-probe-port: "9990"
     prometheus.io/http-probe-path: "/monitor-server/actuator/health"

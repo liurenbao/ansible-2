@@ -24,14 +24,14 @@
 - name: start service plantu-agent
   shell: systemctl start plantu-agent
 
-- name: overide filebeat conf of ravencast
-  template:
-    src: filebeat.yml.j2
-    dest: /etc/filebeat/filebeat.yml
-
-- name: restart filebeat
-  systemd:
-    name: filebeat
-    state: restarted
-    enabled: yes
-    daemon_reload: yes
+#- name: overide filebeat conf of ravencast
+#  template:
+#    src: filebeat.yml.j2
+#    dest: /etc/filebeat/filebeat.yml
+#
+#- name: restart filebeat
+#  systemd:
+#    name: filebeat
+#    state: restarted
+#    enabled: yes
+#    daemon_reload: yes

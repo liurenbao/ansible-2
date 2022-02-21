@@ -1,0 +1,133 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: plantu-qtest
+---
+apiVersion: settings.k8s.io/v1alpha1
+kind: PodPreset
+metadata:
+  name: change-timezone
+  namespace: plantu-qtest
+spec:
+  selector:
+    matchLabels: {}
+  env:
+    - name: TZ
+      value: "Asia/Shanghai"
+  volumeMounts:
+    - name: timezone
+      mountPath: /etc/localtime
+  volumes:
+    - name: timezone
+      hostPath:
+        path: /etc/localtime
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: plantu-qtest-admin
+  namespace: plantu-qtest
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: plantu-qtest-admin-rolebinding
+  namespace: plantu-qtest
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: admin-upgrade-only
+subjects:
+  - kind: ServiceAccount
+    name: plantu-qtest-admin
+    namespace: plantu-qtest
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: plantu-qtest-admin-view-namespace
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: view-namespaces
+subjects:
+  - kind: ServiceAccount
+    name: plantu-qtest-admin
+    namespace: plantu-qtest
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: plantu-qtest-admin-view-crd-resources
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: view-crd-resources
+subjects:
+  - kind: ServiceAccount
+    name: plantu-qtest-admin
+    namespace: plantu-qtest
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: crd-object-admin
+  namespace: plantu-qtest
+rules:
+  - verbs:
+      - create
+      - delete
+      - update
+    apiGroups:
+      - '*'
+    resources:
+      - ingressroutes
+      - ingressroutetcps
+      - ingressrouteudps
+  - verbs:
+      - list
+      - get
+      - watch
+    apiGroups:
+      - '*'
+    resources:
+      - ingressroutes
+      - ingressroutetcps
+      - ingressrouteudps
+      - middlewares
+      - servicemonitors
+      - alertmanagers
+      - prometheusrules
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: plantu-qtest-crd-object-admin
+  namespace: plantu-qtest
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: crd-object-admin
+subjects:
+  - kind: ServiceAccount
+    name: plantu-qtest-admin
+    namespace: plantu-qtest
+
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: harbor
+  namespace: plantu-qtest
+stringData:
+  .dockerconfigjson: |
+    {
+      "auths": {
+        "{{ image_repository }}": {
+          "username": "{{ plantu_harbor_account }}",
+          "password": "{{ plantu_harbor_password }}",
+          "auth": "{{ plantu_haror_auth_plaintext | b64encode }}"
+        }
+      }
+    }
+type: kubernetes.io/dockerconfigjson

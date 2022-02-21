@@ -36,7 +36,7 @@ metadata:
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: admin
+  name: admin-upgrade-only
 subjects:
   - kind: ServiceAccount
     name: atms-admin
@@ -78,6 +78,13 @@ rules:
       - create
       - delete
       - update
+    apiGroups:
+      - '*'
+    resources:
+      - ingressroutes
+      - ingressroutetcps
+      - ingressrouteudps
+  - verbs:
       - list
       - get
       - watch

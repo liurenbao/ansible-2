@@ -1,3 +1,4 @@
+namespace: monitoring
 # number of replicas to run
 replicaCount: 1
 
@@ -29,10 +30,16 @@ image:
   pullPolicy: IfNotPresent
   pullSecret: ""
 
-resources: {}
+resources:
+  limits:
+    cpu: "2"
+    memory: 2048Mi
+  requests:
+    cpu: "0.2"
+    memory: 500Mi
 
 # Annotations to be added to pods
-podAnnotations: {}
+podAnnotations: { }
 
 elasticsearch:
   # elasticsearch endpoint e.g. (svc.namespace||svc)
@@ -73,44 +80,18 @@ elasticsearch:
   #     readOnly: true
 
 # Optional env variables for the pod
-optEnv: []
+optEnv: [ ]
 
-extraConfigOptions: {}
-  # # Options to propagate to all rules, e.g. a common slack_webhook_url or kibana_url
-  # # Please note at the time of implementing this value, it will not work for required_locals
-  # # Which MUST be set at the rule level, these are: ['alert', 'type', 'name', 'index']
-  # generate_kibana_link: true
-  # kibana_url: https://kibana.yourdomain.com
+extraConfigOptions:
+  # Options to propagate to all rules, e.g. a common slack_webhook_url or kibana_url
+  # Please note at the time of implementing this value, it will not work for required_locals
+  # Which MUST be set at the rule level, these are: ['alert', 'type', 'name', 'index']
+  generate_kibana_link: true
+  kibana_url: http://kibana-uat.cicem.fa
   # slack_webhook_url: dummy
 
 # To load ElastAlert 2 config via secret, uncomment the line below
-# secretConfigName: elastalert-config-secret
-
-# Example of a secret config
-
-#apiVersion: v1
-#kind: Secret
-#metadata:
-#  name: elastalert-config-secret
-#type: Opaque
-#stringData:
-#   elastalert_config: |-
-#     rules_folder: /opt/elastalert/rules
-#     scan_subdirectories: false
-#     run_every:
-#       minutes: 1
-#     buffer_time:
-#       minutes: 15
-#     es_host: elasticsearch
-#     es_port: 9200
-#     writeback_index: elastalert
-#     use_ssl: False
-#     verify_certs: True
-#     alert_time_limit:
-#       minutes: 2880
-#     slack_webhook_url: https://hooks.slack.com/services/xxxx
-#     slack_channel_override: '#alerts'
-
+secretConfigName: elastalert-config-secret
 
 # To load ElastAlert's rules via secret, uncomment the line below
 #secretRulesName: elastalert-rules-secret
@@ -148,50 +129,38 @@ extraConfigOptions: {}
 
 # Command and args override for container e.g. (https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/)
 # command: ["YOUR_CUSTOM_COMMAND"]
-# args: ["YOUR", "CUSTOM", "ARGS"]
+args: ["--debug"]
 
 # rule configurations e.g. (http://elastalert2.readthedocs.io/en/latest/)
-rules: {}
-  # deadman_slack: |-
-  #   ---
-  #   name: Deadman Switch Slack
-  #   type: frequency
-  #   index: containers-*
-  #   num_events: 3
-  #   timeframe:
-  #     minutes: 3
-  #   filter:
-  #   - term:
-  #       message: "deadmanslack"
-  #   alert:
-  #   - "slack"
-  #   slack:
-  #   slack_webhook_url: dummy
-  # deadman_pagerduty: |-
-  #   ---
-  #   name: Deadman Switch PagerDuty
-  #   type: frequency
-  #   index: containers-*
-  #   num_events: 3
-  #   timeframe:
-  #     minutes: 3
-  #   filter:
-  #   - term:
-  #       message: "deadmanpd"
-  #   alert:
-  #   - "pagerduty"
-  #   pagerduty:
-  #   pagerduty_service_key: dummy
-  #   pagerduty_client_name: ElastAlert Deadman Switch
+rules:
+  nginx: |-
+    ---
+    name: Rule 1
+    type: frequency
+    index: log-nginx-nginx-*
+    num_events: 3
+    timeframe:
+      minutes: 3
+    filter:
+      - term:
+          message: "ERROR"
+    alert:
+      - email:
+          from_addr: "alertmanager@cicem.fa"
+          email: "tangjizhou@cicem.fa"
+          smtp_host: "10.12.107.121"
+          smtp_port: 587
+          smtp_ssl: false
 
 serviceAccount:
   # Specifies whether a service account should be created
   create: true
   # Annotations to add to the service account
-  annotations: {}
+  annotations:
+    generate-at: "2022-02-14"
   # The name of the service account to use.
   # If not set and create is true, a name is generated using the fullname template
-  name:
+  name: elastalert2
 
 # Enable pod security policy
 # https://kubernetes.io/docs/concepts/policy/pod-security-policy/
@@ -211,29 +180,32 @@ podSecurityContext:
 # Support using node selectors and tolerations
 # nodeSelector:
 #   "node-role.kubernetes.io/infra_worker": "true"
-nodeSelector: {}
+nodeSelector: { }
 
 # Specify node affinity or anti-affinity specifications
-affinity: {}
+affinity: { }
 
-# tolerations:
-#   - key: "node_role"
-#     operator: "Equal"
-#     value: "infra_worker"
-#     effect: "NoSchedule"
-tolerations: []
+tolerations:
+  - key: node.kubernetes.io/not-ready
+    operator: Exists
+    effect: NoExecute
+    tolerationSeconds: 2
+  - key: node.kubernetes.io/unreachable
+    operator: Exists
+    effect: NoExecute
+    tolerationSeconds: 2
 
-extraVolumes: []
-  # - name: smtp-auth
-  #   secret:
-  #     secretName: elastalert-smtp-auth
-  #     items:
-  #       - key: smtp_auth.yaml
-  #         path: smtp_auth.yaml
-  #         mode: 0400
+extraVolumes:
+  - name: smtp-auth
+    secret:
+      secretName: elastalert-smtp-auth
+      items:
+        - key: smtp_auth.yaml
+          path: smtp_auth.yaml
+          mode: 0400
 
-extraVolumeMounts: []
-  # - name: smtp-auth
-  #   mountPath: /opt/elastalert/config-smtp/smtp_auth.yaml
-  #   subPath: smtp_auth.yaml
-  #   readOnly: true
+extraVolumeMounts:
+  - name: smtp-auth
+    mountPath: /opt/elastalert/config-smtp/smtp_auth.yaml
+    subPath: smtp_auth.yaml
+    readOnly: true
