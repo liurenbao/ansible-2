@@ -30,6 +30,7 @@ filebeat.inputs:
       - "{{ gausslog }}/**/*.log"
       - "{{ gausslog }}/**/*.rlog"
       - "{{ gausslog }}/**/*.olog"
+      - "{{ gausslog }}/**/*.aud"
     multiline.pattern: '(^\d{4}-\d{2}-\d{2}|^\[|^\{|^UTC)'
     multiline.negate: true
     multiline.match: after
