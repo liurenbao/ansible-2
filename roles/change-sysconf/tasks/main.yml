@@ -27,5 +27,34 @@
 - name: sysctl enable
   shell: sysctl -p /etc/sysctl.conf
 
+- name: check nf_conntrack exists
+  stat:
+    path: /proc/sys/net/netfilter/nf_conntrack_count
+  register: nf_conntrack
+
+- name: remove nf_conntrack sysconf
+  lineinfile:
+    path: /etc/sysctl.conf
+    regexp: "^net.netfilter.nf_conntrack_tcp_timeout_established"
+    state: absent
+
+- name: change nf_conntrack buckets
+  file:
+    path: /etc/modprobe.d/nf_conntrack.conf
+    state: touch
+  when: nf_conntrack.stat.exists == true
+
+- name: change /etc/modprobe.d/nf_conntrack.conf
+  lineinfile:
+    path: /etc/modprobe.d/nf_conntrack.conf
+    line: "options nf_conntrack hashsize=262144"
+    regexp: "^options nf_conntrack hashsize="
+    state: present
+  when: nf_conntrack.stat.exists == true
+
+- name: reboot after nf_conntrack changed
+  shell: reboot now
+  when: nf_conntrack.stat.exists == true
+
 - name: refresh iptables
   shell: iptables -F
