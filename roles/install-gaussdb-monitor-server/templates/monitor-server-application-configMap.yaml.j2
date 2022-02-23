@@ -58,8 +58,8 @@ data:
       socketConnectionTimeout: 60000
       socketTimeout: 200000
       #发件人邮箱地址
-      fromMailAddress: dbalert@cicem.fa
+      fromMailAddress: {{ alertmanager_db_username }}
       #邮件服务器用户名(发件人)
-      mailUser: dbalert@cicem.fa
+      mailUser: {{ alertmanager_db_username }}
       #邮件服务器登录密码(发件人)
       mailPassword: CEIIsFXKP/ipkkXi+70qbg==

@@ -1,4 +1,0 @@
-[ravencast-mes-ptest]
-10.12.107.204 host_name=jdfap-mesmq01 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
-[ravencast-mes-ptest:vars]
-ravencast_tcphosts=10.12.107.204[7800]
