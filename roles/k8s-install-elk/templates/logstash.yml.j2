@@ -78,6 +78,7 @@ data:
       mutate {
         remove_field => [ "kv_message", "content", "[kubernetes][node][uid]", "[kubernetes][labels][pod-template-hash]",
             "[kubernetes][pod][uid]", "[kubernetes][pod][ip]", "[kubernetes][namespace_uid]","[kubernetes][node][labels]", "stream"  ]
+        convert => ["DurTime", "float"]
       }
     }
   input_main.conf: |-
@@ -95,15 +96,39 @@ data:
       }
     }
   output_main.conf: |-
-    output {
-      # stdout { codec => rubydebug }
-      elasticsearch {
-        hosts => {{ es_hosts_arr }}
-        manage_template => true
-        template_name => "app-log"
-        index => "log-%{[kubernetes][labels][app]}-%{[kubernetes][namespace]}-%{+YYYY-MM}"
-        document_type => "%{[@metadata][type]}"
-      }
+    if [kubernetes][labels][app] == "gaussdb" {
+        output {
+          # stdout { codec => rubydebug }
+          elasticsearch {
+            hosts => {{ es_hosts_arr }}
+            manage_template => true
+            template_name => "app-log"
+            index => "log-%{[kubernetes][labels][app]}-%{[kubernetes][namespace]}-%{+YYYY-MM.dd}"
+            document_type => "%{[@metadata][type]}"
+          }
+        }
+    }else if [kubernetes][labels][app] == "nginx" {
+        output {
+          # stdout { codec => rubydebug }
+          elasticsearch {
+            hosts => {{ es_hosts_arr }}
+            manage_template => true
+            template_name => "app-log"
+            index => "log-%{[kubernetes][labels][app]}-%{[kubernetes][namespace]}-%{+YYYY-MM.dd}"
+            document_type => "%{[@metadata][type]}"
+          }
+        }
+    } else {
+        output {
+          # stdout { codec => rubydebug }
+          elasticsearch {
+            hosts => {{ es_hosts_arr }}
+            manage_template => true
+            template_name => "app-log"
+            index => "log-%{[kubernetes][labels][app]}-%{[kubernetes][namespace]}-%{+YYYY-MM}"
+            document_type => "%{[@metadata][type]}"
+          }
+        }
     }
 ---
 
