@@ -57,6 +57,12 @@
 [ravencast-apc]
 10.12.117.170 host_name=jdfau-apcmq01 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
 10.12.117.171 host_name=jdfau-apcmq02 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
+[ravencast-ptest]
+10.12.117.15 host_name=jdfau-ptestmq ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
+[ravencast-test]
+10.12.118.87    ansible_ssh_user=root   ansible_ssh_pass=Icrd@777.com   host_name=jdfat-mq02
+10.12.118.86    ansible_ssh_user=root   ansible_ssh_pass=Icrd@777.com   host_name=jdfat-mq01
+
 [ravencast-mes:vars]
 ravencast_tcphosts=10.12.117.164[7800],10.12.117.165[7800]
 [ravencast-eis:vars]
@@ -65,6 +71,10 @@ ravencast_tcphosts=10.12.117.166[7800],10.12.117.167[7800]
 ravencast_tcphosts=10.12.117.168[7800],10.12.117.169[7800]
 [ravencast-apc:vars]
 ravencast_tcphosts=10.12.117.170[7800],10.12.117.171[7800]
+[ravencast-ptest:vars]
+ravencast_tcphosts=10.12.117.15[7800]
+[ravencast-test:vars]
+ravencast_tcphosts=10.12.118.87[7800],10.12.118.86[7800]
 [nas]
 10.12.117.172 host_name=jdfau-ftp01 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
 [eap]

@@ -1,4 +1,7 @@
 [db]
+aifab-db
+cim-db
+[cim-db]
 10.12.114.16	ansible_ssh_user=root	ansible_ssh_pass="Icrd@777.com"	host_name=jdc1fap-mesdb01
 10.12.114.116	ansible_ssh_user=root	ansible_ssh_pass="Icrd@777.com"	host_name=jdc2fap-mesdb02
 10.12.114.11	ansible_ssh_user=root	ansible_ssh_pass="Icrd@777.com"	host_name=jdc1fap-spcdb01
@@ -25,3 +28,8 @@
 10.12.114.141	ansible_ssh_user=root	ansible_ssh_pass="Icrd@777.com"	host_name=jdc2fap-mes_fdcdb02
 10.12.114.47	ansible_ssh_user=root	ansible_ssh_pass="Icrd@777.com"	host_name=jdc1fap-pcsdb01
 10.12.114.147	ansible_ssh_user=root	ansible_ssh_pass="Icrd@777.com"	host_name=jdc2fap-pcsdb02
+
+[aifab-db]
+10.17.13.233    host_name=jdc1fau-mesdb01   ansible_ssh_user=omm ansible_ssh_pass=Gauss_123
+10.17.13.234    host_name=jdc1fau-mesdb01   ansible_ssh_user=omm ansible_ssh_pass=Gauss_123
+10.17.13.235    host_name=jdc1fau-mesdb01   ansible_ssh_user=omm ansible_ssh_pass=Gauss_123

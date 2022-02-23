@@ -1,28 +1,35 @@
 [svn]
 10.12.117.51    host_name=jdfau-svn01   ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
 [nexus]
-10.12.118.51    host_name=jdfau-jks01   ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
+10.12.117.38    host_name=jdfau-nexus01   ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
 [jenkins]
 10.12.117.56    host_name=jdfau-jks01   ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
 [zentao]
 10.12.118.46    host_name=jdfat-zt01    ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
 [git]
 10.12.118.36    host_name=jdfau-git01   ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
+
 [ams]
-10.12.117.161   host_name=jdfau-amsrv01 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
-10.12.117.162   host_name=jdfau-amsrv02 ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
+10.12.117.161   ansible_ssh_user=root   ansible_ssh_pass="Icrd@777.com" host_name=jdfau-amsrv01
+10.12.117.162   ansible_ssh_user=root   ansible_ssh_pass="Icrd@777.com" host_name=jdfau-amsrv02
+10.12.118.92    ansible_ssh_user=root   ansible_ssh_pass=Icrd@777.com   host_name=jdfat-amsrv02
+10.12.118.91    ansible_ssh_user=root   ansible_ssh_pass=Icrd@777.com   host_name=jdfat-amsrv01
 [etl]
 10.12.117.101   host_name=jdfau-etl01   ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
 10.12.117.102   host_name=jdfau-etl02   ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
-[sdr]
-10.12.117.111   host_name=jdfau-sdr01   ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
-10.12.117.112   host_name=jdfau-sdr02   ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
-10.12.117.113   host_name=jdfau-sdr03   ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
 [fdc]
-10.12.117.11    host_name=jdfau-fdc_apc01       ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
-10.12.117.12    host_name=jdfau-fdc_apcweb01    ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
+10.12.117.11    ansible_ssh_user=root   ansible_ssh_pass=Icrd@777.com   host_name=jdfau-fdc_apc01
+10.12.117.12    ansible_ssh_user=root   ansible_ssh_pass=Icrd@777.com   host_name=jdfau-fdc_apcweb01
+10.12.118.12    ansible_ssh_user=root   ansible_ssh_pass=Icrd@777.com   host_name=jdfat-fdc-apcweb01
+10.12.118.13    ansible_ssh_user=root   ansible_ssh_pass=Icrd@777.com   host_name=jdfat-fdc-apcdb01
+10.12.118.11    ansible_ssh_user=root   ansible_ssh_pass=Icrd@777.com   host_name=jdfat-fdc-apc01
 [mcs]
 10.12.117.21    host_name=jdfau-mcs01   ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
 10.12.117.22    host_name=jdfau-mcs02   ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
 10.12.117.23    host_name=jdfau-mcs03   ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
 10.12.117.24    host_name=jdfau-mcs04   ansible_ssh_user=root ansible_ssh_pass="Icrd@777.com"
+10.12.118.21    ansible_ssh_user=root   ansible_ssh_pass=Icrd@777.com   host_name=jdfat-mcs01
+[report]
+10.12.117.48    ansible_ssh_user=root   ansible_ssh_pass=Icrd@777.com   host_name=jdfau-rept04
+10.12.117.47    ansible_ssh_user=root   ansible_ssh_pass=Icrd@777.com   host_name=jdfau-rept03
+10.12.117.46    ansible_ssh_user=root   ansible_ssh_pass=Icrd@777.com   host_name=jdfau-rept02

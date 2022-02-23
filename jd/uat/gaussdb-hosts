@@ -1,6 +1,7 @@
 [db:children]
 db-uat
 db-test
+aifab
 [db-uat]
 10.12.117.36	ansible_ssh_user=root	ansible_ssh_pass="Icrd@777.com"	host_name=jdc1fau-mesdb01
 10.12.117.136	ansible_ssh_user=root	ansible_ssh_pass="Icrd@777.com"	host_name=jdc2fau-mesdb02
@@ -13,7 +14,7 @@ db-test
 10.12.117.106	ansible_ssh_user=root	ansible_ssh_pass="Icrd@777.com"	host_name=jdfau-rtdfam01
 10.12.117.115	ansible_ssh_user=root	ansible_ssh_pass="Icrd@777.com"	host_name=jdfau-pcsdb01
 10.12.117.181	ansible_ssh_user=root	ansible_ssh_pass="Icrd@777.com"	host_name=jdfau-cimdb01
-10.12.117.14    ansible_ssh_user=root   ansible_ssh_pass="Icrd@777.com" host_name=jdfau-ptestdb
+#10.12.117.14    ansible_ssh_user=root   ansible_ssh_pass="Icrd@777.com" host_name=jdfau-ptestdb
 
 [db-test]
 10.12.118.22	ansible_ssh_user=root	ansible_ssh_pass="Icrd@777.com"	host_name=jdfat-rtdredodb01
@@ -21,3 +22,6 @@ db-test
 10.12.118.27	ansible_ssh_user=root	ansible_ssh_pass="Icrd@777.com"	host_name=jdfat-rtdredodb01
 10.12.118.56	ansible_ssh_user=root	ansible_ssh_pass="Icrd@777.com"	host_name=jdfat-cimdb01
 10.12.118.31	ansible_ssh_user=root	ansible_ssh_pass="Icrd@777.com"	host_name=jdfat-mesdbdev01
+
+[aifab]
+#10.18.64.11     host_name=jdaifu-dbvm01   ansible_ssh_user=omm ansible_ssh_pass=Gauss_123
