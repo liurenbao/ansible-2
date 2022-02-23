@@ -1,6 +1,6 @@
 - name: install internal nameserver
   gather_facts: false
-  hosts: all
+  hosts: all,!nas
   tasks:
     - name: ensure nameserver line exists
       lineinfile:

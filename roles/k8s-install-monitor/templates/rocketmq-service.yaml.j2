@@ -17,6 +17,7 @@ metadata:
   name: '{{ hostvars[host].host_name }}'
   namespace: monitoring
   annotations:
+    maintainer: tangjizhou@cicem.fa
     prometheus.io/tcp-probe: "true"
     prometheus.io/port: '9876'
 spec:
@@ -44,6 +45,7 @@ metadata:
   name: '{{ hostvars[host].host_name }}'
   namespace: monitoring
   annotations:
+    maintainer: tangjizhou@cicem.fa
     prometheus.io/tcp-probe: "true"
     prometheus.io/port: '10911'
 spec:
