@@ -47,6 +47,7 @@ data:
         patterns_dir => ["/usr/share/logstash/patterns"]
         match => { "message" => "%{TIMESTAMP:timestamp}%{SPACE}%{LOGLEVEL:level}%{SPACE}-%{SPACE}\[%{DATA:trace_id}\]%{SPACE}\[%{DATA:thread_id}\]" }
         match => { "message" => "%{TIMESTAMP:timestamp}(:)?%{SPACE}\[%{PROG:program}\|%{LOGLEVEL:level}\]" }
+        match => { "message" => "%{TIMESTAMP_ISO8601:timestamp} - %{IPV4:remote_addr} - %{HOSTNAME:hostname} - %{HTTP_METHOD:method} %{URIPATHPARAM:path} %{DATA} - %{NUMBER:status} - %{NUMBER:request_time}" }
         match => { "message" => "\[%{MES_SOURCE:SOURCE}\]%{SPACE}%{DATA:kv_message}\n%{GREEDYDATA:content}" }
         match => { "message" => "%{NGINX_ERROR_TIMESTAMP:timestamp}%{SPACE}%{LOGLEVEL:level}%{SPACE}%{GREEDYDATA}" }
         match => { "message" => "%{TIMESTAMP:timestamp}%{SPACE}%?\[?%{LOGLEVEL:level}\]?" }
@@ -78,6 +79,7 @@ data:
       mutate {
         remove_field => [ "kv_message", "content", "[kubernetes][node][uid]", "[kubernetes][labels][pod-template-hash]",
             "[kubernetes][pod][uid]", "[kubernetes][pod][ip]", "[kubernetes][namespace_uid]","[kubernetes][node][labels]", "stream"  ]
+        convert => ["DurTime", "float"]
       }
     }
   input_main.conf: |-
@@ -121,6 +123,7 @@ data:
     NGINX_ERROR_TIMESTAMP %{FULLYEAR}/%{MONTHNUM}/%{MONTHDAY} %{HOUR}:%{MINUTE}:%{SECOND}
     MES_SOURCE (SQL|SYSTEM|SERVICE)
     IMPRECISE_TIMESTAMP %{FULLYEAR}-%{MONTHNUM}-%{MONTHDAY}[T ]%{HOUR}:%{MINUTE}:%{SECOND}\.\d{3}
+    HTTP_METHOD (GET|POST|DELETE|PATH|HEAD|PUT)
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -169,8 +172,8 @@ spec:
               memory: '4Gi'
               cpu: '4'
             requests:
-              memory: '500Mi'
-              cpu: '200m'
+              memory: '1Gi'
+              cpu: '500m'
           volumeMounts:
             - name: logstash-pipeline
               mountPath: /usr/share/logstash/pipeline
