@@ -11,7 +11,7 @@ metadata:
     prometheus.io/scrape: "true"
     prometheus.io/port: "8080"
     prometheus.io/scheme: "http"
-    prometheus.io/path: "/apc-connector-service/prometheus"
+    prometheus.io/path: "/apc-connector-service/actuator/prometheus"
 spec:
   ports:
     - name: http
@@ -52,6 +52,7 @@ spec:
         app: apc-connector-service
         zone: dc1
     spec:
+      terminationGracePeriodSeconds: 120
       imagePullSecrets:
         - name: harbor
       hostNetwork: false
@@ -96,7 +97,7 @@ spec:
            path: /usr/share/zoneinfo/Asia/Shanghai
       containers:
         - name: apc-connector-service
-          image: 10.12.107.150:80/pcs-test/apc-connector-service:1.0.0-2021121078924
+          image: 10.12.107.150:80/pcs-test/apc-connector-service:1.0.0.2-20220223107158
           imagePullPolicy: IfNotPresent
           volumeMounts:
           - name: tz-config
@@ -126,7 +127,7 @@ spec:
           livenessProbe:
             failureThreshold: 3
             httpGet:
-              path: /apc-connector-service/health
+              path: /apc-connector-service/actuator/health/liveness
               port: 8080
               scheme: HTTP
             initialDelaySeconds: 60
@@ -136,7 +137,7 @@ spec:
           readinessProbe:
             failureThreshold: 3
             httpGet:
-              path: /apc-connector-service/health
+              path: /apc-connector-service/actuator/health/readiness
               port: 8080
               scheme: HTTP
             periodSeconds: 10
@@ -145,9 +146,13 @@ spec:
           startupProbe:
             httpGet:
               port: 8080
-              path: /apc-connector-service/health
+              path: /apc-connector-service/actuator/health/liveness
             initialDelaySeconds: 30
             timeoutSeconds: 5
             periodSeconds: 3
             successThreshold: 1
             failureThreshold: 3
+          lifecycle:
+            preStop:
+              exec:
+                command: [ "sleep", "40" ]

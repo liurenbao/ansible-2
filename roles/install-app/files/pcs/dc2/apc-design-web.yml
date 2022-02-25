@@ -15,6 +15,7 @@ spec:
         app: apc-design-web
         zone: dc2
     spec:
+      terminationGracePeriodSeconds: 120
       imagePullSecrets:
         - name: harbor
       hostNetwork: false
@@ -47,7 +48,7 @@ spec:
            path: /usr/share/zoneinfo/Asia/Shanghai
       containers:
         - name: apc-design-web
-          image: 10.12.107.150:80/pcs-test/apc-design-web:1.0.0-2021120978448
+          image: 10.12.107.150:80/pcs-test/apc-design-web:1.0.0.2-20220223107229
           imagePullPolicy: IfNotPresent
           volumeMounts:
           - name: tz-config
@@ -67,7 +68,7 @@ spec:
               path: /
               port: 80
               scheme: HTTP
-            initialDelaySeconds: 300
+            initialDelaySeconds: 30
             periodSeconds: 10
             successThreshold: 1
             timeoutSeconds: 10
@@ -89,3 +90,7 @@ spec:
             periodSeconds: 3
             successThreshold: 1
             failureThreshold: 3
+          lifecycle:
+            preStop:
+              exec:
+                command: [ "sleep", "40" ]

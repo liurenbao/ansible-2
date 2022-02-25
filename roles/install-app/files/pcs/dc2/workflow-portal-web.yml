@@ -15,6 +15,7 @@ spec:
         app: workflow-portal-web
         zone: dc2
     spec:
+      terminationGracePeriodSeconds: 120
       imagePullSecrets:
         - name: harbor
       hostNetwork: false
@@ -47,7 +48,7 @@ spec:
            path: /usr/share/zoneinfo/Asia/Shanghai
       containers:
         - name: workflow-portal-web
-          image: 10.12.107.150:80/pcs-test/workflow-portal-web:1.0.0-2021121078977
+          image: 10.12.107.150:80/pcs-test/workflow-portal-web:1.0.0.2-20220223107252
           imagePullPolicy: IfNotPresent
           volumeMounts:
           - name: tz-config
@@ -89,3 +90,7 @@ spec:
             periodSeconds: 3
             successThreshold: 1
             failureThreshold: 3
+          lifecycle:
+            preStop:
+              exec:
+                command: [ "sleep", "40" ]

@@ -15,6 +15,7 @@ spec:
         app: apc-ui-web
         zone: dc2
     spec:
+      terminationGracePeriodSeconds: 120
       imagePullSecrets:
         - name: harbor
       hostNetwork: false
@@ -47,7 +48,7 @@ spec:
            path: /usr/share/zoneinfo/Asia/Shanghai
       containers:
         - name: apc-ui-web
-          image: 10.12.107.150:80/pcs-test/apc-ui-web:1.0.0-2021120978256
+          image: 10.12.107.150:80/pcs-test/apc-ui-web:1.0.0.2-20220224107512
           imagePullPolicy: IfNotPresent
           volumeMounts:
           - name: tz-config
@@ -89,3 +90,8 @@ spec:
             periodSeconds: 3
             successThreshold: 1
             failureThreshold: 3
+          #优雅停机
+          lifecycle:
+            preStop:
+              exec:
+                command: [ "sleep", "40" ]

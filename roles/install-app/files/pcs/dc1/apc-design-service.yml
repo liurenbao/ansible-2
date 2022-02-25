@@ -52,6 +52,7 @@ spec:
         app: apc-design-service
         zone: dc1
     spec:
+      terminationGracePeriodSeconds: 120
       imagePullSecrets:
         - name: harbor
       hostNetwork: false
@@ -96,14 +97,14 @@ spec:
            path: /usr/share/zoneinfo/Asia/Shanghai            
       containers:
         - name: apc-design-service
-          image: 10.12.107.150:80/pcs-test/apc-design-service:1.0.0-2021120978515
+          image: 10.12.107.150:80/pcs-test/apc-design-service:1.0.0.2-20220223106962
           imagePullPolicy: IfNotPresent
           volumeMounts:
           - name: tz-config
             mountPath: /etc/localtime
           env:
             - name: SPRING_PROFILES_ACTIVE
-              value: "prod_jd"
+              value: "ilab"
             - name: SERVER_PORT
               value: "8080"
             - name: DB_HOST
@@ -116,6 +117,12 @@ spec:
               value: "encrypted.AtwKHsrWko2QOKtbos037KNHlDviuYj/KvA+09lsj0o1"
             - name: REDIS_NODES
               value: "10.12.117.151:6379,10.12.117.152:6379,10.12.117.153:6379,10.12.117.154:6379,10.12.117.155:6379,10.12.117.156:6379"
+            - name: CIPHER1_PATH
+              value: "encrypt/cipher1.txt"
+            - name: CIPHER2_VALUE
+              value: "Z0lHoztyg61L/6ov+uwy0l1rzYzIAt1Sz3o+NMaKGZLGvoL3GT4jtOrmjLXwYLsYPHF155zfGZF/jOqZjVUN1puUtBVFU3k2Hm7Zmn4dn/c4B49kbOuyVqmLbXxKi4k4eemZr3AGkEV+mEb6WlMLXIo5i8kmxnzjLNhl09ZZ1cA="
+            - name: WORKER_KEY
+              value: "Ar2VzIjw4Ez8vZUAHA3DTZD/NKUt1eR0b80q9XBocmBxyOqR5CpzwXqjRiQN1RIQRZkdedQV6hvG00KxX0T/LKk="
           ports:
             - containerPort: 8080
           resources:
@@ -154,3 +161,7 @@ spec:
             periodSeconds: 3
             successThreshold: 1
             failureThreshold: 3
+          lifecycle:
+            preStop:
+              exec:
+                command: [ "sleep", "40" ]
