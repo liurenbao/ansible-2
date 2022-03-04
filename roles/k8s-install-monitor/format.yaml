@@ -1,17 +1,46 @@
-name: Deadman Switch Slack
+rules_folder: /opt/elastalert/rules
+scan_subdirectories: true
+run_every:
+  minutes: 1
+buffer_time:
+  minutes: 15
+es_host: elasticsearch.elk
+es_hosts:
+es_port: 9200
+use_ssl: False
+verify_certs: True
+es_send_get_body_as: GET
+es_conn_timeout: 30
+max_query_size: 1000
+disable_rules_on_error: true
+show_disabled_rules: true
+writeback_index: elastalert
+smtp_host: 10.12.107.121
+smtp_port: 587
+smtp_ssl: false
+timestamp_field: "@timestamp"
+skip_invalid: True
+from_addr: elastalert-uat@cicem.fa
+alert_time_limit:
+  minutes: 2880
+---
+name: nginx-rules
 type: frequency
-index: log-redis-example-test-*
+index: log-nginx-nginx-*
 num_events: 3
+generate_kibana_link: true
+query_timezone: UTC+8
+kibana_url: http://kibana-uat.cicem.fa
+exponential_realert: true
+use_kibana_dashboard: true
 timeframe:
   minutes: 3
 filter:
-  - term:
-      message: "ERROR"
+  - query:
+      query_string:
+        query: "message: ERROR"
 alert:
-  - email:
-      from_addr: "log-alert@cicem.fa"
-      email: "tangjizhou@cicem.fa"
-      smtp_host: "10.12.107.211"
-      smtp_port: 587
-      smtp_ssl: false
-      smtp_auth_file: auth/email-auth.yaml
+  - email
+email:
+  - "tangjizhou@cicem.fa"
+  - "mouyongde@cicem.fa"

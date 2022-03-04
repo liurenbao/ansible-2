@@ -17,16 +17,20 @@ type: Opaque
 stringData:
   elastalert_config: |-
     rules_folder: /opt/elastalert/rules
-    scan_subdirectories: false
+    scan_subdirectories: true
     run_every:
       minutes: 1
     buffer_time:
       minutes: 15
     es_host: elasticsearch.elk
     es_port: 9200
-    writeback_index: elastalert
     use_ssl: False
     verify_certs: True
+    es_send_get_body_as: GET
+    es_conn_timeout: 30
+    max_query_size: 1000
+    disable_rules_on_error: true
+    writeback_index: elastalert
     alert_time_limit:
       minutes: 2880
 ---
@@ -100,6 +104,9 @@ spec:
             runAsUser: 1000
           args:
             - --verbose
+            - --es_debug
+            - --prometheus_port 9998
+            - --start NOW
           volumeMounts:
             - name: config
               mountPath: '/opt/elastalert/config.yaml'
