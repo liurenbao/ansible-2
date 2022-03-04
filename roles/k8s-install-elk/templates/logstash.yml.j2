@@ -108,7 +108,7 @@ data:
             document_type => "%{[@metadata][type]}"
           }
         }
-    }else if [kubernetes][labels][app] == "nginx" {
+    } else if [kubernetes][labels][app] == "nginx" {
         output {
           # stdout { codec => rubydebug }
           elasticsearch {
