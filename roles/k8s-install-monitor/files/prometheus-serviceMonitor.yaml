@@ -9,6 +9,10 @@ spec:
   endpoints:
   - interval: 30s
     port: web
+    relabelings:
+      - action: replace
+        sourceLabels: [ __meta_kubernetes_service_annotation_maintainer ]
+        targetLabel: maintainer
   selector:
     matchLabels:
       prometheus: k8s

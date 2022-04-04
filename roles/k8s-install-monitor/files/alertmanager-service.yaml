@@ -5,6 +5,8 @@ metadata:
     alertmanager: main
   name: alertmanager-main
   namespace: monitoring
+  annotations:
+    maintainer: tangjizhou@cicem.fa
 spec:
   ports:
   - name: web

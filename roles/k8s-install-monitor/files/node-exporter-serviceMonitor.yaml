@@ -22,6 +22,9 @@ spec:
           sourceLabels:
             - __address__
           targetLabel: addr
+        - action: replace
+          sourceLabels: [ __meta_kubernetes_service_annotation_maintainer ]
+          targetLabel: maintainer
       metricRelabelings:
         - action: replace
           sourceLabels:

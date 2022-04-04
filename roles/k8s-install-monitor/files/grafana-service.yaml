@@ -5,6 +5,8 @@ metadata:
     app: grafana
   name: grafana
   namespace: monitoring
+  annotations:
+    maintainer: tangjizhou@cicem.fa
 spec:
   ports:
   - name: http

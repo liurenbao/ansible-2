@@ -5,6 +5,8 @@ metadata:
     name: prometheus-adapter
   name: prometheus-adapter
   namespace: monitoring
+  annotations:
+    maintainer: tangjizhou@cicem.fa
 spec:
   ports:
   - name: https

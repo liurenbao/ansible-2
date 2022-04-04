@@ -48,6 +48,9 @@ spec:
     - sourceLabels:
       - __metrics_path__
       targetLabel: metrics_path
+    - action: replace
+      sourceLabels: [ __meta_kubernetes_service_annotation_maintainer ]
+      targetLabel: maintainer
     scheme: https
     tlsConfig:
       insecureSkipVerify: true

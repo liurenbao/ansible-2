@@ -3,6 +3,8 @@ kind: Service
 metadata:
   name: kube-controller-manager
   namespace: kube-system
+  annotations:
+    maintainer: tangjizhou@cicem.fa
   labels:
     k8s-app: kube-controller-manager
 spec:
@@ -17,6 +19,8 @@ kind: Service
 metadata:
   name: kube-scheduler
   namespace: kube-system
+  annotations:
+    maintainer: tangjizhou@cicem.fa
   labels:
     k8s-app: kube-scheduler
 spec:

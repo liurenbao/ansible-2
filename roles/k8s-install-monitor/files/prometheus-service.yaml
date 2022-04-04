@@ -5,6 +5,8 @@ metadata:
     prometheus: k8s
   name: prometheus-k8s
   namespace: monitoring
+  annotations:
+    maintainer: tangjizhou@cicem.fa
 spec:
   ports:
   - name: web

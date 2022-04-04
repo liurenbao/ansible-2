@@ -7,6 +7,10 @@ spec:
   endpoints:
   - interval: 15s
     port: http
+    relabelings:
+      - action: replace
+        sourceLabels: [ __meta_kubernetes_service_annotation_maintainer ]
+        targetLabel: maintainer
   selector:
     matchLabels:
       app: grafana
